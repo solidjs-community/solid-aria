@@ -86,6 +86,14 @@ importers:
       vite: 2.9.5
       vite-plugin-solid: 2.2.6
 
+  packages/interactions:
+    specifiers:
+      '@solid-aria/types': workspace:^0.0.1
+      '@solid-aria/utils': workspace:^0.0.1
+    dependencies:
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
   packages/types:
     specifiers: {}
 
