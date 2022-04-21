@@ -1,0 +1,62 @@
+{
+  "name": "solid-aria-monorepo",
+  "version": "0.0.1",
+  "description": "A library of high-quality primitives that help you build accessible user interfaces with SolidJS.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solidjs-community/solid-aria.git"
+  },
+  "license": "MIT",
+  "author": "David Di Biase <dave.dibiase@gmail.com>",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "commit": "git-cz",
+    "format": "prettier . --write --ignore-path .gitignore && git update-index --again",
+    "lint": "eslint . --ext .ts,.tsx --ignore-path .gitignore",
+    "prepare": "husky install",
+    "test": "turbo run test"
+  },
+  "lint-staged": {
+    "*.{md,json}": [
+      "prettier --write"
+    ],
+    "*.ts?(x)": [
+      "eslint",
+      "prettier --write"
+    ],
+    "package.json": "npx sort-package-json"
+  },
+  "config": {
+    "commitizen": {
+      "path": "@commitlint/cz-commitlint"
+    }
+  },
+  "devDependencies": {
+    "@changesets/cli": "2.22.0",
+    "@commitlint/cli": "16.2.3",
+    "@commitlint/config-conventional": "16.2.1",
+    "@commitlint/cz-commitlint": "16.2.3",
+    "commitizen": "4.2.4",
+    "eslint": "8.12.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-import-resolver-typescript": "2.7.1",
+    "eslint-plugin-import": "2.26.0",
+    "eslint-plugin-jsx-a11y": "6.5.1",
+    "eslint-plugin-prettier": "4.0.0",
+    "eslint-plugin-simple-import-sort": "7.0.0",
+    "eslint-plugin-solid": "0.4.6",
+    "husky": "7.0.4",
+    "lint-staged": "12.3.7",
+    "prettier": "2.6.2",
+    "solid-js": "1.3.15",
+    "solid-testing-library": "0.3.0",
+    "sort-package-json": "1.55.0",
+    "turbo": "1.2.4",
+    "typescript": "4.6.3",
+    "vite": "2.9.5",
+    "vite-plugin-solid": "2.2.6"
+  }
+}
