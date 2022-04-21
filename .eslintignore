@@ -9,6 +9,4 @@ __mocks__/
 
 commitlint.config.js
 jest.config.cjs
-tsup.config.ts
-vite.config.ts
 *.d.ts
