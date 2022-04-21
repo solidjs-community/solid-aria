@@ -28,10 +28,10 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-          run: pnpm install
+        run: pnpm install
 
       - name: Build
-          run: pnpm build
+        run: pnpm build
 
       - name: Test
         run: pnpm turbo run test
