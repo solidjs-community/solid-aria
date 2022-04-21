@@ -1,8 +1,8 @@
 {
-  "name": "@solid-aria/interactions",
+  "name": "@solid-aria/focus",
   "version": "0.0.1",
   "private": false,
-  "description": "A collection of low level user interactions primitives.",
+  "description": "A collection of focus management related primitives.",
   "keywords": [
     "solid",
     "aria",
@@ -11,7 +11,7 @@
     "system",
     "components"
   ],
-  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/interactions#readme",
+  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/focus#readme",
   "bugs": {
     "url": "https://github.com/solidjs-community/solid-aria/issues"
   },
@@ -38,6 +38,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@solid-aria/interactions": "workspace:^0.0.1",
     "@solid-aria/types": "workspace:^0.0.1",
     "@solid-aria/utils": "workspace:^0.0.1"
   },
@@ -46,7 +47,7 @@
     "solid-js": "^1.3.15"
   },
   "primitive": {
-    "name": "interactions",
+    "name": "focus",
     "stage": 0,
     "list": [],
     "category": "Interactions"

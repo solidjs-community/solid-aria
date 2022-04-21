@@ -86,6 +86,16 @@ importers:
       vite: 2.9.5
       vite-plugin-solid: 2.2.6
 
+  packages/focus:
+    specifiers:
+      '@solid-aria/interactions': workspace:^0.0.1
+      '@solid-aria/types': workspace:^0.0.1
+      '@solid-aria/utils': workspace:^0.0.1
+    dependencies:
+      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
   packages/interactions:
     specifiers:
       '@solid-aria/types': workspace:^0.0.1

@@ -33,8 +33,8 @@
   "scripts": {
     "build": "tsup",
     "dev": "vite serve dev --host",
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
