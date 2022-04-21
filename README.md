@@ -5,3 +5,7 @@
 # Solid Aria
 
 A library of high-quality primitives that help you build accessible user interfaces with SolidJS.
+
+## Acknowledgment
+
+This project is inspired by Adobe's [React Spectrum Libraries](https://github.com/adobe/react-spectrum).
