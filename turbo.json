@@ -8,10 +8,11 @@
     },
     "test": {
       "dependsOn": ["^build"],
-      "outputs": []
+      "outputs": [],
+      "inputs": ["src/**/*.tsx", "src/**/*.ts", "test/**/*.ts", "test/**/*.tsx"]
     },
-    "lint": {
-      "outputs": []
+    "typecheck": {
+      "cache": false
     },
     "dev": {
       "cache": false
