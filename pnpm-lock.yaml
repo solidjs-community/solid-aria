@@ -113,6 +113,16 @@ importers:
     dependencies:
       '@solid-aria/types': link:../types
 
+  packages/visually-hidden:
+    specifiers:
+      '@solid-aria/interactions': workspace:^0.0.1
+      '@solid-aria/types': workspace:^0.0.1
+      '@solid-aria/utils': workspace:^0.0.1
+    dependencies:
+      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
 packages:
 
   /@ampproject/remapping/2.1.2:
