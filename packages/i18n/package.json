@@ -2,7 +2,7 @@
   "name": "@solid-aria/i18n",
   "version": "0.0.1",
   "private": false,
-  "description": "A collection of i18n related primitives.",
+  "description": "Primitives for working with locales and rtl mode.",
   "keywords": [
     "solid",
     "aria",

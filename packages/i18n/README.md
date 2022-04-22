@@ -10,7 +10,7 @@
 [![version](https://img.shields.io/npm/v/@solid-aria/i18n?style=for-the-badge)](https://www.npmjs.com/package/@solid-aria/i18n)
 [![stage](https://img.shields.io/endpoint?style=for-the-badge&url=https%3A%2F%2Fraw.githubusercontent.com%2Fsolidjs-community%2Fsolid-primitives%2Fmain%2Fassets%2Fbadges%2Fstage-0.json)](https://github.com/solidjs-community/solid-aria#contribution-process)
 
-A collection of i18n related primitives.
+Primitives for working with locales and rtl mode.
 
 ## Installation
 
