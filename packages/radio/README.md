@@ -22,6 +22,171 @@ yarn add @solid-aria/radio
 pnpm add @solid-aria/radio
 ```
 
+## `createRadio`
+
+Provides the behavior and accessibility implementation for a radio component.
+
+### Features
+
+Radio can be built with the `<input>` HTML element, but this can be difficult to style. `createRadio` helps achieve accessible radios that can be styled as needed.
+
+- Built with a native HTML `<input>` element, which can be optionally visually hidden to allow custom styling
+- Full support for browser features like form autofill
+- Keyboard focus management and cross browser normalization
+- Labeling support for assistive technology
+
+## `createRadioGroup`
+
+Provides the behavior and accessibility implementation for a radio group component. Radio groups allow users to select a single item from a list of mutually exclusive options.
+
+### Features
+
+Radio groups can be built in HTML with the `<fieldset>` and `<input>` elements, however these can be difficult to style. useRadioGroup and useRadio help achieve accessible radio groups that can be styled as needed.
+
+- Radio groups are exposed to assistive technology via ARIA
+- Each radio is built with a native HTML `<input>` element, which can be optionally visually hidden to allow custom styling
+- Full support for browser features like form autofill
+- Keyboard focus management and cross browser normalization
+- Group and radio labeling support for assistive technology
+
+### How to use it
+
+This example uses native input elements for the radios, and SolidJS context to share state from the group to each radio. An HTML `<label>` element wraps the native input and the text to provide an implicit label for the radio.
+
+```tsx
+import {
+  AriaRadioGroupProps,
+  AriaRadioProps,
+  createRadio,
+  createRadioGroup,
+  createRadioGroupState,
+  RadioGroupState
+} from "@solid-aria/radio";
+
+import { createContext, useContext } from "solid-js";
+
+const RadioContext = createContext<RadioGroupState>();
+
+function RadioGroup(props: AriaRadioGroupProps) {
+  const state = createRadioGroupState(props);
+  const { groupProps, labelProps } = createRadioGroup<"div", "span">(props, state);
+
+  return (
+    <div {...groupProps()}>
+      <span {...labelProps()}>{props.label}</span>
+      <RadioContext.Provider value={state}>{props.children}</RadioContext.Provider>
+    </div>
+  );
+}
+
+function Radio(props: AriaRadioProps) {
+  let ref: HTMLInputElement | undefined;
+  const state = useContext(RadioContext);
+
+  const { inputProps } = createRadio(props, state!, () => ref);
+
+  return (
+    <label style={{ display: "block" }}>
+      <input {...inputProps} ref={ref} />
+      {props.children}
+    </label>
+  );
+}
+
+function App() {
+  return (
+    <RadioGroup label="Favorite pet">
+      <Radio value="dogs">Dogs</Radio>
+      <Radio value="cats">Cats</Radio>
+    </RadioGroup>
+  );
+}
+```
+
+### Styling
+
+To build a custom styled radio button, you can make the native input element visually hidden. This is possible using the [`createVisuallyHidden`](../visually-hidden/) primitive. It is still in the DOM and accessible to assistive technology, but invisible. This example uses SVG to build the visual radio button, which is hidden from screen readers with aria-hidden.
+
+For keyboard accessibility, a focus ring is important to indicate which element has keyboard focus. This is implemented with the `createFocusRing` primitive. When `isFocusVisible` is true, an extra SVG element is rendered to indicate focus. The focus ring is only visible when the user is interacting with a keyboard, not with a mouse or touch.
+
+```tsx
+import { createFocusRing } from "@solid-aria/focus";
+import {
+  AriaRadioGroupProps,
+  AriaRadioProps,
+  createRadio,
+  createRadioGroup,
+  createRadioGroupState,
+  RadioGroupState
+} from "@solid-aria/radio";
+import { createVisuallyHidden } from "@solid-aria/visually-hidden";
+
+import { createContext, useContext } from "solid-js";
+
+const RadioContext = createContext<RadioGroupState>();
+
+function RadioGroup(props: AriaRadioGroupProps) {
+  const state = createRadioGroupState(props);
+  const { groupProps, labelProps } = createRadioGroup<"div", "span">(props, state);
+
+  return (
+    <div {...groupProps()}>
+      <span {...labelProps()}>{props.label}</span>
+      <RadioContext.Provider value={state}>{props.children}</RadioContext.Provider>
+    </div>
+  );
+}
+
+function Radio(props: AriaRadioProps) {
+  let ref: HTMLInputElement | undefined;
+
+  const state = useContext(RadioContext);
+  const { inputProps } = createRadio(props, state!, () => ref);
+  const { isFocusVisible, focusRingProps } = createFocusRing();
+  const { visuallyHiddenProps } = createVisuallyHidden<"div">();
+
+  const isSelected = () => state?.selectedValue() === props.value;
+  const strokeWidth = () => (isSelected() ? 6 : 2);
+
+  return (
+    <label style={{ display: "flex", "align-items": "center" }}>
+      <div {...visuallyHiddenProps()}>
+        <input {...inputProps()} {...focusRingProps()} ref={ref} />
+      </div>
+      <svg width={24} height={24} aria-hidden="true" style={{ "margin-right": 4 }}>
+        <circle
+          cx={12}
+          cy={12}
+          r={8 - strokeWidth() / 2}
+          fill="none"
+          stroke={isSelected() ? "orange" : "gray"}
+          stroke-width={strokeWidth()}
+        />
+        {isFocusVisible() && (
+          <circle cx={12} cy={12} r={11} fill="none" stroke="orange" stroke-width={2} />
+        )}
+      </svg>
+      {props.children}
+    </label>
+  );
+}
+
+function App() {
+  return (
+    <RadioGroup label="Favorite pet">
+      <Radio value="dogs">Dogs</Radio>
+      <Radio value="cats">Cats</Radio>
+    </RadioGroup>
+  );
+}
+```
+
+### Internationalization
+
+#### RTL
+
+In right-to-left languages, the radio group and radio buttons should be mirrored. Ensure that your CSS accounts for this.
+
 ## Changelog
 
 All notable changes are described in the [CHANGELOG.md](./CHANGELOG.md) file.

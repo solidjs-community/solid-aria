@@ -50,7 +50,7 @@ export function createRadio(
   };
 
   const isChecked = () => {
-    return state.value() === props.value;
+    return state.selectedValue() === props.value;
   };
 
   const isLastFocused = () => {
@@ -59,7 +59,7 @@ export function createRadio(
 
   const onChange: JSX.EventHandlerUnion<HTMLInputElement, Event> = event => {
     event.stopPropagation();
-    state.setValue(props.value);
+    state.setSelectedValue(props.value);
   };
 
   const { pressProps } = createPress(props);

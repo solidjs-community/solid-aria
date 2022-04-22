@@ -96,7 +96,7 @@ export function createRadioGroup<T extends DOMElements = "div", U extends DOMEle
   // direction to go to the first or last radio.
   const { focusWithinProps } = createFocusWithin({
     onFocusOut: () => {
-      if (!state.value()) {
+      if (!state.selectedValue()) {
         state.setLastFocusedValue(undefined);
       }
     }
@@ -160,7 +160,7 @@ export function createRadioGroup<T extends DOMElements = "div", U extends DOMEle
       // Call focus on nextElem so that keyboard navigation scrolls the radio into view.
       element.focus();
 
-      state.setValue(element.value);
+      state.setSelectedValue(element.value);
     }
   };
 

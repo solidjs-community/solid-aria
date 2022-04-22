@@ -43,7 +43,7 @@ export interface RadioGroupState {
   /**
    * The currently selected value.
    */
-  readonly value: Accessor<string | undefined>;
+  readonly selectedValue: Accessor<string | undefined>;
 
   /**
    * The value of the last focused radio.
@@ -53,7 +53,7 @@ export interface RadioGroupState {
   /**
    * Sets the selected value.
    */
-  setValue(value: string): void;
+  setSelectedValue(value: string): void;
 
   /**
    * Sets the last focused value.
@@ -66,7 +66,7 @@ export interface RadioGroupState {
  * Provides a name for the group, and manages selection and focus state.
  */
 export function createRadioGroupState(props: CreateRadioGroupStateProps): RadioGroupState {
-  const [selectedValue, setSelectedValue] = createControllableSignal({
+  const [selectedValue, setSelected] = createControllableSignal({
     value: () => access(props.value),
     defaultValue: () => access(props.defaultValue),
     onChange: props.onChange
@@ -82,17 +82,17 @@ export function createRadioGroupState(props: CreateRadioGroupStateProps): RadioG
     return access(props.isReadOnly) || false;
   };
 
-  const setValue = (value: string) => {
+  const setSelectedValue = (value: string) => {
     if (isReadOnly() || isDisabled()) {
       return;
     }
 
-    setSelectedValue(value);
+    setSelected(value);
   };
 
   return {
-    value: selectedValue,
-    setValue,
+    selectedValue,
+    setSelectedValue,
     lastFocusedValue,
     setLastFocusedValue,
     isDisabled,

@@ -12,7 +12,7 @@ jobs:
         operating-system: [ubuntu-latest]
 
     steps:
-      - name: Check out code
+      - name: Checkout repo
         uses: actions/checkout@v2
         with:
           fetch-depth: 2

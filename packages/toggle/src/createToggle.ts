@@ -118,8 +118,6 @@ export function createToggle(
   const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
 
   const inputProps = createMemo(() => {
-    console.log(domProps());
-
     return combineProps(
       domProps(),
       {

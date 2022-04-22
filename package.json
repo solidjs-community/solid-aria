@@ -13,11 +13,15 @@
   ],
   "scripts": {
     "build": "turbo run build",
+    "changeset": "changeset",
+    "clean": "turbo run clean && rm -rf node_modules",
     "commit": "git-cz",
     "format": "prettier . --write --ignore-path .gitignore && git update-index --again",
     "lint": "eslint . --ext .ts,.tsx --ignore-path .gitignore",
     "prepare": "husky install",
-    "test": "turbo run test"
+    "release": "turbo run build && changeset publish",
+    "test": "turbo run test",
+    "version-packages": "changeset version"
   },
   "lint-staged": {
     "*.{md,json}": [
