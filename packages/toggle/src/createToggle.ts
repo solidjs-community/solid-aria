@@ -1,10 +1,62 @@
 import { createFocusable } from "@solid-aria/focus";
 import { createPress } from "@solid-aria/interactions";
-import { AriaToggleProps } from "@solid-aria/types";
+import {
+  AriaLabelingProps,
+  AriaValidationProps,
+  FocusableDOMProps,
+  FocusableProps,
+  InputBase,
+  Validation
+} from "@solid-aria/types";
 import { combineProps, filterDOMProps } from "@solid-aria/utils";
 import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
 
 import { ToggleState } from "./createToggleState";
+
+export interface AriaToggleProps
+  extends InputBase,
+    Validation,
+    FocusableProps,
+    FocusableDOMProps,
+    AriaLabelingProps,
+    AriaValidationProps {
+  /**
+   * Identifies the element (or elements) whose contents or presence are controlled by the current element.
+   */
+  "aria-controls"?: string;
+
+  /**
+   * The label for the element.
+   */
+  children?: JSX.Element;
+
+  /**
+   * Whether the element should be selected (uncontrolled).
+   */
+  defaultSelected?: boolean;
+
+  /**
+   * Whether the element should be selected (controlled).
+   */
+  isSelected?: boolean;
+
+  /**
+   * The value of the input element, used when submitting an HTML form.
+   * See [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#htmlattrdefvalue).
+   */
+  value?: string;
+
+  /**
+   * The name of the input element, used when submitting an HTML form.
+   * See [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#htmlattrdefname).
+   */
+  name?: string;
+
+  /**
+   * Handler that is called when the element's selection state changes.
+   */
+  onChange?: (isSelected: boolean) => void;
+}
 
 export interface ToggleAria {
   /**

@@ -1,5 +1,5 @@
 <p>
-  <img width="100%" src="https://assets.solidjs.com/banner?type=Aria&background=tiles&project=Visually Hidden" alt="Solid Aria - Visually Hidden">
+  <img width="100%" src="https://assets.solidjs.com/banner?type=Aria&background=tiles&project=Visually%20Hidden" alt="Solid Aria - Visually Hidden">
 </p>
 
 # @solid-aria/visually-hidden

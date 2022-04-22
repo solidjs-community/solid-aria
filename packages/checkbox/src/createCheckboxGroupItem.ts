@@ -1,10 +1,14 @@
 import { createToggleState } from "@solid-aria/toggle";
-import { AriaCheckboxGroupItemProps } from "@solid-aria/types";
 import { Accessor, mergeProps } from "solid-js";
 
-import { CheckboxAria, createCheckbox } from "./createCheckbox";
+import { AriaCheckboxProps, CheckboxAria, createCheckbox } from "./createCheckbox";
 import { CheckboxGroupState } from "./createCheckboxGroupState";
 import { checkboxGroupNames } from "./utils";
+
+export interface AriaCheckboxGroupItemProps
+  extends Omit<AriaCheckboxProps, "isSelected" | "defaultSelected"> {
+  value: string;
+}
 
 /**
  * Provides the behavior and accessibility implementation for a checkbox component contained within a checkbox group.

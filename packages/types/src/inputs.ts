@@ -13,6 +13,14 @@ export interface Validation {
   isRequired?: boolean;
 }
 
+export interface AriaValidationProps {
+  /**
+   * Identifies the element that provides an error message for the object.
+   * @see https://www.w3.org/TR/wai-aria-1.2/#aria-errormessage
+   */
+  "aria-errormessage"?: string;
+}
+
 export interface InputBase {
   /**
    * Whether the input is disabled.

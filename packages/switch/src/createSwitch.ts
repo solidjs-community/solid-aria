@@ -1,6 +1,8 @@
-import { createToggle, ToggleState } from "@solid-aria/toggle";
-import { AriaSwitchProps } from "@solid-aria/types";
+import { AriaToggleProps, createToggle, ToggleState } from "@solid-aria/toggle";
+import { AriaValidationProps, Validation } from "@solid-aria/types";
 import { Accessor, createMemo, JSX } from "solid-js";
+
+export type AriaSwitchProps = Omit<AriaToggleProps, keyof (Validation & AriaValidationProps)>;
 
 export interface SwitchAria {
   /**

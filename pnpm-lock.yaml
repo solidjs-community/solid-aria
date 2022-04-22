@@ -146,6 +146,14 @@ importers:
       '@solid-aria/utils': link:../utils
       '@solid-aria/visually-hidden': link:../visually-hidden
 
+  packages/radio:
+    specifiers:
+      '@solid-aria/types': workspace:^0.0.1
+      '@solid-aria/utils': workspace:^0.0.1
+    dependencies:
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
   packages/switch:
     specifiers:
       '@solid-aria/toggle': workspace:^0.0.1

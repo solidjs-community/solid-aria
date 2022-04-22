@@ -1,8 +1,7 @@
 import { createToggleState } from "@solid-aria/toggle";
-import { AriaCheckboxProps } from "@solid-aria/types";
 import { fireEvent, render, screen } from "solid-testing-library";
 
-import { createCheckbox } from "../src";
+import { AriaCheckboxProps, createCheckbox } from "../src";
 
 function Checkbox(props: AriaCheckboxProps) {
   let ref: HTMLInputElement | undefined;

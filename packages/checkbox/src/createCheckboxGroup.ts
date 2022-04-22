@@ -1,10 +1,36 @@
-import { createLabel } from "@solid-aria/label";
-import { AriaCheckboxGroupProps, DOMElements, LabelAriaProps } from "@solid-aria/types";
+import { AriaLabelProps, createLabel } from "@solid-aria/label";
+import {
+  AriaLabelingProps,
+  AriaValidationProps,
+  DOMElements,
+  DOMProps,
+  InputBase,
+  LabelableProps,
+  ValueBase
+} from "@solid-aria/types";
 import { combineProps, filterDOMProps } from "@solid-aria/utils";
 import { Accessor, createEffect, createMemo, JSX, mergeProps } from "solid-js";
 
 import { CheckboxGroupState } from "./createCheckboxGroupState";
 import { checkboxGroupNames } from "./utils";
+
+export interface AriaCheckboxGroupProps
+  extends ValueBase<string[]>,
+    InputBase,
+    LabelableProps,
+    DOMProps,
+    AriaLabelingProps,
+    AriaValidationProps {
+  /**
+   * The Checkboxes contained within the CheckboxGroup.
+   */
+  children?: JSX.Element;
+
+  /**
+   * The name of the CheckboxGroup, used when submitting an HTML form.
+   */
+  name?: string;
+}
 
 interface CheckboxGroupAria<T extends DOMElements, U extends DOMElements> {
   /**
@@ -28,7 +54,7 @@ export function createCheckboxGroup<T extends DOMElements = "div", U extends DOM
   props: AriaCheckboxGroupProps,
   state: CheckboxGroupState
 ): CheckboxGroupAria<T, U> {
-  const defaultCreateLabelProps: LabelAriaProps = {
+  const defaultCreateLabelProps: AriaLabelProps = {
     // Checkbox group is not an HTML input element so it
     // shouldn't be labeled by a <label> element.
     labelElementType: "span"

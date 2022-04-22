@@ -30,9 +30,9 @@ Provides the accessibility implementation for labels and their associated elemen
 
 ```tsx
 import { createLabel } from "@solid-aria/label";
-import { LabelAriaProps } from "@solid-aria/types";
+import { AriaLabelProps } from "@solid-aria/types";
 
-interface ColorFieldProps extends LabelAriaProps {
+interface ColorFieldProps extends AriaLabelProps {
   // your component specific props
 }
 

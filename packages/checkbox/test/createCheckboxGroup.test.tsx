@@ -1,8 +1,9 @@
-import { AriaCheckboxGroupItemProps, AriaCheckboxGroupProps } from "@solid-aria/types";
 import { splitProps } from "solid-js";
 import { fireEvent, render, screen } from "solid-testing-library";
 
 import {
+  AriaCheckboxGroupItemProps,
+  AriaCheckboxGroupProps,
   CheckboxGroupState,
   createCheckboxGroup,
   createCheckboxGroupItem,

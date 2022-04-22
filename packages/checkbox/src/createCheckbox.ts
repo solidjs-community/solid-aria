@@ -1,7 +1,14 @@
-import { createToggle, ToggleState } from "@solid-aria/toggle";
-import { AriaCheckboxProps } from "@solid-aria/types";
+import { AriaToggleProps, createToggle, ToggleState } from "@solid-aria/toggle";
 import { access } from "@solid-primitives/utils";
 import { Accessor, createEffect, createMemo, JSX, on } from "solid-js";
+
+export interface AriaCheckboxProps extends AriaToggleProps {
+  /**
+   * Indeterminism is presentational only.
+   * The indeterminate visual representation remains regardless of user interaction.
+   */
+  isIndeterminate?: boolean;
+}
 
 export interface CheckboxAria {
   /**
