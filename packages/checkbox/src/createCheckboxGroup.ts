@@ -76,14 +76,12 @@ export function createCheckboxGroup<T extends DOMElements = "div", U extends DOM
 
   // Pass name prop from group to all items by attaching to the state.
   // This one is mandatory because `createEffect` run after render.
+  // eslint-disable-next-line solid/reactivity
   checkboxGroupNames.set(state, props.name);
 
   createEffect(() => {
     checkboxGroupNames.set(state, props.name);
   });
 
-  return {
-    groupProps: groupProps as Accessor<unknown> as Accessor<JSX.IntrinsicElements[T]>,
-    labelProps
-  };
+  return { groupProps, labelProps };
 }

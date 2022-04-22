@@ -58,7 +58,7 @@ export interface RadioGroupState {
   /**
    * Sets the last focused value.
    */
-  setLastFocusedValue(value: string): void;
+  setLastFocusedValue(value: string | undefined): void;
 }
 
 /**
