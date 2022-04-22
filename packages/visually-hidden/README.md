@@ -32,7 +32,7 @@ Provides props for an element that hides its children visually, but keeps conten
 import { createVisuallyHidden } from "@solid-aria/visually-hidden";
 
 function Example() {
-  const { visuallyHiddenProps } = createVisuallyHidden<HTMLDivElement>();
+  const { visuallyHiddenProps } = createVisuallyHidden<"div">();
 
   return <div {...visuallyHiddenProps()}>I am hidden</div>;
 }
