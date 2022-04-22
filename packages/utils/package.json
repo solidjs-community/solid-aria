@@ -32,8 +32,8 @@
   ],
   "scripts": {
     "build": "tsup",
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -48,6 +48,6 @@
     "name": "utils",
     "stage": 0,
     "list": [],
-    "category": "Utilities"
+    "category": ""
   }
 }

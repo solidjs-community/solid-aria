@@ -1,0 +1,56 @@
+{
+  "name": "@solid-aria/toggle",
+  "version": "0.0.1",
+  "private": false,
+  "description": "Primitives for building toggle components like checkboxes and switches.",
+  "keywords": [
+    "solid",
+    "aria",
+    "headless",
+    "design",
+    "system",
+    "components"
+  ],
+  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/toggle#readme",
+  "bugs": {
+    "url": "https://github.com/solidjs-community/solid-aria/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solidjs-community/solid-aria.git"
+  },
+  "license": "MIT",
+  "author": "Fabien Marie-Louise <fabienml.dev@gmail.com>",
+  "contributors": [],
+  "sideEffects": false,
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "vite serve dev --host",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch --passWithNoTests",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@solid-aria/focus": "workspace:^0.0.1",
+    "@solid-aria/interactions": "workspace:^0.0.1",
+    "@solid-aria/types": "workspace:^0.0.1",
+    "@solid-aria/utils": "workspace:^0.0.1"
+  },
+  "peerDependencies": {
+    "@solid-primitives/utils": "^1.3.0",
+    "solid-js": "^1.3.15"
+  },
+  "primitive": {
+    "name": "toggle",
+    "stage": 0,
+    "list": [],
+    "category": ""
+  }
+}

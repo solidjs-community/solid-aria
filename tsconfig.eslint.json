@@ -5,5 +5,5 @@
     "noEmit": true
   },
   "include": ["packages", "jest.setup.ts", "tsup.config.ts", "vite.config.ts"],
-  "exclude": ["node_modules", "template/**/*", "**/dist", "**/build"]
+  "exclude": ["node_modules", "template", "**/dist", "**/build"]
 }

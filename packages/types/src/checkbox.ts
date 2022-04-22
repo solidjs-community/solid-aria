@@ -3,7 +3,7 @@ import { JSX } from "solid-js";
 import { AriaLabelingProps, AriaValidationProps } from "./aria";
 import { DOMProps } from "./dom";
 import { InputBase, ValueBase } from "./inputs";
-import { LabelableProps } from "./labelable";
+import { LabelableProps } from "./label";
 import { AriaToggleProps, ToggleProps } from "./toggle";
 
 export interface CheckboxGroupProps extends ValueBase<string[]>, InputBase, LabelableProps {}

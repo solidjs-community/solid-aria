@@ -17,7 +17,7 @@ describe("filterDOMProps", () => {
     });
   });
 
-  it("should include labelling props when labellable option is set to true", async () => {
+  it("should include labelling props when labelable option is set to true", async () => {
     createRoot(async dispose => {
       const filteredProps = filterDOMProps(
         {
