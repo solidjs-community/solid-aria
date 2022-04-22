@@ -40,8 +40,10 @@
   "dependencies": {
     "@solid-aria/checkbox": "workspace:^0.0.1",
     "@solid-aria/focus": "workspace:^0.0.1",
+    "@solid-aria/i18n": "workspace:^0.0.1",
     "@solid-aria/interactions": "workspace:^0.0.1",
     "@solid-aria/label": "workspace:^0.0.1",
+    "@solid-aria/radio": "workspace:^0.0.1",
     "@solid-aria/switch": "workspace:^0.0.1",
     "@solid-aria/toggle": "workspace:^0.0.1",
     "@solid-aria/types": "workspace:^0.0.1",

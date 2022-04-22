@@ -108,6 +108,14 @@ importers:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 
+  packages/i18n:
+    specifiers:
+      '@solid-aria/types': workspace:^0.0.1
+      '@solid-aria/utils': workspace:^0.0.1
+    dependencies:
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
   packages/interactions:
     specifiers:
       '@solid-aria/types': workspace:^0.0.1
@@ -128,8 +136,10 @@ importers:
     specifiers:
       '@solid-aria/checkbox': workspace:^0.0.1
       '@solid-aria/focus': workspace:^0.0.1
+      '@solid-aria/i18n': workspace:^0.0.1
       '@solid-aria/interactions': workspace:^0.0.1
       '@solid-aria/label': workspace:^0.0.1
+      '@solid-aria/radio': workspace:^0.0.1
       '@solid-aria/switch': workspace:^0.0.1
       '@solid-aria/toggle': workspace:^0.0.1
       '@solid-aria/types': workspace:^0.0.1
@@ -138,8 +148,10 @@ importers:
     dependencies:
       '@solid-aria/checkbox': link:../checkbox
       '@solid-aria/focus': link:../focus
+      '@solid-aria/i18n': link:../i18n
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/label': link:../label
+      '@solid-aria/radio': link:../radio
       '@solid-aria/switch': link:../switch
       '@solid-aria/toggle': link:../toggle
       '@solid-aria/types': link:../types
@@ -148,9 +160,17 @@ importers:
 
   packages/radio:
     specifiers:
+      '@solid-aria/focus': workspace:^0.0.1
+      '@solid-aria/i18n': workspace:^0.0.1
+      '@solid-aria/interactions': workspace:^0.0.1
+      '@solid-aria/label': workspace:^0.0.1
       '@solid-aria/types': workspace:^0.0.1
       '@solid-aria/utils': workspace:^0.0.1
     dependencies:
+      '@solid-aria/focus': link:../focus
+      '@solid-aria/i18n': link:../i18n
+      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/label': link:../label
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 
