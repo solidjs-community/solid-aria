@@ -45,7 +45,7 @@ function updateLocale() {
 /**
  * Returns an accessor for the current browser/system language, and updates when it changes.
  */
-export function useDefaultLocale(): Accessor<Locale> {
+export function createDefaultLocaleObserver(): Accessor<Locale> {
   // We cannot determine the browser's language on the server, so default to en-US.
   // This will be updated after hydration on the client to the correct value.
   const defaultSSRLocale: Locale = {
