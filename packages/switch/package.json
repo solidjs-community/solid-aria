@@ -39,8 +39,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/toggle": "workspace:^0.0.1",
-    "@solid-aria/types": "workspace:^0.0.1"
+    "@solid-aria/toggle": "workspace:^",
+    "@solid-aria/types": "workspace:^"
   },
   "peerDependencies": {
     "@solid-primitives/utils": "^1.3.0",
