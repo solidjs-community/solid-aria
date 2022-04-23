@@ -179,7 +179,7 @@ export function setInteractionModality(modality: Modality) {
 /**
  * Keeps state of the current modality.
  */
-export function useInteractionModality(): Accessor<Modality> {
+export function createInteractionModality(): Accessor<Modality> {
   setupGlobalFocusEvents();
 
   const [modality, setModality] = createSignal(currentModality);
