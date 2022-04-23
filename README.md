@@ -8,7 +8,7 @@ A library of high-quality primitives that help you build accessible user interfa
 
 ## Primitives
 
-- [primitives](./packages/primitives/) - Export all Solid Aria primitives in a single convinient package.
+[@solid-aria/primitives](./packages/primitives/) - Export all Solid Aria primitives in a single convinient package.
 
 ### Interactions
 
