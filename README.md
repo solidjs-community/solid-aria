@@ -8,6 +8,12 @@ A library of high-quality primitives that help you build accessible user interfa
 
 ## Primitives
 
+- [primitives](./packages/primitives/) - Export all Solid Aria primitives in a single convinient package.
+
+### Interactions
+
+- [focus](./packages/focus/) - Primitives for dealing with focus rings and focus management.
+
 ### Forms
 
 - [checkbox](./packages/checkbox/) - Provides the behavior and accessibility implementation for checkbox and checkbox group components.
@@ -18,7 +24,7 @@ A library of high-quality primitives that help you build accessible user interfa
 
 ### Utilities
 
-- [i18n](./packages/i18n/) - Primitives for working with locales and rtl mode.
+- [i18n](./packages/i18n/) - Primitives for dealing with locale and layout direction.
 - [visually-hidden](./packages/visually-hidden/) - Hides its children visually, while keeping content visible to screen readers.
 
 ## Acknowledgment
