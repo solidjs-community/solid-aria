@@ -36,7 +36,7 @@ export function I18nProvider(props: I18nProviderProps) {
 }
 
 /**
- * Returns the current locale and layout direction from the closest `I18nProvider` or fallback to the default one.
+ * Returns an accessor for the current locale and layout direction.
  */
 export function useLocale(): Accessor<Locale> {
   const defaultLocale = useDefaultLocale();

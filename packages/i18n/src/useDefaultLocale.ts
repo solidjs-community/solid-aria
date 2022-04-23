@@ -43,7 +43,7 @@ function updateLocale() {
 }
 
 /**
- * Returns the current browser/system language, and updates when it changes.
+ * Returns an accessor for the current browser/system language, and updates when it changes.
  */
 export function useDefaultLocale(): Accessor<Locale> {
   // We cannot determine the browser's language on the server, so default to en-US.
