@@ -2,7 +2,9 @@ import { Direction } from "@solid-aria/types";
 
 // https://en.wikipedia.org/wiki/Right-to-left
 const RTL_SCRIPTS = new Set([
+  "Avst",
   "Arab",
+  "Armi",
   "Syrc",
   "Samr",
   "Mand",
@@ -14,7 +16,7 @@ const RTL_SCRIPTS = new Set([
   "Hebr"
 ]);
 
-const RTL_LANGS = new Set([
+export const RTL_LANGS = new Set([
   "ae",
   "ar",
   "arc",
@@ -45,6 +47,7 @@ export function isRTL(locale: string) {
   // This is more accurate than guessing by language, since languages can be written in multiple scripts.
   if (Intl.Locale) {
     const script = new Intl.Locale(locale).maximize().script ?? "";
+
     return RTL_SCRIPTS.has(script);
   }
 

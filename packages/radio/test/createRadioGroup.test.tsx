@@ -388,8 +388,6 @@ describe("createRadioGroup", () => {
     const dogsLabel = screen.getByLabelText("Dogs").parentElement as HTMLLabelElement;
     const catsLabel = screen.getByLabelText("Cats").parentElement as HTMLLabelElement;
 
-    console.log(catsLabel);
-
     fireEvent.click(catsLabel);
     await Promise.resolve();
 
