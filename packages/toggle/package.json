@@ -39,10 +39,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/focus": "workspace:^0.0.1",
-    "@solid-aria/interactions": "workspace:^0.0.1",
-    "@solid-aria/types": "workspace:^0.0.1",
-    "@solid-aria/utils": "workspace:^0.0.1"
+    "@solid-aria/focus": "workspace:^",
+    "@solid-aria/interactions": "workspace:^",
+    "@solid-aria/types": "workspace:^",
+    "@solid-aria/utils": "workspace:^"
   },
   "peerDependencies": {
     "@solid-primitives/utils": "^1.3.0",

@@ -1,3 +1,3 @@
 export * from "./context";
-export * from "./createDefaultLocaleObserver";
+export * from "./createDefaultLocale";
 export * from "./utils";

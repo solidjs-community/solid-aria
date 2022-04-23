@@ -1,11 +1,11 @@
 import { createRoot, onCleanup, onMount } from "solid-js";
 
-import { createDefaultLocaleObserver } from "../src";
+import { createDefaultLocale } from "../src";
 
-describe("createDefaultLocaleObserver", () => {
+describe("createDefaultLocale", () => {
   it("should use en-US locale by default", () => {
     createRoot(dispose => {
-      const locale = createDefaultLocaleObserver();
+      const locale = createDefaultLocale();
 
       expect(locale().locale).toBe("en-US");
       expect(locale().direction).toBe("ltr");
@@ -19,7 +19,7 @@ describe("createDefaultLocaleObserver", () => {
       jest.spyOn(window, "addEventListener").mock;
       jest.spyOn(window, "removeEventListener").mock;
 
-      createDefaultLocaleObserver();
+      createDefaultLocale();
 
       onMount(() => {
         expect(window.addEventListener).toHaveBeenCalledWith(

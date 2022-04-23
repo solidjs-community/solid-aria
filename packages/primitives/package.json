@@ -39,17 +39,17 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/checkbox": "workspace:^0.0.1",
-    "@solid-aria/focus": "workspace:^0.0.1",
-    "@solid-aria/i18n": "workspace:^0.0.1",
-    "@solid-aria/interactions": "workspace:^0.0.1",
-    "@solid-aria/label": "workspace:^0.0.1",
-    "@solid-aria/radio": "workspace:^0.0.1",
-    "@solid-aria/switch": "workspace:^0.0.1",
-    "@solid-aria/toggle": "workspace:^0.0.1",
-    "@solid-aria/types": "workspace:^0.0.1",
-    "@solid-aria/utils": "workspace:^0.0.1",
-    "@solid-aria/visually-hidden": "workspace:^0.0.1"
+    "@solid-aria/checkbox": "workspace:^",
+    "@solid-aria/focus": "workspace:^",
+    "@solid-aria/i18n": "workspace:^",
+    "@solid-aria/interactions": "workspace:^",
+    "@solid-aria/label": "workspace:^",
+    "@solid-aria/radio": "workspace:^",
+    "@solid-aria/switch": "workspace:^",
+    "@solid-aria/toggle": "workspace:^",
+    "@solid-aria/types": "workspace:^",
+    "@solid-aria/utils": "workspace:^",
+    "@solid-aria/visually-hidden": "workspace:^"
   },
   "peerDependencies": {
     "@solid-primitives/utils": "^1.3.0",
