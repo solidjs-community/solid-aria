@@ -51,6 +51,11 @@ export interface RadioGroupState {
   readonly lastFocusedValue: Accessor<string | undefined>;
 
   /**
+   * Returns whether the given value is selected.
+   */
+  isSelected(value: string): boolean;
+
+  /**
    * Sets the selected value.
    */
   setSelectedValue(value: string): void;
@@ -82,6 +87,10 @@ export function createRadioGroupState(props: CreateRadioGroupStateProps): RadioG
     return access(props.isReadOnly) || false;
   };
 
+  const isSelected = (value: string) => {
+    return selectedValue() === value;
+  };
+
   const setSelectedValue = (value: string) => {
     if (isReadOnly() || isDisabled()) {
       return;
@@ -96,6 +105,7 @@ export function createRadioGroupState(props: CreateRadioGroupStateProps): RadioG
     lastFocusedValue,
     setLastFocusedValue,
     isDisabled,
-    isReadOnly
+    isReadOnly,
+    isSelected
   };
 }

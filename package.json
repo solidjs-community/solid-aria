@@ -21,6 +21,7 @@
     "prepare": "husky install",
     "release": "turbo run build && changeset publish",
     "test": "turbo run test",
+    "typecheck": "turbo run typecheck",
     "version-packages": "changeset version"
   },
   "lint-staged": {

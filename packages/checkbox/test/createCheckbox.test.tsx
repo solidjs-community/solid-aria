@@ -185,7 +185,7 @@ describe("createCheckbox", () => {
     expect(onChangeSpy.mock.calls[1][0]).toBe(false);
   });
 
-  it("can have a non-visible label", () => {
+  it("supports aria-label", () => {
     const ariaLabel = "not visible";
 
     render(() => <Checkbox aria-label={ariaLabel}>Click Me</Checkbox>);

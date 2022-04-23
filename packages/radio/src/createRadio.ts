@@ -50,7 +50,7 @@ export function createRadio(
   };
 
   const isChecked = () => {
-    return state.selectedValue() === props.value;
+    return state.isSelected(props.value);
   };
 
   const isLastFocused = () => {
@@ -58,8 +58,22 @@ export function createRadio(
   };
 
   const onChange: JSX.EventHandlerUnion<HTMLInputElement, Event> = event => {
+    // since we spread props on label, onChange will end up there as well as in here.
+    // so we have to stop propagation at the lowest level that we care about
     event.stopPropagation();
+
     state.setSelectedValue(props.value);
+
+    const target = event.target as HTMLInputElement;
+
+    // Unlike in React, inputs `checked` state can be out of sync with our toggle state.
+    // for example a readonly `<input type="radio" />` is always "checkable".
+    //
+    // Also even if an input is controlled (ex: `<input type="radio" checked={isChecked} />`,
+    // clicking on the input will change its internal `checked` state.
+    //
+    // To prevent this, we need to force the input `checked` state to be in sync with the toggle state.
+    target.checked = isChecked();
   };
 
   const { pressProps } = createPress(props);
