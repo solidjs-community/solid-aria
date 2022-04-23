@@ -1,3 +1,3 @@
-## 0.0.1 (2022-04-23)
+## 0.0.1
 
 - Initial release as a Stage-0 primitive.
