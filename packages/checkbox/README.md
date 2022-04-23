@@ -85,13 +85,13 @@ function Checkbox(props: AriaCheckboxProps) {
 
   const state = createToggleState(props);
   const { inputProps } = createCheckbox(props, state, () => ref);
-  const { isFocusVisible, focusRingProps } = createFocusRing();
+  const { isFocusVisible, focusProps } = createFocusRing();
   const { visuallyHiddenProps } = createVisuallyHidden<HTMLDivElement>();
 
   return (
     <label style={{ display: "flex", "align-items": "center" }}>
       <div {...visuallyHiddenProps()}>
-        <input {...inputProps()} {...focusRingProps()} ref={ref} />
+        <input {...inputProps()} {...focusProps()} ref={ref} />
       </div>
       <svg width={24} height={24} aria-hidden="true" style={{ "margin-right": "4px" }}>
         <rect

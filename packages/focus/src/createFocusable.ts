@@ -43,7 +43,7 @@ export interface FocusableResult {
 // TODO: add all the focus provider stuff when needed
 
 /**
- * Used to make an element focusable and capable of auto focus.
+ * Make an element focusable, capable of auto focus and excludable from tab order.
  */
 export function createFocusable(
   props: CreateFocusableProps,

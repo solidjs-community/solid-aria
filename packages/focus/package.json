@@ -2,7 +2,7 @@
   "name": "@solid-aria/focus",
   "version": "0.0.1",
   "private": false,
-  "description": "A collection of focus management related primitives.",
+  "description": "Primitives for dealing with focus rings and focus management.",
   "keywords": [
     "solid",
     "aria",

@@ -30,8 +30,6 @@ export interface CreateFocusRingProps {
   autoFocus?: MaybeAccessor<boolean | undefined>;
 }
 
-export type FocusRingElementProps = FocusElementProps | FocusWithinElementProps;
-
 export interface FocusRingResult {
   /**
    * Whether the element is currently focused.
@@ -46,7 +44,7 @@ export interface FocusRingResult {
   /**
    * Props to apply to the container element with the focus ring.
    */
-  focusRingProps: Accessor<FocusRingElementProps>;
+  focusProps: Accessor<FocusElementProps | FocusWithinElementProps>;
 }
 
 /**
@@ -82,7 +80,7 @@ export function createFocusRing(props: CreateFocusRingProps = {}): FocusRingResu
 
   const isFocusVisible = () => state.isFocused && isFocusVisibleState();
 
-  const { focusProps } = createFocus({
+  const { focusProps: _focusProps } = createFocus({
     isDisabled: () => access(props.within),
     onFocusChange
   });
@@ -92,13 +90,13 @@ export function createFocusRing(props: CreateFocusRingProps = {}): FocusRingResu
     onFocusWithinChange: onFocusChange
   });
 
-  const focusRingProps: Accessor<FocusRingElementProps> = () => {
-    return access(props.within) ? focusWithinProps() : focusProps();
+  const focusProps = () => {
+    return access(props.within) ? focusWithinProps() : _focusProps();
   };
 
   return {
     isFocused,
     isFocusVisible,
-    focusRingProps
+    focusProps
   };
 }

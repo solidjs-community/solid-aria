@@ -142,7 +142,7 @@ function Radio(props: AriaRadioProps) {
 
   const state = useContext(RadioContext);
   const { inputProps } = createRadio(props, state!, () => ref);
-  const { isFocusVisible, focusRingProps } = createFocusRing();
+  const { isFocusVisible, focusProps } = createFocusRing();
   const { visuallyHiddenProps } = createVisuallyHidden<"div">();
 
   const isSelected = () => state?.selectedValue() === props.value;
@@ -151,7 +151,7 @@ function Radio(props: AriaRadioProps) {
   return (
     <label style={{ display: "flex", "align-items": "center" }}>
       <div {...visuallyHiddenProps()}>
-        <input {...inputProps()} {...focusRingProps()} ref={ref} />
+        <input {...inputProps()} {...focusProps()} ref={ref} />
       </div>
       <svg width={24} height={24} aria-hidden="true" style={{ "margin-right": 4 }}>
         <circle

@@ -21,3 +21,7 @@ yarn add @solid-aria/interactions
 # or
 pnpm add @solid-aria/interactions
 ```
+
+## Changelog
+
+All notable changes are described in the [CHANGELOG.md](./CHANGELOG.md) file.
