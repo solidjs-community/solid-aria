@@ -39,9 +39,8 @@ Checkboxes can be built with the `<input>` HTML element, but this can be difficu
 ### How to use it
 
 ```tsx
-import { createCheckbox } from "@solid-aria/checkbox";
+import { AriaCheckboxProps, createCheckbox } from "@solid-aria/checkbox";
 import { createToggleState } from "@solid-aria/toggle";
-import { AriaCheckboxProps } from "@solid-aria/types";
 
 function Checkbox(props: AriaCheckboxProps) {
   let ref: HTMLInputElement | undefined;
@@ -74,10 +73,9 @@ To build a custom styled checkbox, you can make the native input element visuall
 For keyboard accessibility, a focus ring is important to indicate which element has keyboard focus. This is implemented with the `createFocusRing` primitive. When `isFocusVisible` is true, an extra SVG element is rendered to indicate focus. The focus ring is only visible when the user is interacting with a keyboard, not with a mouse or touch.
 
 ```tsx
+import { AriaCheckboxProps, createCheckbox } from "@solid-aria/checkbox";
 import { createFocusRing } from "@solid-aria/focus";
-import { createCheckbox } from "@solid-aria/checkbox";
 import { createToggleState } from "@solid-aria/toggle";
-import { AriaCheckboxProps } from "@solid-aria/types";
 import { createVisuallyHidden } from "@solid-aria/visually-hidden";
 
 import { Show } from "solid-js/web";
@@ -87,13 +85,13 @@ function Checkbox(props: AriaCheckboxProps) {
 
   const state = createToggleState(props);
   const { inputProps } = createCheckbox(props, state, () => ref);
-  const { isFocusVisible, focusRingProps } = createFocusRing();
+  const { isFocusVisible, focusProps } = createFocusRing();
   const { visuallyHiddenProps } = createVisuallyHidden<HTMLDivElement>();
 
   return (
     <label style={{ display: "flex", "align-items": "center" }}>
       <div {...visuallyHiddenProps()}>
-        <input {...inputProps()} {...focusRingProps()} ref={ref} />
+        <input {...inputProps()} {...focusProps()} ref={ref} />
       </div>
       <svg width={24} height={24} aria-hidden="true" style={{ "margin-right": "4px" }}>
         <rect
@@ -157,12 +155,13 @@ This example uses native input elements for the checkboxes, and SolidJS context 
 
 ```tsx
 import {
+  AriaCheckboxGroupItemProps,
+  AriaCheckboxGroupProps,
   CheckboxGroupState,
   createCheckboxGroup,
   createCheckboxGroupItem,
   createCheckboxGroupState
 } from "@solid-aria/checkbox";
-import { AriaCheckboxGroupItemProps, AriaCheckboxGroupProps } from "@solid-aria/types";
 
 import { createContext, useContext } from "solid-js";
 

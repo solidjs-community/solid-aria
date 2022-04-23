@@ -44,9 +44,8 @@ For keyboard accessibility, a focus ring is important to indicate which element 
 
 ```tsx
 import { createFocusRing } from "@solid-aria/focus";
-import { createSwitch } from "@solid-aria/switch";
+import { AriaSwitchProps, createSwitch } from "@solid-aria/switch";
 import { createToggleState } from "@solid-aria/toggle";
-import { AriaSwitchProps } from "@solid-aria/types";
 import { createVisuallyHidden } from "@solid-aria/visually-hidden";
 
 function Switch(props: AriaSwitchProps) {
@@ -54,13 +53,13 @@ function Switch(props: AriaSwitchProps) {
 
   const state = createToggleState(props);
   const { inputProps } = createSwitch(props, state, () => ref);
-  const { isFocusVisible, focusRingProps } = createFocusRing();
+  const { isFocusVisible, focusProps } = createFocusRing();
   const { visuallyHiddenProps } = createVisuallyHidden<HTMLDivElement>();
 
   return (
     <label style={{ display: "flex", "align-items": "center" }}>
       <div {...visuallyHiddenProps()}>
-        <input {...inputProps()} {...focusRingProps()} ref={ref} />
+        <input {...inputProps()} {...focusProps()} ref={ref} />
       </div>
       <svg width={40} height={24} aria-hidden="true" style={{ "margin-right": "4px" }}>
         <rect

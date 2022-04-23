@@ -1,8 +1,7 @@
 import { createToggleState } from "@solid-aria/toggle";
-import { AriaSwitchProps } from "@solid-aria/types";
 import { fireEvent, render, screen } from "solid-testing-library";
 
-import { createSwitch } from "../src";
+import { AriaSwitchProps, createSwitch } from "../src";
 
 function Switch(props: AriaSwitchProps) {
   let ref: HTMLInputElement | undefined;

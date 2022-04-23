@@ -1,8 +1,9 @@
-import { AriaCheckboxGroupItemProps, AriaCheckboxGroupProps } from "@solid-aria/types";
 import { splitProps } from "solid-js";
 import { fireEvent, render, screen } from "solid-testing-library";
 
 import {
+  AriaCheckboxGroupItemProps,
+  AriaCheckboxGroupProps,
   CheckboxGroupState,
   createCheckboxGroup,
   createCheckboxGroupItem,
@@ -88,10 +89,12 @@ describe("createCheckboxGroup", () => {
     expect(checkboxes[2].checked).toBeTruthy();
   });
 
-  it("can have a default value", () => {
+  it("can have a default value", async () => {
+    const onChangeSpy = jest.fn();
+
     render(() => (
       <CheckboxGroup
-        groupProps={{ label: "Favorite Pet", value: ["cats"] }}
+        groupProps={{ label: "Favorite Pet", defaultValue: ["cats"], onChange: onChangeSpy }}
         checkboxProps={[
           { value: "dogs", children: "Dogs" },
           { value: "cats", children: "Cats" },
@@ -100,9 +103,62 @@ describe("createCheckboxGroup", () => {
       />
     ));
 
-    const cats = screen.getByLabelText("Cats") as HTMLInputElement;
+    const checkboxGroup = screen.getByRole("group", { exact: true });
+    const checkboxes = screen.getAllByRole("checkbox") as HTMLInputElement[];
 
-    expect(cats.checked).toBe(true);
+    expect(checkboxGroup).toBeTruthy();
+    expect(checkboxes.length).toBe(3);
+    expect(onChangeSpy).not.toHaveBeenCalled();
+
+    expect(checkboxes[0].checked).toBeFalsy();
+    expect(checkboxes[1].checked).toBeTruthy();
+    expect(checkboxes[2].checked).toBeFalsy();
+
+    const dragons = screen.getByLabelText("Dragons");
+
+    fireEvent.click(dragons);
+    await Promise.resolve();
+
+    expect(onChangeSpy).toHaveBeenCalledTimes(1);
+    expect(onChangeSpy).toHaveBeenCalledWith(["cats", "dragons"]);
+
+    expect(checkboxes[0].checked).toBeFalsy();
+    expect(checkboxes[1].checked).toBeTruthy();
+    expect(checkboxes[2].checked).toBeTruthy();
+  });
+
+  it("value can be controlled", async () => {
+    const onChangeSpy = jest.fn();
+    render(() => (
+      <CheckboxGroup
+        groupProps={{ label: "Favorite Pet", value: ["cats"], onChange: onChangeSpy }}
+        checkboxProps={[
+          { value: "dogs", children: "Dogs" },
+          { value: "cats", children: "Cats" },
+          { value: "dragons", children: "Dragons" }
+        ]}
+      />
+    ));
+
+    const checkboxes = screen.getAllByRole("checkbox") as HTMLInputElement[];
+
+    expect(checkboxes[0].checked).toBeFalsy();
+    expect(checkboxes[1].checked).toBeTruthy();
+    expect(checkboxes[2].checked).toBeFalsy();
+
+    const dragons = screen.getByLabelText("Dragons");
+
+    fireEvent.click(dragons);
+    await Promise.resolve();
+
+    expect(onChangeSpy).toHaveBeenCalledTimes(1);
+    expect(onChangeSpy).toHaveBeenCalledWith(["cats", "dragons"]);
+
+    expect(checkboxes[0].checked).toBeFalsy();
+    expect(checkboxes[1].checked).toBeTruthy();
+
+    // false because `value` is controlled
+    expect(checkboxes[2].checked).toBeFalsy();
   });
 
   it("name can be controlled", () => {

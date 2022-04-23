@@ -10,14 +10,16 @@ A library of high-quality primitives that help you build accessible user interfa
 
 ### Forms
 
-- [checkbox](./packages/checkbox/) - Provides the behavior and accessibility implementation for a checkbox and checkbox group components.
-- [switch](./packages/switch/) - Provides the behavior and accessibility implementation for a switch component.
-- [toggle](./packages/toggle/) - Handles interactions for toggle elements, e.g. Checkboxes and Switches.
+- [checkbox](./packages/checkbox/) - Provides the behavior and accessibility implementation for checkbox and checkbox group components.
+- [label](./packages/label/) - Provides the the behavior and accessibility implementation for labels and their associated elements.
+- [radio](./packages/radio/) - Provides the behavior and accessibility implementation for radio and radio group components.
+- [switch](./packages/switch/) - Provides the behavior and accessibility implementation for switch component.
+- [toggle](./packages/toggle/) - Handles interactions for toggle elements, e.g. checkboxes and switches.
 
 ### Utilities
 
-- [label](./packages/label/) - Provides the accessibility implementation for labels and their associated elements.
-- [visually-hidden](./src/visually-hidden/) - Hides its children visually, while keeping content visible to screen readers.
+- [i18n](./packages/i18n/) - Primitives for working with locales and rtl mode.
+- [visually-hidden](./packages/visually-hidden/) - Hides its children visually, while keeping content visible to screen readers.
 
 ## Acknowledgment
 

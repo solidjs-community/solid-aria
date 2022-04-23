@@ -1,8 +1,7 @@
 import { createToggleState } from "@solid-aria/toggle";
-import { AriaCheckboxProps } from "@solid-aria/types";
 import { fireEvent, render, screen } from "solid-testing-library";
 
-import { createCheckbox } from "../src";
+import { AriaCheckboxProps, createCheckbox } from "../src";
 
 function Checkbox(props: AriaCheckboxProps) {
   let ref: HTMLInputElement | undefined;
@@ -186,7 +185,7 @@ describe("createCheckbox", () => {
     expect(onChangeSpy.mock.calls[1][0]).toBe(false);
   });
 
-  it("can have a non-visible label", () => {
+  it("supports aria-label", () => {
     const ariaLabel = "not visible";
 
     render(() => <Checkbox aria-label={ariaLabel}>Click Me</Checkbox>);

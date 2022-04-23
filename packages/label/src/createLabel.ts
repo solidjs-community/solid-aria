@@ -1,6 +1,21 @@
-import { AriaLabelingProps, DOMElements, DOMProps, LabelAriaProps } from "@solid-aria/types";
+import {
+  AriaLabelingProps,
+  DOMElements,
+  DOMProps,
+  ElementType,
+  LabelableProps
+} from "@solid-aria/types";
 import { createId, mergeAriaLabels } from "@solid-aria/utils";
+import { MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
+
+export interface AriaLabelProps extends LabelableProps, DOMProps, AriaLabelingProps {
+  /**
+   * The HTML element used to render the label, e.g. 'label', or 'span'.
+   * @default 'label'
+   */
+  labelElementType?: MaybeAccessor<ElementType | undefined>;
+}
 
 export interface LabelAria<T extends DOMElements> {
   /**
@@ -19,11 +34,11 @@ export interface LabelAria<T extends DOMElements> {
  * Labels provide context for user inputs.
  * @param props - The props for labels and fields.
  */
-export function createLabel<T extends DOMElements = "label">(props: LabelAriaProps): LabelAria<T> {
+export function createLabel<T extends DOMElements = "label">(props: AriaLabelProps): LabelAria<T> {
   const defaultFieldId = createId();
   const labelId = createId();
 
-  const defaultProps: LabelAriaProps = {
+  const defaultProps: AriaLabelProps = {
     id: defaultFieldId,
     labelElementType: "label"
   };
