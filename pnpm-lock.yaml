@@ -98,6 +98,14 @@ importers:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 
+  packages/collections:
+    specifiers:
+      '@solid-aria/types': workspace:^
+      '@solid-aria/utils': workspace:^
+    dependencies:
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
   packages/focus:
     specifiers:
       '@solid-aria/interactions': workspace:^
@@ -125,6 +133,22 @@ importers:
       '@solid-aria/utils': link:../utils
 
   packages/label:
+    specifiers:
+      '@solid-aria/types': workspace:^
+      '@solid-aria/utils': workspace:^
+    dependencies:
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
+  packages/list:
+    specifiers:
+      '@solid-aria/types': workspace:^
+      '@solid-aria/utils': workspace:^
+    dependencies:
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
+  packages/listbox:
     specifiers:
       '@solid-aria/types': workspace:^
       '@solid-aria/utils': workspace:^
@@ -171,6 +195,14 @@ importers:
       '@solid-aria/i18n': link:../i18n
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/label': link:../label
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
+  packages/selection:
+    specifiers:
+      '@solid-aria/types': workspace:^
+      '@solid-aria/utils': workspace:^
+    dependencies:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 
