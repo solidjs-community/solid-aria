@@ -2,7 +2,7 @@ import { DOMElements } from "@solid-aria/types";
 import { createId } from "@solid-aria/utils";
 import { Accessor, createMemo, JSX } from "solid-js";
 
-interface AriaListBoxSectionProps {
+export interface AriaListBoxSectionProps {
   /**
    * The heading for the section.
    */
@@ -14,7 +14,7 @@ interface AriaListBoxSectionProps {
   "aria-label"?: string;
 }
 
-interface ListBoxSectionAria<
+export interface ListBoxSectionAria<
   ItemElementType extends DOMElements,
   HeadingElementType extends DOMElements,
   GroupElementType extends DOMElements

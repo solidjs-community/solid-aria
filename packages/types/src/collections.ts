@@ -1,42 +1,52 @@
-import { Component, JSX } from "solid-js";
+import { JSX } from "solid-js";
 
 export type Key = string | number;
 
-export interface ItemProps<T> {
+/**
+ * A generic interface to access a readonly sequential
+ * collection of unique keyed items.
+ */
+export interface Collection<T> extends Iterable<T> {
   /**
-   * Rendered contents of the item or child items.
+   * The number of items in the collection.
    */
-  children?: JSX.Element;
+  readonly size: number;
 
   /**
-   * Rendered contents of the item if `children` contains child items.
+   * Iterate over all keys in the collection.
    */
-  title?: JSX.Element;
+  getKeys(): Iterable<Key>;
 
   /**
-   * A string representation of the item's contents, used for features like typeahead.
+   * Get an item by its key.
    */
-  textValue?: string;
+  getItem(key: Key): T;
 
   /**
-   * An accessibility label for this item.
+   * Get an item by the index of its key.
    */
-  "aria-label"?: string;
+  at(idx: number): T;
 
   /**
-   * A list of child item objects. Used for dynamic collections.
+   * Get the key that comes before the given key in the collection.
    */
-  childItems?: Iterable<T>;
+  getKeyBefore(key: Key): Key | null;
 
   /**
-   * Whether this item has children, even if not loaded yet.
+   * Get the key that comes after the given key in the collection.
    */
-  hasChildItems?: boolean;
+  getKeyAfter(key: Key): Key | null;
+
+  /**
+   * Get the first key in the collection.
+   */
+  getFirstKey(): Key | null;
+
+  /**
+   * Get the last key in the collection.
+   */
+  getLastKey(): Key | null;
 }
-
-export type ItemElement<T> = Component<ItemProps<T>>;
-
-export type ItemRenderer<T> = (item: T) => ItemElement<T>;
 
 export interface Node<T> {
   /**
@@ -115,25 +125,7 @@ export interface Node<T> {
   props?: any;
 
   /**
-   * @private
+   *  @private
    */
-  shouldInvalidate?: (context: unknown) => boolean;
-}
-
-// Undocumented in react-aria
-export interface PartialNode<T> {
-  type?: string;
-  key?: Key;
-  value?: T;
-  element?: JSX.Element;
-  wrapper?: (element: JSX.Element) => JSX.Element;
-  rendered?: JSX.Element;
-  textValue?: string;
-  "aria-label"?: string;
-  index?: number;
-  renderer?: ItemRenderer<T>;
-  hasChildNodes?: boolean;
-  childNodes?: () => IterableIterator<PartialNode<T>>;
-  props?: any;
   shouldInvalidate?: (context: unknown) => boolean;
 }
