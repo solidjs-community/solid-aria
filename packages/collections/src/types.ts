@@ -11,7 +11,7 @@ export interface ItemProps<T> {
   /**
    * Rendered contents of the item if `children` contains child items.
    */
-  title?: JSX.Element; // label?? contents?
+  title?: JSX.Element;
 
   /**
    * A string representation of the item's contents, used for features like typeahead.
