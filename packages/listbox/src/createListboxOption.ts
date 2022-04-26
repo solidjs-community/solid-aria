@@ -63,6 +63,8 @@ export function createListBoxOption<
       return baseProps;
     }
 
+    // TODO: handle aria-selected, aria-disabled and focus state.
+
     return {
       ...baseProps,
       "aria-label": props["aria-label"],

@@ -136,9 +136,11 @@ importers:
 
   packages/listbox:
     specifiers:
+      '@solid-aria/label': workspace:^
       '@solid-aria/types': workspace:^
       '@solid-aria/utils': workspace:^
     dependencies:
+      '@solid-aria/label': link:../label
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 

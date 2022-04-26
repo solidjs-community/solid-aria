@@ -39,6 +39,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@solid-aria/label": "workspace:^",
     "@solid-aria/types": "workspace:^",
     "@solid-aria/utils": "workspace:^"
   },

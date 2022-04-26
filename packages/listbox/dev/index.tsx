@@ -1,5 +1,22 @@
 import { render } from "solid-js/web";
-import { AriaListBoxOptionProps, createListBoxOption } from "../src";
+
+import {
+  AriaListBoxOptionProps,
+  AriaListBoxProps,
+  createListBox,
+  createListBoxOption
+} from "../src";
+
+function ListBox(props: AriaListBoxProps) {
+  const { listBoxProps, labelProps } = createListBox(props);
+
+  return (
+    <div>
+      <span {...labelProps()}>{props.label}</span>
+      <ul {...listBoxProps()}>{props.children}</ul>
+    </div>
+  );
+}
 
 function Option(props: AriaListBoxOptionProps) {
   const { optionProps, labelProps, descriptionProps } = createListBoxOption(props);
@@ -15,12 +32,12 @@ function Option(props: AriaListBoxOptionProps) {
 function App() {
   return (
     <div>
-      <span id="cl-0">Label</span>
-      <ul role="listbox" aria-labelledby="cl-0" aria-multiselectable="false">
+      <ListBox label="Label" id="foo">
         <Option>One</Option>
-        <Option aria-selected="true">Two</Option>
-        <Option aria-disabled="true">Three</Option>
-      </ul>
+        <Option>Two</Option>
+        <Option>Three</Option>
+      </ListBox>
+
       {/* <ul role="listbox">
         <li role="presentation" aria-labelledby="cl-1">
           <span aria-hidden="true" id="cl-1">Section Label</span>

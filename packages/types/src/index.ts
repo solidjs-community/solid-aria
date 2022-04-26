@@ -7,3 +7,4 @@ export * from "./label";
 export * from "./locale";
 export * from "./orientation";
 export * from "./polymorphic";
+export * from "./selection";
