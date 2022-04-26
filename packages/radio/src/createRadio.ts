@@ -21,7 +21,7 @@ export interface AriaRadioProps extends FocusableProps, DOMProps, AriaLabelingPr
   isDisabled?: boolean;
 
   /**
-   * The label for the Radio. Accepts any renderable node.
+   * The label for the Radio.
    */
   children?: JSX.Element;
 }

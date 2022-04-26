@@ -184,14 +184,6 @@ importers:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 
-  packages/selection:
-    specifiers:
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
-    dependencies:
-      '@solid-aria/types': link:../types
-      '@solid-aria/utils': link:../utils
-
   packages/switch:
     specifiers:
       '@solid-aria/toggle': workspace:^

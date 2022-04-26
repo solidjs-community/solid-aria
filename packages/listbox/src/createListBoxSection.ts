@@ -49,9 +49,9 @@ export function createListBoxSection<
 ): ListBoxSectionAria<ItemElementType, HeadingElementType, GroupElementType> {
   const headingId = createId();
 
-  const itemProps: Accessor<JSX.IntrinsicElements[ItemElementType]> = () => ({
+  const itemProps: Accessor<JSX.IntrinsicElements[ItemElementType]> = createMemo(() => ({
     role: "presentation"
-  });
+  }));
 
   const headingProps: Accessor<JSX.IntrinsicElements[HeadingElementType]> = createMemo(() => {
     if (!props.heading) {

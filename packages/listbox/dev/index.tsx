@@ -1,32 +1,13 @@
-import { PropsWithChildren } from "solid-js";
 import { render } from "solid-js/web";
+import { AriaListBoxOptionProps, createListBoxOption } from "../src";
 
-import { AriaListBoxSectionProps, createListBoxSection } from "../src";
-
-function Section(props: PropsWithChildren<AriaListBoxSectionProps>) {
-  const { itemProps, headingProps, groupProps } = createListBoxSection(props);
+function Option(props: AriaListBoxOptionProps) {
+  const { optionProps, labelProps, descriptionProps } = createListBoxOption(props);
 
   return (
-    <li {...itemProps()}>
-      <span
-        {...headingProps()}
-        style={{
-          "font-weight": "bold",
-          "font-size": "1.1em",
-          padding: "2px 5px"
-        }}
-      >
-        {props.heading}
-      </span>
-      <ul
-        {...groupProps}
-        style={{
-          padding: 0,
-          "list-style": "none"
-        }}
-      >
-        {props.children}
-      </ul>
+    <li {...optionProps()}>
+      <span {...labelProps()}>Title</span>
+      <span {...descriptionProps()}>{props.children}</span>
     </li>
   );
 }
@@ -34,11 +15,20 @@ function Section(props: PropsWithChildren<AriaListBoxSectionProps>) {
 function App() {
   return (
     <div>
-      <Section heading="Section 1">
-        <span>One</span>
-        <span>Two</span>
-        <span>Three</span>
-      </Section>
+      <span id="cl-0">Label</span>
+      <ul role="listbox" aria-labelledby="cl-0" aria-multiselectable="false">
+        <Option>One</Option>
+        <Option aria-selected="true">Two</Option>
+        <Option aria-disabled="true">Three</Option>
+      </ul>
+      {/* <ul role="listbox">
+        <li role="presentation" aria-labelledby="cl-1">
+          <span aria-hidden="true" id="cl-1">Section Label</span>
+          <ul role="group">
+            <li role="option"></li>
+          </ul>
+        </li>
+      </ul> */}
     </div>
   );
 }
