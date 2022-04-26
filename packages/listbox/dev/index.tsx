@@ -6,36 +6,31 @@ import {
   createListBox,
   createListBoxOption
 } from "../src";
+import { ListBoxProvider } from "../src/context";
 
 function ListBox(props: AriaListBoxProps) {
-  const { listBoxProps, labelProps } = createListBox(props);
+  const { listBoxProps } = createListBox(props);
 
   return (
-    <div>
-      <span {...labelProps()}>{props.label}</span>
+    <ListBoxProvider>
       <ul {...listBoxProps()}>{props.children}</ul>
-    </div>
+    </ListBoxProvider>
   );
 }
 
 function Option(props: AriaListBoxOptionProps) {
-  const { optionProps, labelProps, descriptionProps } = createListBoxOption(props);
+  const { optionProps } = createListBoxOption(props);
 
-  return (
-    <li {...optionProps()}>
-      <span {...labelProps()}>Title</span>
-      <span {...descriptionProps()}>{props.children}</span>
-    </li>
-  );
+  return <li {...optionProps()}>{props.children}</li>;
 }
 
 function App() {
   return (
     <div>
-      <ListBox label="Label" id="foo">
-        <Option>One</Option>
-        <Option>Two</Option>
-        <Option>Three</Option>
+      <ListBox>
+        <Option value="1">One</Option>
+        <Option value="2">Two</Option>
+        <Option value="3">Three</Option>
       </ListBox>
 
       {/* <ul role="listbox">

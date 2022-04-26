@@ -1,3 +1,4 @@
+import { createKeyboard } from "@solid-aria/interactions";
 import { AriaLabelProps, createLabel } from "@solid-aria/label";
 import {
   AriaLabelingProps,
@@ -25,6 +26,11 @@ export interface AriaListBoxProps extends LabelableProps, DOMProps, AriaLabeling
    * The selection behavior for the collection.
    */
   selectionBehavior?: SelectionBehavior;
+
+  /**
+   * Whether the listbox is disabled.
+   */
+  isDisabled?: boolean;
 }
 
 export interface ListBoxAria<
@@ -62,12 +68,17 @@ export function createListBox<
 
   const { labelProps, fieldProps } = createLabel<LabelElementType>(createLabelProps);
 
+  const { keyboardProps } = createKeyboard({
+    isDisabled: () => props.isDisabled
+  });
+
   const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
 
   const listBoxProps: Accessor<JSX.IntrinsicElements[ListBoxElementType]> = createMemo(() => {
-    return combineProps(domProps(), fieldProps(), {
+    return combineProps(domProps(), keyboardProps(), fieldProps(), {
       role: "listbox",
-      "aria-multiselectable": props.selectionMode === "multiple" ? true : undefined
+      "aria-multiselectable": props.selectionMode === "multiple" ? true : undefined,
+      tabIndex: -1
     });
   });
 

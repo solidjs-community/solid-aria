@@ -1,17 +1,35 @@
 import { DOMElements } from "@solid-aria/types";
-import { createSlotId, isMac, isWebKit } from "@solid-aria/utils";
-import { Accessor, createMemo, JSX } from "solid-js";
+import { createId, createSlotId, isMac, isWebKit } from "@solid-aria/utils";
+import { access, MaybeAccessor } from "@solid-primitives/utils";
+import { Accessor, createMemo, JSX, onCleanup, onMount } from "solid-js";
+
+import { useListBoxContext } from "./context";
 
 export interface AriaListBoxOptionProps {
   /**
-   * The rendered contents of the option.
+   * The value of the option.
    */
-  children?: JSX.Element;
+  value: string;
+
+  /**
+   * A string value for this node, used for features like typeahead.
+   */
+  textValue?: string;
+
+  /**
+   * Whether the option is disabled.
+   */
+  isDisabled?: boolean;
 
   /**
    * A screen reader only label for the option.
    */
   "aria-label"?: string;
+
+  /**
+   * The rendered contents of the option.
+   */
+  children?: JSX.Element;
 }
 
 export interface ListBoxOptionAria<
@@ -46,14 +64,24 @@ export function createListBoxOption<
   LabelElementType extends DOMElements = "span",
   DescriptionElementType extends DOMElements = "span"
 >(
-  props: AriaListBoxOptionProps
+  props: AriaListBoxOptionProps,
+  ref?: MaybeAccessor<HTMLElement>
 ): ListBoxOptionAria<OptionElementType, LabelElementType, DescriptionElementType> {
+  const context = useListBoxContext();
+
+  const key = createId();
+
   const labelId = createSlotId();
   const descriptionId = createSlotId();
 
   const optionProps: Accessor<JSX.IntrinsicElements[OptionElementType]> = createMemo(() => {
+    // TODO: handle aria-selected, and focus state.
+
     const baseProps: JSX.IntrinsicElements[OptionElementType] = {
-      role: "option"
+      role: "option",
+      "aria-selected": false,
+      "aria-disabled": props.isDisabled,
+      tabIndex: -1
     };
 
     // Safari with VoiceOver on macOS misreads options with aria-labelledby or aria-label as simply "text".
@@ -62,8 +90,6 @@ export function createListBoxOption<
     if (isMac() && isWebKit()) {
       return baseProps;
     }
-
-    // TODO: handle aria-selected, aria-disabled and focus state.
 
     return {
       ...baseProps,
@@ -82,6 +108,25 @@ export function createListBoxOption<
       id: descriptionId()
     })
   );
+
+  onMount(() => {
+    const elementRef = access(ref);
+
+    if (!elementRef) {
+      return;
+    }
+
+    context.registerOption(key, {
+      ref: elementRef,
+      value: props.value,
+      textValue: props.textValue ?? elementRef?.textContent ?? "",
+      isDisabled: props.isDisabled ?? false
+    });
+
+    onCleanup(() => {
+      context.unregisterOption(key);
+    });
+  });
 
   return { optionProps, labelProps, descriptionProps };
 }
