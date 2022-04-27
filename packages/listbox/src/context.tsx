@@ -1,5 +1,4 @@
-import { createContext, JSX, onMount, useContext } from "solid-js";
-import { ListBoxOptionMetaData } from "./types";
+import { createContext, JSX, useContext } from "solid-js";
 
 interface ListBoxProviderProps {
   /**
@@ -8,35 +7,12 @@ interface ListBoxProviderProps {
   children?: JSX.Element;
 }
 
-interface ListBoxContextValue {
-  /**
-   * Register an option to the listbox.
-   */
-  registerOption: (key: string, metaData: ListBoxOptionMetaData) => void;
-
-  /**
-   * Unregister an option from the listbox.
-   */
-  unregisterOption: (key: string) => void;
-}
+type ListBoxContextValue = {};
 
 const ListBoxContext = createContext<ListBoxContextValue>();
 
 export function ListBoxProvider(props: ListBoxProviderProps) {
-  const options = new Map<string, ListBoxOptionMetaData>();
-
-  const registerOption = (key: string, metaData: ListBoxOptionMetaData) => {
-    options.set(key, metaData);
-  };
-
-  const unregisterOption = (key: string) => {
-    options.delete(key);
-  };
-
-  const context: ListBoxContextValue = {
-    registerOption,
-    unregisterOption
-  };
+  const context: ListBoxContextValue = {};
 
   return <ListBoxContext.Provider value={context}>{props.children}</ListBoxContext.Provider>;
 }
