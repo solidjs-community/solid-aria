@@ -1,5 +1,6 @@
+import { createKeyboard, createPress } from "@solid-aria/interactions";
 import { DOMElements } from "@solid-aria/types";
-import { createSlotId, isMac, isWebKit } from "@solid-aria/utils";
+import { combineProps, createSlotId, isMac, isWebKit } from "@solid-aria/utils";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor, createMemo, JSX, onCleanup, onMount } from "solid-js";
 
@@ -100,13 +101,34 @@ export function createListBoxOption<
   const isFocused = createMemo(() => context.isFocusedKey(key()));
   const isDisabled = createMemo(() => props.isDisabled ?? false);
 
+  const { pressProps } = createPress({
+    isDisabled,
+    onClick: () => {
+      context.select(key());
+      context.setFocusedKey(key());
+    }
+  });
+
+  const { keyboardProps } = createKeyboard({
+    isDisabled,
+    onKeyDown: event => {
+      switch (event.key) {
+        case "Enter":
+        case " ":
+          context.select(key());
+          context.setFocusedKey(key());
+          break;
+      }
+    }
+  });
+
   const optionProps: Accessor<JSX.IntrinsicElements[OptionElement]> = createMemo(() => {
-    const baseProps: JSX.IntrinsicElements[OptionElement] = {
+    const baseProps = combineProps(pressProps(), keyboardProps(), {
       role: "option",
       tabIndex: isFocused() ? 0 : -1,
       "aria-selected": isSelected() || undefined,
       "aria-disabled": isDisabled() || undefined
-    };
+    }) as JSX.IntrinsicElements[OptionElement];
 
     // Safari with VoiceOver on macOS misreads options with aria-labelledby or aria-label as simply "text".
     // We should not map the label and description on Safari and instead just have VoiceOver read the textContent.

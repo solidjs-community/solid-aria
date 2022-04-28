@@ -64,6 +64,11 @@ export interface ListBoxState {
   isFocusedKey: (key: string) => boolean;
 
   /**
+   * Set the currently focused key.
+   */
+  setFocusedKey: (key: string) => void;
+
+  /**
    * Returns whether a key is selected.
    */
   isSelected: (key: string) => boolean;
@@ -218,6 +223,7 @@ export function createListBoxState(props: CreateListBoxStateProps): ListBoxState
     setSelectedKeys(new Set([]));
   };
 
+  // TODO: handle when option is disabled.
   const focusAtIndex = (index: number) => {
     const option = options()[index];
 
@@ -310,6 +316,7 @@ export function createListBoxState(props: CreateListBoxStateProps): ListBoxState
   return {
     listBoxTabIndex,
     isFocusedKey,
+    setFocusedKey,
     isSelected,
     replaceSelection,
     toggleSelection,

@@ -64,11 +64,11 @@ function Option(props: AriaListBoxOptionProps) {
 }
 
 function App() {
-  const [keys, setKeys] = createSignal<Set<string>>(new Set(["1", "3"]));
+  //const [keys, setKeys] = createSignal<Set<string>>(new Set(["1", "3"]));
 
   return (
     <div>
-      <ListBox label="Select a value" selectedKeys={keys()} onSelectionChange={setKeys}>
+      <ListBox label="Select a value">
         <Option value="1">One</Option>
         <Option value="2">Two</Option>
         <Option value="3">Three</Option>
