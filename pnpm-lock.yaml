@@ -136,11 +136,13 @@ importers:
 
   packages/listbox:
     specifiers:
+      '@solid-aria/focus': workspace:^
       '@solid-aria/interactions': workspace:^
       '@solid-aria/label': workspace:^
       '@solid-aria/types': workspace:^
       '@solid-aria/utils': workspace:^
     dependencies:
+      '@solid-aria/focus': link:../focus
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/label': link:../label
       '@solid-aria/types': link:../types

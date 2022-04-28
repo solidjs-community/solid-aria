@@ -1,4 +1,3 @@
-export * from "./collection";
 export * from "./dom";
 export * from "./element";
 export * from "./events";

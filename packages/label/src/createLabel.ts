@@ -1,20 +1,14 @@
-import {
-  AriaLabelingProps,
-  DOMElements,
-  DOMProps,
-  ElementType,
-  LabelableProps
-} from "@solid-aria/types";
+import { AriaLabelingProps, DOMElements, DOMProps, LabelableProps } from "@solid-aria/types";
 import { createId, mergeAriaLabels } from "@solid-aria/utils";
 import { MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
 
 export interface AriaLabelProps extends LabelableProps, DOMProps, AriaLabelingProps {
   /**
-   * The HTML element used to render the label, e.g. 'label', or 'span'.
-   * @default 'label'
+   * Whether the HTML element used to render the label is a <label>.
+   * @default true
    */
-  labelElementType?: MaybeAccessor<ElementType | undefined>;
+  isHTMLLabelElement?: MaybeAccessor<boolean | undefined>;
 }
 
 export interface LabelAria<T extends DOMElements> {
@@ -40,7 +34,7 @@ export function createLabel<T extends DOMElements = "label">(props: AriaLabelPro
 
   const defaultProps: AriaLabelProps = {
     id: defaultFieldId,
-    labelElementType: "label"
+    isHTMLLabelElement: true
   };
 
   const propsWithDefault = mergeProps(defaultProps, props);
@@ -49,7 +43,7 @@ export function createLabel<T extends DOMElements = "label">(props: AriaLabelPro
     "label",
     "aria-labelledby",
     "aria-label",
-    "labelElementType"
+    "isHTMLLabelElement"
   ]);
 
   const labelProps: Accessor<JSX.IntrinsicElements[T]> = createMemo(() => {
@@ -59,7 +53,7 @@ export function createLabel<T extends DOMElements = "label">(props: AriaLabelPro
 
     return {
       id: labelId,
-      for: local.labelElementType === "label" ? local.id : undefined
+      for: local.isHTMLLabelElement ? local.id : undefined
     };
   });
 

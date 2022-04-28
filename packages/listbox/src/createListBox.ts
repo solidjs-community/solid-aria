@@ -1,4 +1,4 @@
-import { createKeyboard } from "@solid-aria/interactions";
+import { createFocusable } from "@solid-aria/focus";
 import { AriaLabelProps, createLabel } from "@solid-aria/label";
 import {
   AriaLabelingProps,
@@ -12,16 +12,33 @@ import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
 
 import { ListBoxState } from "./createListBoxState";
 
-export interface AriaListBoxProps extends LabelableProps, DOMProps, AriaLabelingProps {
+interface AriaListBoxOptions extends LabelableProps, DOMProps, AriaLabelingProps {
+  /**
+   * The type of selection that is allowed in the listbox.
+   */
+  selectionMode?: SelectionMode;
+
+  /**
+   * Whether the listbox is disabled.
+   */
+  isDisabled?: boolean;
+
   /**
    * The rendered contents of the listbox.
    */
   children?: JSX.Element;
+}
+
+export interface AriaListBoxProps extends AriaListBoxOptions {
+  /**
+   * The currently selected keys in the listbox (controlled).
+   */
+  selectedKeys?: Set<string>;
 
   /**
-   * The type of selection that is allowed in the collection.
+   * The initial selected keys in the listbox (uncontrolled).
    */
-  selectionMode?: SelectionMode;
+  defaultSelectedKeys?: Set<string>;
 
   /**
    * Whether the listbox allows empty selection.
@@ -29,9 +46,24 @@ export interface AriaListBoxProps extends LabelableProps, DOMProps, AriaLabeling
   allowEmptySelection?: boolean;
 
   /**
-   * Whether the listbox is disabled.
+   * Whether typeahead is enabled.
    */
-  isDisabled?: boolean;
+  allowTypeAhead?: boolean;
+
+  /**
+   * Whether focus should wrap around when the end/start is reached.
+   */
+  shouldFocusWrap?: boolean;
+
+  /**
+   * Whether selection should occur automatically on focus.
+   */
+  selectOnFocus?: boolean;
+
+  /**
+   * Handler that is called when the selection changes.
+   */
+  onSelectionChange?: (keys: Set<string>) => any;
 }
 
 export interface ListBoxAria<
@@ -57,30 +89,53 @@ export interface ListBoxAria<
  */
 export function createListBox<
   ListBoxElementType extends DOMElements = "ul",
-  LabelElementType extends DOMElements = "span"
->(props: AriaListBoxProps, state: ListBoxState): ListBoxAria<ListBoxElementType, LabelElementType> {
+  LabelElementType extends DOMElements = "div"
+>(
+  props: AriaListBoxOptions,
+  state: ListBoxState
+): ListBoxAria<ListBoxElementType, LabelElementType> {
   const defaultCreateLabelProps: AriaLabelProps = {
     // listbox is not an HTML input element so it
     // shouldn't be labeled by a <label> element.
-    labelElementType: "span"
+    isHTMLLabelElement: false
   };
 
   const createLabelProps = mergeProps(defaultCreateLabelProps, props);
 
   const { labelProps, fieldProps } = createLabel<LabelElementType>(createLabelProps);
 
-  const { keyboardProps } = createKeyboard({
-    isDisabled: () => props.isDisabled
+  const { focusableProps } = createFocusable({
+    isDisabled: () => props.isDisabled,
+    onFocus: () => {
+      state.focusFirstSelected();
+    },
+    onKeyDown: event => {
+      const { key } = event;
+
+      switch (key) {
+        case "Home":
+          state.focusFirst();
+          break;
+        case "End":
+          state.focusLast();
+          break;
+        case "ArrowUp":
+          state.focusPrevious();
+          break;
+        case "ArrowDown":
+          state.focusNext();
+          break;
+      }
+    }
   });
 
   const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
 
   const listBoxProps: Accessor<JSX.IntrinsicElements[ListBoxElementType]> = createMemo(() => {
-    return combineProps(domProps(), keyboardProps(), fieldProps(), {
+    return combineProps(domProps(), focusableProps(), fieldProps(), {
       role: "listbox",
       "aria-multiselectable": props.selectionMode === "multiple" ? true : undefined,
-      "aria-activedescendant": state.activeDescendant(),
-      tabIndex: 0
+      tabIndex: state.listBoxTabIndex()
     });
   });
 

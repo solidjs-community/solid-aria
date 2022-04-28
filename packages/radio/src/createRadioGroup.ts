@@ -82,7 +82,7 @@ export function createRadioGroup<T extends DOMElements = "div", U extends DOMEle
   const defaultCreateLabelProps: AriaLabelProps = {
     // Radio group is not an HTML input element so it
     // shouldn't be labeled by a <label> element.
-    labelElementType: "span"
+    isHTMLLabelElement: false
   };
 
   const createLabelProps = mergeProps(defaultCreateLabelProps, props);

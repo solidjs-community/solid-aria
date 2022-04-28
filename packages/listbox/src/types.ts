@@ -1,10 +1,13 @@
-import { Key } from "@solid-aria/types";
-
 export interface ListBoxOptionMetaData {
   /**
-   * A unique key for the option.
+   * A unique key for identifiying the option.
    */
-  key: Key;
+  key: string;
+
+  /**
+   * A ref to the HTML option element.
+   */
+  ref: HTMLElement;
 
   /**
    * The value of the option.

@@ -1,5 +1,5 @@
 import { DOMElements } from "@solid-aria/types";
-import { createId, createSlotId, isMac, isWebKit } from "@solid-aria/utils";
+import { createSlotId, isMac, isWebKit } from "@solid-aria/utils";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor, createMemo, JSX, onCleanup, onMount } from "solid-js";
 
@@ -15,6 +15,12 @@ export interface AriaListBoxOptionProps {
    * A string value for this node, used for features like typeahead.
    */
   textValue?: string;
+
+  /**
+   * A unique key for identifiying the option.
+   * If not provided, the `value` will be used as key.
+   */
+  key?: string;
 
   /**
    * Whether the option is disabled.
@@ -33,24 +39,39 @@ export interface AriaListBoxOptionProps {
 }
 
 export interface ListBoxOptionAria<
-  OptionElementType extends DOMElements,
-  LabelElementType extends DOMElements,
-  DescriptionElementType extends DOMElements
+  OptionElement extends DOMElements,
+  LabelElement extends DOMElements,
+  DescriptionElement extends DOMElements
 > {
   /**
    * Props for the option element.
    */
-  optionProps: Accessor<JSX.IntrinsicElements[OptionElementType]>;
+  optionProps: Accessor<JSX.IntrinsicElements[OptionElement]>;
 
   /**
    * Props for the main text element inside the option.
    */
-  labelProps: Accessor<JSX.IntrinsicElements[LabelElementType]>;
+  labelProps: Accessor<JSX.IntrinsicElements[LabelElement]>;
 
   /**
    * Props for the description text element inside the option, if any.
    */
-  descriptionProps: Accessor<JSX.IntrinsicElements[DescriptionElementType]>;
+  descriptionProps: Accessor<JSX.IntrinsicElements[DescriptionElement]>;
+
+  /**
+   * Whether the option is currently selected.
+   */
+  isSelected: Accessor<boolean>;
+
+  /**
+   * Whether the option is currently focused.
+   */
+  isFocused: Accessor<boolean>;
+
+  /**
+   * Whether the option is disabled.
+   */
+  isDisabled: Accessor<boolean>;
 }
 
 /**
@@ -60,29 +81,31 @@ export interface ListBoxOptionAria<
  * @param ref - A ref for the HTML option element.
  */
 export function createListBoxOption<
-  OptionElementType extends DOMElements = "li",
-  LabelElementType extends DOMElements = "span",
-  DescriptionElementType extends DOMElements = "span"
+  OptionElement extends DOMElements = "li",
+  LabelElement extends DOMElements = "span",
+  DescriptionElement extends DOMElements = "span",
+  RefElement extends HTMLElement = HTMLLIElement
 >(
   props: AriaListBoxOptionProps,
-  ref?: MaybeAccessor<HTMLElement>
-): ListBoxOptionAria<OptionElementType, LabelElementType, DescriptionElementType> {
+  ref: MaybeAccessor<RefElement | undefined>
+): ListBoxOptionAria<OptionElement, LabelElement, DescriptionElement> {
   const context = useListBoxContext();
-
-  const key = createId();
 
   const labelId = createSlotId();
   const descriptionId = createSlotId();
 
-  const optionProps: Accessor<JSX.IntrinsicElements[OptionElementType]> = createMemo(() => {
-    // TODO: handle focus state.
+  const key = () => props.key ?? props.value;
 
-    const baseProps: JSX.IntrinsicElements[OptionElementType] = {
-      id: key,
+  const isSelected = createMemo(() => context.isSelected(key()));
+  const isFocused = createMemo(() => context.isFocusedKey(key()));
+  const isDisabled = createMemo(() => props.isDisabled ?? false);
+
+  const optionProps: Accessor<JSX.IntrinsicElements[OptionElement]> = createMemo(() => {
+    const baseProps: JSX.IntrinsicElements[OptionElement] = {
       role: "option",
-      tabIndex: -1,
-      "aria-selected": context.isSelected(key),
-      "aria-disabled": props.isDisabled
+      tabIndex: isFocused() ? 0 : -1,
+      "aria-selected": isSelected() || undefined,
+      "aria-disabled": isDisabled() || undefined
     };
 
     // Safari with VoiceOver on macOS misreads options with aria-labelledby or aria-label as simply "text".
@@ -100,15 +123,13 @@ export function createListBoxOption<
     };
   });
 
-  const labelProps: Accessor<JSX.IntrinsicElements[LabelElementType]> = createMemo(() => ({
+  const labelProps: Accessor<JSX.IntrinsicElements[LabelElement]> = createMemo(() => ({
     id: labelId()
   }));
 
-  const descriptionProps: Accessor<JSX.IntrinsicElements[DescriptionElementType]> = createMemo(
-    () => ({
-      id: descriptionId()
-    })
-  );
+  const descriptionProps: Accessor<JSX.IntrinsicElements[DescriptionElement]> = createMemo(() => ({
+    id: descriptionId()
+  }));
 
   onMount(() => {
     const elementRef = access(ref);
@@ -118,16 +139,24 @@ export function createListBoxOption<
     }
 
     context.registerOption({
-      key,
+      key: key(),
+      ref: elementRef,
       value: props.value,
-      textValue: props.textValue ?? elementRef?.textContent ?? "",
-      isDisabled: props.isDisabled ?? false
+      textValue: props.textValue ?? elementRef.textContent ?? "",
+      isDisabled: isDisabled()
     });
 
     onCleanup(() => {
-      context.unregisterOption(key);
+      context.unregisterOption(key());
     });
   });
 
-  return { optionProps, labelProps, descriptionProps };
+  return {
+    optionProps,
+    labelProps,
+    descriptionProps,
+    isSelected,
+    isFocused,
+    isDisabled
+  };
 }
