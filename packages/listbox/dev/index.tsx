@@ -4,17 +4,23 @@ import {
   AriaListBoxOptionProps,
   AriaListBoxProps,
   createListBox,
-  createListBoxOption
+  createListBoxOption,
+  createListBoxState
 } from "../src";
-import { ListBoxProvider } from "../src/context";
+import { ListBoxContext } from "../src/context";
 
 function ListBox(props: AriaListBoxProps) {
-  const { listBoxProps } = createListBox(props);
+  let ref: HTMLUListElement | undefined;
+
+  const state = createListBoxState(props);
+  const { listBoxProps } = createListBox(props, state);
 
   return (
-    <ListBoxProvider>
-      <ul {...listBoxProps()}>{props.children}</ul>
-    </ListBoxProvider>
+    <ListBoxContext.Provider value={state}>
+      <ul {...listBoxProps()} ref={ref}>
+        {props.children}
+      </ul>
+    </ListBoxContext.Provider>
   );
 }
 

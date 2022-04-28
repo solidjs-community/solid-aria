@@ -5,11 +5,12 @@ import {
   DOMElements,
   DOMProps,
   LabelableProps,
-  SelectionBehavior,
   SelectionMode
 } from "@solid-aria/types";
 import { combineProps, filterDOMProps } from "@solid-aria/utils";
 import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
+
+import { ListBoxState } from "./createListBoxState";
 
 export interface AriaListBoxProps extends LabelableProps, DOMProps, AriaLabelingProps {
   /**
@@ -23,9 +24,9 @@ export interface AriaListBoxProps extends LabelableProps, DOMProps, AriaLabeling
   selectionMode?: SelectionMode;
 
   /**
-   * The selection behavior for the collection.
+   * Whether the listbox allows empty selection.
    */
-  selectionBehavior?: SelectionBehavior;
+  allowEmptySelection?: boolean;
 
   /**
    * Whether the listbox is disabled.
@@ -57,7 +58,7 @@ export interface ListBoxAria<
 export function createListBox<
   ListBoxElementType extends DOMElements = "ul",
   LabelElementType extends DOMElements = "span"
->(props: AriaListBoxProps): ListBoxAria<ListBoxElementType, LabelElementType> {
+>(props: AriaListBoxProps, state: ListBoxState): ListBoxAria<ListBoxElementType, LabelElementType> {
   const defaultCreateLabelProps: AriaLabelProps = {
     // listbox is not an HTML input element so it
     // shouldn't be labeled by a <label> element.
@@ -78,7 +79,8 @@ export function createListBox<
     return combineProps(domProps(), keyboardProps(), fieldProps(), {
       role: "listbox",
       "aria-multiselectable": props.selectionMode === "multiple" ? true : undefined,
-      tabIndex: -1
+      "aria-activedescendant": state.activeDescendant(),
+      tabIndex: 0
     });
   });
 

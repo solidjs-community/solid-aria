@@ -57,7 +57,7 @@ export interface ListBoxOptionAria<
  * Provides the behavior and accessibility implementation for an option in a listbox.
  * See `createListBox` for more details about listboxes.
  * @param props - Props for the option.
- * @param state - State for the listbox, as returned by `useListState`.
+ * @param ref - A ref for the HTML option element.
  */
 export function createListBoxOption<
   OptionElementType extends DOMElements = "li",
@@ -75,13 +75,14 @@ export function createListBoxOption<
   const descriptionId = createSlotId();
 
   const optionProps: Accessor<JSX.IntrinsicElements[OptionElementType]> = createMemo(() => {
-    // TODO: handle aria-selected, and focus state.
+    // TODO: handle focus state.
 
     const baseProps: JSX.IntrinsicElements[OptionElementType] = {
+      id: key,
       role: "option",
-      "aria-selected": false,
-      "aria-disabled": props.isDisabled,
-      tabIndex: -1
+      tabIndex: -1,
+      "aria-selected": context.isSelected(key),
+      "aria-disabled": props.isDisabled
     };
 
     // Safari with VoiceOver on macOS misreads options with aria-labelledby or aria-label as simply "text".
@@ -116,8 +117,8 @@ export function createListBoxOption<
       return;
     }
 
-    context.registerOption(key, {
-      ref: elementRef,
+    context.registerOption({
+      key,
       value: props.value,
       textValue: props.textValue ?? elementRef?.textContent ?? "",
       isDisabled: props.isDisabled ?? false

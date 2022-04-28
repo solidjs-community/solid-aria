@@ -1,27 +1,14 @@
-import { createContext, JSX, useContext } from "solid-js";
+import { createContext, useContext } from "solid-js";
 
-interface ListBoxProviderProps {
-  /**
-   * Children of the provider.
-   */
-  children?: JSX.Element;
-}
+import { ListBoxState } from "./createListBoxState";
 
-type ListBoxContextValue = {};
-
-const ListBoxContext = createContext<ListBoxContextValue>();
-
-export function ListBoxProvider(props: ListBoxProviderProps) {
-  const context: ListBoxContextValue = {};
-
-  return <ListBoxContext.Provider value={context}>{props.children}</ListBoxContext.Provider>;
-}
+export const ListBoxContext = createContext<ListBoxState>();
 
 export function useListBoxContext() {
   const context = useContext(ListBoxContext);
 
   if (!context) {
-    throw new Error("[solid-aria]: useListBoxContext should be used in a ListBoxProvider.");
+    throw new Error("[solid-aria]: useListBoxContext should be used in a ListBoxContext.Provider.");
   }
 
   return context;
