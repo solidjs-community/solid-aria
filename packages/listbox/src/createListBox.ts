@@ -1,12 +1,7 @@
 import { createFocusable } from "@solid-aria/focus";
 import { AriaLabelProps, createLabel } from "@solid-aria/label";
-import {
-  AriaLabelingProps,
-  DOMElements,
-  DOMProps,
-  LabelableProps,
-  SelectionMode
-} from "@solid-aria/types";
+import { SelectionMode } from "@solid-aria/selection";
+import { AriaLabelingProps, DOMElements, DOMProps, LabelableProps } from "@solid-aria/types";
 import { combineProps, filterDOMProps } from "@solid-aria/utils";
 import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
 
@@ -63,7 +58,7 @@ export interface AriaListBoxProps extends AriaListBoxOptions {
   /**
    * Handler that is called when the selection changes.
    */
-  onSelectionChange?: (keys: Set<string>) => any;
+  onSelectionChange?: (keys: Set<string>) => void;
 }
 
 export interface ListBoxAria<
@@ -107,23 +102,23 @@ export function createListBox<
   const { focusableProps } = createFocusable({
     isDisabled: () => props.isDisabled,
     onFocus: () => {
-      state.focusFirstSelected();
+      state.focusManager.focusFirstSelected();
     },
     onKeyDown: event => {
       const { key } = event;
 
       switch (key) {
-        case "Home":
-          state.focusFirst();
-          break;
-        case "End":
-          state.focusLast();
-          break;
         case "ArrowUp":
-          state.focusPrevious();
+          state.focusManager.focusPrevious();
           break;
         case "ArrowDown":
-          state.focusNext();
+          state.focusManager.focusNext();
+          break;
+        case "Home":
+          state.focusManager.focusFirst();
+          break;
+        case "End":
+          state.focusManager.focusLast();
           break;
       }
     }
@@ -135,7 +130,7 @@ export function createListBox<
     return combineProps(domProps(), focusableProps(), fieldProps(), {
       role: "listbox",
       "aria-multiselectable": props.selectionMode === "multiple" ? true : undefined,
-      tabIndex: state.listBoxTabIndex()
+      tabIndex: state.focusManager.focusedKey() == null ? 0 : -1
     });
   });
 

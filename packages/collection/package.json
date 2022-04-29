@@ -1,8 +1,8 @@
 {
-  "name": "@solid-aria/listbox",
+  "name": "@solid-aria/collection",
   "version": "0.0.1",
   "private": false,
-  "description": "Primitives for building accessible listbox component.",
+  "description": "Primitives for dealing with collection of items.",
   "keywords": [
     "solid",
     "aria",
@@ -11,7 +11,7 @@
     "system",
     "components"
   ],
-  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/listbox#readme",
+  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/collection#readme",
   "bugs": {
     "url": "https://github.com/solidjs-community/solid-aria/issues"
   },
@@ -39,11 +39,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/collection": "workspace:^",
-    "@solid-aria/focus": "workspace:^",
-    "@solid-aria/interactions": "workspace:^",
-    "@solid-aria/label": "workspace:^",
-    "@solid-aria/selection": "workspace:^",
     "@solid-aria/types": "workspace:^",
     "@solid-aria/utils": "workspace:^"
   },
@@ -55,7 +50,7 @@
     "access": "public"
   },
   "primitive": {
-    "name": "listbox",
+    "name": "collection",
     "stage": 0,
     "list": [],
     "category": ""

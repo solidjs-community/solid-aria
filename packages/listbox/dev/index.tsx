@@ -42,7 +42,7 @@ function ListBox(props: AriaListBoxProps) {
 function Option(props: AriaListBoxOptionProps) {
   let ref: HTMLLIElement | undefined;
 
-  const { optionProps, isSelected } = createListBoxOption(props, () => ref);
+  const { optionProps, isSelected, isDisabled } = createListBoxOption(props, () => ref);
 
   const { isFocusVisible, focusProps } = createFocusRing();
 
@@ -54,10 +54,11 @@ function Option(props: AriaListBoxOptionProps) {
         background: isSelected() ? "blueviolet" : "transparent",
         color: isSelected() ? "white" : null,
         padding: "2px 5px",
-        outline: isFocusVisible() ? "2px solid orange" : "none"
+        outline: isFocusVisible() ? "2px solid orange" : "none",
+        opacity: isDisabled() ? 0.4 : 1
       }}
     >
-      {props.children} - {isSelected().toString()}
+      {props.children} {isSelected() && "(Selected)"}
     </li>
   );
 }
@@ -67,10 +68,27 @@ function App() {
 
   return (
     <div>
-      <ListBox label="Select a value">
-        <Option value="1">One</Option>
-        <Option value="2">Two</Option>
+      <ListBox label="Select a value" allowEmptySelection>
+        <Option value="1" isDisabled>
+          One
+        </Option>
+        <Option value="2" isDisabled>
+          Two
+        </Option>
         <Option value="3">Three</Option>
+        <Option value="4">Four</Option>
+        <Option value="5" isDisabled>
+          Five
+        </Option>
+        <Option value="6">Six</Option>
+        <Option value="7" isDisabled>
+          Seven
+        </Option>
+        <Option value="8">Eight</Option>
+        <Option value="9">Nine</Option>
+        <Option value="10" isDisabled>
+          Ten
+        </Option>
       </ListBox>
 
       {/* <ul role="listbox">

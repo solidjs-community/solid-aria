@@ -18,12 +18,6 @@ export interface AriaListBoxOptionProps {
   textValue?: string;
 
   /**
-   * A unique key for identifiying the option.
-   * If not provided, the `value` will be used as key.
-   */
-  key?: string;
-
-  /**
    * Whether the option is disabled.
    */
   isDisabled?: boolean;
@@ -95,29 +89,40 @@ export function createListBoxOption<
   const labelId = createSlotId();
   const descriptionId = createSlotId();
 
-  const key = () => props.key ?? props.value;
+  // Since an option value should be unique we can use it as key for the focus and selection management.
+  const key = () => props.value;
 
-  const isSelected = createMemo(() => context.isSelected(key()));
-  const isFocused = createMemo(() => context.isFocusedKey(key()));
+  const isSelected = createMemo(() => {
+    // hack to track the selected keys changes.
+    context.selectionManager.selectedKeys();
+
+    return context.selectionManager.isSelected(key());
+  });
+
+  const isFocused = createMemo(() => {
+    // hack to track the currently focused key changes.
+    context.focusManager.focusedKey();
+
+    return context.focusManager.isFocusedKey(key());
+  });
+
   const isDisabled = createMemo(() => props.isDisabled ?? false);
+
+  const focusAndSelect = () => {
+    context.focusManager.setFocusedKey(key());
+    context.selectionManager.select(key());
+  };
 
   const { pressProps } = createPress({
     isDisabled,
-    onClick: () => {
-      context.select(key());
-      context.setFocusedKey(key());
-    }
+    onClick: focusAndSelect
   });
 
   const { keyboardProps } = createKeyboard({
     isDisabled,
     onKeyDown: event => {
-      switch (event.key) {
-        case "Enter":
-        case " ":
-          context.select(key());
-          context.setFocusedKey(key());
-          break;
+      if (["Enter", " "].includes(event.key)) {
+        focusAndSelect();
       }
     }
   });
@@ -165,7 +170,7 @@ export function createListBoxOption<
       ref: elementRef,
       value: props.value,
       textValue: props.textValue ?? elementRef.textContent ?? "",
-      isDisabled: isDisabled()
+      isDisabled
     });
 
     onCleanup(() => {
