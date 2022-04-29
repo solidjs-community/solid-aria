@@ -7,9 +7,9 @@ import {
   AriaListBoxProps,
   createListBox,
   createListBoxOption,
-  createListBoxState
+  createListBoxState,
+  ListBoxContext
 } from "../src";
-import { ListBoxContext } from "../src/context";
 
 function ListBox(props: AriaListBoxProps) {
   let ref: HTMLUListElement | undefined;
