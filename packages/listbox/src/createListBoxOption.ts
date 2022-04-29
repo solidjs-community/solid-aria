@@ -18,6 +18,12 @@ export interface AriaListBoxOptionProps {
   textValue?: string;
 
   /**
+   * A unique key for identifiying the option.
+   * If not provided, the `value` will be used as key.
+   */
+  key?: string;
+
+  /**
    * Whether the option is disabled.
    */
   isDisabled?: boolean;
@@ -89,8 +95,8 @@ export function createListBoxOption<
   const labelId = createSlotId();
   const descriptionId = createSlotId();
 
-  // Since an option value should be unique we can use it as key for the focus and selection management.
-  const key = () => props.value;
+  // the key used for the focus and selection management.
+  const key = () => props.key ?? props.value;
 
   const isSelected = createMemo(() => {
     // hack to track the selected keys changes.
@@ -110,7 +116,12 @@ export function createListBoxOption<
 
   const focusAndSelect = () => {
     context.focusManager.setFocusedKey(key());
-    context.selectionManager.select(key());
+
+    // When selectOnFocus=true, selection is automatically handled by an effect in the ListBoxState.
+    // Otherwise, we manually select the option.
+    if (!context.selectOnFocus()) {
+      context.selectionManager.select(key());
+    }
   };
 
   const { pressProps } = createPress({

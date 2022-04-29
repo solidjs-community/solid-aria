@@ -45,13 +45,17 @@ export function createListFocusManager<T extends Item<any>>(
     }
 
     if (item.isDisabled()) {
-      // All items after the focused one was disabled, do nothing
+      // All items after the focused one was disabled.
       if (move === "forward" && props.collection.isLastIndex(index)) {
+        // try focus the first enabled item if focus wrap is allowed.
+        access(props.shouldFocusWrap) && focusFirst();
         return;
       }
 
-      // All items before the focused one was disabled, do nothing
+      // All items before the focused one was disabled.
       if (move === "backward" && props.collection.isFirstIndex(index)) {
+        // try focus the last enabled item if focus wrap is allowed.
+        access(props.shouldFocusWrap) && focusLast();
         return;
       }
 
@@ -107,19 +111,19 @@ export function createListFocusManager<T extends Item<any>>(
   };
 
   const focusFirstSelected = () => {
-    // A previously focused option exist, bring back focus to it.
+    // A previously focused item exist (e.g. has tabIndex=0), bring back focus to it.
     if (focusedKey() != null) {
       focusAtIndex(props.collection.findIndexByKey(focusedKey()), "forward");
       return;
     }
 
-    // No selection, focus the first option.
+    // No previous selection, focus the first enabled item.
     if (props.selectionManager.isEmpty()) {
       focusFirst();
       return;
     }
 
-    // Focus the first option in the listbox that is selected.
+    // Focus the first item in the listbox that is selected.
     focusAtIndex(props.selectionManager.getFirstSelectedIndex(), "forward");
   };
 

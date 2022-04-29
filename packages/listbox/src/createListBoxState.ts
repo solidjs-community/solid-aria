@@ -9,7 +9,7 @@ import {
   SelectionMode
 } from "@solid-aria/selection";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { createEffect, on } from "solid-js";
+import { Accessor, createEffect, on } from "solid-js";
 
 type CreateListBoxStateOptions = Partial<
   Pick<
@@ -54,6 +54,11 @@ export interface ListBoxState {
   focusManager: ListFocusManager;
 
   /**
+   * Whether selection should occur automatically on focus.
+   */
+  selectOnFocus: Accessor<boolean>;
+
+  /**
    * Register an option to the listbox with some meta data.
    */
   registerOption: (metaData: Item<string>) => void;
@@ -85,11 +90,13 @@ export function createListBoxState(props: CreateListBoxStateProps): ListBoxState
     shouldFocusWrap: () => access(props.shouldFocusWrap) ?? false
   });
 
+  const selectOnFocus = () => access(props.selectOnFocus) ?? false;
+
   createEffect(
     on(
       () => focusManager.focusedKey(),
       newValue => {
-        if (newValue != null && access(props.selectOnFocus)) {
+        if (newValue != null && selectOnFocus()) {
           selectionManager.replaceSelection(newValue);
         }
       }
@@ -99,6 +106,7 @@ export function createListBoxState(props: CreateListBoxStateProps): ListBoxState
   return {
     selectionManager,
     focusManager,
+    selectOnFocus,
     registerOption: collection.addItem,
     unregisterOption: collection.removeItem
   };
