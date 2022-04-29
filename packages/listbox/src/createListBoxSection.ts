@@ -4,14 +4,20 @@ import { Accessor, createMemo, JSX } from "solid-js";
 
 export interface AriaListBoxSectionProps {
   /**
+   * An accessibility label for the section.
+   * Required if `heading` is not present.
+   */
+  "aria-label"?: string;
+
+  /**
    * The heading for the section.
    */
   heading?: JSX.Element;
 
   /**
-   * An accessibility label for the section. Required if `heading` is not present.
+   * The rendered contents of the section.
    */
-  "aria-label"?: string;
+  children?: JSX.Element;
 }
 
 export interface ListBoxSectionAria<

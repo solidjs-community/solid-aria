@@ -1,14 +1,14 @@
-import { Collection, Item } from "@solid-aria/collection";
+import { Collection } from "@solid-aria/collection";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { createSignal } from "solid-js";
+import { Accessor, createSignal } from "solid-js";
 
 import { ListFocusManager, SelectionManager } from "./types";
 
-export interface CreateListFocusManagerProps<T> {
+export interface CreateListFocusManagerProps {
   /**
    * The managed collection.
    */
-  collection: Collection<T>;
+  collection: Collection;
 
   /**
    * An interface for managing selection state in collection.
@@ -19,14 +19,18 @@ export interface CreateListFocusManagerProps<T> {
    * Whether focus should wrap around when the end/start is reached.
    */
   shouldFocusWrap: MaybeAccessor<boolean>;
+
+  /**
+   * The ref attached to the scrollable element.
+   */
+  scrollRef: Accessor<HTMLElement | undefined>;
 }
 
 /**
  * Manage keyboard focus movement behavior in a list.
+ * @param props - Props for the ListFocusManager.
  */
-export function createListFocusManager<T extends Item<any>>(
-  props: CreateListFocusManagerProps<T>
-): ListFocusManager {
+export function createListFocusManager(props: CreateListFocusManagerProps): ListFocusManager {
   const [focusedKey, setFocusedKey] = createSignal<string | undefined>();
 
   const isFocusedKey = (key: string) => {
@@ -110,6 +114,68 @@ export function createListFocusManager<T extends Item<any>>(
     focusAtIndex(index + 1, "forward");
   };
 
+  const focusPreviousPage = () => {
+    let index = props.collection.findIndexByKey(focusedKey());
+
+    if (index == null) {
+      return;
+    }
+
+    const scrollParent = props.scrollRef();
+    let item = props.collection.getItems()[index];
+
+    if (!item || !scrollParent) {
+      return;
+    }
+
+    const pageY = Math.max(
+      0,
+      item.ref.offsetTop + item.ref.offsetHeight - scrollParent.offsetHeight
+    );
+
+    while (item && item.ref.offsetTop > pageY) {
+      if (props.collection.isFirstIndex(index)) {
+        break;
+      }
+
+      index = index - 1;
+      item = props.collection.getItems()[index];
+    }
+
+    focusAtIndex(index, "backward");
+  };
+
+  const focusNextPage = () => {
+    let index = props.collection.findIndexByKey(focusedKey());
+
+    if (index == null) {
+      return;
+    }
+
+    const scrollParent = props.scrollRef();
+    let item = props.collection.getItems()[index];
+
+    if (!item || !scrollParent) {
+      return;
+    }
+
+    const pageY = Math.min(
+      scrollParent.scrollHeight,
+      item.ref.offsetTop - item.ref.offsetHeight + scrollParent.offsetHeight
+    );
+
+    while (item && item.ref.offsetTop < pageY) {
+      if (props.collection.isLastIndex(index)) {
+        break;
+      }
+
+      index = index + 1;
+      item = props.collection.getItems()[index];
+    }
+
+    focusAtIndex(index, "forward");
+  };
+
   const focusFirstSelected = () => {
     // A previously focused item exist (e.g. has tabIndex=0), bring back focus to it.
     if (focusedKey() != null) {
@@ -135,6 +201,8 @@ export function createListFocusManager<T extends Item<any>>(
     focusLast,
     focusPrevious,
     focusNext,
+    focusPreviousPage,
+    focusNextPage,
     focusFirstSelected
   };
 }

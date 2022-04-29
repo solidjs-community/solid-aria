@@ -13,7 +13,7 @@ import { Accessor, createEffect, on } from "solid-js";
 
 type CreateListBoxStateOptions = Partial<
   Pick<
-    CreateListFocusManagerProps<string> & CreateSelectionManagerProps<string>,
+    CreateListFocusManagerProps & CreateSelectionManagerProps,
     | "selectedKeys"
     | "defaultSelectedKeys"
     | "allowEmptySelection"
@@ -61,7 +61,7 @@ export interface ListBoxState {
   /**
    * Register an option to the listbox with some meta data.
    */
-  registerOption: (metaData: Item<string>) => void;
+  registerOption: (metaData: Item) => void;
 
   /**
    * Unregister an option from the listbox.
@@ -72,8 +72,11 @@ export interface ListBoxState {
 /**
  * Provides state management for a listbox component.
  */
-export function createListBoxState(props: CreateListBoxStateProps): ListBoxState {
-  const collection = createCollection<Item<string>>();
+export function createListBoxState(
+  props: CreateListBoxStateProps,
+  scrollRef: Accessor<HTMLElement | undefined>
+): ListBoxState {
+  const collection = createCollection();
 
   const selectionManager = createSelectionManager({
     collection,
@@ -87,6 +90,7 @@ export function createListBoxState(props: CreateListBoxStateProps): ListBoxState
   const focusManager = createListFocusManager({
     collection,
     selectionManager,
+    scrollRef,
     shouldFocusWrap: () => access(props.shouldFocusWrap) ?? false
   });
 

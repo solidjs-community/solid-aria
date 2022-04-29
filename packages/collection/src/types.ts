@@ -1,18 +1,13 @@
 import { Accessor } from "solid-js";
 
-export interface Item<T> {
+export interface Item {
   /**
    * A unique key for the item.
    */
   key: string;
 
   /**
-   * The value of the item.
-   */
-  value: T;
-
-  /**
-   * A string value for this item, used for features like typeahead.
+   * A string representation of the item's contents, used for features like typeahead.
    */
   textValue: string;
 
@@ -30,11 +25,11 @@ export interface Item<T> {
 /**
  * An interface for dealing with collection.
  */
-export interface Collection<T> {
+export interface Collection {
   /**
    * Get all items in the collection.
    */
-  getItems: () => Array<T>;
+  getItems: () => Array<Item>;
 
   /**
    * Get all keys in the collection.
@@ -44,7 +39,7 @@ export interface Collection<T> {
   /**
    * Add an item to the collection.
    */
-  addItem: (item: T) => void;
+  addItem: (item: Item) => void;
 
   /**
    * Remove a item from the collection.
@@ -54,7 +49,12 @@ export interface Collection<T> {
   /**
    * Find a item by its index.
    */
-  findByIndex: (index: number) => T | null;
+  findByIndex: (index: number) => Item | null;
+
+  /**
+   * Find a item by its key.
+   */
+  findByKey: (key: string) => Item | null;
 
   /**
    * Find an index by the item  key.

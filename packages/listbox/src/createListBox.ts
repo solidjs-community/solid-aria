@@ -108,17 +108,23 @@ export function createListBox<
       const { key } = event;
 
       switch (key) {
+        case "Home":
+          state.focusManager.focusFirst();
+          break;
+        case "End":
+          state.focusManager.focusLast();
+          break;
         case "ArrowUp":
           state.focusManager.focusPrevious();
           break;
         case "ArrowDown":
           state.focusManager.focusNext();
           break;
-        case "Home":
-          state.focusManager.focusFirst();
+        case "PageUp":
+          state.focusManager.focusPreviousPage();
           break;
-        case "End":
-          state.focusManager.focusLast();
+        case "PageDown":
+          state.focusManager.focusNextPage();
           break;
       }
     }

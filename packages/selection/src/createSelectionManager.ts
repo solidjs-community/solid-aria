@@ -1,14 +1,14 @@
-import { Collection, Item } from "@solid-aria/collection";
+import { Collection } from "@solid-aria/collection";
 import { createControllableSignal } from "@solid-aria/utils";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
 
 import { SelectionManager, SelectionMode } from "./types";
 
-export interface CreateSelectionManagerProps<T> {
+export interface CreateSelectionManagerProps {
   /**
    * The managed collection.
    */
-  collection: Collection<T>;
+  collection: Collection;
 
   /**
    * The type of selection that is allowed in the collection.
@@ -39,9 +39,7 @@ export interface CreateSelectionManagerProps<T> {
 /**
  * Manage selection in a collection.
  */
-export function createSelectionManager<T extends Item<any>>(
-  props: CreateSelectionManagerProps<T>
-): SelectionManager {
+export function createSelectionManager(props: CreateSelectionManagerProps): SelectionManager {
   const [selectedKeys, setSelectedKeys] = createControllableSignal<Set<string>>({
     value: () => access(props.selectedKeys),
     defaultValue: () => access(props.defaultSelectedKeys) ?? new Set([]),

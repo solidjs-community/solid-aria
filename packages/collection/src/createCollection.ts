@@ -5,8 +5,8 @@ import { Collection, Item } from "./types";
 /**
  * Create a reactive collection of items.
  */
-export function createCollection<T extends Item<any>>(): Collection<T> {
-  const [items, setItems] = createSignal<Array<T>>([]);
+export function createCollection(): Collection {
+  const [items, setItems] = createSignal<Array<Item>>([]);
 
   const isCollectionEmpty = () => {
     return !items() || items().length <= 0;
@@ -16,7 +16,7 @@ export function createCollection<T extends Item<any>>(): Collection<T> {
     return items().map(item => item.key);
   };
 
-  const addItem = (item: T) => {
+  const addItem = (item: Item) => {
     setItems(prev => [...prev, item]);
   };
 
@@ -26,6 +26,10 @@ export function createCollection<T extends Item<any>>(): Collection<T> {
 
   const findByIndex = (index: number) => {
     return items()[index] ?? null;
+  };
+
+  const findByKey = (key: string) => {
+    return items().find(item => item.key === key) ?? null;
   };
 
   const findIndexByKey = (key?: string) => {
@@ -68,6 +72,7 @@ export function createCollection<T extends Item<any>>(): Collection<T> {
     addItem,
     removeItem,
     findByIndex,
+    findByKey,
     findIndexByKey,
     getFirstIndex,
     getLastIndex,

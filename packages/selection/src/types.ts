@@ -40,6 +40,16 @@ export interface ListFocusManager {
   focusNext: () => void;
 
   /**
+   * Focus the item visually one page above the given one, or `null` for none.
+   */
+  focusPreviousPage: () => void;
+
+  /**
+   * Focus the item visually one page below the given one, or `null` for none.
+   */
+  focusNextPage: () => void;
+
+  /**
    * Focus the first item in the collection that is selected .
    */
   focusFirstSelected: () => void;
@@ -48,7 +58,7 @@ export interface ListFocusManager {
 /**
  * The type of selection that is allowed in a collection.
  */
-export type SelectionMode = "single" | "multiple";
+export type SelectionMode = "none" | "single" | "multiple";
 
 /**
  * An interface for reading and updating multiple selection state.
