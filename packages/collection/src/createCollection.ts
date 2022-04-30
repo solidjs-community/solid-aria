@@ -1,6 +1,7 @@
 import { createSignal } from "solid-js";
 
 import { Collection, Item } from "./types";
+import { filterItems } from "./utils";
 
 /**
  * Create a reactive collection of items.
@@ -33,18 +34,41 @@ export function createCollection(): Collection {
   };
 
   const findIndexByKey = (key?: string) => {
-    if (key == null || isCollectionEmpty()) {
-      return null;
+    return items().findIndex(item => item.key === key);
+  };
+
+  const findIndexBySearch = (filter: string, collator: Intl.Collator, startIndex: number) => {
+    // Access the reactive items once during the function execution.
+    const resolvedItems = items();
+
+    // Order the items to prioritize items after the given start index.
+    const orderedItems = [
+      ...resolvedItems.slice(startIndex),
+      ...resolvedItems.slice(0, startIndex)
+    ];
+
+    // first check if there is an exact match for the typed string.
+    const firstMatch = filterItems(orderedItems, filter, collator)[0];
+
+    if (firstMatch) {
+      return resolvedItems.indexOf(firstMatch);
     }
 
-    const index = items().findIndex(item => item.key === key);
+    // If the same letter is being repeated, cycle through first-letter matches.
+    const allSameLetter = (array: string[]) => array.every(letter => letter === array[0]);
 
-    return index === -1 ? null : index;
+    if (allSameLetter(filter.split(""))) {
+      const matches = filterItems(orderedItems, filter[0], collator);
+      return resolvedItems.indexOf(matches[0]);
+    }
+
+    // No matches
+    return -1;
   };
 
   const getFirstIndex = () => {
     if (isCollectionEmpty()) {
-      return null;
+      return -1;
     }
 
     return 0;
@@ -52,7 +76,7 @@ export function createCollection(): Collection {
 
   const getLastIndex = () => {
     if (isCollectionEmpty()) {
-      return null;
+      return -1;
     }
 
     return items().length - 1;
@@ -74,6 +98,7 @@ export function createCollection(): Collection {
     findByIndex,
     findByKey,
     findIndexByKey,
+    findIndexBySearch,
     getFirstIndex,
     getLastIndex,
     isFirstIndex,

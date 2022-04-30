@@ -57,11 +57,7 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
     }
   };
 
-  const focusAtIndex = (index: number | null, move: "forward" | "backward") => {
-    if (index == null) {
-      return;
-    }
-
+  const focusAtIndex = (index: number, move: "forward" | "backward") => {
     const item = props.collection.findByIndex(index);
 
     if (!item) {
@@ -92,6 +88,8 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
     }
 
     focusItem(item);
+
+    return item;
   };
 
   const focusFirstItem = () => {
@@ -105,10 +103,6 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
   const focusItemAbove = () => {
     const index = props.collection.findIndexByKey(focusedKey());
 
-    if (index == null) {
-      return;
-    }
-
     if (props.collection.isFirstIndex(index)) {
       access(props.shouldFocusWrap) && focusLastItem();
       return;
@@ -119,10 +113,6 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
 
   const focusItemBelow = () => {
     const index = props.collection.findIndexByKey(focusedKey());
-
-    if (index == null) {
-      return;
-    }
 
     if (props.collection.isLastIndex(index)) {
       access(props.shouldFocusWrap) && focusFirstItem();
@@ -135,12 +125,8 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
   const focusItemPageAbove = () => {
     let index = props.collection.findIndexByKey(focusedKey());
 
-    if (index == null) {
-      return;
-    }
-
     const scrollParent = props.scrollRef();
-    let item = props.collection.getItems()[index];
+    let item = props.collection.findByIndex(index);
 
     if (!item || !scrollParent) {
       return;
@@ -157,7 +143,7 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
       }
 
       index = index - 1;
-      item = props.collection.getItems()[index];
+      item = props.collection.findByIndex(index);
     }
 
     focusAtIndex(index, "backward");
@@ -166,12 +152,8 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
   const focusItemPageBelow = () => {
     let index = props.collection.findIndexByKey(focusedKey());
 
-    if (index == null) {
-      return;
-    }
-
     const scrollParent = props.scrollRef();
-    let item = props.collection.getItems()[index];
+    let item = props.collection.findByIndex(index);
 
     if (!item || !scrollParent) {
       return;
@@ -188,10 +170,18 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
       }
 
       index = index + 1;
-      item = props.collection.getItems()[index];
+      item = props.collection.findByIndex(index);
     }
 
     focusAtIndex(index, "forward");
+  };
+
+  const focusItemForSearch = (search: string) => {
+    const focusedIndex = props.collection.findIndexByKey(focusedKey());
+
+    const nextIndex = props.collection.findIndexBySearch(search, collator(), focusedIndex + 1);
+
+    return focusAtIndex(nextIndex, "forward");
   };
 
   const focusFirstSelectedItem = () => {
@@ -211,40 +201,6 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
     focusAtIndex(props.selectionManager.getFirstSelectedIndex(), "forward");
   };
 
-  const focusItemForSearch = (search: string) => {
-    let index = props.collection.findIndexByKey(focusedKey()) ?? props.collection.getFirstIndex();
-
-    if (index == null) {
-      return;
-    }
-
-    let item = props.collection.getItems()[index];
-
-    if (!item) {
-      return;
-    }
-
-    let substring = item.textValue.slice(0, search.length);
-
-    while (index != null && collator().compare(substring, search) !== 0) {
-      if (props.collection.isLastIndex(index)) {
-        index = props.collection.getFirstIndex();
-      } else {
-        index = index + 1;
-      }
-
-      if (index == null) {
-        break;
-      }
-
-      item = props.collection.getItems()[index];
-
-      substring = item.textValue.slice(0, search.length);
-    }
-
-    focusAtIndex(index, "forward");
-  };
-
   return {
     focusedKey,
     isFocusedKey,
@@ -255,7 +211,7 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
     focusItemBelow,
     focusItemPageAbove,
     focusItemPageBelow,
-    focusFirstSelectedItem,
-    focusItemForSearch
+    focusItemForSearch,
+    focusFirstSelectedItem
   };
 }

@@ -1,3 +1,4 @@
+import { Item } from "@solid-aria/collection";
 import { Accessor } from "solid-js";
 
 /**
@@ -55,9 +56,12 @@ export interface ListFocusManager {
   focusFirstSelectedItem: () => void;
 
   /**
-   * Focus the next item after the currenlty focused one that matches the given search string.
+   * Focus the next item after the currenlty focused one that matches the given search string,
+   * falling back to searching the whole list.
+   *
+   * @returns - the newly focused item.
    */
-  focusItemForSearch: (search: string) => void;
+  focusItemForSearch: (search: string) => Item | undefined;
 }
 
 /**
@@ -92,7 +96,7 @@ export interface SelectionManager {
   /**
    * Returns the index of the first selected item in the collection.
    */
-  getFirstSelectedIndex: () => number | null;
+  getFirstSelectedIndex: () => number;
 
   /**
    * Replaces the selection with only the given key.

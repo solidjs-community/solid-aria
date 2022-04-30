@@ -1,3 +1,4 @@
+import { Item } from "@solid-aria/collection";
 import { DOMElements } from "@solid-aria/types";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor, createMemo, createSignal, JSX } from "solid-js";
@@ -11,9 +12,9 @@ interface CreateTypeSelectProps {
   focusManager: MaybeAccessor<ListFocusManager>;
 
   /**
-   * Called when an item is focused by typing.
+   * Callback invoked when an item is focused by typing.
    */
-  onTypeSelect?: (key: string) => void;
+  onTypeSelect?: (item: Item) => void;
 }
 
 interface TypeSelectAria<T extends DOMElements> {
@@ -33,6 +34,8 @@ export function createTypeSelect<T extends DOMElements = "ul">(
   const [timeoutId, setTimeoutId] = createSignal(-1);
 
   const onKeyDown = (event: KeyboardEvent) => {
+    window.clearTimeout(timeoutId());
+
     const focusManager = access(props.focusManager);
 
     const character = getStringForKey(event.key);
@@ -50,21 +53,21 @@ export function createTypeSelect<T extends DOMElements = "ul">(
       event.stopPropagation();
     }
 
-    setSearch(prev => (prev += character));
-
-    clearTimeout(timeoutId());
-
-    const id = window.setTimeout(() => {
-      focusManager.focusItemForSearch(search());
-
-      const focusedKey = focusManager.focusedKey();
-
-      focusedKey != null && props.onTypeSelect?.(focusedKey);
-
+    // Clear the search after the timeout.
+    const searchTimeoutId = window.setTimeout(() => {
       setSearch("");
     }, 500);
 
-    setTimeoutId(id);
+    setTimeoutId(searchTimeoutId);
+
+    // Concat the new char to the previous search.
+    setSearch(prev => (prev += character));
+
+    const focusedItem = focusManager.focusItemForSearch(search());
+
+    if (focusedItem) {
+      props.onTypeSelect?.(focusedItem);
+    }
   };
 
   const typeSelectProps = createMemo(() => {

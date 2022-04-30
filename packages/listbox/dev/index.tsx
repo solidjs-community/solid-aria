@@ -98,7 +98,7 @@ function Option(props: AriaListBoxOptionProps) {
 function App() {
   return (
     <div>
-      <ListBox style={{ height: "66px", "overflow-y": "auto" }}>
+      <ListBox>
         <Option value="1">One</Option>
         <Option value="2">Two</Option>
         <Option value="3">Three</Option>
@@ -108,6 +108,7 @@ function App() {
         <Option value="7">Seven</Option>
         <Option value="8">Eight</Option>
         <Option value="9">Nine</Option>
+        <Option value="10">Ten</Option>
       </ListBox>
     </div>
   );

@@ -57,9 +57,7 @@ export function createSelectionManager(props: CreateSelectionManagerProps): Sele
   };
 
   const getFirstSelectedIndex = () => {
-    const index = props.collection.getItems().findIndex(item => selectedKeys()?.has(item.key));
-
-    return index === -1 ? null : index;
+    return props.collection.getItems().findIndex(item => selectedKeys()?.has(item.key));
   };
 
   const replaceSelection = (key: string) => {

@@ -59,17 +59,27 @@ export interface Collection {
   /**
    * Find an index by the item  key.
    */
-  findIndexByKey: (key?: string) => number | null;
+  findIndexByKey: (key?: string) => number;
 
   /**
-   * Get the first index in the collection.
+   * Find an index based on a filter string, returns -1 if not found.
+   * If the filter is multiple iterations of the same letter (e.g "aaa"), then cycle through first-letter matches.
+   *
+   * @param filter - The filter string to search.
+   * @param collator - The collator to use for string comparison.
+   * @param startIndex - The index in the collection to start search from.
    */
-  getFirstIndex: () => number | null;
+  findIndexBySearch: (filter: string, collator: Intl.Collator, startIndex: number) => number;
 
   /**
-   * Get the last index in the collection.
+   * Get the first index in the collection, or -1 if empty.
    */
-  getLastIndex: () => number | null;
+  getFirstIndex: () => number;
+
+  /**
+   * Get the last index in the collection, or -1 if empty.
+   */
+  getLastIndex: () => number;
 
   /**
    * Return whether the given index is the first one.
