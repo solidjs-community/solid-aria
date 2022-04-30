@@ -125,11 +125,7 @@ export function createListBoxOption<
 
   const { keyboardProps } = createKeyboard({
     isDisabled,
-    onKeyDown: event => {
-      if (["Enter", " "].includes(event.key)) {
-        focusAndSelect();
-      }
-    }
+    onKeyDown: event => ["Enter", " "].includes(event.key) && focusAndSelect()
   });
 
   const optionProps: Accessor<JSX.IntrinsicElements[OptionElement]> = createMemo(() => {

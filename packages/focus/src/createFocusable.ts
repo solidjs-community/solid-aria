@@ -47,7 +47,7 @@ export interface FocusableResult {
  */
 export function createFocusable(
   props: CreateFocusableProps,
-  ref?: Accessor<HTMLElement | undefined>
+  ref: Accessor<HTMLElement | undefined>
 ): FocusableResult {
   const [autoFocus, setAutoFocus] = createSignal(!!access(props.autoFocus));
 

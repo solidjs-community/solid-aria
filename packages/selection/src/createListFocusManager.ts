@@ -1,4 +1,6 @@
-import { Collection } from "@solid-aria/collection";
+import { Collection, Item } from "@solid-aria/collection";
+import { createCollator } from "@solid-aria/i18n";
+import { focusWithoutScrolling, scrollIntoView } from "@solid-aria/utils";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor, createSignal } from "solid-js";
 
@@ -21,7 +23,9 @@ export interface CreateListFocusManagerProps {
   shouldFocusWrap: MaybeAccessor<boolean>;
 
   /**
-   * The ref attached to the scrollable element.
+   * The ref attached to the scrollable body.
+   * Used to provide automatic scrolling on item focus.
+   * Can be the element representing the collection or a descendant.
    */
   scrollRef: Accessor<HTMLElement | undefined>;
 }
@@ -31,10 +35,26 @@ export interface CreateListFocusManagerProps {
  * @param props - Props for the ListFocusManager.
  */
 export function createListFocusManager(props: CreateListFocusManagerProps): ListFocusManager {
+  const collator = createCollator({ usage: "search", sensitivity: "base" });
+
   const [focusedKey, setFocusedKey] = createSignal<string | undefined>();
 
   const isFocusedKey = (key: string) => {
     return key === focusedKey();
+  };
+
+  const focusItem = (item: Item) => {
+    setFocusedKey(item.key);
+
+    const scrollParent = props.scrollRef();
+    const itemElement = item.ref;
+
+    if (scrollParent) {
+      focusWithoutScrolling(itemElement);
+      scrollIntoView(scrollParent, itemElement);
+    } else {
+      itemElement.focus();
+    }
   };
 
   const focusAtIndex = (index: number | null, move: "forward" | "backward") => {
@@ -52,14 +72,14 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
       // All items after the focused one was disabled.
       if (move === "forward" && props.collection.isLastIndex(index)) {
         // try focus the first enabled item if focus wrap is allowed.
-        access(props.shouldFocusWrap) && focusFirst();
+        access(props.shouldFocusWrap) && focusFirstItem();
         return;
       }
 
       // All items before the focused one was disabled.
       if (move === "backward" && props.collection.isFirstIndex(index)) {
         // try focus the last enabled item if focus wrap is allowed.
-        access(props.shouldFocusWrap) && focusLast();
+        access(props.shouldFocusWrap) && focusLastItem();
         return;
       }
 
@@ -71,20 +91,18 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
       return;
     }
 
-    setFocusedKey(item.key);
-
-    item.ref.focus();
+    focusItem(item);
   };
 
-  const focusFirst = () => {
+  const focusFirstItem = () => {
     focusAtIndex(props.collection.getFirstIndex(), "forward");
   };
 
-  const focusLast = () => {
+  const focusLastItem = () => {
     focusAtIndex(props.collection.getLastIndex(), "backward");
   };
 
-  const focusPrevious = () => {
+  const focusItemAbove = () => {
     const index = props.collection.findIndexByKey(focusedKey());
 
     if (index == null) {
@@ -92,14 +110,14 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
     }
 
     if (props.collection.isFirstIndex(index)) {
-      access(props.shouldFocusWrap) && focusLast();
+      access(props.shouldFocusWrap) && focusLastItem();
       return;
     }
 
     focusAtIndex(index - 1, "backward");
   };
 
-  const focusNext = () => {
+  const focusItemBelow = () => {
     const index = props.collection.findIndexByKey(focusedKey());
 
     if (index == null) {
@@ -107,14 +125,14 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
     }
 
     if (props.collection.isLastIndex(index)) {
-      access(props.shouldFocusWrap) && focusFirst();
+      access(props.shouldFocusWrap) && focusFirstItem();
       return;
     }
 
     focusAtIndex(index + 1, "forward");
   };
 
-  const focusPreviousPage = () => {
+  const focusItemPageAbove = () => {
     let index = props.collection.findIndexByKey(focusedKey());
 
     if (index == null) {
@@ -145,7 +163,7 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
     focusAtIndex(index, "backward");
   };
 
-  const focusNextPage = () => {
+  const focusItemPageBelow = () => {
     let index = props.collection.findIndexByKey(focusedKey());
 
     if (index == null) {
@@ -176,7 +194,7 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
     focusAtIndex(index, "forward");
   };
 
-  const focusFirstSelected = () => {
+  const focusFirstSelectedItem = () => {
     // A previously focused item exist (e.g. has tabIndex=0), bring back focus to it.
     if (focusedKey() != null) {
       focusAtIndex(props.collection.findIndexByKey(focusedKey()), "forward");
@@ -185,7 +203,7 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
 
     // No previous selection, focus the first enabled item.
     if (props.selectionManager.isEmpty()) {
-      focusFirst();
+      focusFirstItem();
       return;
     }
 
@@ -193,16 +211,51 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
     focusAtIndex(props.selectionManager.getFirstSelectedIndex(), "forward");
   };
 
+  const focusItemForSearch = (search: string) => {
+    let index = props.collection.findIndexByKey(focusedKey()) ?? props.collection.getFirstIndex();
+
+    if (index == null) {
+      return;
+    }
+
+    let item = props.collection.getItems()[index];
+
+    if (!item) {
+      return;
+    }
+
+    let substring = item.textValue.slice(0, search.length);
+
+    while (index != null && collator().compare(substring, search) !== 0) {
+      if (props.collection.isLastIndex(index)) {
+        index = props.collection.getFirstIndex();
+      } else {
+        index = index + 1;
+      }
+
+      if (index == null) {
+        break;
+      }
+
+      item = props.collection.getItems()[index];
+
+      substring = item.textValue.slice(0, search.length);
+    }
+
+    focusAtIndex(index, "forward");
+  };
+
   return {
     focusedKey,
     isFocusedKey,
     setFocusedKey,
-    focusFirst,
-    focusLast,
-    focusPrevious,
-    focusNext,
-    focusPreviousPage,
-    focusNextPage,
-    focusFirstSelected
+    focusFirstItem,
+    focusLastItem,
+    focusItemAbove,
+    focusItemBelow,
+    focusItemPageAbove,
+    focusItemPageBelow,
+    focusFirstSelectedItem,
+    focusItemForSearch
   };
 }

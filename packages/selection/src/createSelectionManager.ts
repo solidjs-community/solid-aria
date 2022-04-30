@@ -46,6 +46,8 @@ export function createSelectionManager(props: CreateSelectionManagerProps): Sele
     onChange: value => props.onSelectionChange?.(value)
   });
 
+  const selectionMode = () => access(props.selectionMode);
+
   const isEmpty = () => {
     return !selectedKeys() || selectedKeys()?.size === 0;
   };
@@ -110,6 +112,7 @@ export function createSelectionManager(props: CreateSelectionManagerProps): Sele
   };
 
   return {
+    selectionMode,
     selectedKeys,
     isEmpty,
     isSelected,

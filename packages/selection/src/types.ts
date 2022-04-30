@@ -20,39 +20,44 @@ export interface ListFocusManager {
   setFocusedKey: (key: string) => void;
 
   /**
-   * Focus first item.
+   * Focus the first item.
    */
-  focusFirst: () => void;
+  focusFirstItem: () => void;
 
   /**
-   * Focus last item.
+   * Focus the last item.
    */
-  focusLast: () => void;
+  focusLastItem: () => void;
 
   /**
-   * Focus previous item.
+   * Focus the item visually above the currenlty focused one.
    */
-  focusPrevious: () => void;
+  focusItemAbove: () => void;
 
   /**
-   * Focus next item.
+   * Focus the item visually below the currenlty focused one.
    */
-  focusNext: () => void;
+  focusItemBelow: () => void;
 
   /**
-   * Focus the item visually one page above the given one, or `null` for none.
+   * Focus the item visually one page above the currenlty focused one.
    */
-  focusPreviousPage: () => void;
+  focusItemPageAbove: () => void;
 
   /**
-   * Focus the item visually one page below the given one, or `null` for none.
+   * Focus the item visually one page below the currenlty focused one.
    */
-  focusNextPage: () => void;
+  focusItemPageBelow: () => void;
 
   /**
-   * Focus the first item in the collection that is selected .
+   * Focus the first item in the collection that is selected.
    */
-  focusFirstSelected: () => void;
+  focusFirstSelectedItem: () => void;
+
+  /**
+   * Focus the next item after the currenlty focused one that matches the given search string.
+   */
+  focusItemForSearch: (search: string) => void;
 }
 
 /**
@@ -65,9 +70,14 @@ export type SelectionMode = "none" | "single" | "multiple";
  */
 export interface SelectionManager {
   /**
+   * The type of selection that is allowed in the collection.
+   */
+  selectionMode: Accessor<SelectionMode>;
+
+  /**
    * Returns a set of selected keys.
    */
-  selectedKeys: () => Set<string> | undefined;
+  selectedKeys: Accessor<Set<string> | undefined>;
 
   /**
    * Returns whether the selection is empty.

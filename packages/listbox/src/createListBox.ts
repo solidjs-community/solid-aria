@@ -1,6 +1,6 @@
 import { createFocusable } from "@solid-aria/focus";
 import { AriaLabelProps, createLabel } from "@solid-aria/label";
-import { SelectionMode } from "@solid-aria/selection";
+import { createTypeSelect, isCtrlKeyPressed, SelectionMode } from "@solid-aria/selection";
 import { AriaLabelingProps, DOMElements, DOMProps, LabelableProps } from "@solid-aria/types";
 import { combineProps, filterDOMProps } from "@solid-aria/utils";
 import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
@@ -17,6 +17,11 @@ interface AriaListBoxOptions extends LabelableProps, DOMProps, AriaLabelingProps
    * Whether the listbox is disabled.
    */
   isDisabled?: boolean;
+
+  /**
+   * Whether the listbox should be automatically focused upon render.
+   */
+  autoFocus?: boolean;
 
   /**
    * The rendered contents of the listbox.
@@ -81,13 +86,16 @@ export interface ListBoxAria<
  * A listbox displays a list of options and allows a user to select one or more of them.
  * @param props - Props for the listbox.
  * @param state - State for the listbox, as returned by `createListBoxState`.
+ * @param ref - A ref for the HTML listbox element.
  */
 export function createListBox<
   ListBoxElementType extends DOMElements = "ul",
-  LabelElementType extends DOMElements = "div"
+  LabelElementType extends DOMElements = "div",
+  RefElement extends HTMLElement = HTMLUListElement
 >(
   props: AriaListBoxOptions,
-  state: ListBoxState
+  state: ListBoxState,
+  ref: Accessor<RefElement | undefined>
 ): ListBoxAria<ListBoxElementType, LabelElementType> {
   const defaultCreateLabelProps: AriaLabelProps = {
     // listbox is not an HTML input element so it
@@ -99,45 +107,67 @@ export function createListBox<
 
   const { labelProps, fieldProps } = createLabel<LabelElementType>(createLabelProps);
 
-  const { focusableProps } = createFocusable({
-    isDisabled: () => props.isDisabled,
-    onFocus: () => {
-      state.focusManager.focusFirstSelected();
-    },
-    onKeyDown: event => {
-      const { key } = event;
+  const isMultipleSelectionMode = () => state.selectionManager.selectionMode() === "multiple";
 
-      switch (key) {
-        case "Home":
-          state.focusManager.focusFirst();
-          break;
-        case "End":
-          state.focusManager.focusLast();
-          break;
-        case "ArrowUp":
-          state.focusManager.focusPrevious();
-          break;
-        case "ArrowDown":
-          state.focusManager.focusNext();
-          break;
-        case "PageUp":
-          state.focusManager.focusPreviousPage();
-          break;
-        case "PageDown":
-          state.focusManager.focusNextPage();
-          break;
+  const { focusableProps } = createFocusable(
+    {
+      isDisabled: () => props.isDisabled,
+      autoFocus: () => props.autoFocus,
+      onFocus: () => {
+        setTimeout(() => state.focusManager.focusFirstSelectedItem(), 0);
+      },
+      onKeyDown: event => {
+        const { key } = event;
+
+        switch (key) {
+          case "Home":
+            event.preventDefault();
+            state.focusManager.focusFirstItem();
+            break;
+          case "End":
+            event.preventDefault();
+            state.focusManager.focusLastItem();
+            break;
+          case "ArrowUp":
+            event.preventDefault();
+            state.focusManager.focusItemAbove();
+            break;
+          case "ArrowDown":
+            event.preventDefault();
+            state.focusManager.focusItemBelow();
+            break;
+          case "PageUp":
+            event.preventDefault();
+            state.focusManager.focusItemPageAbove();
+            break;
+          case "PageDown":
+            event.preventDefault();
+            state.focusManager.focusItemPageBelow();
+            break;
+          case "a":
+            if (isCtrlKeyPressed(event) && isMultipleSelectionMode()) {
+              event.preventDefault();
+              state.selectionManager.selectAll();
+            }
+            break;
+        }
       }
-    }
+    },
+    ref
+  );
+
+  const { typeSelectProps } = createTypeSelect<ListBoxElementType>({
+    focusManager: () => state.focusManager
   });
 
   const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
 
-  const listBoxProps: Accessor<JSX.IntrinsicElements[ListBoxElementType]> = createMemo(() => {
-    return combineProps(domProps(), focusableProps(), fieldProps(), {
+  const listBoxProps = createMemo(() => {
+    return combineProps(domProps(), focusableProps(), typeSelectProps(), fieldProps(), {
       role: "listbox",
-      "aria-multiselectable": props.selectionMode === "multiple" ? true : undefined,
+      "aria-multiselectable": isMultipleSelectionMode() ? true : undefined,
       tabIndex: state.focusManager.focusedKey() == null ? 0 : -1
-    });
+    }) as JSX.IntrinsicElements[ListBoxElementType];
   });
 
   return { listBoxProps, labelProps };

@@ -71,6 +71,8 @@ export interface ListBoxState {
 
 /**
  * Provides state management for a listbox component.
+ * @param props - Props for the ListBoxState.
+ * @param scrollRef - The ref attached to the scrollable body. Can be the element representing the collection or a descendant.
  */
 export function createListBoxState(
   props: CreateListBoxStateProps,

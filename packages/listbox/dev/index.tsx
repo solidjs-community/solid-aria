@@ -1,6 +1,6 @@
 import { createFocusRing } from "@solid-aria/focus";
 import { combineProps } from "@solid-aria/utils";
-import { JSX, Show } from "solid-js";
+import { createSignal, JSX, Show } from "solid-js";
 import { render } from "solid-js/web";
 
 import {
@@ -18,7 +18,7 @@ function ListBox(props: AriaListBoxProps & JSX.IntrinsicElements["ul"]) {
   let ref: HTMLUListElement | undefined;
 
   const state = createListBoxState(props, () => ref);
-  const { listBoxProps } = createListBox(props, state);
+  const { listBoxProps } = createListBox(props, state, () => ref);
 
   return (
     <ListBoxContext.Provider value={state}>
@@ -97,17 +97,19 @@ function Option(props: AriaListBoxOptionProps) {
 
 function App() {
   return (
-    <ListBox style={{ height: "100px", "overflow-y": "auto" }}>
-      <Option value="1">One</Option>
-      <Option value="2">Two</Option>
-      <Option value="3">Three</Option>
-      <Option value="4">Four</Option>
-      <Option value="5">Five</Option>
-      <Option value="6">Six</Option>
-      <Option value="7">Seven</Option>
-      <Option value="8">Eight</Option>
-      <Option value="9">Nine</Option>
-    </ListBox>
+    <div>
+      <ListBox style={{ height: "66px", "overflow-y": "auto" }}>
+        <Option value="1">One</Option>
+        <Option value="2">Two</Option>
+        <Option value="3">Three</Option>
+        <Option value="4">Four</Option>
+        <Option value="5">Five</Option>
+        <Option value="6">Six</Option>
+        <Option value="7">Seven</Option>
+        <Option value="8">Eight</Option>
+        <Option value="9">Nine</Option>
+      </ListBox>
+    </div>
   );
 }
 
