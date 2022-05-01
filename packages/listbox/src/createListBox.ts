@@ -3,33 +3,22 @@ import { AriaLabelProps, createLabel } from "@solid-aria/label";
 import { createTypeSelect, isCtrlKeyPressed, SelectionMode } from "@solid-aria/selection";
 import { AriaLabelingProps, DOMElements, DOMProps, LabelableProps } from "@solid-aria/types";
 import { combineProps, filterDOMProps } from "@solid-aria/utils";
-import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
+import {
+  Accessor,
+  Component,
+  createComponent,
+  createContext,
+  createMemo,
+  JSX,
+  mergeProps,
+  useContext
+} from "solid-js";
 
-import { ListBoxState } from "./createListBoxState";
+import { createListBoxState, ListBoxState } from "./createListBoxState";
 
-interface AriaListBoxOptions extends LabelableProps, DOMProps, AriaLabelingProps {
-  /**
-   * The type of selection that is allowed in the listbox.
-   */
-  selectionMode?: SelectionMode;
+const ListBoxContext = createContext<ListBoxState>();
 
-  /**
-   * Whether the listbox is disabled.
-   */
-  isDisabled?: boolean;
-
-  /**
-   * Whether the listbox should be automatically focused upon render.
-   */
-  autoFocus?: boolean;
-
-  /**
-   * The rendered contents of the listbox.
-   */
-  children?: JSX.Element;
-}
-
-export interface AriaListBoxProps extends AriaListBoxOptions {
+export interface AriaListBoxProps extends LabelableProps, DOMProps, AriaLabelingProps {
   /**
    * The currently selected keys in the listbox (controlled).
    */
@@ -41,14 +30,14 @@ export interface AriaListBoxProps extends AriaListBoxOptions {
   defaultSelectedKeys?: Set<string>;
 
   /**
+   * The type of selection that is allowed in the listbox.
+   */
+  selectionMode?: SelectionMode;
+
+  /**
    * Whether the listbox allows empty selection.
    */
   allowEmptySelection?: boolean;
-
-  /**
-   * Whether typeahead is enabled.
-   */
-  allowTypeAhead?: boolean;
 
   /**
    * Whether focus should wrap around when the end/start is reached.
@@ -61,6 +50,21 @@ export interface AriaListBoxProps extends AriaListBoxOptions {
   selectOnFocus?: boolean;
 
   /**
+   * Whether the listbox should be automatically focused upon render.
+   */
+  autoFocus?: boolean;
+
+  /**
+   * Whether the listbox is disabled.
+   */
+  isDisabled?: boolean;
+
+  /**
+   * The rendered contents of the listbox.
+   */
+  children?: JSX.Element;
+
+  /**
    * Handler that is called when the selection changes.
    */
   onSelectionChange?: (keys: Set<string>) => void;
@@ -70,6 +74,16 @@ export interface ListBoxAria<
   ListBoxElementType extends DOMElements,
   LabelElementType extends DOMElements
 > {
+  /**
+   * Provide the listbox state to descendant elements.
+   */
+  ListBoxProvider: Component;
+
+  /**
+   * State of the listbox.
+   */
+  state: ListBoxState;
+
   /**
    * Props for the listbox element.
    */
@@ -85,23 +99,34 @@ export interface ListBoxAria<
  * Provides the behavior and accessibility implementation for a listbox component.
  * A listbox displays a list of options and allows a user to select one or more of them.
  * @param props - Props for the listbox.
- * @param state - State for the listbox, as returned by `createListBoxState`.
  * @param ref - A ref for the HTML listbox element.
+ * @param scrollRef - The ref attached to the scrollable body, if not provided the listbox ref will be used.
  */
 export function createListBox<
   ListBoxElementType extends DOMElements = "ul",
   LabelElementType extends DOMElements = "div",
   RefElement extends HTMLElement = HTMLUListElement
 >(
-  props: AriaListBoxOptions,
-  state: ListBoxState,
-  ref: Accessor<RefElement | undefined>
+  props: AriaListBoxProps,
+  ref: Accessor<RefElement | undefined>,
+  scrollRef?: Accessor<HTMLElement | undefined>
 ): ListBoxAria<ListBoxElementType, LabelElementType> {
   const defaultCreateLabelProps: AriaLabelProps = {
     // listbox is not an HTML input element so it
     // shouldn't be labeled by a <label> element.
     isHTMLLabelElement: false
   };
+
+  const scrollElementRef = createMemo(() => {
+    if (scrollRef) {
+      return scrollRef();
+    }
+
+    // Fallback to the listbox ref
+    return ref();
+  });
+
+  const state = createListBoxState(props, scrollElementRef);
 
   const createLabelProps = mergeProps(defaultCreateLabelProps, props);
 
@@ -170,5 +195,24 @@ export function createListBox<
     }) as JSX.IntrinsicElements[ListBoxElementType];
   });
 
-  return { listBoxProps, labelProps };
+  const ListBoxProvider: Component = props => {
+    return createComponent(ListBoxContext.Provider, {
+      value: state,
+      get children() {
+        return props.children;
+      }
+    });
+  };
+
+  return { ListBoxProvider, state, listBoxProps, labelProps };
+}
+
+export function useListBoxContext() {
+  const context = useContext(ListBoxContext);
+
+  if (!context) {
+    throw new Error("[solid-aria]: useListBoxContext should be used in a ListBoxProvider.");
+  }
+
+  return context;
 }

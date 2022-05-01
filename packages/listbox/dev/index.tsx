@@ -9,19 +9,16 @@ import {
   AriaListBoxSectionProps,
   createListBox,
   createListBoxOption,
-  createListBoxSection,
-  createListBoxState,
-  ListBoxContext
+  createListBoxSection
 } from "../src";
 
 function ListBox(props: AriaListBoxProps & JSX.IntrinsicElements["ul"]) {
   let ref: HTMLUListElement | undefined;
 
-  const state = createListBoxState(props, () => ref);
-  const { listBoxProps } = createListBox(props, state, () => ref);
+  const { ListBoxProvider, listBoxProps } = createListBox(props, () => ref);
 
   return (
-    <ListBoxContext.Provider value={state}>
+    <ListBoxProvider>
       <ul
         {...props}
         {...listBoxProps()}
@@ -36,7 +33,7 @@ function ListBox(props: AriaListBoxProps & JSX.IntrinsicElements["ul"]) {
       >
         {props.children}
       </ul>
-    </ListBoxContext.Provider>
+    </ListBoxProvider>
   );
 }
 

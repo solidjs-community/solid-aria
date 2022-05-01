@@ -4,7 +4,7 @@ import { combineProps, createSlotId, isMac, isWebKit } from "@solid-aria/utils";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor, createMemo, JSX, onCleanup, onMount } from "solid-js";
 
-import { useListBoxContext } from "./context";
+import { useListBoxContext } from "./createListBox";
 
 export interface AriaListBoxOptionProps {
   /**
