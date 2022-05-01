@@ -1,4 +1,4 @@
-import { createCollection, Item } from "@solid-aria/collection";
+import { Collection, createCollection } from "@solid-aria/collection";
 import {
   createListFocusManager,
   CreateListFocusManagerProps,
@@ -59,14 +59,9 @@ export interface ListBoxState {
   selectOnFocus: Accessor<boolean>;
 
   /**
-   * Register an option to the listbox with some meta data.
+   * The collection of items (options) in the listbox.
    */
-  registerOption: (metaData: Item) => void;
-
-  /**
-   * Unregister an option from the listbox.
-   */
-  unregisterOption: (key: string) => void;
+  collection: Collection;
 }
 
 /**
@@ -113,7 +108,6 @@ export function createListBoxState(
     selectionManager,
     focusManager,
     selectOnFocus,
-    registerOption: collection.addItem,
-    unregisterOption: collection.removeItem
+    collection
   };
 }

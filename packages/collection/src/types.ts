@@ -29,12 +29,12 @@ export interface Collection {
   /**
    * Get all items in the collection.
    */
-  items: () => Array<Item>;
+  items: Accessor<Array<Item>>;
 
   /**
    * Get all keys in the collection.
    */
-  keys(): Array<string>;
+  keys: Accessor<Array<string>>;
 
   /**
    * Add an item to the collection.

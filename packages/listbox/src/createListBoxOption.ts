@@ -133,7 +133,11 @@ export function createListBoxOption<
       role: "option",
       tabIndex: isFocused() ? 0 : -1,
       "aria-selected": isSelected() || undefined,
-      "aria-disabled": isDisabled() || undefined
+      "aria-disabled": isDisabled() || undefined,
+
+      // TODO: This won't works with virtual scroll since options are removed from collection onCleanup.
+      "aria-posinset": context.collection.findIndexByKey(key()) + 1,
+      "aria-setsize": context.collection.items().length
     }) as JSX.IntrinsicElements[OptionElement];
 
     // Safari with VoiceOver on macOS misreads options with aria-labelledby or aria-label as simply "text".
@@ -166,7 +170,7 @@ export function createListBoxOption<
       return;
     }
 
-    context.registerOption({
+    context.collection.addItem({
       key: key(),
       ref: elementRef,
       textValue: props.textValue ?? elementRef.textContent ?? "",
@@ -174,7 +178,7 @@ export function createListBoxOption<
     });
 
     onCleanup(() => {
-      context.unregisterOption(key());
+      context.collection.removeItem(key());
     });
   });
 
