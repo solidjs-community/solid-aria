@@ -57,7 +57,7 @@ export function createSelectionManager(props: CreateSelectionManagerProps): Sele
   };
 
   const getFirstSelectedIndex = () => {
-    return props.collection.getItems().findIndex(item => selectedKeys()?.has(item.key));
+    return props.collection.items().findIndex(item => selectedKeys()?.has(item.key));
   };
 
   const replaceSelection = (key: string) => {
@@ -98,7 +98,7 @@ export function createSelectionManager(props: CreateSelectionManagerProps): Sele
       return;
     }
 
-    setSelectedKeys(new Set(props.collection.getKeys()));
+    setSelectedKeys(new Set(props.collection.keys()));
   };
 
   const clearSelection = () => {

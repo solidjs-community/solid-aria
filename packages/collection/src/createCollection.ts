@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js";
+import { createMemo, createSignal } from "solid-js";
 
 import { Collection, Item } from "./types";
 import { filterItems } from "./utils";
@@ -8,13 +8,10 @@ import { filterItems } from "./utils";
  */
 export function createCollection(): Collection {
   const [items, setItems] = createSignal<Array<Item>>([]);
+  const keys = createMemo(() => items().map(item => item.key));
 
   const isCollectionEmpty = () => {
     return !items() || items().length <= 0;
-  };
-
-  const getKeys = () => {
-    return items().map(item => item.key);
   };
 
   const addItem = (item: Item) => {
@@ -83,16 +80,24 @@ export function createCollection(): Collection {
   };
 
   const isFirstIndex = (index: number) => {
+    if (isCollectionEmpty()) {
+      return false;
+    }
+
     return index === getFirstIndex();
   };
 
   const isLastIndex = (index: number) => {
+    if (isCollectionEmpty()) {
+      return false;
+    }
+
     return index === getLastIndex();
   };
 
   return {
-    getItems: items,
-    getKeys,
+    items,
+    keys,
     addItem,
     removeItem,
     findByIndex,
