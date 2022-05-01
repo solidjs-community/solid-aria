@@ -9,7 +9,7 @@ export interface CreateKeyboardProps extends KeyboardEvents {
   isDisabled?: MaybeAccessor<boolean | undefined>;
 }
 
-export interface keyboardElementProps {
+export interface KeyboardElementProps {
   /**
    * Handler that is called when a key is pressed.
    */
@@ -25,7 +25,7 @@ export interface KeyboardResult {
   /**
    * Props to spread onto the target element.
    */
-  keyboardProps: Accessor<keyboardElementProps>;
+  keyboardProps: Accessor<KeyboardElementProps>;
 }
 
 /**
@@ -48,7 +48,7 @@ export function createKeyboard(props: CreateKeyboardProps): KeyboardResult {
     props.onKeyUp?.(event);
   };
 
-  const keyboardProps: Accessor<keyboardElementProps> = createMemo(() => ({
+  const keyboardProps: Accessor<KeyboardElementProps> = createMemo(() => ({
     onKeyDown,
     onKeyUp
   }));

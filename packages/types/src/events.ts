@@ -1,3 +1,41 @@
+export type HoverPointerType = "mouse" | "pen";
+
+export type PointerType = HoverPointerType | "touch";
+
+export interface HoverEvent {
+  /**
+   * The type of hover event being fired.
+   */
+  type: "hoverstart" | "hoverend";
+
+  /**
+   * The pointer type that triggered the hover event.
+   */
+  pointerType: HoverPointerType;
+
+  /**
+   * The target element of the hover event.
+   */
+  target: HTMLElement;
+}
+
+export interface HoverEvents {
+  /**
+   * Handler that is called when a hover interaction starts.
+   */
+  onHoverStart?: (e: HoverEvent) => void;
+
+  /**
+   * Handler that is called when a hover interaction ends.
+   */
+  onHoverEnd?: (e: HoverEvent) => void;
+
+  /**
+   * Handler that is called when the hover state changes.
+   */
+  onHoverChange?: (isHovering: boolean) => void;
+}
+
 export interface PressEvents {
   /**
    * Handler that is called when a pointing device is both pressed and released while the pointer is over the target.

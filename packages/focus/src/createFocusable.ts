@@ -4,7 +4,7 @@ import {
   createKeyboard,
   CreateKeyboardProps,
   FocusElementProps,
-  keyboardElementProps
+  KeyboardElementProps
 } from "@solid-aria/interactions";
 import { combineProps } from "@solid-aria/utils";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
@@ -31,7 +31,7 @@ export interface CreateFocusableProps extends CreateFocusProps, CreateKeyboardPr
 }
 
 export type FocusableElementProps = FocusElementProps &
-  keyboardElementProps & { tabIndex?: number };
+  KeyboardElementProps & { tabIndex?: number };
 
 export interface FocusableResult {
   /**
