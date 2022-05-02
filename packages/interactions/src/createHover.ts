@@ -105,9 +105,7 @@ export function createHover(props: CreateHoverProps): HoverResult {
       access(props.isDisabled) ||
       pointerType === "touch" ||
       isHovered() ||
-      !eventCurrentTarget ||
-      !eventTarget ||
-      !eventCurrentTarget.contains(eventTarget)
+      !eventCurrentTarget?.contains(eventTarget)
     ) {
       return;
     }
@@ -196,6 +194,7 @@ export function createHover(props: CreateHoverProps): HoverResult {
 
   onMount(() => {
     const cleanupFn = setupGlobalTouchEvents();
+
     onCleanup(() => cleanupFn?.());
   });
 
