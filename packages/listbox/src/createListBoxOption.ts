@@ -114,7 +114,7 @@ export function createListBoxOption<
   const isDisabled = createMemo(() => props.isDisabled ?? false);
 
   const focusAndSelect = () => {
-    context.focusManager.setFocusedKey(key());
+    context.focusManager.focusItemForKey(key());
 
     // When selectOnFocus=true, selection is automatically handled by an effect in the ListBoxState.
     // Otherwise, we manually select the option.
@@ -137,7 +137,7 @@ export function createListBoxOption<
     isDisabled: () => props.isDisabled || !context.shouldFocusOnHover(),
     onHoverStart: () => {
       if (!isKeyboardFocusVisible()) {
-        context.focusManager.setFocusedKey(key());
+        context.focusManager.focusItemForKey(key());
       }
     }
   });

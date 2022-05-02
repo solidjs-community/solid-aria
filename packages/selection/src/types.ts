@@ -16,11 +16,6 @@ export interface ListFocusManager {
   isFocusedKey: (key: string) => boolean;
 
   /**
-   * Set the currently focused key.
-   */
-  setFocusedKey: (key: string) => void;
-
-  /**
    * Focus the first item.
    */
   focusFirstItem: () => void;
@@ -54,6 +49,11 @@ export interface ListFocusManager {
    * Focus the first item in the collection that is selected.
    */
   focusFirstSelectedItem: () => void;
+
+  /**
+   * Focus the item with the given key.
+   */
+  focusItemForKey: (key: string) => void;
 
   /**
    * Focus the next item after the currenlty focused one that matches the given search string,

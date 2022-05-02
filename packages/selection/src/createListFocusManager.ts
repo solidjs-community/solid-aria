@@ -176,6 +176,12 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
     focusAtIndex(index, "forward");
   };
 
+  const focusItemForKey = (key: string) => {
+    const index = props.collection.findIndexByKey(key);
+
+    focusAtIndex(index, "forward");
+  };
+
   const focusItemForSearch = (search: string) => {
     const focusedIndex = props.collection.findIndexByKey(focusedKey());
 
@@ -204,13 +210,13 @@ export function createListFocusManager(props: CreateListFocusManagerProps): List
   return {
     focusedKey,
     isFocusedKey,
-    setFocusedKey,
     focusFirstItem,
     focusLastItem,
     focusItemAbove,
     focusItemBelow,
     focusItemPageAbove,
     focusItemPageBelow,
+    focusItemForKey,
     focusItemForSearch,
     focusFirstSelectedItem
   };

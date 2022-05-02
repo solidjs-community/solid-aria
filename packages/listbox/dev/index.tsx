@@ -93,7 +93,7 @@ function Option(props: AriaListBoxOptionProps) {
 function App() {
   return (
     <div>
-      <ListBox shouldFocusOnHover>
+      <ListBox>
         <Option value="1">One</Option>
         <Option value="2">Two</Option>
         <Option value="3">Three</Option>
