@@ -1,4 +1,9 @@
-import { createKeyboard, createPress } from "@solid-aria/interactions";
+import {
+  createHover,
+  createKeyboard,
+  createPress,
+  isKeyboardFocusVisible
+} from "@solid-aria/interactions";
 import { DOMElements } from "@solid-aria/types";
 import { combineProps, createSlotId, isMac, isWebKit } from "@solid-aria/utils";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
@@ -128,8 +133,17 @@ export function createListBoxOption<
     onKeyDown: event => ["Enter", " "].includes(event.key) && focusAndSelect()
   });
 
+  const { hoverProps } = createHover({
+    isDisabled: () => props.isDisabled || !context.shouldFocusOnHover(),
+    onHoverStart: () => {
+      if (!isKeyboardFocusVisible()) {
+        context.focusManager.setFocusedKey(key());
+      }
+    }
+  });
+
   const optionProps: Accessor<JSX.IntrinsicElements[OptionElement]> = createMemo(() => {
-    const baseProps = combineProps(pressProps(), keyboardProps(), {
+    const baseProps = combineProps(pressProps(), keyboardProps(), hoverProps(), {
       role: "option",
       tabIndex: isFocused() ? 0 : -1,
       "aria-selected": isSelected() || undefined,

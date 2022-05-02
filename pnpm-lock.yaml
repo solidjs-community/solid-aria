@@ -165,11 +165,14 @@ importers:
   packages/primitives:
     specifiers:
       '@solid-aria/checkbox': workspace:^
+      '@solid-aria/collection': workspace:^
       '@solid-aria/focus': workspace:^
       '@solid-aria/i18n': workspace:^
       '@solid-aria/interactions': workspace:^
       '@solid-aria/label': workspace:^
+      '@solid-aria/listbox': workspace:^
       '@solid-aria/radio': workspace:^
+      '@solid-aria/selection': workspace:^
       '@solid-aria/switch': workspace:^
       '@solid-aria/toggle': workspace:^
       '@solid-aria/types': workspace:^
@@ -177,11 +180,14 @@ importers:
       '@solid-aria/visually-hidden': workspace:^
     dependencies:
       '@solid-aria/checkbox': link:../checkbox
+      '@solid-aria/collection': link:../collection
       '@solid-aria/focus': link:../focus
       '@solid-aria/i18n': link:../i18n
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/label': link:../label
+      '@solid-aria/listbox': link:../listbox
       '@solid-aria/radio': link:../radio
+      '@solid-aria/selection': link:../selection
       '@solid-aria/switch': link:../switch
       '@solid-aria/toggle': link:../toggle
       '@solid-aria/types': link:../types

@@ -20,7 +20,6 @@ function ListBox(props: AriaListBoxProps & JSX.IntrinsicElements["ul"]) {
   return (
     <ListBoxProvider>
       <ul
-        {...props}
         {...listBoxProps()}
         ref={ref}
         style={{
@@ -41,7 +40,7 @@ function Section(props: AriaListBoxSectionProps) {
   const { groupProps, headingProps, itemProps } = createListBoxSection(props);
 
   return (
-    <li {...props} {...itemProps()}>
+    <li {...itemProps()}>
       <Show when={props.heading}>
         <span
           {...headingProps()}
@@ -76,7 +75,6 @@ function Option(props: AriaListBoxOptionProps) {
 
   return (
     <li
-      {...props}
       {...combineProps(optionProps(), focusProps())}
       ref={ref}
       style={{
@@ -95,7 +93,7 @@ function Option(props: AriaListBoxOptionProps) {
 function App() {
   return (
     <div>
-      <ListBox>
+      <ListBox shouldFocusOnHover>
         <Option value="1">One</Option>
         <Option value="2">Two</Option>
         <Option value="3">Three</Option>

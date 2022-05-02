@@ -36,6 +36,12 @@ export interface CreateListBoxStateProps extends CreateListBoxStateOptions {
   allowTypeAhead?: MaybeAccessor<boolean | undefined>;
 
   /**
+   * Whether options should be focused when the user hovers over them.
+   * @default false
+   */
+  shouldFocusOnHover?: MaybeAccessor<boolean | undefined>;
+
+  /**
    * Whether selection should occur automatically on focus.
    * @default false
    */
@@ -52,6 +58,11 @@ export interface ListBoxState {
    * An interface for managing item's focus in the listbox.
    */
   focusManager: ListFocusManager;
+
+  /**
+   * Whether options should be focused when the user hovers over them.
+   */
+  shouldFocusOnHover: Accessor<boolean>;
 
   /**
    * Whether selection should occur automatically on focus.
@@ -91,6 +102,8 @@ export function createListBoxState(
     shouldFocusWrap: () => access(props.shouldFocusWrap) ?? false
   });
 
+  const shouldFocusOnHover = () => access(props.shouldFocusOnHover) ?? false;
+
   const selectOnFocus = () => access(props.selectOnFocus) ?? false;
 
   createEffect(
@@ -107,6 +120,7 @@ export function createListBoxState(
   return {
     selectionManager,
     focusManager,
+    shouldFocusOnHover,
     selectOnFocus,
     collection
   };

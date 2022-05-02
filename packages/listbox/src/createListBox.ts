@@ -45,6 +45,11 @@ export interface AriaListBoxProps extends LabelableProps, DOMProps, AriaLabeling
   shouldFocusWrap?: boolean;
 
   /**
+   * Whether options should be focused when the user hovers over them.
+   */
+  shouldFocusOnHover?: boolean;
+
+  /**
    * Whether selection should occur automatically on focus.
    */
   selectOnFocus?: boolean;
