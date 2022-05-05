@@ -214,14 +214,14 @@ function App() {
   return (
     <ListBox>
       <Section heading="Section 1">
-        <Item>One</Item>
-        <Item>Two</Item>
-        <Item>Three</Item>
+        <Option value="1">One</Option>
+        <Option value="2">Two</Option>
+        <Option value="3">Three</Option>
       </Section>
       <Section heading="Section 2">
-        <Item>One</Item>
-        <Item>Two</Item>
-        <Item>Three</Item>
+        <Option value="4">Four</Option>
+        <Option value="5">Five</Option>
+        <Option value="6">Six</Option>
       </Section>
     </ListBox>
   );
