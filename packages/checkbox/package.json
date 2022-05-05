@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/checkbox",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "description": "Primitives for building accessible checkbox and checkbox group component.",
   "keywords": [

@@ -1,3 +1,9 @@
-## 0.0.1 (2022-)
+## 0.0.2
 
-- Initial release.
+### Patch Changes
+
+- Release listbox
+
+## 0.0.1
+
+- Initial release as a Stage-0 primitive.
