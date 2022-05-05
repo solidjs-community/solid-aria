@@ -30,12 +30,6 @@ export interface CreateListBoxStateProps extends CreateListBoxStateOptions {
   selectionMode?: MaybeAccessor<SelectionMode | undefined>;
 
   /**
-   * Whether typeahead is enabled.
-   * @default true
-   */
-  allowTypeAhead?: MaybeAccessor<boolean | undefined>;
-
-  /**
    * Whether options should be focused when the user hovers over them.
    * @default false
    */

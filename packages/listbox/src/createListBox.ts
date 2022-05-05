@@ -122,16 +122,7 @@ export function createListBox<
     isHTMLLabelElement: false
   };
 
-  const scrollElementRef = createMemo(() => {
-    if (scrollRef) {
-      return scrollRef();
-    }
-
-    // Fallback to the listbox ref
-    return ref();
-  });
-
-  const state = createListBoxState(props, scrollElementRef);
+  const state = createListBoxState(props, scrollRef ?? ref);
 
   const createLabelProps = mergeProps(defaultCreateLabelProps, props);
 
@@ -143,9 +134,7 @@ export function createListBox<
     {
       isDisabled: () => props.isDisabled,
       autoFocus: () => props.autoFocus,
-      onFocus: () => {
-        setTimeout(() => state.focusManager.focusFirstSelectedItem(), 0);
-      },
+      onFocus: () => state.focusManager.focusFirstSelectedItem(),
       onKeyDown: event => {
         const { key } = event;
 

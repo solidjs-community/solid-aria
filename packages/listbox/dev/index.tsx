@@ -1,6 +1,6 @@
 import { createFocusRing } from "@solid-aria/focus";
 import { combineProps } from "@solid-aria/utils";
-import { createSignal, JSX, Show } from "solid-js";
+import { JSX, Show } from "solid-js";
 import { render } from "solid-js/web";
 
 import {
