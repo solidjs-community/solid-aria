@@ -1,6 +1,6 @@
 import { createFocusRing } from "@solid-aria/focus";
 import { combineProps } from "@solid-aria/utils";
-import { JSX, Show } from "solid-js";
+import { Show } from "solid-js";
 import { render } from "solid-js/web";
 
 import {
@@ -12,7 +12,7 @@ import {
   createListBoxSection
 } from "../src";
 
-function ListBox(props: AriaListBoxProps & JSX.IntrinsicElements["ul"]) {
+function ListBox(props: AriaListBoxProps) {
   let ref: HTMLUListElement | undefined;
 
   const { ListBoxProvider, listBoxProps } = createListBox(props, () => ref);
