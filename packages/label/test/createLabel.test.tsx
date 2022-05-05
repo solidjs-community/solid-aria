@@ -83,9 +83,9 @@ describe("createLabel", () => {
     });
   });
 
-  it("should not return a `for` attribute when the label element type is not <label>", async () => {
+  it("should not return a `for` attribute when the label element is not <label>", async () => {
     createRoot(async dispose => {
-      const { labelProps, fieldProps } = createLabel({ label: "Test", labelElementType: "span" });
+      const { labelProps, fieldProps } = createLabel({ label: "Test", isHTMLLabelElement: false });
 
       expect(labelProps().id).toBeDefined();
       expect(fieldProps().id).toBeDefined();

@@ -11,6 +11,7 @@ importers:
       '@commitlint/cli': 16.2.3
       '@commitlint/config-conventional': 16.2.1
       '@commitlint/cz-commitlint': 16.2.3
+      '@solid-primitives/refs': 0.1.0
       '@solid-primitives/utils': 1.3.0
       '@testing-library/dom': 8.13.0
       '@testing-library/jest-dom': 5.16.4
@@ -32,6 +33,7 @@ importers:
       eslint-plugin-simple-import-sort: 7.0.0
       eslint-plugin-solid: 0.4.6
       husky: 7.0.4
+      inquirer: 8.2.2
       jest: 27.5.1
       lint-staged: 12.3.7
       prettier: 2.6.2
@@ -51,7 +53,8 @@ importers:
       '@changesets/cli': 2.22.0
       '@commitlint/cli': 16.2.3
       '@commitlint/config-conventional': 16.2.1
-      '@commitlint/cz-commitlint': 16.2.3_commitizen@4.2.4
+      '@commitlint/cz-commitlint': 16.2.3_commitizen@4.2.4+inquirer@8.2.2
+      '@solid-primitives/refs': 0.1.0_solid-js@1.3.15
       '@solid-primitives/utils': 1.3.0_solid-js@1.3.15
       '@testing-library/dom': 8.13.0
       '@testing-library/jest-dom': 5.16.4
@@ -73,6 +76,7 @@ importers:
       eslint-plugin-simple-import-sort: 7.0.0_eslint@8.12.0
       eslint-plugin-solid: 0.4.6_eslint@8.12.0+typescript@4.6.3
       husky: 7.0.4
+      inquirer: 8.2.2
       jest: 27.5.1
       lint-staged: 12.3.7
       prettier: 2.6.2
@@ -95,6 +99,14 @@ importers:
     dependencies:
       '@solid-aria/label': link:../label
       '@solid-aria/toggle': link:../toggle
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
+  packages/collection:
+    specifiers:
+      '@solid-aria/types': workspace:^
+      '@solid-aria/utils': workspace:^
+    dependencies:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 
@@ -132,14 +144,35 @@ importers:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 
+  packages/listbox:
+    specifiers:
+      '@solid-aria/collection': workspace:^
+      '@solid-aria/focus': workspace:^
+      '@solid-aria/interactions': workspace:^
+      '@solid-aria/label': workspace:^
+      '@solid-aria/selection': workspace:^
+      '@solid-aria/types': workspace:^
+      '@solid-aria/utils': workspace:^
+    dependencies:
+      '@solid-aria/collection': link:../collection
+      '@solid-aria/focus': link:../focus
+      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/label': link:../label
+      '@solid-aria/selection': link:../selection
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
   packages/primitives:
     specifiers:
       '@solid-aria/checkbox': workspace:^
+      '@solid-aria/collection': workspace:^
       '@solid-aria/focus': workspace:^
       '@solid-aria/i18n': workspace:^
       '@solid-aria/interactions': workspace:^
       '@solid-aria/label': workspace:^
+      '@solid-aria/listbox': workspace:^
       '@solid-aria/radio': workspace:^
+      '@solid-aria/selection': workspace:^
       '@solid-aria/switch': workspace:^
       '@solid-aria/toggle': workspace:^
       '@solid-aria/types': workspace:^
@@ -147,11 +180,14 @@ importers:
       '@solid-aria/visually-hidden': workspace:^
     dependencies:
       '@solid-aria/checkbox': link:../checkbox
+      '@solid-aria/collection': link:../collection
       '@solid-aria/focus': link:../focus
       '@solid-aria/i18n': link:../i18n
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/label': link:../label
+      '@solid-aria/listbox': link:../listbox
       '@solid-aria/radio': link:../radio
+      '@solid-aria/selection': link:../selection
       '@solid-aria/switch': link:../switch
       '@solid-aria/toggle': link:../toggle
       '@solid-aria/types': link:../types
@@ -171,6 +207,18 @@ importers:
       '@solid-aria/i18n': link:../i18n
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/label': link:../label
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
+  packages/selection:
+    specifiers:
+      '@solid-aria/collection': workspace:^
+      '@solid-aria/i18n': workspace:^
+      '@solid-aria/types': workspace:^
+      '@solid-aria/utils': workspace:^
+    dependencies:
+      '@solid-aria/collection': link:../collection
+      '@solid-aria/i18n': link:../i18n
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 
@@ -1640,7 +1688,7 @@ packages:
       ajv: 6.12.6
     dev: true
 
-  /@commitlint/cz-commitlint/16.2.3_commitizen@4.2.4:
+  /@commitlint/cz-commitlint/16.2.3_commitizen@4.2.4+inquirer@8.2.2:
     resolution: {integrity: sha512-G9rRnBJ/5te7RiOzp7EdqII9rQYvtsfsqwMxcoK4B7l0Rc57nFCOlf0e4Bn70E4aOsLeMzNe+PvVVrEsPStEHg==}
     engines: {node: '>=v12'}
     peerDependencies:
@@ -1652,6 +1700,7 @@ packages:
       '@commitlint/types': 16.2.1
       chalk: 4.1.2
       commitizen: 4.2.4
+      inquirer: 8.2.2
       lodash: 4.17.21
       word-wrap: 1.2.3
     transitivePeerDependencies:
@@ -2113,6 +2162,34 @@ packages:
     resolution: {integrity: sha512-OAPJUAtgeINhh/TAlUID4QTs53Njm7xzddaVlEs/SXwgtiD1tW22zAB/W1wdqfrpmikgaWQ9Fw6Ws+hsiRm5Vg==}
     dependencies:
       '@sinonjs/commons': 1.8.3
+    dev: true
+
+  /@solid-primitives/immutable/0.1.0_solid-js@1.3.15:
+    resolution: {integrity: sha512-vKA318tb65h6f9mizF/x7ep9CxhtCtD6HMm5XVpRE+KrujgwyWB3DAVxmJ0lM4v4cImc7jvwBWvYirpnupe11A==}
+    dependencies:
+      '@solid-primitives/utils': 1.3.0_solid-js@1.3.15
+    transitivePeerDependencies:
+      - solid-js
+    dev: true
+
+  /@solid-primitives/refs/0.1.0_solid-js@1.3.15:
+    resolution: {integrity: sha512-GdQoE2+6g2VSjFDxyUnzfEh9zBJrRXJ+5LYlJzJ1gletR1akQAO8f+DAUCgTZFIFAiK8xRYBXm/47794mAmnUg==}
+    peerDependencies:
+      solid-js: ^1.3.0
+    dependencies:
+      '@solid-primitives/immutable': 0.1.0_solid-js@1.3.15
+      '@solid-primitives/rootless': 0.1.0_solid-js@1.3.15
+      '@solid-primitives/utils': 1.3.0_solid-js@1.3.15
+      solid-js: 1.3.15
+    dev: true
+
+  /@solid-primitives/rootless/0.1.0_solid-js@1.3.15:
+    resolution: {integrity: sha512-SyDA6vaL0S9rZEyIi1PjXqq6ZxGGlzguv5Su3VWWGUa5mfLyGPKNn4DNRVLiShQms57Pfxx2EUFwWlr4a3Un3g==}
+    peerDependencies:
+      solid-js: ^1.3.1
+    dependencies:
+      '@solid-primitives/utils': 1.3.0_solid-js@1.3.15
+      solid-js: 1.3.15
     dev: true
 
   /@solid-primitives/utils/1.3.0_solid-js@1.3.15:
@@ -2839,6 +2916,10 @@ packages:
     resolution: {integrity: sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw==}
     dev: true
 
+  /base64-js/1.5.1:
+    resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
+    dev: true
+
   /better-path-resolve/1.0.0:
     resolution: {integrity: sha512-pbnl5XzGBdrFU/wT4jqmJVPn2B6UHPBOhzMQkY/SPUPB6QtUXtmBHBIwCbXJol93mOpGMnQyP/+BB19q04xj7g==}
     engines: {node: '>=4'}
@@ -2849,6 +2930,14 @@ packages:
   /binary-extensions/2.2.0:
     resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
+    dev: true
+
+  /bl/4.1.0:
+    resolution: {integrity: sha512-1W07cM9gS6DcLperZfFSj+bWLtaPGSOHWhPiGzXmvVJbRLdG82sH/Kn8EtW1VqWVA54AKf2h5k5BbnIbwF3h6w==}
+    dependencies:
+      buffer: 5.7.1
+      inherits: 2.0.4
+      readable-stream: 3.6.0
     dev: true
 
   /brace-expansion/1.1.11:
@@ -2902,6 +2991,13 @@ packages:
 
   /buffer-from/1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
+    dev: true
+
+  /buffer/5.7.1:
+    resolution: {integrity: sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==}
+    dependencies:
+      base64-js: 1.5.1
+      ieee754: 1.2.1
     dev: true
 
   /bundle-require/3.0.4_esbuild@0.14.38:
@@ -3035,6 +3131,11 @@ packages:
       restore-cursor: 3.1.0
     dev: true
 
+  /cli-spinners/2.6.1:
+    resolution: {integrity: sha512-x/5fWmGMnbKQAaNwN+UZlV79qBLM9JFnJuJ03gIi5whrob0xV0ofNVHy9DhwGdsMJQc2OKv0oGmLzvaqvAVv+g==}
+    engines: {node: '>=6'}
+    dev: true
+
   /cli-truncate/2.1.0:
     resolution: {integrity: sha512-n8fOixwDD6b/ObinzTrp1ZKFzbgvKZvuz/TvejnLn1aQfC6r52XEx85FmuC+3HI+JM7coBRXUvNqEU2PHVrHpg==}
     engines: {node: '>=8'}
@@ -3053,6 +3154,11 @@ packages:
 
   /cli-width/2.2.1:
     resolution: {integrity: sha512-GRMWDxpOB6Dgk2E5Uo+3eEBvtOOlimMmpbFiKuLFnQzYDavtLFY3K5ona41jgN/WdRZtG7utuVSVTL4HbZHGkw==}
+    dev: true
+
+  /cli-width/3.0.0:
+    resolution: {integrity: sha512-FxqpkPPwu1HjuN93Omfm4h8uIanXofW0RxVEW3k5RKx+mJJYSthzNhp32Kzxxy3YAEZ/Dc/EWN1vZRY0+kOhbw==}
+    engines: {node: '>= 10'}
     dev: true
 
   /cliui/6.0.0:
@@ -4155,6 +4261,13 @@ packages:
       escape-string-regexp: 1.0.5
     dev: true
 
+  /figures/3.2.0:
+    resolution: {integrity: sha512-yaduQFRKLXYOGgEn6AZau90j3ggSOyiqXU0F9JZfeXYhNa+Jk4X+s45A2zg5jns87GAFa34BBm2kXw4XpNcbdg==}
+    engines: {node: '>=8'}
+    dependencies:
+      escape-string-regexp: 1.0.5
+    dev: true
+
   /file-entry-cache/6.0.1:
     resolution: {integrity: sha512-7Gps/XWymbLk2QLYK4NzpMOrYjMhdIxXuIvy2QBsLE6ljuodKvdkWs/cpyJJ3CVIVpH0Oi1Hvg1ovbMzLdFBBg==}
     engines: {node: ^10.12.0 || >=12.0.0}
@@ -4584,6 +4697,10 @@ packages:
       safer-buffer: 2.1.2
     dev: true
 
+  /ieee754/1.2.1:
+    resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
+    dev: true
+
   /ignore/5.2.0:
     resolution: {integrity: sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==}
     engines: {node: '>= 4'}
@@ -4651,6 +4768,26 @@ packages:
       rxjs: 6.6.7
       string-width: 2.1.1
       strip-ansi: 5.2.0
+      through: 2.3.8
+    dev: true
+
+  /inquirer/8.2.2:
+    resolution: {integrity: sha512-pG7I/si6K/0X7p1qU+rfWnpTE1UIkTONN1wxtzh0d+dHXtT/JG6qBgLxoyHVsQa8cFABxAPh0pD6uUUHiAoaow==}
+    engines: {node: '>=12.0.0'}
+    dependencies:
+      ansi-escapes: 4.3.2
+      chalk: 4.1.2
+      cli-cursor: 3.1.0
+      cli-width: 3.0.0
+      external-editor: 3.1.0
+      figures: 3.2.0
+      lodash: 4.17.21
+      mute-stream: 0.0.8
+      ora: 5.4.1
+      run-async: 2.4.1
+      rxjs: 7.5.5
+      string-width: 4.2.3
+      strip-ansi: 6.0.1
       through: 2.3.8
     dev: true
 
@@ -4752,6 +4889,11 @@ packages:
       html-tags: 3.2.0
     dev: true
 
+  /is-interactive/1.0.0:
+    resolution: {integrity: sha512-2HvIEKRoqS62guEC+qBjpvRubdX910WCMuJTZ+I9yvqKU2/12eSL549HMwtabb4oupdj2sMP50k+XJfB/8JE6w==}
+    engines: {node: '>=8'}
+    dev: true
+
   /is-negative-zero/2.0.2:
     resolution: {integrity: sha512-dqJvarLawXsFbNDeJW7zAz8ItJ9cd28YufuuFzh0G8pNHjJMnY08Dv7sYX2uF5UpQOwieAeOExEYAWWfu7ZZUA==}
     engines: {node: '>= 0.4'}
@@ -4837,6 +4979,11 @@ packages:
 
   /is-typedarray/1.0.0:
     resolution: {integrity: sha1-5HnICFjfDBsR3dppQPlgEfzaSpo=}
+    dev: true
+
+  /is-unicode-supported/0.1.0:
+    resolution: {integrity: sha512-knxG2q4UC3u8stRGyAVJCOdxFmv5DZiRcdlIaAQXAbSfJya+OhopNotLQrstBhququ4ZpuKbDc/8S6mgXgPFPw==}
+    engines: {node: '>=10'}
     dev: true
 
   /is-utf8/0.2.1:
@@ -5670,6 +5817,14 @@ packages:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
     dev: true
 
+  /log-symbols/4.1.0:
+    resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==}
+    engines: {node: '>=10'}
+    dependencies:
+      chalk: 4.1.2
+      is-unicode-supported: 0.1.0
+    dev: true
+
   /log-update/4.0.0:
     resolution: {integrity: sha512-9fkkDevMefjg0mmzWFBW8YkFP91OrizzkW3diF7CpG+S2EYdy4+TVfGwz1zeF8x7hCx1ovSPTOE9Ngib74qqUg==}
     engines: {node: '>=10'}
@@ -5865,6 +6020,10 @@ packages:
     resolution: {integrity: sha1-MHXOk7whuPq0PhvE2n6BFe0ee6s=}
     dev: true
 
+  /mute-stream/0.0.8:
+    resolution: {integrity: sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==}
+    dev: true
+
   /mz/2.7.0:
     resolution: {integrity: sha512-z81GNO7nnYMEhrGh9LeymoE4+Yr0Wn5McHIZMK5cfQCl+NDX08sCZgUc9/6MHni9IWuFLm1Z3HTCXu2z9fN62Q==}
     dependencies:
@@ -6001,6 +6160,21 @@ packages:
       prelude-ls: 1.2.1
       type-check: 0.4.0
       word-wrap: 1.2.3
+    dev: true
+
+  /ora/5.4.1:
+    resolution: {integrity: sha512-5b6Y85tPxZZ7QytO+BQzysW31HJku27cRIlkbAXaNx+BdcVi+LlRFmVXzeF6a7JCwJpyw5c4b+YSVImQIrBpuQ==}
+    engines: {node: '>=10'}
+    dependencies:
+      bl: 4.1.0
+      chalk: 4.1.2
+      cli-cursor: 3.1.0
+      cli-spinners: 2.6.1
+      is-interactive: 1.0.0
+      is-unicode-supported: 0.1.0
+      log-symbols: 4.1.0
+      strip-ansi: 6.0.1
+      wcwidth: 1.0.1
     dev: true
 
   /os-tmpdir/1.0.2:

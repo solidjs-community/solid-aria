@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/primitives",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": false,
   "description": "A library of high-quality primitives that help you build accessible user interfaces with SolidJS.",
   "keywords": [
@@ -40,11 +40,14 @@
   },
   "dependencies": {
     "@solid-aria/checkbox": "workspace:^",
+    "@solid-aria/collection": "workspace:^",
     "@solid-aria/focus": "workspace:^",
     "@solid-aria/i18n": "workspace:^",
     "@solid-aria/interactions": "workspace:^",
     "@solid-aria/label": "workspace:^",
+    "@solid-aria/listbox": "workspace:^",
     "@solid-aria/radio": "workspace:^",
+    "@solid-aria/selection": "workspace:^",
     "@solid-aria/switch": "workspace:^",
     "@solid-aria/toggle": "workspace:^",
     "@solid-aria/types": "workspace:^",

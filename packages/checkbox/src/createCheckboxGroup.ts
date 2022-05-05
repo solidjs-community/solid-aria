@@ -57,7 +57,7 @@ export function createCheckboxGroup<T extends DOMElements = "div", U extends DOM
   const defaultCreateLabelProps: AriaLabelProps = {
     // Checkbox group is not an HTML input element so it
     // shouldn't be labeled by a <label> element.
-    labelElementType: "span"
+    isHTMLLabelElement: false
   };
 
   const createLabelProps = mergeProps(defaultCreateLabelProps, props);

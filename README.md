@@ -10,6 +10,12 @@ A library of high-quality primitives that help you build accessible user interfa
 
 - [@solid-aria/primitives](./packages/primitives/) - Export all Solid Aria primitives in a single convenient package.
 
+### Collections
+
+- [collection](./packages/collection/) - Primitives for dealing with collection of items.
+- [listbox](./packages/listbox/) - Provides the behavior and accessibility implementation for listbox component.
+- [selection](./packages/selection/) - Primitives for managing selection in collections.
+
 ### Interactions
 
 - [focus](./packages/focus/) - Primitives for dealing with focus rings and focus management.

@@ -134,7 +134,7 @@ export function setupGlobalFocusEvents() {
   document.addEventListener("click", handleClickEvent, true);
 
   // Register focus events on the window so they are sure to happen
-  // before React's event listeners (registered on the document).
+  // before Solid's event listeners (registered on the document).
   window.addEventListener("focus", handleFocusEvent, true);
   window.addEventListener("blur", handleWindowBlur, false);
 
@@ -179,7 +179,7 @@ export function setInteractionModality(modality: Modality) {
 /**
  * Keeps state of the current modality.
  */
-export function useInteractionModality(): Accessor<Modality> {
+export function createInteractionModality(): Accessor<Modality> {
   setupGlobalFocusEvents();
 
   const [modality, setModality] = createSignal(currentModality);

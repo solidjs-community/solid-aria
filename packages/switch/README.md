@@ -54,7 +54,7 @@ function Switch(props: AriaSwitchProps) {
   const state = createToggleState(props);
   const { inputProps } = createSwitch(props, state, () => ref);
   const { isFocusVisible, focusProps } = createFocusRing();
-  const { visuallyHiddenProps } = createVisuallyHidden<HTMLDivElement>();
+  const { visuallyHiddenProps } = createVisuallyHidden<"div">();
 
   return (
     <label style={{ display: "flex", "align-items": "center" }}>
