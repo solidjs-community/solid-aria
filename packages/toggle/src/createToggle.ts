@@ -117,7 +117,10 @@ export function createToggle(
     target.checked = state.isSelected();
   };
 
-  const { pressProps } = createPress(props);
+  // This handles focusing the input on pointer down, which Safari does not do by default.
+  const { pressProps } = createPress<HTMLInputElement>({
+    isDisabled: () => props.isDisabled
+  });
 
   const { focusableProps } = createFocusable(props, inputRef);
   const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));

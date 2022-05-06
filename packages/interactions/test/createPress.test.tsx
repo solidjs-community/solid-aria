@@ -1,113 +1,134 @@
+import { Dynamic } from "solid-js/web";
 import { fireEvent, render, screen } from "solid-testing-library";
 
-import { createPress } from "../src";
+import { createPress, CreatePressProps } from "../src";
+import { installPointerEvent } from "../src/test-utils";
 
-function Example(props: any) {
-  const { pressProps } = createPress(props);
+function Example(
+  props: CreatePressProps & { elementType?: string; style?: any; draggable?: boolean }
+) {
+  let ref: any;
+
+  const { pressProps } = createPress(props, () => ref);
 
   return (
-    <button {...pressProps} data-testid="example">
-      {props.children}
-    </button>
+    <Dynamic
+      {...pressProps()}
+      ref={ref}
+      component={props.elementType ?? "div"}
+      style={props.style}
+      tabIndex="0"
+      draggable={props.draggable}
+    >
+      test
+    </Dynamic>
   );
 }
 
+function pointerEvent(type: any, opts: any) {
+  const evt = new Event(type, { bubbles: true, cancelable: true });
+  Object.assign(
+    evt,
+    {
+      ctrlKey: false,
+      metaKey: false,
+      shiftKey: false,
+      altKey: false,
+      button: opts.button || 0,
+      width: 1,
+      height: 1
+    },
+    opts
+  );
+  return evt;
+}
+
 describe("createPress", () => {
-  it("handles press events on the immediate target", async () => {
-    const events: any[] = [];
-    const addEvent = (e: any) => events.push({ type: e.type, target: e.target });
-
-    render(() => (
-      <Example
-        onClick={addEvent}
-        onMouseDown={addEvent}
-        onMouseUp={addEvent}
-        onPressChange={(isPressed: boolean) => events.push({ type: "presschange", isPressed })}
-      />
-    ));
-
-    const el = screen.getByTestId("example");
-
-    fireEvent.click(el);
-    await Promise.resolve();
-
-    fireEvent.mouseDown(el);
-    await Promise.resolve();
-
-    fireEvent.mouseUp(el);
-    await Promise.resolve();
-
-    expect(events).toEqual([
-      { type: "click", target: el },
-      { type: "mousedown", target: el },
-      { type: "presschange", isPressed: true },
-      { type: "mouseup", target: el },
-      { type: "presschange", isPressed: false }
-    ]);
+  beforeAll(() => {
+    jest.useFakeTimers("legacy");
+    jest.spyOn(window, "requestAnimationFrame").mockImplementation(cb => {
+      cb(0);
+      return 0;
+    });
   });
 
-  it("does not handle press events if disabled", async () => {
-    const events: any[] = [];
-    const addEvent = (e: any) => events.push({ type: e.type, target: e.target });
+  afterEach(() => jest.runAllTimers());
 
-    render(() => (
-      <Example
-        isDisabled
-        onClick={addEvent}
-        onMouseDown={addEvent}
-        onMouseUp={addEvent}
-        onPressChange={(isPressed: boolean) => events.push({ type: "presschange", isPressed })}
-      />
-    ));
+  // TODO: JSDOM doesn't yet support pointer events. Once they do, convert these tests.
+  // https://github.com/jsdom/jsdom/issues/2527
+  describe("pointer events", function () {
+    installPointerEvent();
 
-    const el = screen.getByTestId("example");
+    it("should fire press events based on pointer events", async () => {
+      const events: any[] = [];
+      const addEvent = (e: any) => events.push(e);
 
-    fireEvent.click(el);
-    await Promise.resolve();
+      render(() => (
+        <Example
+          onPressStart={addEvent}
+          onPressEnd={addEvent}
+          onPressChange={pressed => addEvent({ type: "presschange", pressed })}
+          onPress={addEvent}
+          onPressUp={addEvent}
+        />
+      ));
 
-    fireEvent.mouseDown(el);
-    await Promise.resolve();
+      const el = screen.getByText("test");
 
-    fireEvent.mouseUp(el);
-    await Promise.resolve();
+      fireEvent(el, pointerEvent("pointerdown", { pointerId: 1, pointerType: "mouse" }));
+      fireEvent(
+        el,
+        pointerEvent("pointerup", { pointerId: 1, pointerType: "mouse", clientX: 0, clientY: 0 })
+      );
 
-    expect(events).toEqual([]);
-  });
-
-  it("should not bubble events when stopPropagation is called", async () => {
-    const onWrapperClick = jest.fn();
-    const onWrapperMouseDown = jest.fn();
-    const onWrapperMouseUp = jest.fn();
-    const onInnerClick = jest.fn(e => e.stopPropagation());
-    const onInnerMouseDown = jest.fn(e => e.stopPropagation());
-    const onInnerMouseUp = jest.fn(e => e.stopPropagation());
-
-    render(() => (
-      <button
-        onClick={onWrapperClick}
-        onMouseDown={onWrapperMouseDown}
-        onMouseUp={onWrapperMouseUp}
-      >
-        <Example onClick={onInnerClick} onMouseDown={onInnerMouseDown} onMouseUp={onInnerMouseUp} />
-      </button>
-    ));
-
-    const el = screen.getByTestId("example");
-
-    fireEvent.click(el);
-    await Promise.resolve();
-
-    fireEvent.mouseDown(el);
-    await Promise.resolve();
-
-    fireEvent.mouseUp(el);
-    await Promise.resolve();
-
-    expect(onInnerClick).toHaveBeenCalledTimes(1);
-    expect(onInnerMouseDown).toHaveBeenCalledTimes(1);
-    expect(onInnerMouseUp).toHaveBeenCalledTimes(1);
-    expect(onWrapperClick).not.toHaveBeenCalled();
-    expect(onWrapperMouseDown).not.toHaveBeenCalled();
-    expect(onWrapperMouseUp).not.toHaveBeenCalled();
+      // How else to get the DOM node it renders the hook to?
+      // let el = events[0].target;
+      expect(events).toEqual([
+        {
+          type: "pressstart",
+          target: el,
+          pointerType: "mouse",
+          ctrlKey: false,
+          metaKey: false,
+          shiftKey: false,
+          altKey: false
+        },
+        {
+          type: "presschange",
+          pressed: true
+        },
+        {
+          type: "pressup",
+          target: el,
+          pointerType: "mouse",
+          ctrlKey: false,
+          metaKey: false,
+          shiftKey: false,
+          altKey: false
+        },
+        {
+          type: "pressend",
+          target: el,
+          pointerType: "mouse",
+          ctrlKey: false,
+          metaKey: false,
+          shiftKey: false,
+          altKey: false
+        },
+        {
+          type: "presschange",
+          pressed: false
+        },
+        {
+          type: "press",
+          target: el,
+          pointerType: "mouse",
+          ctrlKey: false,
+          metaKey: false,
+          shiftKey: false,
+          altKey: false
+        }
+      ]);
+    });
   });
 });

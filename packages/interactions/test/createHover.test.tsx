@@ -2,6 +2,7 @@ import { createSignal } from "solid-js";
 import { fireEvent, render, screen } from "solid-testing-library";
 
 import { createHover, CreateHoverProps } from "../src";
+import { installPointerEvent } from "../src/test-utils";
 
 function Example(props: CreateHoverProps) {
   const { hoverProps, isHovered } = createHover(props);
@@ -26,51 +27,6 @@ function pointerEvent(type: any, opts: any) {
     opts
   );
   return evt;
-}
-
-export function installPointerEvent() {
-  beforeAll(() => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    global.PointerEvent = class FakePointerEvent extends MouseEvent {
-      _init: {
-        pageX: number;
-        pageY: number;
-        pointerType: string;
-        pointerId: number;
-        width: number;
-        height: number;
-      };
-      constructor(name: any, init: any) {
-        super(name, init);
-        this._init = init;
-      }
-      get pointerType() {
-        return this._init.pointerType;
-      }
-      get pointerId() {
-        return this._init.pointerId;
-      }
-      get pageX() {
-        return this._init.pageX;
-      }
-      get pageY() {
-        return this._init.pageY;
-      }
-      get width() {
-        return this._init.width;
-      }
-      get height() {
-        return this._init.height;
-      }
-    };
-  });
-
-  afterAll(() => {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    delete global.PointerEvent;
-  });
 }
 
 describe("createHover", () => {

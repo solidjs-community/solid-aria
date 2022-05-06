@@ -6,10 +6,7 @@ import { JSX } from "solid-js";
  */
 export function callHandler<T, E extends Event>(
   handler: JSX.EventHandlerUnion<T, E> | undefined,
-  event: E & {
-    currentTarget: T;
-    target: Element;
-  }
+  event: E & { currentTarget: T; target: Element }
 ) {
   if (handler) {
     if (typeof handler === "function") {
@@ -24,19 +21,11 @@ export function callHandler<T, E extends Event>(
 
 /**
  * Return a function that will call all handlers in the order they were chained with the same arguments.
- * Stop at the first `event.preventDefault()` call.
  */
 export function chainHandlers<T, E extends Event>(
   ...fns: Array<JSX.EventHandlerUnion<T, E> | undefined>
 ) {
-  return function (
-    event: E & {
-      currentTarget: T;
-      target: Element;
-    }
-  ) {
-    fns.some(fn => {
-      return callHandler(fn, event);
-    });
+  return function (event: E & { currentTarget: T; target: Element }) {
+    fns.forEach(fn => callHandler(fn, event));
   };
 }
