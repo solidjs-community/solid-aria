@@ -1,3 +1,9 @@
+## 0.0.4
+
+### Patch Changes
+
+- 2a637bf: Simplify API
+
 ## 0.0.3
 
 ### Patch Changes

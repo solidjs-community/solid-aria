@@ -1,3 +1,14 @@
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [2a637bf]
+  - @solid-aria/checkbox@0.0.3
+  - @solid-aria/listbox@0.0.2
+  - @solid-aria/radio@0.0.4
+  - @solid-aria/switch@0.0.3
+  - @solid-aria/toggle@0.0.3
+
 ## 0.0.3
 
 ### Patch Changes

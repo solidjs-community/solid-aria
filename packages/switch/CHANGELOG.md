@@ -1,9 +1,16 @@
+## 0.0.3
+
+### Patch Changes
+
+- 2a637bf: Simplify API
+- Updated dependencies [2a637bf]
+  - @solid-aria/toggle@0.0.3
+
 ## 0.0.2
 
 ### Patch Changes
 
 - Updated dependencies
-
   - @solid-aria/types@0.0.2
   - @solid-aria/toggle@0.0.2
 

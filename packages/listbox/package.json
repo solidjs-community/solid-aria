@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/listbox",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "description": "Primitives for building accessible listbox component.",
   "keywords": [
