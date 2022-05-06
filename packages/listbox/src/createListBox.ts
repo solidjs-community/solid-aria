@@ -85,7 +85,7 @@ export interface ListBoxAria<
   ListBoxProvider: Component;
 
   /**
-   * State of the listbox.
+   * State for the listbox, as returned by `createListBoxState`.
    */
   state: ListBoxState;
 

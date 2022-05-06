@@ -15,6 +15,11 @@ export interface CheckboxAria {
    * Props for the input element.
    */
   inputProps: Accessor<JSX.InputHTMLAttributes<HTMLInputElement>>;
+
+  /**
+   * State for the checkbox, as returned by `createToggleState`.
+   */
+  state: ToggleState;
 }
 
 /**
@@ -22,16 +27,13 @@ export interface CheckboxAria {
  * Checkboxes allow users to select multiple items from a list of individual items,
  * or to mark one individual item as selected.
  * @param props - Props for the checkbox.
- * @param state - State for the checkbox, as returned by `useToggleState`.
  * @param inputRef - A ref for the HTML input element.
  */
 export function createCheckbox(
   props: AriaCheckboxProps,
-  state: ToggleState,
   inputRef: Accessor<HTMLInputElement | undefined>
 ): CheckboxAria {
-  const { inputProps: toggleInputProps } = createToggle(props, state, inputRef);
-  const { isSelected } = state;
+  const { inputProps: toggleInputProps, state } = createToggle(props, inputRef);
 
   // indeterminate is a property, but it can only be set via javascript
   // https://css-tricks.com/indeterminate-checkboxes/
@@ -48,7 +50,7 @@ export function createCheckbox(
   // To prevent this, we need to force the input `indeterminate` state to be in sync with our `props.isIndeterminate`.
   createEffect(
     on(
-      () => isSelected(),
+      () => state.isSelected(),
       () => {
         const input = access(inputRef);
 
@@ -61,9 +63,9 @@ export function createCheckbox(
 
   const inputProps: Accessor<JSX.InputHTMLAttributes<HTMLInputElement>> = createMemo(() => ({
     ...toggleInputProps(),
-    checked: isSelected(),
-    "aria-checked": props.isIndeterminate ? "mixed" : isSelected()
+    checked: state.isSelected(),
+    "aria-checked": props.isIndeterminate ? "mixed" : state.isSelected()
   }));
 
-  return { inputProps };
+  return { inputProps, state };
 }

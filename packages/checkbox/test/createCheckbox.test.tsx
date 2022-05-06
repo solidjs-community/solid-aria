@@ -1,4 +1,3 @@
-import { createToggleState } from "@solid-aria/toggle";
 import { fireEvent, render, screen } from "solid-testing-library";
 
 import { AriaCheckboxProps, createCheckbox } from "../src";
@@ -6,8 +5,7 @@ import { AriaCheckboxProps, createCheckbox } from "../src";
 function Checkbox(props: AriaCheckboxProps) {
   let ref: HTMLInputElement | undefined;
 
-  const state = createToggleState(props);
-  const { inputProps } = createCheckbox(props, state, () => ref);
+  const { inputProps } = createCheckbox(props, () => ref);
 
   return (
     <label data-testid="label">

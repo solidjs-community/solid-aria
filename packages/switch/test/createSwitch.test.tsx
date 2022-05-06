@@ -1,4 +1,3 @@
-import { createToggleState } from "@solid-aria/toggle";
 import { fireEvent, render, screen } from "solid-testing-library";
 
 import { AriaSwitchProps, createSwitch } from "../src";
@@ -6,8 +5,7 @@ import { AriaSwitchProps, createSwitch } from "../src";
 function Switch(props: AriaSwitchProps) {
   let ref: HTMLInputElement | undefined;
 
-  const state = createToggleState(props);
-  const { inputProps } = createSwitch(props, state, () => ref);
+  const { inputProps } = createSwitch(props, () => ref);
 
   return (
     <label data-testid="label">

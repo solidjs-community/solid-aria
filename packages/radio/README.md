@@ -58,32 +58,24 @@ import {
   AriaRadioGroupProps,
   AriaRadioProps,
   createRadio,
-  createRadioGroup,
-  createRadioGroupState,
-  RadioGroupState
+  createRadioGroup
 } from "@solid-aria/radio";
 
-import { createContext, useContext } from "solid-js";
-
-const RadioContext = createContext<RadioGroupState>();
-
 function RadioGroup(props: AriaRadioGroupProps) {
-  const state = createRadioGroupState(props);
-  const { groupProps, labelProps } = createRadioGroup<"div", "span">(props, state);
+  const { RadioGroupProvider, groupProps, labelProps, state } = createRadioGroup(props);
 
   return (
     <div {...groupProps()}>
       <span {...labelProps()}>{props.label}</span>
-      <RadioContext.Provider value={state}>{props.children}</RadioContext.Provider>
+      <RadioGroupProvider>{props.children}</RadioGroupProvider>
     </div>
   );
 }
 
 function Radio(props: AriaRadioProps) {
   let ref: HTMLInputElement | undefined;
-  const state = useContext(RadioContext);
 
-  const { inputProps } = createRadio(props, state!, () => ref);
+  const { inputProps, state } = createRadio(props, () => ref);
 
   return (
     <label style={{ display: "block" }}>
@@ -115,24 +107,17 @@ import {
   AriaRadioGroupProps,
   AriaRadioProps,
   createRadio,
-  createRadioGroup,
-  createRadioGroupState,
-  RadioGroupState
+  createRadioGroup
 } from "@solid-aria/radio";
 import { createVisuallyHidden } from "@solid-aria/visually-hidden";
 
-import { createContext, useContext } from "solid-js";
-
-const RadioContext = createContext<RadioGroupState>();
-
 function RadioGroup(props: AriaRadioGroupProps) {
-  const state = createRadioGroupState(props);
-  const { groupProps, labelProps } = createRadioGroup<"div", "span">(props, state);
+  const { RadioGroupProvider, groupProps, labelProps, state } = createRadioGroup(props);
 
   return (
     <div {...groupProps()}>
       <span {...labelProps()}>{props.label}</span>
-      <RadioContext.Provider value={state}>{props.children}</RadioContext.Provider>
+      <RadioGroupProvider>{props.children}</RadioGroupProvider>
     </div>
   );
 }
@@ -140,12 +125,11 @@ function RadioGroup(props: AriaRadioGroupProps) {
 function Radio(props: AriaRadioProps) {
   let ref: HTMLInputElement | undefined;
 
-  const state = useContext(RadioContext);
-  const { inputProps } = createRadio(props, state!, () => ref);
+  const { inputProps, state } = createRadio(props, () => ref);
   const { isFocusVisible, focusProps } = createFocusRing();
   const { visuallyHiddenProps } = createVisuallyHidden<"div">();
 
-  const isSelected = () => state?.selectedValue() === props.value;
+  const isSelected = () => state.selectedValue() === props.value;
   const strokeWidth = () => (isSelected() ? 6 : 2);
 
   return (

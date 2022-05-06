@@ -11,7 +11,7 @@ import {
 import { combineProps, filterDOMProps } from "@solid-aria/utils";
 import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
 
-import { ToggleState } from "./createToggleState";
+import { createToggleState, ToggleState } from "./createToggleState";
 
 export interface AriaToggleProps
   extends InputBase,
@@ -63,19 +63,24 @@ export interface ToggleAria {
    * Props to be spread on the input element.
    */
   inputProps: Accessor<JSX.InputHTMLAttributes<HTMLInputElement>>;
+
+  /**
+   * State for the toggle element, as returned by `createToggleState`.
+   */
+  state: ToggleState;
 }
 
 /**
  * Handles interactions for toggle elements, e.g. Checkboxes and Switches.
  * @param props - Props for the toggle element.
- * @param state - State for the toggle element, as returned by `createToggleState`.
  * @param inputRef - Ref to the HTML input element.
  */
 export function createToggle(
   props: AriaToggleProps,
-  state: ToggleState,
   inputRef: Accessor<HTMLInputElement | undefined>
 ): ToggleAria {
+  const state = createToggleState(props);
+
   const defaultProps: AriaToggleProps = {
     isDisabled: false,
     validationState: "valid"
@@ -137,5 +142,5 @@ export function createToggle(
     );
   });
 
-  return { inputProps };
+  return { inputProps, state };
 }

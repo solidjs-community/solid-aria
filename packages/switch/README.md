@@ -45,14 +45,12 @@ For keyboard accessibility, a focus ring is important to indicate which element 
 ```tsx
 import { createFocusRing } from "@solid-aria/focus";
 import { AriaSwitchProps, createSwitch } from "@solid-aria/switch";
-import { createToggleState } from "@solid-aria/toggle";
 import { createVisuallyHidden } from "@solid-aria/visually-hidden";
 
 function Switch(props: AriaSwitchProps) {
   let ref: HTMLInputElement | undefined;
 
-  const state = createToggleState(props);
-  const { inputProps } = createSwitch(props, state, () => ref);
+  const { inputProps, state } = createSwitch(props, () => ref);
   const { isFocusVisible, focusProps } = createFocusRing();
   const { visuallyHiddenProps } = createVisuallyHidden<"div">();
 

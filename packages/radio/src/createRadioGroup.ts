@@ -14,10 +14,32 @@ import {
   ValueBase
 } from "@solid-aria/types";
 import { combineProps, createId, filterDOMProps } from "@solid-aria/utils";
-import { Accessor, createEffect, createMemo, JSX, mergeProps } from "solid-js";
+import {
+  Accessor,
+  Component,
+  createComponent,
+  createContext,
+  createMemo,
+  JSX,
+  mergeProps,
+  useContext
+} from "solid-js";
 
-import { RadioGroupState } from "./createRadioGroupState";
-import { radioGroupNames } from "./utils";
+import { createRadioGroupState, RadioGroupState } from "./createRadioGroupState";
+
+interface RadioGroupContextValue {
+  /**
+   * State for the radio group, as returned by `createRadioGroupState`.
+   */
+  state: RadioGroupState;
+
+  /**
+   * The name of the RadioGroup, used when submitting an HTML form.
+   */
+  name: Accessor<string>;
+}
+
+const RadioGroupContext = createContext<RadioGroupContextValue>();
 
 export interface AriaRadioGroupProps
   extends ValueBase<string>,
@@ -45,28 +67,42 @@ export interface AriaRadioGroupProps
   name?: string;
 }
 
-interface RadioGroupAria<T extends DOMElements, U extends DOMElements> {
+interface RadioGroupAria<
+  GroupElementType extends DOMElements,
+  LabelElementType extends DOMElements
+> {
+  /**
+   * Provide the radio group state to descendant elements.
+   */
+  RadioGroupProvider: Component;
+
   /**
    * Props for the radio group wrapper element.
    */
-  groupProps: Accessor<JSX.IntrinsicElements[T]>;
+  groupProps: Accessor<JSX.IntrinsicElements[GroupElementType]>;
 
   /**
    * Props for the radio group's visible label (if any).
    *  */
-  labelProps: Accessor<JSX.IntrinsicElements[U]>;
+  labelProps: Accessor<JSX.IntrinsicElements[LabelElementType]>;
+
+  /**
+   * State for the radio group, as returned by `createRadioGroupState`.
+   */
+  state: RadioGroupState;
 }
 
 /**
  * Provides the behavior and accessibility implementation for a radio group component.
  * Radio groups allow users to select a single item from a list of mutually exclusive options.
  * @param props - Props for the radio group.
- * @param state - State for the radio group, as returned by `useRadioGroupState`.
  */
-export function createRadioGroup<T extends DOMElements = "div", U extends DOMElements = "span">(
-  props: AriaRadioGroupProps,
-  state: RadioGroupState
-): RadioGroupAria<T, U> {
+export function createRadioGroup<
+  GroupElementType extends DOMElements = "div",
+  LabelElementType extends DOMElements = "span"
+>(props: AriaRadioGroupProps): RadioGroupAria<GroupElementType, LabelElementType> {
+  const state = createRadioGroupState(props);
+
   const defaultGroupName = createId();
 
   const defaultProps: AriaRadioGroupProps = {
@@ -87,7 +123,7 @@ export function createRadioGroup<T extends DOMElements = "div", U extends DOMEle
 
   const createLabelProps = mergeProps(defaultCreateLabelProps, props);
 
-  const { labelProps, fieldProps } = createLabel<U>(createLabelProps);
+  const { labelProps, fieldProps } = createLabel<LabelElementType>(createLabelProps);
 
   const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
 
@@ -179,14 +215,26 @@ export function createRadioGroup<T extends DOMElements = "div", U extends DOMEle
     });
   });
 
-  // Pass name prop from group to all items by attaching to the state.
-  // This one is mandatory because `createEffect` run after render.
-  // eslint-disable-next-line solid/reactivity
-  radioGroupNames.set(state, props.name);
+  const name = createMemo(() => props.name ?? defaultGroupName);
 
-  createEffect(() => {
-    radioGroupNames.set(state, props.name);
-  });
+  const RadioGroupProvider: Component = props => {
+    return createComponent(RadioGroupContext.Provider, {
+      value: { state, name },
+      get children() {
+        return props.children;
+      }
+    });
+  };
 
-  return { groupProps, labelProps };
+  return { RadioGroupProvider, groupProps, labelProps, state };
+}
+
+export function useRadioGroupContext() {
+  const context = useContext(RadioGroupContext);
+
+  if (!context) {
+    throw new Error("[solid-aria]: useRadioGroupContext should be used in a RadioGroupProvider.");
+  }
+
+  return context;
 }

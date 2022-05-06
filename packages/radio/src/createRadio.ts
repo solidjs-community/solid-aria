@@ -4,8 +4,8 @@ import { AriaLabelingProps, DOMProps, FocusableProps } from "@solid-aria/types";
 import { combineProps, filterDOMProps } from "@solid-aria/utils";
 import { Accessor, createMemo, JSX } from "solid-js";
 
+import { useRadioGroupContext } from "./createRadioGroup";
 import { RadioGroupState } from "./createRadioGroupState";
-import { radioGroupNames } from "./utils";
 
 export interface AriaRadioProps extends FocusableProps, DOMProps, AriaLabelingProps {
   /**
@@ -31,30 +31,35 @@ interface RadioAria {
    * Props for the input element.
    */
   inputProps: Accessor<JSX.InputHTMLAttributes<HTMLInputElement>>;
+
+  /**
+   * State for the radio group, as returned by `createRadioGroupState`.
+   */
+  state: RadioGroupState;
 }
 
 /**
  * Provides the behavior and accessibility implementation for an individual
  * radio button in a radio group.
  * @param props - Props for the radio.
- * @param state - State for the radio group, as returned by `useRadioGroupState`.
- * @param ref - Ref to the HTML input element.
+ * @param inputRef - Ref to the HTML input element.
  */
 export function createRadio(
   props: AriaRadioProps,
-  state: RadioGroupState,
   inputRef: Accessor<HTMLInputElement | undefined>
 ): RadioAria {
+  const context = useRadioGroupContext();
+
   const isDisabled = () => {
-    return props.isDisabled || state.isDisabled();
+    return props.isDisabled || context.state.isDisabled();
   };
 
   const isChecked = () => {
-    return state.isSelected(props.value);
+    return context.state.isSelected(props.value);
   };
 
   const isLastFocused = () => {
-    return state.lastFocusedValue() === props.value;
+    return context.state.lastFocusedValue() === props.value;
   };
 
   const onChange: JSX.EventHandlerUnion<HTMLInputElement, Event> = event => {
@@ -62,7 +67,7 @@ export function createRadio(
     // so we have to stop propagation at the lowest level that we care about
     event.stopPropagation();
 
-    state.setSelectedValue(props.value);
+    context.state.setSelectedValue(props.value);
 
     const target = event.target as HTMLInputElement;
 
@@ -79,7 +84,7 @@ export function createRadio(
   const { pressProps } = createPress(props);
 
   const createFocusableProps = combineProps(props, {
-    onFocus: () => state.setLastFocusedValue(props.value)
+    onFocus: () => context.state.setLastFocusedValue(props.value)
   } as CreateFocusableProps);
 
   const { focusableProps } = createFocusable(createFocusableProps, inputRef);
@@ -91,13 +96,13 @@ export function createRadio(
       return undefined;
     }
 
-    return isLastFocused() || state.lastFocusedValue() == null ? 0 : -1;
+    return isLastFocused() || context.state.lastFocusedValue() == null ? 0 : -1;
   });
 
   const inputProps: Accessor<JSX.InputHTMLAttributes<HTMLInputElement>> = createMemo(() => {
     return combineProps(domProps(), pressProps(), focusableProps(), {
       type: "radio",
-      name: radioGroupNames.get(state),
+      name: context.name(),
       tabIndex: tabIndex(),
       disabled: isDisabled(),
       checked: isChecked(),
@@ -106,5 +111,5 @@ export function createRadio(
     });
   });
 
-  return { inputProps };
+  return { inputProps, state: context.state };
 }
