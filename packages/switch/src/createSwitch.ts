@@ -9,29 +9,31 @@ export interface SwitchAria {
    * Props for the input element.
    */
   inputProps: Accessor<JSX.InputHTMLAttributes<HTMLInputElement>>;
+
+  /**
+   * State for the switch, as returned by `createToggleState`.
+   */
+  state: ToggleState;
 }
 
 /**
  * Provides the behavior and accessibility implementation for a switch component.
  * A switch is similar to a checkbox, but represents on/off values as opposed to selection.
  * @param props - Props for the switch.
- * @param state - State for the switch, as returned by `createToggleState`.
  * @param inputRef - Ref to the HTML input element.
  */
 export function createSwitch(
   props: AriaSwitchProps,
-  state: ToggleState,
   inputRef: Accessor<HTMLInputElement | undefined>
 ): SwitchAria {
-  const { inputProps: toggleInputProps } = createToggle(props, state, inputRef);
-  const { isSelected } = state;
+  const { inputProps: toggleInputProps, state } = createToggle(props, inputRef);
 
   const inputProps: Accessor<JSX.InputHTMLAttributes<HTMLInputElement>> = createMemo(() => ({
     ...toggleInputProps(),
     role: "switch",
-    checked: isSelected(),
-    "aria-checked": isSelected()
+    checked: state.isSelected(),
+    "aria-checked": state.isSelected()
   }));
 
-  return { inputProps };
+  return { inputProps, state };
 }

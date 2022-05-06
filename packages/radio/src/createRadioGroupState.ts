@@ -74,7 +74,7 @@ export function createRadioGroupState(props: CreateRadioGroupStateProps): RadioG
   const [selectedValue, setSelected] = createControllableSignal({
     value: () => access(props.value),
     defaultValue: () => access(props.defaultValue),
-    onChange: props.onChange
+    onChange: value => props.onChange?.(value)
   });
 
   const [lastFocusedValue, setLastFocusedValue] = createSignal(undefined);

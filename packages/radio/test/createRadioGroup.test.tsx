@@ -1,40 +1,28 @@
-import { splitProps } from "solid-js";
 import { fireEvent, render, screen } from "solid-testing-library";
 
-import {
-  AriaRadioGroupProps,
-  AriaRadioProps,
-  createRadio,
-  createRadioGroup,
-  createRadioGroupState,
-  RadioGroupState
-} from "../src";
+import { AriaRadioGroupProps, AriaRadioProps, createRadio, createRadioGroup } from "../src";
 
-function Radio(props: AriaRadioProps & { radioGroupState: RadioGroupState }) {
-  const [local, others] = splitProps(props, ["children", "radioGroupState"]);
+function RadioGroup(props: AriaRadioGroupProps) {
+  const { RadioGroupProvider, groupProps, labelProps } = createRadioGroup(props);
 
+  return (
+    <div {...groupProps()}>
+      <span {...labelProps()}>{props.label}</span>
+      <RadioGroupProvider>{props.children}</RadioGroupProvider>
+    </div>
+  );
+}
+
+function Radio(props: AriaRadioProps) {
   let ref: HTMLInputElement | undefined;
-  const { inputProps } = createRadio(others, local.radioGroupState, () => ref);
+
+  const { inputProps } = createRadio(props, () => ref);
 
   return (
     <label>
       <input ref={ref} {...inputProps()} />
-      {local.children}
+      {props.children}
     </label>
-  );
-}
-
-function RadioGroup(props: { groupProps: AriaRadioGroupProps; radioProps: AriaRadioProps[] }) {
-  const state = createRadioGroupState(props.groupProps);
-  const { groupProps: radioGroupProps, labelProps } = createRadioGroup(props.groupProps, state);
-
-  return (
-    <div {...(radioGroupProps() as any)}>
-      {props.groupProps.label && <span {...labelProps()}>{props.groupProps.label}</span>}
-      <Radio radioGroupState={state} {...props.radioProps[0]} />
-      <Radio radioGroupState={state} {...props.radioProps[1]} />
-      <Radio radioGroupState={state} {...props.radioProps[2]} />
-    </div>
   );
 }
 
@@ -43,14 +31,11 @@ describe("createRadioGroup", () => {
     const onChangeSpy = jest.fn();
 
     render(() => (
-      <RadioGroup
-        groupProps={{ label: "Favorite Pet", onChange: onChangeSpy }}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup label="Favorite Pet" onChange={onChangeSpy}>
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats">Cats</Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radioGroup = screen.getByRole("radiogroup", { exact: true });
@@ -89,14 +74,11 @@ describe("createRadioGroup", () => {
     const onChangeSpy = jest.fn();
 
     render(() => (
-      <RadioGroup
-        groupProps={{ label: "Favorite Pet", defaultValue: "cats", onChange: onChangeSpy }}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup label="Favorite Pet" defaultValue="cats" onChange={onChangeSpy}>
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats">Cats</Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radioGroup = screen.getByRole("radiogroup", { exact: true });
@@ -126,14 +108,11 @@ describe("createRadioGroup", () => {
   it("value can be controlled", async () => {
     const onChangeSpy = jest.fn();
     render(() => (
-      <RadioGroup
-        groupProps={{ label: "Favorite Pet", value: "cats", onChange: onChangeSpy }}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup label="Favorite Pet" value="cats" onChange={onChangeSpy}>
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats">Cats</Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radios = screen.getAllByRole("radio") as HTMLInputElement[];
@@ -159,14 +138,11 @@ describe("createRadioGroup", () => {
 
   it("name can be controlled", () => {
     render(() => (
-      <RadioGroup
-        groupProps={{ name: "test-name", label: "Favorite Pet" }}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup label="Favorite Pet" name="test-name">
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats">Cats</Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radios = screen.getAllByRole("radio") as HTMLInputElement[];
@@ -178,14 +154,11 @@ describe("createRadioGroup", () => {
 
   it("supports labeling", () => {
     render(() => (
-      <RadioGroup
-        groupProps={{ label: "Favorite Pet" }}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup label="Favorite Pet">
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats">Cats</Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radioGroup = screen.getByRole("radiogroup", { exact: true });
@@ -194,6 +167,7 @@ describe("createRadioGroup", () => {
 
     expect(labelId).toBeDefined();
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const label = document.getElementById(labelId!);
 
     expect(label).toHaveTextContent("Favorite Pet");
@@ -201,14 +175,11 @@ describe("createRadioGroup", () => {
 
   it("supports aria-label", () => {
     render(() => (
-      <RadioGroup
-        groupProps={{ "aria-label": "My Favorite Pet" }}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup aria-label="My Favorite Pet">
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats">Cats</Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radioGroup = screen.getByRole("radiogroup", { exact: true });
@@ -217,17 +188,12 @@ describe("createRadioGroup", () => {
   });
 
   it("supports custom props", () => {
-    const groupProps = { label: "Favorite Pet", "data-testid": "favorite-pet" };
-
     render(() => (
-      <RadioGroup
-        groupProps={groupProps}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup label="Favorite Pet" data-testid="favorite-pet">
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats">Cats</Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radioGroup = screen.getByRole("radiogroup", { exact: true });
@@ -237,14 +203,11 @@ describe("createRadioGroup", () => {
 
   it("sets aria-orientation by default", () => {
     render(() => (
-      <RadioGroup
-        groupProps={{ label: "Favorite Pet" }}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup label="Favorite Pet">
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats">Cats</Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radioGroup = screen.getByRole("radiogroup", { exact: true });
@@ -254,14 +217,11 @@ describe("createRadioGroup", () => {
 
   it("sets aria-orientation based on the orientation prop", () => {
     render(() => (
-      <RadioGroup
-        groupProps={{ label: "Favorite Pet", orientation: "horizontal" }}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup label="Favorite Pet" orientation="horizontal">
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats">Cats</Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radioGroup = screen.getByRole("radiogroup", { exact: true });
@@ -271,14 +231,11 @@ describe("createRadioGroup", () => {
 
   it("sets aria-invalid when validationState='invalid'", () => {
     render(() => (
-      <RadioGroup
-        groupProps={{ label: "Favorite Pet", validationState: "invalid" }}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup label="Favorite Pet" validationState="invalid">
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats">Cats</Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radioGroup = screen.getByRole("radiogroup", { exact: true });
@@ -288,18 +245,11 @@ describe("createRadioGroup", () => {
 
   it("passes through aria-errormessage", () => {
     render(() => (
-      <RadioGroup
-        groupProps={{
-          label: "Favorite Pet",
-          validationState: "invalid",
-          "aria-errormessage": "test"
-        }}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup label="Favorite Pet" validationState="invalid" aria-errormessage="test">
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats">Cats</Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radioGroup = screen.getByRole("radiogroup", { exact: true });
@@ -310,14 +260,11 @@ describe("createRadioGroup", () => {
 
   it("sets aria-required when isRequired is true", () => {
     render(() => (
-      <RadioGroup
-        groupProps={{ label: "Favorite Pet", isRequired: true }}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup label="Favorite Pet" isRequired>
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats">Cats</Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radioGroup = screen.getByRole("radiogroup", { exact: true });
@@ -335,14 +282,11 @@ describe("createRadioGroup", () => {
     const groupOnChangeSpy = jest.fn();
 
     render(() => (
-      <RadioGroup
-        groupProps={{ label: "Favorite Pet", isDisabled: true, onChange: groupOnChangeSpy }}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup label="Favorite Pet" isDisabled onChange={groupOnChangeSpy}>
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats">Cats</Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radioGroup = screen.getByRole("radiogroup", { exact: true });
@@ -368,14 +312,13 @@ describe("createRadioGroup", () => {
     const groupOnChangeSpy = jest.fn();
 
     render(() => (
-      <RadioGroup
-        groupProps={{ label: "Favorite Pet", onChange: groupOnChangeSpy }}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats", isDisabled: true },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup label="Favorite Pet" onChange={groupOnChangeSpy}>
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats" isDisabled>
+          Cats
+        </Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radios = screen.getAllByRole("radio") as HTMLInputElement[];
@@ -410,14 +353,11 @@ describe("createRadioGroup", () => {
 
   it("doesn't set aria-disabled or make radios disabled by default", () => {
     render(() => (
-      <RadioGroup
-        groupProps={{ label: "Favorite Pet" }}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup label="Favorite Pet">
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats">Cats</Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radioGroup = screen.getByRole("radiogroup", { exact: true });
@@ -433,14 +373,11 @@ describe("createRadioGroup", () => {
 
   it("doesn't set aria-disabled or make radios disabled when isDisabled is false", () => {
     render(() => (
-      <RadioGroup
-        groupProps={{ label: "Favorite Pet", isDisabled: false }}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup label="Favorite Pet" isDisabled={false}>
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats">Cats</Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radioGroup = screen.getByRole("radiogroup", { exact: true });
@@ -457,14 +394,11 @@ describe("createRadioGroup", () => {
   it('sets aria-readonly="true" on radio group', async () => {
     const groupOnChangeSpy = jest.fn();
     render(() => (
-      <RadioGroup
-        groupProps={{ label: "Favorite Pet", isReadOnly: true, onChange: groupOnChangeSpy }}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup label="Favorite Pet" isReadOnly onChange={groupOnChangeSpy}>
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats">Cats</Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radioGroup = screen.getByRole("radiogroup", { exact: true });
@@ -487,14 +421,11 @@ describe("createRadioGroup", () => {
     const groupOnChangeSpy = jest.fn();
 
     render(() => (
-      <RadioGroup
-        groupProps={{ label: "Favorite Pet", isReadOnly: true, onChange: groupOnChangeSpy }}
-        radioProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <RadioGroup label="Favorite Pet" isReadOnly onChange={groupOnChangeSpy}>
+        <Radio value="dogs">Dogs</Radio>
+        <Radio value="cats">Cats</Radio>
+        <Radio value="dragons">Dragons</Radio>
+      </RadioGroup>
     ));
 
     const radios = screen.getAllByRole("radio") as HTMLInputElement[];

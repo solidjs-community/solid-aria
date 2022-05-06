@@ -40,13 +40,11 @@ Checkboxes can be built with the `<input>` HTML element, but this can be difficu
 
 ```tsx
 import { AriaCheckboxProps, createCheckbox } from "@solid-aria/checkbox";
-import { createToggleState } from "@solid-aria/toggle";
 
 function Checkbox(props: AriaCheckboxProps) {
   let ref: HTMLInputElement | undefined;
 
-  const state = createToggleState(props);
-  const { inputProps } = createCheckbox(props, state, () => ref);
+  const { inputProps, state } = createCheckbox(props, () => ref);
 
   return (
     <label>
@@ -75,7 +73,6 @@ For keyboard accessibility, a focus ring is important to indicate which element 
 ```tsx
 import { AriaCheckboxProps, createCheckbox } from "@solid-aria/checkbox";
 import { createFocusRing } from "@solid-aria/focus";
-import { createToggleState } from "@solid-aria/toggle";
 import { createVisuallyHidden } from "@solid-aria/visually-hidden";
 
 import { Show } from "solid-js/web";
@@ -83,8 +80,7 @@ import { Show } from "solid-js/web";
 function Checkbox(props: AriaCheckboxProps) {
   let ref: HTMLInputElement | undefined;
 
-  const state = createToggleState(props);
-  const { inputProps } = createCheckbox(props, state, () => ref);
+  const { inputProps, state } = createCheckbox(props, () => ref);
   const { isFocusVisible, focusProps } = createFocusRing();
   const { visuallyHiddenProps } = createVisuallyHidden<HTMLDivElement>();
 
@@ -157,24 +153,17 @@ This example uses native input elements for the checkboxes, and SolidJS context 
 import {
   AriaCheckboxGroupItemProps,
   AriaCheckboxGroupProps,
-  CheckboxGroupState,
   createCheckboxGroup,
-  createCheckboxGroupItem,
-  createCheckboxGroupState
+  createCheckboxGroupItem
 } from "@solid-aria/checkbox";
 
-import { createContext, useContext } from "solid-js";
-
-const CheckboxGroupContext = createContext<CheckboxGroupState>();
-
 function CheckboxGroup(props: AriaCheckboxGroupProps) {
-  const state = createCheckboxGroupState(props);
-  const { groupProps, labelProps } = createCheckboxGroup(props, state);
+  const { CheckboxGroupProvider, groupProps, labelProps, state } = createCheckboxGroup(props);
 
   return (
     <div {...groupProps()}>
       <span {...labelProps()}>{props.label}</span>
-      <CheckboxGroupContext.Provider value={state}>{props.children}</CheckboxGroupContext.Provider>
+      <CheckboxGroupProvider>{props.children}</CheckboxGroupProvider>
     </div>
   );
 }
@@ -182,8 +171,7 @@ function CheckboxGroup(props: AriaCheckboxGroupProps) {
 function Checkbox(props: AriaCheckboxGroupItemProps) {
   let ref: HTMLInputElement | undefined;
 
-  const state = useContext(CheckboxGroupContext)!;
-  const { inputProps } = createCheckboxGroupItem(props, state, () => ref);
+  const { inputProps, state } = createCheckboxGroupItem(props, () => ref);
 
   const isDisabled = () => state.isDisabled() || props.isDisabled;
   const isSelected = () => state.isSelected(props.value);

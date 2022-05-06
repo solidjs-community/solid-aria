@@ -9,10 +9,32 @@ import {
   ValueBase
 } from "@solid-aria/types";
 import { combineProps, filterDOMProps } from "@solid-aria/utils";
-import { Accessor, createEffect, createMemo, JSX, mergeProps } from "solid-js";
+import {
+  Accessor,
+  Component,
+  createComponent,
+  createContext,
+  createMemo,
+  JSX,
+  mergeProps,
+  useContext
+} from "solid-js";
 
-import { CheckboxGroupState } from "./createCheckboxGroupState";
-import { checkboxGroupNames } from "./utils";
+import { CheckboxGroupState, createCheckboxGroupState } from "./createCheckboxGroupState";
+
+interface CheckboxGroupContextValue {
+  /**
+   * State for the checkbox group, as returned by `createCheckboxGroupState`.
+   */
+  state: CheckboxGroupState;
+
+  /**
+   * The name of the CheckboxGroup, used when submitting an HTML form.
+   */
+  name: Accessor<string | undefined>;
+}
+
+const CheckboxGroupContext = createContext<CheckboxGroupContextValue>();
 
 export interface AriaCheckboxGroupProps
   extends ValueBase<string[]>,
@@ -32,28 +54,42 @@ export interface AriaCheckboxGroupProps
   name?: string;
 }
 
-interface CheckboxGroupAria<T extends DOMElements, U extends DOMElements> {
+interface CheckboxGroupAria<
+  GroupElementType extends DOMElements,
+  LabelElementType extends DOMElements
+> {
+  /**
+   * Provide the checkbox group state to descendant elements.
+   */
+  CheckboxGroupProvider: Component;
+
   /**
    * Props for the checkbox group wrapper element.
    */
-  groupProps: Accessor<JSX.IntrinsicElements[T]>;
+  groupProps: Accessor<JSX.IntrinsicElements[GroupElementType]>;
 
   /**
    * Props for the checkbox group's visible label (if any).
    *  */
-  labelProps: Accessor<JSX.IntrinsicElements[U]>;
+  labelProps: Accessor<JSX.IntrinsicElements[LabelElementType]>;
+
+  /**
+   * State for the checkbox group, as returned by `createCheckboxGroupState`.
+   */
+  state: CheckboxGroupState;
 }
 
 /**
  * Provides the behavior and accessibility implementation for a checkbox group component.
  * Checkbox groups allow users to select multiple items from a list of options.
  * @param props - Props for the checkbox group.
- * @param state - State for the checkbox group, as returned by `useCheckboxGroupState`.
  */
-export function createCheckboxGroup<T extends DOMElements = "div", U extends DOMElements = "span">(
-  props: AriaCheckboxGroupProps,
-  state: CheckboxGroupState
-): CheckboxGroupAria<T, U> {
+export function createCheckboxGroup<
+  GroupElementType extends DOMElements = "div",
+  LabelElementType extends DOMElements = "span"
+>(props: AriaCheckboxGroupProps): CheckboxGroupAria<GroupElementType, LabelElementType> {
+  const state = createCheckboxGroupState(props);
+
   const defaultCreateLabelProps: AriaLabelProps = {
     // Checkbox group is not an HTML input element so it
     // shouldn't be labeled by a <label> element.
@@ -62,7 +98,7 @@ export function createCheckboxGroup<T extends DOMElements = "div", U extends DOM
 
   const createLabelProps = mergeProps(defaultCreateLabelProps, props);
 
-  const { labelProps, fieldProps } = createLabel<U>(createLabelProps);
+  const { labelProps, fieldProps } = createLabel<LabelElementType>(createLabelProps);
 
   const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
 
@@ -74,14 +110,28 @@ export function createCheckboxGroup<T extends DOMElements = "div", U extends DOM
     });
   });
 
-  // Pass name prop from group to all items by attaching to the state.
-  // This one is mandatory because `createEffect` run after render.
-  // eslint-disable-next-line solid/reactivity
-  checkboxGroupNames.set(state, props.name);
+  const name = createMemo(() => props.name);
 
-  createEffect(() => {
-    checkboxGroupNames.set(state, props.name);
-  });
+  const CheckboxGroupProvider: Component = props => {
+    return createComponent(CheckboxGroupContext.Provider, {
+      value: { state, name },
+      get children() {
+        return props.children;
+      }
+    });
+  };
 
-  return { groupProps, labelProps };
+  return { CheckboxGroupProvider, groupProps, labelProps, state };
+}
+
+export function useCheckboxGroupContext() {
+  const context = useContext(CheckboxGroupContext);
+
+  if (!context) {
+    throw new Error(
+      "[solid-aria]: useCheckboxGroupContext should be used in a CheckboxGroupProvider."
+    );
+  }
+
+  return context;
 }

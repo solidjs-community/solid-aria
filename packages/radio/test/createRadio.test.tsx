@@ -1,12 +1,22 @@
 import { fireEvent, render, screen } from "solid-testing-library";
 
-import { AriaRadioProps, createRadio, createRadioGroupState } from "../src";
+import { AriaRadioGroupProps, AriaRadioProps, createRadio, createRadioGroup } from "../src";
+
+function RadioGroup(props: AriaRadioGroupProps) {
+  const { RadioGroupProvider, groupProps, labelProps } = createRadioGroup(props);
+
+  return (
+    <div {...groupProps()}>
+      <span {...labelProps()}>{props.label}</span>
+      <RadioGroupProvider>{props.children}</RadioGroupProvider>
+    </div>
+  );
+}
 
 function Radio(props: AriaRadioProps) {
   let ref: HTMLInputElement | undefined;
 
-  const state = createRadioGroupState({});
-  const { inputProps } = createRadio(props, state, () => ref);
+  const { inputProps } = createRadio(props, () => ref);
 
   return (
     <label data-testid="label">
@@ -18,7 +28,11 @@ function Radio(props: AriaRadioProps) {
 
 describe("createRadio", () => {
   it("should set input type to radio", async () => {
-    render(() => <Radio value="test">Test</Radio>);
+    render(() => (
+      <RadioGroup>
+        <Radio value="test">Test</Radio>
+      </RadioGroup>
+    ));
 
     const input = screen.getByTestId("input") as HTMLInputElement;
 
@@ -26,7 +40,11 @@ describe("createRadio", () => {
   });
 
   it("ensure default unchecked can be checked", async () => {
-    render(() => <Radio value="test">Click Me</Radio>);
+    render(() => (
+      <RadioGroup>
+        <Radio value="test">Click Me</Radio>
+      </RadioGroup>
+    ));
 
     const input = screen.getByTestId("input") as HTMLInputElement;
 
@@ -40,9 +58,11 @@ describe("createRadio", () => {
 
   it("can be disabled", async () => {
     render(() => (
-      <Radio value="test" isDisabled>
-        Click Me
-      </Radio>
+      <RadioGroup>
+        <Radio value="test" isDisabled>
+          Click Me
+        </Radio>
+      </RadioGroup>
     ));
 
     const label = screen.getByTestId("label");
@@ -63,9 +83,11 @@ describe("createRadio", () => {
     const ariaLabel = "not visible";
 
     render(() => (
-      <Radio value="test" aria-label={ariaLabel}>
-        Click Me
-      </Radio>
+      <RadioGroup>
+        <Radio value="test" aria-label={ariaLabel}>
+          Click Me
+        </Radio>
+      </RadioGroup>
     ));
 
     const input = screen.getByTestId("input") as HTMLInputElement;
@@ -77,9 +99,11 @@ describe("createRadio", () => {
     const ariaLabelledBy = "test";
 
     render(() => (
-      <Radio value="test" aria-labelledby={ariaLabelledBy}>
-        Click Me
-      </Radio>
+      <RadioGroup>
+        <Radio value="test" aria-labelledby={ariaLabelledBy}>
+          Click Me
+        </Radio>
+      </RadioGroup>
     ));
 
     const input = screen.getByTestId("input") as HTMLInputElement;
@@ -91,9 +115,11 @@ describe("createRadio", () => {
     const ariaDescribedBy = "test";
 
     render(() => (
-      <Radio value="test" aria-describedby={ariaDescribedBy}>
-        Click Me
-      </Radio>
+      <RadioGroup>
+        <Radio value="test" aria-describedby={ariaDescribedBy}>
+          Click Me
+        </Radio>
+      </RadioGroup>
     ));
 
     const input = screen.getByTestId("input") as HTMLInputElement;
@@ -103,9 +129,11 @@ describe("createRadio", () => {
 
   it("supports additional props", () => {
     render(() => (
-      <Radio value="test" data-foo="bar">
-        Click Me
-      </Radio>
+      <RadioGroup>
+        <Radio value="test" data-foo="bar">
+          Click Me
+        </Radio>
+      </RadioGroup>
     ));
 
     const input = screen.getByTestId("input") as HTMLInputElement;

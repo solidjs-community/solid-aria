@@ -1,61 +1,46 @@
-import { splitProps } from "solid-js";
 import { fireEvent, render, screen } from "solid-testing-library";
 
 import {
   AriaCheckboxGroupItemProps,
   AriaCheckboxGroupProps,
-  CheckboxGroupState,
   createCheckboxGroup,
-  createCheckboxGroupItem,
-  createCheckboxGroupState
+  createCheckboxGroupItem
 } from "../src";
 
-function Checkbox(props: AriaCheckboxGroupItemProps & { checkboxGroupState: CheckboxGroupState }) {
-  const [local, others] = splitProps(props, ["children", "checkboxGroupState"]);
+function CheckboxGroup(props: AriaCheckboxGroupProps) {
+  const { CheckboxGroupProvider, groupProps, labelProps } = createCheckboxGroup(props);
 
+  return (
+    <div {...groupProps()}>
+      <span {...labelProps()}>{props.label}</span>
+      <CheckboxGroupProvider>{props.children}</CheckboxGroupProvider>
+    </div>
+  );
+}
+
+function Checkbox(props: AriaCheckboxGroupItemProps) {
   let ref: HTMLInputElement | undefined;
-  const { inputProps } = createCheckboxGroupItem(others, local.checkboxGroupState, () => ref);
+
+  const { inputProps } = createCheckboxGroupItem(props, () => ref);
 
   return (
     <label>
       <input ref={ref} {...inputProps()} />
-      {local.children}
+      {props.children}
     </label>
-  );
-}
-
-function CheckboxGroup(props: {
-  groupProps: AriaCheckboxGroupProps;
-  checkboxProps: AriaCheckboxGroupItemProps[];
-}) {
-  const state = createCheckboxGroupState(props.groupProps);
-  const { groupProps: checkboxGroupProps, labelProps } = createCheckboxGroup(
-    props.groupProps,
-    state
-  );
-
-  return (
-    <div {...(checkboxGroupProps() as any)}>
-      {props.groupProps.label && <span {...labelProps()}>{props.groupProps.label}</span>}
-      <Checkbox checkboxGroupState={state} {...props.checkboxProps[0]} />
-      <Checkbox checkboxGroupState={state} {...props.checkboxProps[1]} />
-      <Checkbox checkboxGroupState={state} {...props.checkboxProps[2]} />
-    </div>
   );
 }
 
 describe("createCheckboxGroup", () => {
   it("handles defaults", async () => {
     const onChangeSpy = jest.fn();
+
     render(() => (
-      <CheckboxGroup
-        groupProps={{ label: "Favorite Pet", onChange: onChangeSpy }}
-        checkboxProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <CheckboxGroup label="Favorite Pet" onChange={onChangeSpy}>
+        <Checkbox value="dogs">Dogs</Checkbox>
+        <Checkbox value="cats">Cats</Checkbox>
+        <Checkbox value="dragons">Dragons</Checkbox>
+      </CheckboxGroup>
     ));
 
     const checkboxGroup = screen.getByRole("group", { exact: true });
@@ -93,14 +78,11 @@ describe("createCheckboxGroup", () => {
     const onChangeSpy = jest.fn();
 
     render(() => (
-      <CheckboxGroup
-        groupProps={{ label: "Favorite Pet", defaultValue: ["cats"], onChange: onChangeSpy }}
-        checkboxProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <CheckboxGroup label="Favorite Pet" defaultValue={["cats"]} onChange={onChangeSpy}>
+        <Checkbox value="dogs">Dogs</Checkbox>
+        <Checkbox value="cats">Cats</Checkbox>
+        <Checkbox value="dragons">Dragons</Checkbox>
+      </CheckboxGroup>
     ));
 
     const checkboxGroup = screen.getByRole("group", { exact: true });
@@ -130,14 +112,11 @@ describe("createCheckboxGroup", () => {
   it("value can be controlled", async () => {
     const onChangeSpy = jest.fn();
     render(() => (
-      <CheckboxGroup
-        groupProps={{ label: "Favorite Pet", value: ["cats"], onChange: onChangeSpy }}
-        checkboxProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <CheckboxGroup label="Favorite Pet" value={["cats"]} onChange={onChangeSpy}>
+        <Checkbox value="dogs">Dogs</Checkbox>
+        <Checkbox value="cats">Cats</Checkbox>
+        <Checkbox value="dragons">Dragons</Checkbox>
+      </CheckboxGroup>
     ));
 
     const checkboxes = screen.getAllByRole("checkbox") as HTMLInputElement[];
@@ -163,14 +142,11 @@ describe("createCheckboxGroup", () => {
 
   it("name can be controlled", () => {
     render(() => (
-      <CheckboxGroup
-        groupProps={{ name: "test-name", label: "Favorite Pet" }}
-        checkboxProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <CheckboxGroup label="Favorite Pet" name="test-name">
+        <Checkbox value="dogs">Dogs</Checkbox>
+        <Checkbox value="cats">Cats</Checkbox>
+        <Checkbox value="dragons">Dragons</Checkbox>
+      </CheckboxGroup>
     ));
 
     const checkboxes = screen.getAllByRole("checkbox") as HTMLInputElement[];
@@ -182,14 +158,11 @@ describe("createCheckboxGroup", () => {
 
   it("supports labeling", () => {
     render(() => (
-      <CheckboxGroup
-        groupProps={{ label: "Favorite Pet" }}
-        checkboxProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <CheckboxGroup label="Favorite Pet">
+        <Checkbox value="dogs">Dogs</Checkbox>
+        <Checkbox value="cats">Cats</Checkbox>
+        <Checkbox value="dragons">Dragons</Checkbox>
+      </CheckboxGroup>
     ));
 
     const checkboxGroup = screen.getByRole("group", { exact: true });
@@ -198,6 +171,7 @@ describe("createCheckboxGroup", () => {
 
     expect(labelId).toBeDefined();
 
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const label = document.getElementById(labelId!);
 
     expect(label).toHaveTextContent("Favorite Pet");
@@ -205,14 +179,11 @@ describe("createCheckboxGroup", () => {
 
   it("supports aria-label", () => {
     render(() => (
-      <CheckboxGroup
-        groupProps={{ "aria-label": "My Favorite Pet" }}
-        checkboxProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <CheckboxGroup aria-label="My Favorite Pet">
+        <Checkbox value="dogs">Dogs</Checkbox>
+        <Checkbox value="cats">Cats</Checkbox>
+        <Checkbox value="dragons">Dragons</Checkbox>
+      </CheckboxGroup>
     ));
 
     const checkboxGroup = screen.getByRole("group", { exact: true });
@@ -221,16 +192,12 @@ describe("createCheckboxGroup", () => {
   });
 
   it("supports custom props", () => {
-    const groupProps = { label: "Favorite Pet", "data-testid": "favorite-pet" };
     render(() => (
-      <CheckboxGroup
-        groupProps={groupProps}
-        checkboxProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <CheckboxGroup label="Favorite Pet" data-testid="favorite-pet">
+        <Checkbox value="dogs">Dogs</Checkbox>
+        <Checkbox value="cats">Cats</Checkbox>
+        <Checkbox value="dragons">Dragons</Checkbox>
+      </CheckboxGroup>
     ));
 
     const checkboxGroup = screen.getByRole("group", { exact: true });
@@ -243,14 +210,13 @@ describe("createCheckboxGroup", () => {
     const checkboxOnChangeSpy = jest.fn();
 
     render(() => (
-      <CheckboxGroup
-        groupProps={{ label: "Favorite Pet", isDisabled: true, onChange: groupOnChangeSpy }}
-        checkboxProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons", onChange: checkboxOnChangeSpy }
-        ]}
-      />
+      <CheckboxGroup label="Favorite Pet" isDisabled onChange={groupOnChangeSpy}>
+        <Checkbox value="dogs">Dogs</Checkbox>
+        <Checkbox value="cats">Cats</Checkbox>
+        <Checkbox value="dragons" onChange={checkboxOnChangeSpy}>
+          Dragons
+        </Checkbox>
+      </CheckboxGroup>
     ));
 
     const checkboxGroup = screen.getByRole("group", { exact: true });
@@ -275,14 +241,11 @@ describe("createCheckboxGroup", () => {
 
   it("doesn't set aria-disabled or make checkboxes disabled by default", () => {
     render(() => (
-      <CheckboxGroup
-        groupProps={{ label: "Favorite Pet" }}
-        checkboxProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <CheckboxGroup label="Favorite Pet">
+        <Checkbox value="dogs">Dogs</Checkbox>
+        <Checkbox value="cats">Cats</Checkbox>
+        <Checkbox value="dragons">Dragons</Checkbox>
+      </CheckboxGroup>
     ));
 
     const checkboxGroup = screen.getByRole("group", { exact: true });
@@ -298,14 +261,11 @@ describe("createCheckboxGroup", () => {
 
   it("doesn't set aria-disabled or make checkboxes disabled when isDisabled is false", () => {
     render(() => (
-      <CheckboxGroup
-        groupProps={{ label: "Favorite Pet", isDisabled: false }}
-        checkboxProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons" }
-        ]}
-      />
+      <CheckboxGroup label="Favorite Pet" isDisabled={false}>
+        <Checkbox value="dogs">Dogs</Checkbox>
+        <Checkbox value="cats">Cats</Checkbox>
+        <Checkbox value="dragons">Dragons</Checkbox>
+      </CheckboxGroup>
     ));
 
     const checkboxGroup = screen.getByRole("group", { exact: true });
@@ -324,14 +284,13 @@ describe("createCheckboxGroup", () => {
     const checkboxOnChangeSpy = jest.fn();
 
     render(() => (
-      <CheckboxGroup
-        groupProps={{ label: "Favorite Pet", isReadOnly: true, onChange: groupOnChangeSpy }}
-        checkboxProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons", onChange: checkboxOnChangeSpy }
-        ]}
-      />
+      <CheckboxGroup label="Favorite Pet" isReadOnly onChange={groupOnChangeSpy}>
+        <Checkbox value="dogs">Dogs</Checkbox>
+        <Checkbox value="cats">Cats</Checkbox>
+        <Checkbox value="dragons" onChange={checkboxOnChangeSpy}>
+          Dragons
+        </Checkbox>
+      </CheckboxGroup>
     ));
 
     const checkboxes = screen.getAllByRole("checkbox") as HTMLInputElement[];
@@ -356,14 +315,13 @@ describe("createCheckboxGroup", () => {
     const checkboxOnChangeSpy = jest.fn();
 
     render(() => (
-      <CheckboxGroup
-        groupProps={{ label: "Favorite Pet", onChange: groupOnChangeSpy }}
-        checkboxProps={[
-          { value: "dogs", children: "Dogs" },
-          { value: "cats", children: "Cats" },
-          { value: "dragons", children: "Dragons", isReadOnly: true, onChange: checkboxOnChangeSpy }
-        ]}
-      />
+      <CheckboxGroup label="Favorite Pet" onChange={groupOnChangeSpy}>
+        <Checkbox value="dogs">Dogs</Checkbox>
+        <Checkbox value="cats">Cats</Checkbox>
+        <Checkbox value="dragons" isReadOnly onChange={checkboxOnChangeSpy}>
+          Dragons
+        </Checkbox>
+      </CheckboxGroup>
     ));
 
     const checkboxes = screen.getAllByRole("checkbox") as HTMLInputElement[];
