@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/collection",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "description": "Primitives for dealing with collection of items.",
   "keywords": [

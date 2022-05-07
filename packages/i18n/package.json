@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/i18n",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": false,
   "description": "Primitives for dealing with locale and layout direction.",
   "keywords": [

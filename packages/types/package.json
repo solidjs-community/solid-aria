@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/types",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": false,
   "description": "A collection of type definitions, for building Solid Aria primitives.",
   "keywords": [

@@ -1,3 +1,11 @@
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [2d46cdd]
+  - @solid-aria/types@0.0.3
+  - @solid-aria/utils@0.0.3
+
 ## 0.0.2
 
 ### Patch Changes

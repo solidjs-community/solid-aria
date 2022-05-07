@@ -1,3 +1,11 @@
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [2d46cdd]
+  - @solid-aria/toggle@0.0.4
+  - @solid-aria/types@0.0.3
+
 ## 0.0.3
 
 ### Patch Changes
