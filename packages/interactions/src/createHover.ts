@@ -1,4 +1,4 @@
-import { HoverEvents, PointerType } from "@solid-aria/types";
+import { HoverEvents, HoverPointerType, PointerType } from "@solid-aria/types";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor, createEffect, createMemo, createSignal, on, onCleanup, onMount } from "solid-js";
 
@@ -115,7 +115,7 @@ export function createHover(props: CreateHoverProps): HoverResult {
     props.onHoverStart?.({
       type: "hoverstart",
       target: eventCurrentTarget,
-      pointerType
+      pointerType: pointerType as HoverPointerType
     });
 
     props.onHoverChange?.(true);
@@ -134,7 +134,7 @@ export function createHover(props: CreateHoverProps): HoverResult {
     props.onHoverEnd?.({
       type: "hoverend",
       target: event.currentTarget as HTMLElement,
-      pointerType
+      pointerType: pointerType as HoverPointerType
     });
 
     props.onHoverChange?.(false);

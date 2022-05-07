@@ -125,7 +125,7 @@ export function createListBoxOption<
 
   const { pressProps } = createPress({
     isDisabled,
-    onClick: focusAndSelect
+    onPress: focusAndSelect
   });
 
   const { keyboardProps } = createKeyboard({

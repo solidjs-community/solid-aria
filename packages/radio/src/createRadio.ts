@@ -81,7 +81,9 @@ export function createRadio(
     target.checked = isChecked();
   };
 
-  const { pressProps } = createPress(props);
+  const { pressProps } = createPress<HTMLInputElement>({
+    isDisabled: () => props.isDisabled
+  });
 
   const createFocusableProps = combineProps(props, {
     onFocus: () => context.state.setLastFocusedValue(props.value)

@@ -1,6 +1,50 @@
 export type HoverPointerType = "mouse" | "pen";
 
-export type PointerType = HoverPointerType | "touch";
+export type PointerType = HoverPointerType | "touch" | "keyboard" | "virtual";
+
+export interface PressEvent {
+  /**
+   * The type of press event being fired.
+   */
+  type: "pressstart" | "pressend" | "pressup" | "press";
+
+  /**
+   * The pointer type that triggered the press event.
+   */
+  pointerType: PointerType;
+
+  /**
+   * The target element of the press event.
+   */
+  target: HTMLElement;
+
+  /**
+   * Whether the shift keyboard modifier was held during the press event.
+   */
+  shiftKey: boolean;
+
+  /**
+   * Whether the ctrl keyboard modifier was held during the press event.
+   */
+  ctrlKey: boolean;
+
+  /**
+   * Whether the meta keyboard modifier was held during the press event.
+   */
+  metaKey: boolean;
+
+  /**
+   * Whether the alt keyboard modifier was held during the press event.
+   */
+  altKey: boolean;
+}
+
+export interface LongPressEvent extends Omit<PressEvent, "type"> {
+  /**
+   * The type of long press event being fired.
+   */
+  type: "longpressstart" | "longpressend" | "longpress";
+}
 
 export interface HoverEvent {
   /**
@@ -19,6 +63,35 @@ export interface HoverEvent {
   target: HTMLElement;
 }
 
+export interface PressEvents {
+  /**
+   * Handler that is called when the press is released over the target.
+   */
+  onPress?: (e: PressEvent) => void;
+
+  /**
+   * Handler that is called when a press interaction starts.
+   */
+  onPressStart?: (e: PressEvent) => void;
+
+  /**
+   * Handler that is called when a press interaction ends, either
+   * over the target or when the pointer leaves the target.
+   */
+  onPressEnd?: (e: PressEvent) => void;
+
+  /**
+   * Handler that is called when the press state changes.
+   */
+  onPressChange?: (isPressed: boolean) => void;
+
+  /**
+   * Handler that is called when a press is released over the target, regardless of
+   * whether it started on the target or not.
+   */
+  onPressUp?: (e: PressEvent) => void;
+}
+
 export interface HoverEvents {
   /**
    * Handler that is called when a hover interaction starts.
@@ -34,28 +107,6 @@ export interface HoverEvents {
    * Handler that is called when the hover state changes.
    */
   onHoverChange?: (isHovering: boolean) => void;
-}
-
-export interface PressEvents {
-  /**
-   * Handler that is called when a pointing device is both pressed and released while the pointer is over the target.
-   */
-  onClick?: (e: MouseEvent) => void;
-
-  /**
-   * Handler that is called when a pointing device is pressed while the pointer is over the target.
-   */
-  onMouseDown?: (e: MouseEvent) => void;
-
-  /**
-   * Handler that is called when a pointing device is released while the pointer is over the target.
-   */
-  onMouseUp?: (e: MouseEvent) => void;
-
-  /**
-   * Handler that is called when the press state changes.
-   */
-  onPressChange?: (isPressed: boolean) => void;
 }
 
 export interface FocusEvents {
