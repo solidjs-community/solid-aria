@@ -1,8 +1,8 @@
 {
-  "name": "@solid-aria/primitives",
-  "version": "0.0.6",
+  "name": "@solid-aria/overlays",
+  "version": "0.0.0",
   "private": false,
-  "description": "A library of high-quality primitives that help you build accessible user interfaces with SolidJS.",
+  "description": "Primitives for building accessible overlay components such as dialogs, popovers, and menus.",
   "keywords": [
     "solid",
     "aria",
@@ -11,7 +11,7 @@
     "system",
     "components"
   ],
-  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/primitives#readme",
+  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/overlays#readme",
   "bugs": {
     "url": "https://github.com/solidjs-community/solid-aria/issues"
   },
@@ -39,22 +39,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/button": "workspace:^",
-    "@solid-aria/checkbox": "workspace:^",
-    "@solid-aria/collection": "workspace:^",
-    "@solid-aria/focus": "workspace:^",
-    "@solid-aria/i18n": "workspace:^",
-    "@solid-aria/interactions": "workspace:^",
-    "@solid-aria/label": "workspace:^",
-    "@solid-aria/listbox": "workspace:^",
-    "@solid-aria/overlays": "workspace:^",
-    "@solid-aria/radio": "workspace:^",
-    "@solid-aria/selection": "workspace:^",
-    "@solid-aria/switch": "workspace:^",
-    "@solid-aria/toggle": "workspace:^",
     "@solid-aria/types": "workspace:^",
-    "@solid-aria/utils": "workspace:^",
-    "@solid-aria/visually-hidden": "workspace:^"
+    "@solid-aria/utils": "workspace:^"
   },
   "peerDependencies": {
     "@solid-primitives/utils": "^1.3.0",
@@ -64,7 +50,7 @@
     "access": "public"
   },
   "primitive": {
-    "name": "primitives",
+    "name": "overlays",
     "stage": 0,
     "list": [],
     "category": ""

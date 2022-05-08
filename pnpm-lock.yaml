@@ -176,6 +176,14 @@ importers:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 
+  packages/overlays:
+    specifiers:
+      '@solid-aria/types': workspace:^
+      '@solid-aria/utils': workspace:^
+    dependencies:
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
   packages/primitives:
     specifiers:
       '@solid-aria/button': workspace:^
@@ -186,6 +194,7 @@ importers:
       '@solid-aria/interactions': workspace:^
       '@solid-aria/label': workspace:^
       '@solid-aria/listbox': workspace:^
+      '@solid-aria/overlays': workspace:^
       '@solid-aria/radio': workspace:^
       '@solid-aria/selection': workspace:^
       '@solid-aria/switch': workspace:^
@@ -202,6 +211,7 @@ importers:
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/label': link:../label
       '@solid-aria/listbox': link:../listbox
+      '@solid-aria/overlays': link:../overlays
       '@solid-aria/radio': link:../radio
       '@solid-aria/selection': link:../selection
       '@solid-aria/switch': link:../switch

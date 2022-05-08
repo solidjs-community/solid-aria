@@ -6,6 +6,7 @@ export * from "@solid-aria/i18n";
 export * from "@solid-aria/interactions";
 export * from "@solid-aria/label";
 export * from "@solid-aria/listbox";
+export * from "@solid-aria/overlays";
 export * from "@solid-aria/radio";
 export * from "@solid-aria/selection";
 export * from "@solid-aria/switch";
