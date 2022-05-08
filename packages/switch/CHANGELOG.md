@@ -1,3 +1,12 @@
+# @solid-aria/switch
+
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [e8be0a0]
+  - @solid-aria/toggle@0.0.5
+
 ## 0.0.4
 
 ### Patch Changes

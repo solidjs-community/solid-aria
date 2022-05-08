@@ -1,3 +1,26 @@
+# @solid-aria/primitives
+
+## 0.0.6
+
+### Patch Changes
+
+- e8be0a0: Release button package
+- Updated dependencies [e8be0a0]
+  - @solid-aria/button@0.0.1
+  - @solid-aria/interactions@0.0.4
+  - @solid-aria/toggle@0.0.5
+  - @solid-aria/utils@0.0.4
+  - @solid-aria/focus@0.0.4
+  - @solid-aria/listbox@0.0.4
+  - @solid-aria/radio@0.0.6
+  - @solid-aria/visually-hidden@0.0.4
+  - @solid-aria/checkbox@0.0.5
+  - @solid-aria/switch@0.0.5
+  - @solid-aria/collection@0.0.3
+  - @solid-aria/i18n@0.0.5
+  - @solid-aria/label@0.0.4
+  - @solid-aria/selection@0.0.3
+
 ## 0.0.5
 
 ### Patch Changes

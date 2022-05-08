@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/selection",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": false,
   "description": "Primitives for managing selection in collections.",
   "keywords": [

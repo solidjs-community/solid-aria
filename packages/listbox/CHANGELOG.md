@@ -1,3 +1,17 @@
+# @solid-aria/listbox
+
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [e8be0a0]
+  - @solid-aria/interactions@0.0.4
+  - @solid-aria/utils@0.0.4
+  - @solid-aria/focus@0.0.4
+  - @solid-aria/collection@0.0.3
+  - @solid-aria/label@0.0.4
+  - @solid-aria/selection@0.0.3
+
 ## 0.0.3
 
 ### Patch Changes

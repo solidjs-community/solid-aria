@@ -1,3 +1,14 @@
+# @solid-aria/checkbox
+
+## 0.0.5
+
+### Patch Changes
+
+- Updated dependencies [e8be0a0]
+  - @solid-aria/toggle@0.0.5
+  - @solid-aria/utils@0.0.4
+  - @solid-aria/label@0.0.4
+
 ## 0.0.4
 
 ### Patch Changes

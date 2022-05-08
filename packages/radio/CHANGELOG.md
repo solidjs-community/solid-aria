@@ -1,3 +1,16 @@
+# @solid-aria/radio
+
+## 0.0.6
+
+### Patch Changes
+
+- Updated dependencies [e8be0a0]
+  - @solid-aria/interactions@0.0.4
+  - @solid-aria/utils@0.0.4
+  - @solid-aria/focus@0.0.4
+  - @solid-aria/i18n@0.0.5
+  - @solid-aria/label@0.0.4
+
 ## 0.0.5
 
 ### Patch Changes

@@ -1,3 +1,14 @@
+# @solid-aria/selection
+
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [e8be0a0]
+  - @solid-aria/utils@0.0.4
+  - @solid-aria/collection@0.0.3
+  - @solid-aria/i18n@0.0.5
+
 ## 0.0.2
 
 ### Patch Changes
