@@ -19,13 +19,13 @@ export function callHandler<T, E extends Event>(
   return event?.defaultPrevented;
 }
 
-/**
- * Return a function that will call all handlers in the order they were chained with the same arguments.
- */
-export function chainHandlers<T, E extends Event>(
-  ...fns: Array<JSX.EventHandlerUnion<T, E> | undefined>
-) {
-  return function (event: E & { currentTarget: T; target: Element }) {
-    fns.forEach(fn => callHandler(fn, event));
-  };
-}
+// /**
+//  * Return a function that will call all handlers in the order they were chained with the same arguments.
+//  */
+// export function chainHandlers<T, E extends Event>(
+//   ...fns: Array<JSX.EventHandlerUnion<T, E> | undefined>
+// ) {
+//   return function (event: E & { currentTarget: T; target: Element }) {
+//     fns.forEach(fn => callHandler(fn, event));
+//   };
+// }

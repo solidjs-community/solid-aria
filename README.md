@@ -10,6 +10,10 @@ A library of high-quality primitives that help you build accessible user interfa
 
 - [@solid-aria/primitives](./packages/primitives/) - Export all Solid Aria primitives in a single convenient package.
 
+### Buttons
+
+- [button](./packages/button/) - Provides the behavior and accessibility implementation for button and toggle button components.
+
 ### Collections
 
 - [collection](./packages/collection/) - Primitives for dealing with collection of items.
@@ -19,6 +23,7 @@ A library of high-quality primitives that help you build accessible user interfa
 ### Interactions
 
 - [focus](./packages/focus/) - Primitives for dealing with focus rings and focus management.
+- [interactions](./packages/interactions/) - Primitives for dealing with user interactions like press, hover, etc.
 
 ### Forms
 

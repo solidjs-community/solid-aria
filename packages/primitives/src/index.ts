@@ -1,3 +1,4 @@
+export * from "@solid-aria/button";
 export * from "@solid-aria/checkbox";
 export * from "@solid-aria/collection";
 export * from "@solid-aria/focus";

@@ -18,7 +18,6 @@ import {
   splitProps,
   useContext
 } from "solid-js";
-import { createStore } from "solid-js/store";
 
 import { disableTextSelection, restoreTextSelection } from "./textSelection";
 import { isVirtualClick } from "./utils";
@@ -52,8 +51,6 @@ export interface CreatePressProps extends PressEvents {
    */
   allowTextSelectionOnPress?: MaybeAccessor<boolean | undefined>;
 }
-
-//export interface PressElementProps {}
 
 export interface PressResult<T extends HTMLElement> {
   /**
