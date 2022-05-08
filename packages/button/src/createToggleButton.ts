@@ -1,4 +1,4 @@
-import { createToggleState } from "@solid-aria/toggle";
+import { createToggleState, ToggleState } from "@solid-aria/toggle";
 import { ElementType } from "@solid-aria/types";
 import { chain, combineProps } from "@solid-aria/utils";
 import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
@@ -6,35 +6,42 @@ import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
 import { ButtonAria, createButton } from "./createButton";
 import { AriaToggleButtonProps } from "./types";
 
+export interface ToggleButtonAria<T> extends ButtonAria<T> {
+  /**
+   * State for the toggle button, as returned by `createToggleState`.
+   */
+  state: ToggleState;
+}
+
 export function createToggleButton(
   props: AriaToggleButtonProps<"a">,
   ref: Accessor<HTMLAnchorElement | undefined>
-): ButtonAria<JSX.AnchorHTMLAttributes<HTMLAnchorElement>>;
+): ToggleButtonAria<JSX.AnchorHTMLAttributes<HTMLAnchorElement>>;
 
 export function createToggleButton(
   props: AriaToggleButtonProps<"button">,
   ref: Accessor<HTMLButtonElement | undefined>
-): ButtonAria<JSX.ButtonHTMLAttributes<HTMLButtonElement>>;
+): ToggleButtonAria<JSX.ButtonHTMLAttributes<HTMLButtonElement>>;
 
 export function createToggleButton(
   props: AriaToggleButtonProps<"div">,
   ref: Accessor<HTMLDivElement | undefined>
-): ButtonAria<JSX.HTMLAttributes<HTMLDivElement>>;
+): ToggleButtonAria<JSX.HTMLAttributes<HTMLDivElement>>;
 
 export function createToggleButton(
   props: AriaToggleButtonProps<"input">,
   ref: Accessor<HTMLInputElement | undefined>
-): ButtonAria<JSX.InputHTMLAttributes<HTMLInputElement>>;
+): ToggleButtonAria<JSX.InputHTMLAttributes<HTMLInputElement>>;
 
 export function createToggleButton(
   props: AriaToggleButtonProps<"span">,
   ref: Accessor<HTMLSpanElement | undefined>
-): ButtonAria<JSX.HTMLAttributes<HTMLSpanElement>>;
+): ToggleButtonAria<JSX.HTMLAttributes<HTMLSpanElement>>;
 
 export function createToggleButton(
   props: AriaToggleButtonProps<ElementType>,
   ref: Accessor<HTMLElement | undefined>
-): ButtonAria<JSX.HTMLAttributes<HTMLElement>>;
+): ToggleButtonAria<JSX.HTMLAttributes<HTMLElement>>;
 
 /**
  * Provides the behavior and accessibility implementation for a toggle button component.
@@ -45,7 +52,7 @@ export function createToggleButton(
 export function createToggleButton(
   props: AriaToggleButtonProps<ElementType>,
   ref: Accessor<any>
-): ButtonAria<JSX.HTMLAttributes<any>> {
+): ToggleButtonAria<JSX.HTMLAttributes<any>> {
   const state = createToggleState(props);
 
   const createButtonProps = mergeProps(props, {
@@ -58,5 +65,5 @@ export function createToggleButton(
     return combineProps(baseButtonProps, { "aria-pressed": state.isSelected() });
   });
 
-  return { buttonProps, isPressed };
+  return { buttonProps, isPressed, state };
 }

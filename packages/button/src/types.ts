@@ -7,7 +7,7 @@ import {
 } from "@solid-aria/types";
 import { JSX } from "solid-js";
 
-export interface ButtonProps extends PressEvents, FocusableProps {
+interface ButtonProps extends PressEvents, FocusableProps {
   /**
    * Whether the button is disabled.
    */

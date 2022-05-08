@@ -39,6 +39,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@solid-aria/button": "workspace:^",
     "@solid-aria/checkbox": "workspace:^",
     "@solid-aria/collection": "workspace:^",
     "@solid-aria/focus": "workspace:^",
