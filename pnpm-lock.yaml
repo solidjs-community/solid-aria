@@ -90,6 +90,20 @@ importers:
       vite: 2.9.5
       vite-plugin-solid: 2.2.6
 
+  packages/button:
+    specifiers:
+      '@solid-aria/focus': workspace:^
+      '@solid-aria/interactions': workspace:^
+      '@solid-aria/toggle': workspace:^
+      '@solid-aria/types': workspace:^
+      '@solid-aria/utils': workspace:^
+    dependencies:
+      '@solid-aria/focus': link:../focus
+      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/toggle': link:../toggle
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
   packages/checkbox:
     specifiers:
       '@solid-aria/label': workspace:^

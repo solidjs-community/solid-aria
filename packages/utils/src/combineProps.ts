@@ -2,7 +2,7 @@ import { isObject } from "@solid-primitives/utils";
 import clsx from "clsx";
 import { mergeProps } from "solid-js";
 
-import { chainHandlers } from "./handler";
+import { chain } from "./chain";
 
 interface Props {
   [key: string]: any;
@@ -46,7 +46,7 @@ export function combineProps<T extends Props[]>(...args: T): UnionToIntersection
         key.charCodeAt(2) <= /* 'Z' */ 90
       ) {
         // eslint-disable-next-line solid/reactivity
-        combinedProps = mergeProps(combinedProps, { [key]: chainHandlers(a, b) });
+        combinedProps = mergeProps(combinedProps, { [key]: chain(a, b) });
 
         // Merge classes or classNames, sometimes they are empty string which eval to false, so we just need to do a type check
       } else if (

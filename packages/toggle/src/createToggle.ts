@@ -79,24 +79,14 @@ export function createToggle(
   props: AriaToggleProps,
   inputRef: Accessor<HTMLInputElement | undefined>
 ): ToggleAria {
-  const state = createToggleState(props);
-
   const defaultProps: AriaToggleProps = {
     isDisabled: false,
     validationState: "valid"
   };
 
-  const propsWithDefault = mergeProps(defaultProps, props);
-  const [local] = splitProps(propsWithDefault, [
-    "isDisabled",
-    "isRequired",
-    "isReadOnly",
-    "value",
-    "name",
-    "aria-errormessage",
-    "aria-controls",
-    "validationState"
-  ]);
+  props = mergeProps(defaultProps, props);
+
+  const state = createToggleState(props);
 
   const onChange: JSX.EventHandlerUnion<HTMLInputElement, Event> = event => {
     // since we spread props on label, onChange will end up there as well as in here.
@@ -129,14 +119,14 @@ export function createToggle(
     return combineProps(
       domProps(),
       {
-        "aria-invalid": local.validationState === "invalid" || undefined,
-        "aria-errormessage": local["aria-errormessage"],
-        "aria-controls": local["aria-controls"],
-        "aria-readonly": local.isReadOnly || undefined,
-        "aria-required": local.isRequired || undefined,
-        disabled: local.isDisabled,
-        value: local.value,
-        name: local.name,
+        "aria-invalid": props.validationState === "invalid" || undefined,
+        "aria-errormessage": props["aria-errormessage"],
+        "aria-controls": props["aria-controls"],
+        "aria-readonly": props.isReadOnly || undefined,
+        "aria-required": props.isRequired || undefined,
+        disabled: props.isDisabled,
+        value: props.value,
+        name: props.name,
         type: "checkbox",
         onChange
       },
