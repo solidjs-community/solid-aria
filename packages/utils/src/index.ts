@@ -6,6 +6,7 @@ export * from "./createId";
 export * from "./createSyncRef";
 export * from "./filterDOMProps";
 export * from "./focusWithoutScrolling";
+export * from "./getScrollParent";
 export * from "./handler";
 export * from "./mergeAriaLabels";
 export * from "./platform";

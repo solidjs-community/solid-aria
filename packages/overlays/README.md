@@ -22,6 +22,30 @@ yarn add @solid-aria/overlays
 pnpm add @solid-aria/overlays
 ```
 
+## `createPreventScrollEffect`
+
+Prevents scrolling on the document body on mount, and restores it on unmount. Also ensures that content does not shift due to the scrollbars disappearing.
+
+### How to use it
+
+```tsx
+import { createPreventScrollEffect } from "@solid-aria/overlays";
+import { createSignal } from "solid-js";
+
+function App() {
+  const [isDisabled, setDisabled] = createSignal(false);
+
+  createPreventScrollEffect({ isDisabled });
+
+  return (
+    <>
+      <button onClick={() => setDisabled(prev => !prev)}>Toggle scroll lock</button>
+      <p>Very long scrollable content...</p>
+    </>
+  );
+}
+```
+
 ## Changelog
 
 All notable changes are described in the [CHANGELOG.md](./CHANGELOG.md) file.
