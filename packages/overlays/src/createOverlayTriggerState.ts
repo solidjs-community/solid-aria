@@ -68,7 +68,7 @@ export function createOverlayTriggerState(
   };
 
   const toggle = () => {
-    setOpen(!isOpen);
+    setOpen(!isOpen());
   };
 
   return { isOpen, setOpen, open, close, toggle };

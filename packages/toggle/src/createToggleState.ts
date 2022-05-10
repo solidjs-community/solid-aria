@@ -45,27 +45,23 @@ export interface ToggleState {
  * Provides state management for toggle components like checkboxes and switches.
  */
 export function createToggleState(props: CreateToggleStateProps = {}): ToggleState {
-  const [isSelected, setSelected] = createControllableBooleanSignal({
+  const [isSelected, _setSelected] = createControllableBooleanSignal({
     value: () => access(props.isSelected),
     defaultValue: () => !!access(props.defaultSelected),
     onChange: props.onChange
   });
 
-  const updateSelected = (value: boolean) => {
+  const setSelected = (value: boolean) => {
     if (!access(props.isReadOnly)) {
-      setSelected(value);
+      _setSelected(value);
     }
   };
 
-  const toggleSelected = () => {
+  const toggle = () => {
     if (!access(props.isReadOnly)) {
-      setSelected(!isSelected());
+      _setSelected(!isSelected());
     }
   };
 
-  return {
-    isSelected,
-    setSelected: updateSelected,
-    toggle: toggleSelected
-  };
+  return { isSelected, setSelected, toggle };
 }
