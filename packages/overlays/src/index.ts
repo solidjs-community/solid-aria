@@ -1,1 +1,1 @@
-export * from "./createPreventScrollEffect";
+export * from "./createPreventScroll";

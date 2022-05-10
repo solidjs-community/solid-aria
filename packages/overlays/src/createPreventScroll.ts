@@ -29,7 +29,7 @@ const nonTextInputTypes = new Set([
  * restores it on unmount. Also ensures that content does not
  * shift due to the scrollbars disappearing.
  */
-export function createPreventScrollEffect(options: PreventScrollOptions = {}) {
+export function createPreventScroll(options: PreventScrollOptions = {}) {
   createEffect(
     on(
       () => access(options.isDisabled),

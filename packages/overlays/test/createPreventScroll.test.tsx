@@ -1,14 +1,14 @@
 import { createSignal } from "solid-js";
 import { fireEvent, render, screen } from "solid-testing-library";
 
-import { createPreventScrollEffect, PreventScrollOptions } from "../src";
+import { createPreventScroll, PreventScrollOptions } from "../src";
 
 function Example(props: PreventScrollOptions) {
-  createPreventScrollEffect(props);
+  createPreventScroll(props);
   return <div />;
 }
 
-describe("createPreventScrollEffect", function () {
+describe("createPreventScroll", function () {
   it("should set overflow: hidden on the body on mount and remove on unmount", () => {
     expect(document.documentElement).not.toHaveStyle("overflow: hidden");
 
