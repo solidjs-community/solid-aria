@@ -178,9 +178,11 @@ importers:
 
   packages/overlays:
     specifiers:
+      '@solid-aria/button': workspace:^
       '@solid-aria/types': workspace:^
       '@solid-aria/utils': workspace:^
     dependencies:
+      '@solid-aria/button': link:../button
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 
