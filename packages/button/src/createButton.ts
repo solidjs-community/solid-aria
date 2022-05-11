@@ -108,7 +108,13 @@ export function createButton(
       "aria-expanded": props["aria-expanded"],
       "aria-controls": props["aria-controls"],
       "aria-pressed": props["aria-pressed"],
-      tabIndex: props.allowFocusWhenDisabled && props.isDisabled ? -1 : focusableProps().tabIndex
+      tabIndex: props.allowFocusWhenDisabled && props.isDisabled ? -1 : focusableProps().tabIndex,
+      onClick: (e: MouseEvent) => {
+        if (props.onClick) {
+          props.onClick(e);
+          console.warn("onClick is deprecated, please use onPress");
+        }
+      }
     });
   });
 

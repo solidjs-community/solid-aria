@@ -98,6 +98,11 @@ interface AriaBaseButtonProps extends FocusableDOMProps, AriaLabelingProps {
    * Whether the button can receive focus when disabled.
    */
   allowFocusWhenDisabled?: boolean;
+
+  /**
+   * Handler that is called when the click is released over the target.
+   */
+  onClick?: (e: MouseEvent) => void;
 }
 
 export interface AriaButtonProps<T extends ElementType = "button">
