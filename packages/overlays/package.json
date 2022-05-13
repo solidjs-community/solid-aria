@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@solid-aria/button": "workspace:^",
+    "@solid-aria/interactions": "workspace:^",
     "@solid-aria/types": "workspace:^",
     "@solid-aria/utils": "workspace:^"
   },
