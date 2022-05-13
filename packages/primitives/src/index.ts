@@ -1,6 +1,7 @@
 export * from "@solid-aria/button";
 export * from "@solid-aria/checkbox";
 export * from "@solid-aria/collection";
+export * from "@solid-aria/dialog";
 export * from "@solid-aria/focus";
 export * from "@solid-aria/i18n";
 export * from "@solid-aria/interactions";

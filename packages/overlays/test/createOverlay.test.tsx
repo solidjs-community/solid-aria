@@ -16,7 +16,7 @@ function Example(props: any) {
   const rootProps = createMemo(() => combineProps(underlayProps(), props.underlayProps || {}));
 
   return (
-    <div {...rootProps()}>
+    <div {...rootProps}>
       <div ref={ref} {...overlayProps()} data-testid={props["data-testid"] || "test"}>
         {props.children}
       </div>

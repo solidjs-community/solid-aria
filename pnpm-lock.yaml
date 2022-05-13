@@ -124,6 +124,16 @@ importers:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 
+  packages/dialog:
+    specifiers:
+      '@solid-aria/focus': workspace:^
+      '@solid-aria/types': workspace:^
+      '@solid-aria/utils': workspace:^
+    dependencies:
+      '@solid-aria/focus': link:../focus
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
   packages/focus:
     specifiers:
       '@solid-aria/interactions': workspace:^
@@ -179,10 +189,12 @@ importers:
   packages/overlays:
     specifiers:
       '@solid-aria/button': workspace:^
+      '@solid-aria/interactions': workspace:^
       '@solid-aria/types': workspace:^
       '@solid-aria/utils': workspace:^
     dependencies:
       '@solid-aria/button': link:../button
+      '@solid-aria/interactions': link:../interactions
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 
@@ -191,6 +203,7 @@ importers:
       '@solid-aria/button': workspace:^
       '@solid-aria/checkbox': workspace:^
       '@solid-aria/collection': workspace:^
+      '@solid-aria/dialog': workspace:^
       '@solid-aria/focus': workspace:^
       '@solid-aria/i18n': workspace:^
       '@solid-aria/interactions': workspace:^
@@ -208,6 +221,7 @@ importers:
       '@solid-aria/button': link:../button
       '@solid-aria/checkbox': link:../checkbox
       '@solid-aria/collection': link:../collection
+      '@solid-aria/dialog': link:../dialog
       '@solid-aria/focus': link:../focus
       '@solid-aria/i18n': link:../i18n
       '@solid-aria/interactions': link:../interactions

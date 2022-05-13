@@ -3,7 +3,7 @@ import { DOMElements } from "@solid-aria/types";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor, createEffect, createMemo, JSX, onCleanup } from "solid-js";
 
-interface CreateOverlayProps {
+export interface AriaOverlayProps {
   /**
    * Whether the overlay is currently open.
    */
@@ -40,7 +40,7 @@ interface CreateOverlayProps {
   shouldCloseOnInteractOutside?: (element: HTMLElement) => boolean;
 }
 
-interface OverlayAria<
+export interface OverlayAria<
   OverlayElementType extends DOMElements,
   UnderlayElementType extends DOMElements
 > {
@@ -67,7 +67,7 @@ export function createOverlay<
   UnderlayElementType extends DOMElements = "div",
   RefElement extends HTMLElement = HTMLDivElement
 >(
-  props: CreateOverlayProps,
+  props: AriaOverlayProps,
   ref: Accessor<RefElement | undefined>
 ): OverlayAria<OverlayElementType, UnderlayElementType> {
   // Add the overlay ref to the stack of visible overlays on mount, and remove on unmount.

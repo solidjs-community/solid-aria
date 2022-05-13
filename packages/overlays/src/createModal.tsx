@@ -1,4 +1,3 @@
-import { access, MaybeAccessor } from "@solid-primitives/utils";
 import {
   Accessor,
   createContext,
@@ -138,8 +137,8 @@ export function OverlayContainer(props: OverlayContainerProps) {
   );
 }
 
-interface CreateModalProps {
-  isDisabled?: MaybeAccessor<boolean | undefined>;
+export interface AriaModalProps {
+  isDisabled?: boolean;
 }
 
 interface ModalElementProps extends JSX.HTMLAttributes<HTMLElement> {
@@ -149,7 +148,7 @@ interface ModalElementProps extends JSX.HTMLAttributes<HTMLElement> {
   "data-ismodal": boolean;
 }
 
-interface ModalAria {
+export interface ModalAria {
   /**
    * Props for the modal content element.
    */
@@ -162,7 +161,7 @@ interface ModalAria {
  * other types of overlays to ensure that only the top-most modal is
  * accessible at once.
  */
-export function createModal(options?: CreateModalProps): ModalAria {
+export function createModal(props?: AriaModalProps): ModalAria {
   // Add aria-hidden to all parent providers on mount, and restore on unmount.
   const context = useContext(Context);
 
@@ -171,11 +170,11 @@ export function createModal(options?: CreateModalProps): ModalAria {
   }
 
   const modalProps = createMemo(() => ({
-    "data-ismodal": !access(options?.isDisabled)
+    "data-ismodal": !props?.isDisabled
   }));
 
   createEffect(() => {
-    if (access(options?.isDisabled) || !context.parent()) {
+    if (props?.isDisabled || !context.parent()) {
       return;
     }
 
