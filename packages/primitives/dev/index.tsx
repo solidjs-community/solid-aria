@@ -1,3 +1,4 @@
+import { FocusScope } from "@solid-aria/focus";
 import { Show } from "solid-js";
 import { JSX } from "solid-js/jsx-runtime";
 import { render } from "solid-js/web";
@@ -55,22 +56,24 @@ function ModalDialog(props: ModalDialogProps) {
       }}
       {...underlayProps()}
     >
-      <div
-        {...overlayProps()}
-        {...dialogProps()}
-        {...modalProps()}
-        ref={ref}
-        style={{
-          background: "white",
-          color: "black",
-          padding: "30px"
-        }}
-      >
-        <h3 {...titleProps()} style={{ "margin-top": 0 }}>
-          {props.title}
-        </h3>
-        {props.children}
-      </div>
+      <FocusScope contain restoreFocus autoFocus>
+        <div
+          {...overlayProps()}
+          {...dialogProps()}
+          {...modalProps()}
+          ref={ref}
+          style={{
+            background: "white",
+            color: "black",
+            padding: "30px"
+          }}
+        >
+          <h3 {...titleProps()} style={{ "margin-top": 0 }}>
+            {props.title}
+          </h3>
+          {props.children}
+        </div>
+      </FocusScope>
     </div>
   );
 }
@@ -106,7 +109,10 @@ function Example() {
       <Show when={state.isOpen()}>
         <OverlayContainer>
           <ModalDialog title="Enter your name" isOpen onClose={state.close} isDismissable>
-            <input autofocus id="first-name" />
+            <label htmlFor="first-name">First Name:</label>
+            <input id="first-name" />
+            <label htmlFor="last-name">Last Name:</label>
+            <input id="last-name" />
             <button {...closeButtonProps()} ref={closeButtonRef} style={{ "margin-top": "10px" }}>
               Submit
             </button>
