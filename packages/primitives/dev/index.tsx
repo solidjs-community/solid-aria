@@ -1,5 +1,5 @@
 import { FocusScope } from "@solid-aria/focus";
-import { Show } from "solid-js";
+import { createSignal, Show } from "solid-js";
 import { JSX } from "solid-js/jsx-runtime";
 import { render } from "solid-js/web";
 

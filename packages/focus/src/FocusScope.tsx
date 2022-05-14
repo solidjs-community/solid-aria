@@ -2,12 +2,13 @@ import {
   Accessor,
   children,
   createContext,
+  createEffect,
   createMemo,
-  createRenderEffect,
+  createReaction,
   createSignal,
   JSX,
+  on,
   onCleanup,
-  onMount,
   useContext
 } from "solid-js";
 
@@ -106,20 +107,29 @@ export function FocusScope(props: FocusScopeProps) {
   const ctx = useContext(FocusContext);
   const parentScope = () => ctx?.scopeRef() ?? null;
 
-  createFocusContainment(scopeRef, () => !!props.contain);
-  createRestoreFocus(
-    scopeRef,
-    () => !!props.restoreFocus,
-    () => !!props.contain
-  );
-  createAutoFocus(scopeRef, () => !!props.autoFocus);
-
   const focusManager = createMemo(() => createFocusManagerForScope(scopeRef));
 
-  createRenderEffect(() => {
-    // hacks to trigger the effect when this changes
-    children(() => props.children);
-    parentScope();
+  const resolvedChildren = children(() => props.children);
+
+  const autoFocusReaction = createReaction(() => {
+    if (!props.autoFocus) {
+      return;
+    }
+
+    activeScope = scopeRef();
+
+    if (!isElementInScope(document.activeElement, activeScope)) {
+      focusFirstInScope(activeScope);
+    }
+  });
+
+  // Auto focus logic run only once when scopeRef changes.
+  // This ensure scopeRef is not empty before trying to focus an element in the FocusScope.
+  autoFocusReaction(scopeRef);
+
+  createEffect(() => {
+    // hacks to trigger the effect when this dependency changes.
+    resolvedChildren();
 
     // Find all rendered nodes between the sentinels and add them to the scope.
     let node = startRef?.nextSibling;
@@ -130,29 +140,35 @@ export function FocusScope(props: FocusScopeProps) {
       node = node.nextSibling;
     }
 
-    setScopeRef(nodes as HTMLElement[]);
-  });
+    const newScope = setScopeRef(nodes as HTMLElement[]);
 
-  createRenderEffect(() => {
-    scopes.set(scopeRef(), parentScope());
+    const resolvedParentScope = parentScope();
+
+    scopes.set(newScope, resolvedParentScope);
 
     onCleanup(() => {
-      const parenScopeResolved = parentScope();
-
       // Restore the active scope on unmount if this scope or a descendant scope is active.
       // Parent effect cleanups run before children, so we need to check if the
       // parent scope actually still exists before restoring the active scope to it.
       if (
         activeScope &&
-        (scopeRef() === activeScope || isAncestorScope(scopeRef(), activeScope)) &&
-        (!parenScopeResolved || scopes.has(parenScopeResolved))
+        (newScope === activeScope || isAncestorScope(newScope, activeScope)) &&
+        (!resolvedParentScope || scopes.has(resolvedParentScope))
       ) {
-        activeScope = parentScope();
+        activeScope = resolvedParentScope;
       }
 
-      scopes.delete(scopeRef());
+      scopes.delete(newScope);
     });
   });
+
+  createFocusContainment(scopeRef, () => !!props.contain);
+
+  createRestoreFocus(
+    scopeRef,
+    () => !!props.restoreFocus,
+    () => !!props.contain
+  );
 
   const context: FocusContextValue = {
     scopeRef,
@@ -283,10 +299,11 @@ function getScopeRoot(scope: HTMLElement[]) {
 }
 
 function createFocusContainment(scopeRef: Accessor<HTMLElement[]>, contain: Accessor<boolean>) {
-  const [focusedNode, setFocusedNode] = createSignal<HTMLElement | undefined>();
-  const [raf, setRaf] = createSignal<number>(-1);
+  let raf: number;
 
-  createRenderEffect(() => {
+  const [focusedNode, setFocusedNode] = createSignal<HTMLElement | undefined>();
+
+  createEffect(() => {
     const scope = scopeRef();
 
     if (!contain()) {
@@ -308,7 +325,9 @@ function createFocusContainment(scopeRef: Accessor<HTMLElement[]>, contain: Acce
 
       const walker = getFocusableTreeWalker(getScopeRoot(scope)!, { tabbable: true }, scope);
       walker.currentNode = focusedElement;
-      let nextElement = (e.shiftKey ? walker.previousNode() : walker.nextNode()) as HTMLElement;
+      let nextElement = (
+        e.shiftKey ? walker.previousNode() : walker.nextNode()
+      ) as HTMLElement | null;
 
       if (!nextElement) {
         if (e.shiftKey) {
@@ -339,8 +358,10 @@ function createFocusContainment(scopeRef: Accessor<HTMLElement[]>, contain: Acce
       ) {
         // If a focus event occurs outside the active scope (e.g. user tabs from browser location bar),
         // restore focus to the previously focused node or the first tabbable element in the active scope.
-        if (focusedNode()) {
-          focusedNode()?.focus();
+        const resolvedFocusedNode = focusedNode();
+
+        if (resolvedFocusedNode) {
+          resolvedFocusedNode.focus();
         } else if (activeScope) {
           focusFirstInScope(activeScope);
         }
@@ -351,19 +372,17 @@ function createFocusContainment(scopeRef: Accessor<HTMLElement[]>, contain: Acce
 
     const onBlur = (e: FocusEvent) => {
       // Firefox doesn't shift focus back to the Dialog properly without this
-      const rafId = requestAnimationFrame(() => {
+      raf = requestAnimationFrame(() => {
         // Use document.activeElement instead of e.relatedTarget so we can tell if user clicked into iframe
         if (
           scopeRef() === activeScope &&
           !isElementInChildScope(document.activeElement, scopeRef())
         ) {
           activeScope = scopeRef();
-          setFocusedNode(e.target as HTMLElement);
-          focusedNode()?.focus();
+          const newFocusedNode = setFocusedNode(e.target as HTMLElement);
+          newFocusedNode.focus();
         }
       });
-
-      setRaf(rafId);
     };
 
     document.addEventListener("keydown", onKeyDown, false);
@@ -381,7 +400,7 @@ function createFocusContainment(scopeRef: Accessor<HTMLElement[]>, contain: Acce
     });
   });
 
-  onCleanup(() => cancelAnimationFrame(raf()));
+  onCleanup(() => cancelAnimationFrame(raf));
 }
 
 function isElementInAnyScope(element: Element | null) {
@@ -450,20 +469,6 @@ function focusFirstInScope(scope: HTMLElement[]) {
   focusElement(walker.nextNode() as HTMLElement);
 }
 
-function createAutoFocus(scopeRef: Accessor<HTMLElement[]>, autoFocus: Accessor<boolean>) {
-  onMount(() => {
-    if (!autoFocus()) {
-      return;
-    }
-
-    activeScope = scopeRef();
-
-    if (!isElementInScope(document.activeElement, activeScope)) {
-      focusFirstInScope(scopeRef());
-    }
-  });
-}
-
 function createRestoreFocus(
   scopeRef: Accessor<HTMLElement[]>,
   restoreFocus: Accessor<boolean>,
@@ -474,8 +479,7 @@ function createRestoreFocus(
     return typeof document !== "undefined" ? (document.activeElement as HTMLElement) : null;
   });
 
-  // createRenderEffect instead of createEffect so the active element is saved synchronously instead of asynchronously.
-  createRenderEffect(() => {
+  createEffect(() => {
     let nodeToRestore = nodeToRestoreMemo();
 
     if (!restoreFocus()) {
