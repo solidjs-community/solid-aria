@@ -106,7 +106,7 @@ function Example() {
       <Show when={state.isOpen()}>
         <OverlayContainer>
           <ModalDialog title="Enter your name" isOpen onClose={state.close} isDismissable>
-            <p>Lorem ipsum dolor sit amet.</p>
+            <input autofocus id="first-name" />
             <button {...closeButtonProps()} ref={closeButtonRef} style={{ "margin-top": "10px" }}>
               Submit
             </button>

@@ -69,15 +69,17 @@ export function createDialog<
 
   const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
 
-  // We do not use aria-modal due to a Safari bug which forces the first focusable element to be focused
+  // Note: aria-modal has a bug in Safari which forces the first focusable element to be focused
   // on mount when inside an iframe, no matter which element we programmatically focus.
   // See https://bugs.webkit.org/show_bug.cgi?id=211934.
-  // useModal sets aria-hidden on all elements outside the dialog, so the dialog will behave as a modal
+  //
+  // `createModal` sets aria-hidden on all elements outside the dialog, so the dialog will behave as a modal
   // even without aria-modal on the dialog itself.
   const dialogProps = createMemo(() => ({
     ...domProps(),
     role: props.role ?? "dialog",
     tabIndex: -1,
+    "aria-modal": true,
     "aria-labelledby": props["aria-labelledby"] || titleId()
   }));
 

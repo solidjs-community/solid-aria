@@ -11,14 +11,14 @@ import {
 } from "solid-js";
 import { Portal } from "solid-js/web";
 
-interface ModalContext {
-  parent: Accessor<ModalContext | null>;
+interface ModalContextValue {
+  parent: Accessor<ModalContextValue | null>;
   modalCount: Accessor<number>;
   addModal: () => void;
   removeModal: () => void;
 }
 
-const Context = createContext<ModalContext | null>(null);
+const ModalContext = createContext<ModalContextValue | null>(null);
 
 interface ModalProviderProps extends JSX.HTMLAttributes<any> {
   children?: JSX.Element;
@@ -33,7 +33,7 @@ interface ModalProviderProps extends JSX.HTMLAttributes<any> {
  * like portals.
  */
 export function ModalProvider(props: ModalProviderProps) {
-  const parent = createMemo(() => useContext(Context)); // Not sure if `createMemo` is needed.
+  const parent = createMemo(() => useContext(ModalContext)); // Not sure if `createMemo` is needed.
 
   const [modalCount, setModalCount] = createSignal(0);
 
@@ -47,14 +47,14 @@ export function ModalProvider(props: ModalProviderProps) {
     parent()?.removeModal();
   };
 
-  const context: ModalContext = {
+  const context: ModalContextValue = {
     parent,
     modalCount,
     addModal,
     removeModal
   };
 
-  return <Context.Provider value={context}>{props.children}</Context.Provider>;
+  return <ModalContext.Provider value={context}>{props.children}</ModalContext.Provider>;
 }
 
 interface ModalProviderAria {
@@ -69,7 +69,7 @@ interface ModalProviderAria {
  * modals are open.
  */
 export function createModalProvider(): ModalProviderAria {
-  const context = useContext(Context);
+  const context = useContext(ModalContext);
 
   const modalProviderProps: Accessor<JSX.AriaAttributes> = createMemo(() => ({
     "aria-hidden": context && context.modalCount() > 0 ? true : undefined
@@ -83,6 +83,7 @@ export function createModalProvider(): ModalProviderAria {
  */
 function OverlayContainerDOM(props: ModalProviderProps) {
   const { modalProviderProps } = createModalProvider();
+
   return <div data-overlay-container {...props} {...modalProviderProps()} />;
 }
 
@@ -163,7 +164,7 @@ export interface ModalAria {
  */
 export function createModal(props?: AriaModalProps): ModalAria {
   // Add aria-hidden to all parent providers on mount, and restore on unmount.
-  const context = useContext(Context);
+  const context = useContext(ModalContext);
 
   if (!context) {
     throw new Error("Modal is not contained within a provider");
