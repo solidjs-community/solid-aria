@@ -7,7 +7,6 @@ import {
   createReaction,
   createSignal,
   JSX,
-  on,
   onCleanup,
   useContext
 } from "solid-js";
@@ -111,22 +110,6 @@ export function FocusScope(props: FocusScopeProps) {
 
   const resolvedChildren = children(() => props.children);
 
-  const autoFocusReaction = createReaction(() => {
-    if (!props.autoFocus) {
-      return;
-    }
-
-    activeScope = scopeRef();
-
-    if (!isElementInScope(document.activeElement, activeScope)) {
-      focusFirstInScope(activeScope);
-    }
-  });
-
-  // Auto focus logic run only once when scopeRef changes.
-  // This ensure scopeRef is not empty before trying to focus an element in the FocusScope.
-  autoFocusReaction(scopeRef);
-
   createEffect(() => {
     // hacks to trigger the effect when this dependency changes.
     resolvedChildren();
@@ -170,6 +153,22 @@ export function FocusScope(props: FocusScopeProps) {
     () => !!props.contain
   );
 
+  const autoFocusReaction = createReaction(() => {
+    if (!props.autoFocus) {
+      return;
+    }
+
+    activeScope = scopeRef();
+
+    if (!isElementInScope(document.activeElement, activeScope)) {
+      focusFirstInScope(activeScope);
+    }
+  });
+
+  // Auto focus logic is done via a reaction and run only once when scopeRef changes.
+  // This ensure scopeRef is not empty when trying to focus an element in the `FocusScope`.
+  autoFocusReaction(scopeRef);
+
   const context: FocusContextValue = {
     scopeRef,
     focusManager
@@ -178,7 +177,7 @@ export function FocusScope(props: FocusScopeProps) {
   return (
     <FocusContext.Provider value={context}>
       <span data-focus-scope-start hidden ref={startRef} />
-      {props.children}
+      {resolvedChildren()}
       <span data-focus-scope-end hidden ref={endRef} />
     </FocusContext.Provider>
   );

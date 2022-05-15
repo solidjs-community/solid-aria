@@ -46,25 +46,27 @@ export function createDialog<
 
   // Focus the dialog itself on mount, unless a child element is already focused.
   createEffect(() => {
-    const dialogEl = ref();
+    // Here we need to use a microtask, so other components like `FocusScope`
+    // has a chance to handle focus first instead of focusing the dialog directly.
+    queueMicrotask(() => {
+      const dialogEl = ref();
 
-    if (dialogEl && !dialogEl.contains(document.activeElement)) {
-      focusSafely(dialogEl);
+      if (dialogEl && !dialogEl.contains(document.activeElement)) {
+        focusSafely(dialogEl);
 
-      // Safari on iOS does not move the VoiceOver cursor to the dialog
-      // or announce that it has opened until it has rendered. A workaround
-      // is to wait for half a second, then blur and re-focus the dialog.
-      const timeoutId = setTimeout(() => {
-        if (document.activeElement === dialogEl) {
-          dialogEl.blur();
-          focusSafely(dialogEl);
-        }
-      }, 500);
+        // Safari on iOS does not move the VoiceOver cursor to the dialog
+        // or announce that it has opened until it has rendered. A workaround
+        // is to wait for half a second, then blur and re-focus the dialog.
+        const timeoutId = setTimeout(() => {
+          if (document.activeElement === dialogEl) {
+            dialogEl.blur();
+            focusSafely(dialogEl);
+          }
+        }, 500);
 
-      onCleanup(() => {
-        clearTimeout(timeoutId);
-      });
-    }
+        onCleanup(() => clearTimeout(timeoutId));
+      }
+    });
   });
 
   const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
