@@ -11,10 +11,10 @@ import {
 import { combineProps, filterDOMProps } from "@solid-aria/utils";
 import {
   Accessor,
-  Component,
   createComponent,
   createContext,
   createMemo,
+  FlowComponent,
   JSX,
   mergeProps,
   useContext
@@ -61,7 +61,7 @@ interface CheckboxGroupAria<
   /**
    * Provide the checkbox group state to descendant elements.
    */
-  CheckboxGroupProvider: Component;
+  CheckboxGroupProvider: FlowComponent;
 
   /**
    * Props for the checkbox group wrapper element.
@@ -112,7 +112,7 @@ export function createCheckboxGroup<
 
   const name = createMemo(() => props.name);
 
-  const CheckboxGroupProvider: Component = props => {
+  const CheckboxGroupProvider: FlowComponent = props => {
     return createComponent(CheckboxGroupContext.Provider, {
       value: { state, name },
       get children() {

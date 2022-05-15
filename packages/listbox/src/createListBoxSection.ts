@@ -55,9 +55,11 @@ export function createListBoxSection<
 ): ListBoxSectionAria<ItemElementType, HeadingElementType, GroupElementType> {
   const headingId = createId();
 
-  const itemProps: Accessor<JSX.IntrinsicElements[ItemElementType]> = createMemo(() => ({
-    role: "presentation"
-  }));
+  const itemProps = createMemo(() => {
+    return {
+      role: "presentation"
+    } as JSX.IntrinsicElements[ItemElementType];
+  });
 
   const headingProps: Accessor<JSX.IntrinsicElements[HeadingElementType]> = createMemo(() => {
     if (!props.heading) {
@@ -73,11 +75,13 @@ export function createListBoxSection<
     };
   });
 
-  const groupProps: Accessor<JSX.IntrinsicElements[GroupElementType]> = createMemo(() => ({
-    role: "group",
-    "aria-label": props["aria-label"],
-    "aria-labelledby": props.heading ? headingId : undefined
-  }));
+  const groupProps = createMemo(() => {
+    return {
+      role: "group",
+      "aria-label": props["aria-label"],
+      "aria-labelledby": props.heading ? headingId : undefined
+    } as JSX.IntrinsicElements[GroupElementType];
+  });
 
   return { itemProps, headingProps, groupProps };
 }

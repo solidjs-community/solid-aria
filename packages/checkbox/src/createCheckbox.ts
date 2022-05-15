@@ -61,11 +61,13 @@ export function createCheckbox(
     )
   );
 
-  const inputProps: Accessor<JSX.InputHTMLAttributes<HTMLInputElement>> = createMemo(() => ({
-    ...toggleInputProps(),
-    checked: state.isSelected(),
-    "aria-checked": props.isIndeterminate ? "mixed" : state.isSelected()
-  }));
+  const inputProps = createMemo(() => {
+    return {
+      ...toggleInputProps(),
+      checked: state.isSelected(),
+      "aria-checked": props.isIndeterminate ? "mixed" : state.isSelected()
+    } as JSX.InputHTMLAttributes<HTMLInputElement>;
+  });
 
   return { inputProps, state };
 }

@@ -28,12 +28,14 @@ export function createSwitch(
 ): SwitchAria {
   const { inputProps: toggleInputProps, state } = createToggle(props, inputRef);
 
-  const inputProps: Accessor<JSX.InputHTMLAttributes<HTMLInputElement>> = createMemo(() => ({
-    ...toggleInputProps(),
-    role: "switch",
-    checked: state.isSelected(),
-    "aria-checked": state.isSelected()
-  }));
+  const inputProps = createMemo(() => {
+    return {
+      ...toggleInputProps(),
+      role: "switch",
+      checked: state.isSelected(),
+      "aria-checked": state.isSelected()
+    } as JSX.InputHTMLAttributes<HTMLInputElement>;
+  });
 
   return { inputProps, state };
 }

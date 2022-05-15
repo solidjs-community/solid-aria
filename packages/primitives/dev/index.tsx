@@ -109,9 +109,9 @@ function Example() {
       <Show when={state.isOpen()}>
         <OverlayContainer>
           <ModalDialog title="Enter your name" isOpen onClose={state.close} isDismissable>
-            <label htmlFor="first-name">First Name:</label>
+            <label for="first-name">First Name:</label>
             <input id="first-name" />
-            <label htmlFor="last-name">Last Name:</label>
+            <label for="last-name">Last Name:</label>
             <input id="last-name" />
             <button {...closeButtonProps()} ref={closeButtonRef} style={{ "margin-top": "10px" }}>
               Submit

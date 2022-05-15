@@ -9,7 +9,7 @@ import {
   Validation
 } from "@solid-aria/types";
 import { combineProps, filterDOMProps } from "@solid-aria/utils";
-import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
+import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
 
 import { createToggleState, ToggleState } from "./createToggleState";
 
@@ -132,7 +132,7 @@ export function createToggle(
       },
       pressProps(),
       focusableProps()
-    );
+    ) as JSX.InputHTMLAttributes<HTMLInputElement>;
   });
 
   return { inputProps, state };

@@ -5,10 +5,10 @@ import { AriaLabelingProps, DOMElements, DOMProps, LabelableProps } from "@solid
 import { combineProps, filterDOMProps } from "@solid-aria/utils";
 import {
   Accessor,
-  Component,
   createComponent,
   createContext,
   createMemo,
+  FlowComponent,
   JSX,
   mergeProps,
   useContext
@@ -82,7 +82,7 @@ export interface ListBoxAria<
   /**
    * Provide the listbox state to descendant elements.
    */
-  ListBoxProvider: Component;
+  ListBoxProvider: FlowComponent;
 
   /**
    * State for the listbox, as returned by `createListBoxState`.
@@ -189,7 +189,7 @@ export function createListBox<
     }) as JSX.IntrinsicElements[ListBoxElementType];
   });
 
-  const ListBoxProvider: Component = props => {
+  const ListBoxProvider: FlowComponent = props => {
     return createComponent(ListBoxContext.Provider, {
       value: state,
       get children() {

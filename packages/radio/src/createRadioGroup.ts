@@ -16,10 +16,10 @@ import {
 import { combineProps, createId, filterDOMProps } from "@solid-aria/utils";
 import {
   Accessor,
-  Component,
   createComponent,
   createContext,
   createMemo,
+  FlowComponent,
   JSX,
   mergeProps,
   useContext
@@ -74,7 +74,7 @@ interface RadioGroupAria<
   /**
    * Provide the radio group state to descendant elements.
    */
-  RadioGroupProvider: Component;
+  RadioGroupProvider: FlowComponent;
 
   /**
    * Props for the radio group wrapper element.
@@ -217,7 +217,7 @@ export function createRadioGroup<
 
   const name = createMemo(() => props.name ?? defaultGroupName);
 
-  const RadioGroupProvider: Component = props => {
+  const RadioGroupProvider: FlowComponent = props => {
     return createComponent(RadioGroupContext.Provider, {
       value: { state, name },
       get children() {

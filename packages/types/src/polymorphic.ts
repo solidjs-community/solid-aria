@@ -1,4 +1,6 @@
-import { ElementType, ExtendedProps, PropsOf } from "./element";
+import { ComponentProps } from "solid-js";
+
+import { ElementType, ExtendedProps } from "./element";
 
 type AsProp<C extends ElementType> = {
   /**
@@ -7,7 +9,7 @@ type AsProp<C extends ElementType> = {
   as?: C;
 };
 
-type InheritedProps<C extends ElementType, Props = {}> = ExtendedProps<PropsOf<C>, Props>;
+type InheritedProps<C extends ElementType, Props = {}> = ExtendedProps<ComponentProps<C>, Props>;
 
 export type PolymorphicComponentProps<C, Props = {}> = C extends ElementType
   ? InheritedProps<C, Props & AsProp<C>>
