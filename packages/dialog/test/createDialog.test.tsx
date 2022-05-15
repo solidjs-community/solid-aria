@@ -30,8 +30,11 @@ describe("createDialog", () => {
     expect(el).toHaveAttribute("role", "alertdialog");
   });
 
-  it("should focus the overlay on mount", () => {
+  it("should focus the overlay on mount", async () => {
     render(() => <Example />);
+
+    // wait for dialog microtask to end
+    await Promise.resolve();
 
     const el = screen.getByTestId("test");
 
@@ -40,15 +43,19 @@ describe("createDialog", () => {
     expect(document.activeElement).toBe(el);
   });
 
-  // it("should not focus the overlay if something inside is auto focused", () => {
-  //   render(() => (
-  //     <Example>
-  //       <input data-testid="input" autofocus />
-  //     </Example>
-  //   ));
+  /*
+  it("should not focus the overlay if something inside is auto focused", async () => {
+    render(() => (
+      <Example>
+        <input data-testid="input" autofocus />
+      </Example>
+    ));
 
-  //   const input = screen.getByTestId("input");
+    await Promise.resolve();
 
-  //   expect(document.activeElement).toBe(input);
-  // });
+    const input = screen.getByTestId("input");
+
+    expect(document.activeElement).toBe(input);
+  });
+  */
 });
