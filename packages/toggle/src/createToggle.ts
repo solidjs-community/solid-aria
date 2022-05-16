@@ -8,7 +8,8 @@ import {
   InputBase,
   Validation
 } from "@solid-aria/types";
-import { combineProps, filterDOMProps } from "@solid-aria/utils";
+import { filterDOMProps } from "@solid-aria/utils";
+import { combineProps } from "@solid-primitives/props";
 import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
 
 import { createToggleState, ToggleState } from "./createToggleState";

@@ -1,5 +1,5 @@
-import { chain, getScrollParent, isIOS } from "@solid-aria/utils";
-import { access, MaybeAccessor } from "@solid-primitives/utils";
+import { getScrollParent, isIOS } from "@solid-aria/utils";
+import { access, chain, MaybeAccessor } from "@solid-primitives/utils";
 import { createEffect, on, onCleanup } from "solid-js";
 
 export interface PreventScrollOptions {
@@ -51,14 +51,14 @@ export function createPreventScroll(options: PreventScrollOptions = {}) {
 // For most browsers, all we need to do is set `overflow: hidden` on the root element, and
 // add some padding to prevent the page from shifting when the scrollbar is hidden.
 function preventScrollStandard() {
-  return chain(
+  return chain([
     setStyle(
       document.documentElement,
       "paddingRight",
       `${window.innerWidth - document.documentElement.clientWidth}px`
     ),
     setStyle(document.documentElement, "overflow", "hidden")
-  );
+  ]);
 }
 
 // Mobile Safari is a whole different beast. Even with overflow: hidden,
@@ -181,7 +181,7 @@ function preventScrollMobileSafari() {
   // enable us to scroll the window to the top, which is required for the rest of this to work.
   const scrollX = window.pageXOffset;
   const scrollY = window.pageYOffset;
-  const restoreStyles = chain(
+  const restoreStyles = chain([
     setStyle(
       document.documentElement,
       "paddingRight",
@@ -189,18 +189,18 @@ function preventScrollMobileSafari() {
     ),
     setStyle(document.documentElement, "overflow", "hidden"),
     setStyle(document.body, "marginTop", `-${scrollY}px`)
-  );
+  ]);
 
   // Scroll to the top. The negative margin on the body will make this appear the same.
   window.scrollTo(0, 0);
 
-  const removeEvents = chain(
+  const removeEvents = chain([
     addEvent(document, "touchstart", onTouchStart, { passive: false, capture: true }),
     addEvent(document, "touchmove", onTouchMove, { passive: false, capture: true }),
     addEvent(document, "touchend", onTouchEnd, { passive: false, capture: true }),
     addEvent(document, "focus", onFocus, true),
     addEvent(window, "scroll", onWindowScroll)
-  );
+  ]);
 
   return () => {
     // Restore styles and scroll the page back to where it was.

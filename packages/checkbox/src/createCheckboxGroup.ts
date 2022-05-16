@@ -8,7 +8,8 @@ import {
   LabelableProps,
   ValueBase
 } from "@solid-aria/types";
-import { combineProps, filterDOMProps } from "@solid-aria/utils";
+import { filterDOMProps } from "@solid-aria/utils";
+import { combineProps } from "@solid-primitives/props";
 import {
   Accessor,
   createComponent,
@@ -107,7 +108,7 @@ export function createCheckboxGroup<
       role: "group",
       "aria-disabled": props.isDisabled || undefined,
       ...fieldProps()
-    });
+    }) as JSX.IntrinsicElements[GroupElementType];
   });
 
   const name = createMemo(() => props.name);

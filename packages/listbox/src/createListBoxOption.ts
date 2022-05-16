@@ -5,7 +5,8 @@ import {
   isKeyboardFocusVisible
 } from "@solid-aria/interactions";
 import { DOMElements } from "@solid-aria/types";
-import { combineProps, createSlotId, isMac, isWebKit } from "@solid-aria/utils";
+import { createSlotId, isMac, isWebKit } from "@solid-aria/utils";
+import { combineProps } from "@solid-primitives/props";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor, createMemo, JSX, onCleanup, onMount } from "solid-js";
 

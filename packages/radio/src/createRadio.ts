@@ -1,7 +1,8 @@
 import { createFocusable, CreateFocusableProps } from "@solid-aria/focus";
 import { createPress } from "@solid-aria/interactions";
 import { AriaLabelingProps, DOMProps, FocusableProps } from "@solid-aria/types";
-import { combineProps, filterDOMProps } from "@solid-aria/utils";
+import { filterDOMProps } from "@solid-aria/utils";
+import { combineProps } from "@solid-primitives/props";
 import { Accessor, createMemo, JSX } from "solid-js";
 
 import { useRadioGroupContext } from "./createRadioGroup";

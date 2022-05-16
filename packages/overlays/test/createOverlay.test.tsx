@@ -1,4 +1,4 @@
-import { combineProps } from "@solid-aria/utils";
+import { combineProps } from "@solid-primitives/props";
 import { createMemo } from "solid-js";
 import { fireEvent, render, screen } from "solid-testing-library";
 

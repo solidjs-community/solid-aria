@@ -1,7 +1,8 @@
 import { createFocusable } from "@solid-aria/focus";
 import { createPress } from "@solid-aria/interactions";
 import { ElementType } from "@solid-aria/types";
-import { combineProps, filterDOMProps } from "@solid-aria/utils";
+import { filterDOMProps } from "@solid-aria/utils";
+import { combineProps } from "@solid-primitives/props";
 import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
 
 import { AriaButtonProps } from "./types";
@@ -115,7 +116,7 @@ export function createButton(
           console.warn("onClick is deprecated, please use onPress");
         }
       }
-    });
+    }) as JSX.HTMLAttributes<any>;
   });
 
   return { buttonProps, isPressed };

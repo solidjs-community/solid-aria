@@ -13,7 +13,8 @@ import {
   Validation,
   ValueBase
 } from "@solid-aria/types";
-import { combineProps, createId, filterDOMProps } from "@solid-aria/utils";
+import { createId, filterDOMProps } from "@solid-aria/utils";
+import { combineProps } from "@solid-primitives/props";
 import {
   Accessor,
   createComponent,
@@ -212,7 +213,7 @@ export function createRadioGroup<
       onKeyDown,
       ...fieldProps(),
       ...focusWithinProps()
-    });
+    }) as JSX.IntrinsicElements[GroupElementType];
   });
 
   const name = createMemo(() => props.name ?? defaultGroupName);

@@ -1,10 +1,6 @@
 import { PointerType, PressEvents } from "@solid-aria/types";
-import {
-  combineProps,
-  createGlobalListeners,
-  createSyncRef,
-  focusWithoutScrolling
-} from "@solid-aria/utils";
+import { createGlobalListeners, createSyncRef, focusWithoutScrolling } from "@solid-aria/utils";
+import { combineProps } from "@solid-primitives/props";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
 import {
   Accessor,
@@ -347,12 +343,7 @@ export function createPress<RefElement extends HTMLElement>(
     }
   };
 
-  const pressProps: Accessor<JSX.HTMLAttributes<RefElement>> = createMemo(() => {
-    // triggerPressStart
-    // triggerPressEnd
-    // triggerPressUp
-    // cancel
-
+  const pressProps = createMemo(() => {
     const onKeyDown: JSX.EventHandlerUnion<RefElement, KeyboardEvent> = e => {
       if (isValidKeyboardEvent(e) && e.currentTarget.contains(e.target as HTMLElement)) {
         if (shouldPreventDefaultKeyboard(e.target as Element)) {
@@ -425,8 +416,6 @@ export function createPress<RefElement extends HTMLElement>(
       onKeyUp,
       onClick
     };
-
-    // globalOnKeyUp
 
     if (typeof PointerEvent !== "undefined") {
       const onPointerDown: JSX.EventHandlerUnion<RefElement, PointerEvent> = e => {
@@ -508,10 +497,6 @@ export function createPress<RefElement extends HTMLElement>(
           triggerPressUp(e, pointerType() || (e.pointerType as PointerType));
         }
       };
-
-      // globalOnPointerMove
-      // globalOnPointerUp
-      // globalOnPointerCancel
 
       const onDragStart: JSX.EventHandlerUnion<RefElement, DragEvent> = e => {
         if (!e.currentTarget.contains(e.target as HTMLElement)) {
@@ -598,8 +583,6 @@ export function createPress<RefElement extends HTMLElement>(
           triggerPressUp(e, pointerType()!);
         }
       };
-
-      // globalOnMouseUp
 
       const onTouchStart: JSX.EventHandlerUnion<RefElement, TouchEvent> = e => {
         if (!e.currentTarget.contains(e.target as HTMLElement)) {
@@ -708,8 +691,6 @@ export function createPress<RefElement extends HTMLElement>(
         }
       };
 
-      // globalOnScroll
-
       const onDragStart: JSX.EventHandlerUnion<RefElement, DragEvent> = e => {
         if (!e.currentTarget.contains(e.target as HTMLElement)) {
           return;
@@ -729,7 +710,7 @@ export function createPress<RefElement extends HTMLElement>(
       pressProps.onDragStart = onDragStart;
     }
 
-    return combineProps(domProps, pressProps);
+    return combineProps(domProps, pressProps) as JSX.HTMLAttributes<RefElement>;
   });
 
   const isPressed = createMemo(() => access(local.isPressed) ?? isTriggerPressed());

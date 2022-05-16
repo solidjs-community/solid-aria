@@ -55,7 +55,7 @@ import {
   createListBox,
   createListBoxOption
 } from "@solid-aria/listbox";
-import { combineProps } from "@solid-aria/utils";
+import { combineProps } from "@solid-primitives/props";
 
 function ListBox(props: AriaListBoxProps) {
   let ref: HTMLUListElement | undefined;

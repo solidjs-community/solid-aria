@@ -41,7 +41,7 @@
     "@solid-aria/types": "workspace:^"
   },
   "peerDependencies": {
-    "@solid-primitives/utils": "^1.3.0",
+    "@solid-primitives/utils": "^2.0.0",
     "clsx": "^1.1.1",
     "solid-js": "^1.4.0"
   },

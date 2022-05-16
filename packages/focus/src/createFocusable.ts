@@ -6,7 +6,7 @@ import {
   FocusElementProps,
   KeyboardElementProps
 } from "@solid-aria/interactions";
-import { combineProps } from "@solid-aria/utils";
+import { combineProps } from "@solid-primitives/props";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor, createMemo, createSignal, onMount } from "solid-js";
 

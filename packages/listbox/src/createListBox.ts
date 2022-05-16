@@ -2,7 +2,8 @@ import { createFocusable } from "@solid-aria/focus";
 import { AriaLabelProps, createLabel } from "@solid-aria/label";
 import { createTypeSelect, isCtrlKeyPressed, SelectionMode } from "@solid-aria/selection";
 import { AriaLabelingProps, DOMElements, DOMProps, LabelableProps } from "@solid-aria/types";
-import { combineProps, filterDOMProps } from "@solid-aria/utils";
+import { filterDOMProps } from "@solid-aria/utils";
+import { combineProps } from "@solid-primitives/props";
 import {
   Accessor,
   createComponent,
