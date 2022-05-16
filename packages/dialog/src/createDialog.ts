@@ -1,7 +1,7 @@
 import { focusSafely } from "@solid-aria/focus";
 import { AriaLabelingProps, DOMElements, DOMProps } from "@solid-aria/types";
 import { createSlotId, filterDOMProps } from "@solid-aria/utils";
-import { Accessor, createEffect, createMemo, JSX, onCleanup } from "solid-js";
+import { Accessor, createMemo, JSX, onCleanup, onMount } from "solid-js";
 
 export interface AriaDialogProps extends DOMProps, AriaLabelingProps {
   /**
@@ -44,31 +44,6 @@ export function createDialog<
     return props["aria-label"] ? undefined : defaultTitleId();
   });
 
-  // Focus the dialog itself on mount, unless a child element is already focused.
-  createEffect(() => {
-    // Here we need to use a microtask, so other components like `FocusScope`
-    // has a chance to handle focus first instead of focusing the dialog directly.
-    queueMicrotask(() => {
-      const dialogEl = ref();
-
-      if (dialogEl && !dialogEl.contains(document.activeElement)) {
-        focusSafely(dialogEl);
-
-        // Safari on iOS does not move the VoiceOver cursor to the dialog
-        // or announce that it has opened until it has rendered. A workaround
-        // is to wait for half a second, then blur and re-focus the dialog.
-        const timeoutId = setTimeout(() => {
-          if (document.activeElement === dialogEl) {
-            dialogEl.blur();
-            focusSafely(dialogEl);
-          }
-        }, 500);
-
-        onCleanup(() => clearTimeout(timeoutId));
-      }
-    });
-  });
-
   const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
 
   // Note: aria-modal has a bug in Safari which forces the first focusable element to be focused
@@ -88,6 +63,32 @@ export function createDialog<
   const titleProps = createMemo(() => ({
     id: titleId()
   }));
+
+  onMount(() => {
+    let iosSafariFocusTimeoutId: number;
+
+    // Use `requestAnimationFrame` to ensure DOM elements has been rendered
+    // and things like browser `autofocus` has run first.
+    requestAnimationFrame(() => {
+      const dialogEl = ref();
+
+      if (dialogEl && !dialogEl.contains(document.activeElement)) {
+        focusSafely(dialogEl);
+
+        // Safari on iOS does not move the VoiceOver cursor to the dialog
+        // or announce that it has opened until it has rendered. A workaround
+        // is to wait for half a second, then blur and re-focus the dialog.
+        iosSafariFocusTimeoutId = window.setTimeout(() => {
+          if (document.activeElement === dialogEl) {
+            dialogEl.blur();
+            focusSafely(dialogEl);
+          }
+        }, 500);
+      }
+    });
+
+    onCleanup(() => clearTimeout(iosSafariFocusTimeoutId));
+  });
 
   return { dialogProps, titleProps };
 }

@@ -20,8 +20,3 @@ export type ExtendedProps<SourceProps = {}, OverrideProps = {}> = Omit<
   keyof OverrideProps
 > &
   OverrideProps;
-
-/**
- * SolidJS ref.
- */
-export type Ref<T> = T | ((el: T) => void) | undefined;

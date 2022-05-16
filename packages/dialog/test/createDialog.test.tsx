@@ -1,4 +1,4 @@
-import { render, screen } from "solid-testing-library";
+import { render, screen, waitFor } from "solid-testing-library";
 
 import { createDialog } from "../src";
 
@@ -7,13 +7,26 @@ function Example(props: any) {
   const { dialogProps } = createDialog(props, () => ref);
 
   return (
-    <div ref={ref} {...dialogProps()} data-testid="test">
+    <div {...dialogProps()} ref={ref} data-testid="test">
       {props.children}
     </div>
   );
 }
 
 describe("createDialog", () => {
+  beforeEach(() => {
+    jest.spyOn(window, "requestAnimationFrame").mockImplementation(cb => {
+      cb(0);
+      return 0;
+    });
+  });
+
+  afterEach(() => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    window.requestAnimationFrame.mockRestore();
+  });
+
   it('should have role="dialog" by default', () => {
     render(() => <Example />);
 
@@ -33,9 +46,6 @@ describe("createDialog", () => {
   it("should focus the overlay on mount", async () => {
     render(() => <Example />);
 
-    // wait for dialog microtask to end
-    await Promise.resolve();
-
     const el = screen.getByTestId("test");
 
     expect(el).toHaveAttribute("tabIndex", "-1");
@@ -43,7 +53,6 @@ describe("createDialog", () => {
     expect(document.activeElement).toBe(el);
   });
 
-  /*
   it("should not focus the overlay if something inside is auto focused", async () => {
     render(() => (
       <Example>
@@ -51,11 +60,8 @@ describe("createDialog", () => {
       </Example>
     ));
 
-    await Promise.resolve();
-
     const input = screen.getByTestId("input");
 
-    expect(document.activeElement).toBe(input);
+    waitFor(() => expect(document.activeElement).toBe(input));
   });
-  */
 });
