@@ -13,7 +13,7 @@ importers:
       '@commitlint/cz-commitlint': 16.2.3
       '@solid-primitives/props': 2.1.2
       '@solid-primitives/refs': 0.2.0
-      '@solid-primitives/utils': 2.0.0
+      '@solid-primitives/utils': 2.0.1
       '@testing-library/dom': 8.13.0
       '@testing-library/jest-dom': 5.16.4
       '@testing-library/user-event': 14.1.1
@@ -38,8 +38,8 @@ importers:
       jest: 27.5.1
       lint-staged: 12.3.7
       prettier: 2.6.2
-      rollup: ^2.73.0
-      rollup-preset-solid: ^1.4.0
+      rollup: 2.73.0
+      rollup-preset-solid: 1.4.0
       solid-js: 1.4.0
       solid-testing-library: 0.3.0
       sort-package-json: 1.55.0
@@ -59,7 +59,7 @@ importers:
       '@commitlint/cz-commitlint': 16.2.3_commitizen@4.2.4+inquirer@8.2.2
       '@solid-primitives/props': 2.1.2_solid-js@1.4.0
       '@solid-primitives/refs': 0.2.0_solid-js@1.4.0
-      '@solid-primitives/utils': 2.0.0_solid-js@1.4.0
+      '@solid-primitives/utils': 2.0.1_solid-js@1.4.0
       '@testing-library/dom': 8.13.0
       '@testing-library/jest-dom': 5.16.4
       '@testing-library/user-event': 14.1.1_@testing-library+dom@8.13.0
@@ -2309,6 +2309,14 @@ packages:
       solid-js: 1.4.0
     dev: true
 
+  /@solid-primitives/utils/2.0.1_solid-js@1.4.0:
+    resolution: {integrity: sha512-9EbVhDKpxyAJCctMgRvfm6MMaS3Lj1ryKJHX+sxZ+VYNSB9H5SpkTwlkbhe/yh+S8iVQ811FkM7A4LCVcPLU5g==}
+    peerDependencies:
+      solid-js: ^1.4.1
+    dependencies:
+      solid-js: 1.4.0
+    dev: true
+
   /@testing-library/dom/7.31.2:
     resolution: {integrity: sha512-3UqjCpey6HiTZT92vODYLPxTBWlM8ZOOjr3LX5F37/VRipW2M1kX6I/Cm4VXzteZqfGfagg8yXywpcOgQBlNsQ==}
     engines: {node: '>=10'}
@@ -2879,7 +2887,7 @@ packages:
     dev: true
 
   /asynckit/0.4.0:
-    resolution: {integrity: sha1-x57Zf380y48robyXkLzDZkdLS3k=}
+    resolution: {integrity: sha512-Oei9OH4tRh0YqU3GxhX79dM/mwVgvbZJaSNaRk+bshkj0S5cfHcgYakreBjrHwatXKbz+IoIdYLxrKim2MjW0Q==}
     dev: true
 
   /atob/2.1.2:

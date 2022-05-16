@@ -14,6 +14,7 @@ Primitives for dealing with focus rings and focus management.
 
 - [`createFocusable`](#createFocusable) - Make an element focusable, capable of auto focus and excludable from tab order.
 - [`createFocusRing`](#createFocusRing) - Determines whether a focus ring should be shown to indicate keyboard focus.
+- [`FocusScope`](#FocusScope) - Utility component that can be used to manage focus for its descendants.
 
 ## Installation
 
@@ -93,6 +94,40 @@ function Example() {
 ```
 
 See [`createCheckbox`](../checkbox/), [`createRadioGroup`](../radio/), and [`createSwitch`](../switch/) for more advanced examples of focus rings with other styling techniques.
+
+## `FocusScope`
+
+A FocusScope manages focus for its descendants. It supports containing focus inside the scope, restoring focus to the previously focused element on unmount, and auto focusing children on mount. It also acts as a container for a programmatic focus management interface that can be used to move focus forward and back in response to user events.
+
+### How to use it
+
+A basic example of a focus scope that contains focus within it. Clicking the "Open" button mounts a FocusScope, which auto focuses the first input inside it. Once open, you can press the `Tab` key to move within the scope, but focus is contained inside. Clicking the "Close" button unmounts the focus scope, which restores focus back to the button.
+
+For a full example of building a modal dialog, see [`createDialog`](../dialog/README.md).
+
+```tsx
+import { FocusScope } from "@solid-aria/focus";
+import { createSignal, Show } from "solid-js";
+
+function Example() {
+  const [isOpen, setOpen] = createSignal(false);
+
+  return (
+    <>
+      <button onClick={() => setOpen(true)}>Open</button>
+      <Show when={isOpen()}>
+        <FocusScope contain restoreFocus autoFocus>
+          <label for="first-input">First Input</label>
+          <input id="first-input" />
+          <label for="second-input">Second Input</label>
+          <input id="second-input" />
+          <button onClick={() => setOpen(false)}>Close</button>
+        </FocusScope>
+      </Show>
+    </>
+  );
+}
+```
 
 ## Changelog
 

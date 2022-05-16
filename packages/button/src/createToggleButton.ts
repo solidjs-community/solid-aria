@@ -1,7 +1,7 @@
 import { createToggleState, ToggleState } from "@solid-aria/toggle";
 import { ElementType } from "@solid-aria/types";
 import { combineProps } from "@solid-primitives/props";
-import { chain, noop } from "@solid-primitives/utils";
+import { chain } from "@solid-primitives/utils";
 import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
 
 import { ButtonAria, createButton } from "./createButton";
@@ -57,7 +57,7 @@ export function createToggleButton(
   const state = createToggleState(props);
 
   const createButtonProps = mergeProps(props, {
-    onPress: chain([state.toggle, props.onPress ?? noop])
+    onPress: chain([state.toggle, props.onPress])
   });
 
   const { isPressed, buttonProps: baseButtonProps } = createButton(createButtonProps, ref);
