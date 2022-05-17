@@ -44,40 +44,40 @@ A library of high-quality primitives that help you build accessible user interfa
 
 ## Roadmap
 
-- [] Accordion
-- [] AutoComplete
-- [] Breadcrumbs
+- [ ] Accordion
+- [ ] AutoComplete
+- [ ] Breadcrumbs
 - [x] Button
-- [] Calendar
+- [ ] Calendar
 - [x] Checkbox
-- [] Combobox
-- [] DatePicker
+- [ ] Combobox
+- [ ] DatePicker
 - [x] Dialog
 - [x] Label
-- [] Link
-- [] List
+- [ ] Link
+- [ ] List
 - [x] Listbox
-- [] LiveAnnouncer
-- [] Menu
-- [] Meter
-- [] NumberField
+- [ ] LiveAnnouncer
+- [ ] Menu
+- [ ] Meter
+- [ ] NumberField
 - [x] Overlays
-- [] Pagination
-- [] Progress
+- [ ] Pagination
+- [ ] Progress
 - [x] Radio
-- [] SearchField
-- [] Select
-- [] Separator
-- [] Slider
-- [] SpinButton
+- [ ] SearchField
+- [ ] Select
+- [ ] Separator
+- [ ] Slider
+- [ ] SpinButton
 - [x] Switch
-- [] Table
-- [] Tabs
-- [] Tag
-- [] TextField
-- [] Toast
+- [ ] Table
+- [ ] Tabs
+- [ ] Tag
+- [ ] TextField
+- [ ] Toast
 - [x] Toggle
-- [] Tooltip
+- [ ] Tooltip
 - [x] Visually-hidden
 
 ## Acknowledgment
