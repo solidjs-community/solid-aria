@@ -1,4 +1,4 @@
-import { render, screen } from "solid-testing-library";
+import { render, screen, waitFor } from "solid-testing-library";
 
 import { createDialog } from "../src";
 
@@ -62,6 +62,6 @@ describe("createDialog", () => {
 
     const input = screen.getByTestId("input");
 
-    expect(document.activeElement).toBe(input);
+    waitFor(() => expect(document.activeElement).toBe(input));
   });
 });

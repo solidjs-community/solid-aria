@@ -1,7 +1,7 @@
 import userEvent from "@testing-library/user-event";
 import { createSignal, Show } from "solid-js";
 import { Portal } from "solid-js/web";
-import { fireEvent, render, screen } from "solid-testing-library";
+import { fireEvent, render, screen, waitFor } from "solid-testing-library";
 
 import { FocusScope, useFocusManager } from "../src";
 
@@ -415,7 +415,7 @@ describe("FocusScope", () => {
 
       const input2 = screen.getByTestId("input2");
 
-      expect(document.activeElement).toBe(input2);
+      waitFor(() => expect(document.activeElement).toBe(input2));
 
       fireEvent.click(toggleShowButton);
       await Promise.resolve();
@@ -429,7 +429,9 @@ describe("FocusScope", () => {
 
         return (
           <div>
+            <input data-testid="before" />
             <input data-testid="outside" />
+            <input data-testid="after" />
             <Show when={show()}>
               <FocusScope restoreFocus>
                 <input data-testid="input1" />
@@ -457,7 +459,7 @@ describe("FocusScope", () => {
 
       const input3 = screen.getByTestId("input3");
 
-      expect(document.activeElement).toBe(input3);
+      waitFor(() => expect(document.activeElement).toBe(input3));
 
       await userEvent.tab();
       expect(document.activeElement).toBe(screen.getByTestId("after"));
@@ -469,7 +471,9 @@ describe("FocusScope", () => {
 
         return (
           <div>
+            <input data-testid="before" />
             <input data-testid="outside" />
+            <input data-testid="after" />
             <Show when={show()}>
               <FocusScope restoreFocus>
                 <input data-testid="input1" autofocus />
@@ -497,7 +501,7 @@ describe("FocusScope", () => {
 
       const input1 = screen.getByTestId("input1");
 
-      expect(document.activeElement).toBe(input1);
+      waitFor(() => expect(document.activeElement).toBe(input1));
 
       await userEvent.tab({ shift: true });
       expect(document.activeElement).toBe(screen.getByTestId("before"));
@@ -772,7 +776,7 @@ describe("FocusScope", () => {
 
       const input2 = screen.getByTestId("input2");
 
-      expect(document.activeElement).toBe(input2);
+      waitFor(() => expect(document.activeElement).toBe(input2));
     });
   });
 
@@ -1215,7 +1219,6 @@ describe("FocusScope", () => {
       expect(document.activeElement).toBe(child1);
 
       await userEvent.tab();
-
       expect(document.activeElement).toBe(child2);
 
       await userEvent.tab();
