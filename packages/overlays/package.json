@@ -49,9 +49,11 @@
   },
   "dependencies": {
     "@solid-aria/button": "workspace:^",
+    "@solid-aria/i18n": "workspace:^",
     "@solid-aria/interactions": "workspace:^",
     "@solid-aria/types": "workspace:^",
-    "@solid-aria/utils": "workspace:^"
+    "@solid-aria/utils": "workspace:^",
+    "@solid-aria/visually-hidden": "workspace:^"
   },
   "peerDependencies": {
     "@solid-primitives/props": "^2.1.2",

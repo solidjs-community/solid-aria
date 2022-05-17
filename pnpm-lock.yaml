@@ -195,14 +195,18 @@ importers:
   packages/overlays:
     specifiers:
       '@solid-aria/button': workspace:^
+      '@solid-aria/i18n': workspace:^
       '@solid-aria/interactions': workspace:^
       '@solid-aria/types': workspace:^
       '@solid-aria/utils': workspace:^
+      '@solid-aria/visually-hidden': workspace:^
     dependencies:
       '@solid-aria/button': link:../button
+      '@solid-aria/i18n': link:../i18n
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-aria/visually-hidden': link:../visually-hidden
 
   packages/primitives:
     specifiers:
