@@ -85,7 +85,7 @@ interface FocusContextValue {
   scopeRef: Accessor<ScopeRef>;
   setScopeRef: Setter<ScopeRef>;
   parentScope: Accessor<ScopeRef | null>;
-  focusManager: Accessor<FocusManager>;
+  focusManager: FocusManager;
 }
 
 const FocusContext = createContext<FocusContextValue>();
@@ -154,12 +154,12 @@ function FocusScopeContainer(props: FocusScopeProps) {
       return;
     }
 
+    activeScope = ctx.scopeRef();
+
     // Use `requestAnimationFrame` to ensure DOM elements has been rendered
     // and things like browser `autofocus` has run first.
     requestAnimationFrame(() => {
-      activeScope = ctx.scopeRef();
-
-      if (!isElementInScope(document.activeElement, activeScope)) {
+      if (activeScope && !isElementInScope(document.activeElement, activeScope)) {
         focusFirstInScope(activeScope);
       }
     });
@@ -191,7 +191,7 @@ export function FocusScope(props: FocusScopeProps) {
   const parentContext = useContext(FocusContext);
   const parentScope = () => parentContext?.scopeRef() ?? null;
 
-  const focusManager = createMemo(() => createFocusManagerForScope(scopeRef));
+  const focusManager = createFocusManagerForScope(scopeRef);
 
   const context: FocusContextValue = {
     scopeRef,
@@ -212,7 +212,7 @@ export function FocusScope(props: FocusScopeProps) {
  * A FocusManager can be used to programmatically move focus within a FocusScope,
  * e.g. in response to user events like keyboard navigation.
  */
-export function useFocusManager(): Accessor<FocusManager> {
+export function useFocusManager(): FocusManager {
   const context = useContext(FocusContext);
 
   if (!context) {
@@ -325,16 +325,15 @@ function createFocusContainment(scopeRef: Accessor<HTMLElement[]>, contain: Acce
   let focusedNode: HTMLElement;
   let raf: number;
 
-  //const [focusedNode, setFocusedNode] = createSignal<HTMLElement | undefined>();
-
   // Handle the Tab key to contain focus within the scope
   const onKeyDown = (e: KeyboardEvent) => {
-    if (e.key !== "Tab" || e.altKey || e.ctrlKey || e.metaKey || scopeRef() !== activeScope) {
+    const scope = scopeRef();
+
+    if (e.key !== "Tab" || e.altKey || e.ctrlKey || e.metaKey || scope !== activeScope) {
       return;
     }
 
     const focusedElement = document.activeElement as HTMLElement;
-    const scope = scopeRef();
 
     if (!isElementInScope(focusedElement, scope)) {
       return;

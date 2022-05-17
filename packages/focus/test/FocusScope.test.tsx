@@ -784,7 +784,7 @@ describe("FocusScope", () => {
     it("should move focus forward", async () => {
       function Item(props: any) {
         const focusManager = useFocusManager();
-        const onClick = () => focusManager().focusNext();
+        const onClick = () => focusManager.focusNext();
 
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events
         return <div {...props} tabIndex={-1} role="button" onClick={onClick} />;
@@ -828,7 +828,7 @@ describe("FocusScope", () => {
     it("should move focus forward and wrap around", async () => {
       function Item(props: any) {
         const focusManager = useFocusManager();
-        const onClick = () => focusManager().focusNext({ wrap: true });
+        const onClick = () => focusManager.focusNext({ wrap: true });
 
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events
         return <div {...props} tabIndex={-1} role="button" onClick={onClick} />;
@@ -872,7 +872,7 @@ describe("FocusScope", () => {
     it("should move focus forward but only to tabbable elements", async () => {
       function Item(props: any) {
         const focusManager = useFocusManager();
-        const onClick = () => focusManager().focusNext({ tabbable: true });
+        const onClick = () => focusManager.focusNext({ tabbable: true });
 
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events
         return <div tabIndex={0} {...props} role="button" onClick={onClick} />;
@@ -913,7 +913,7 @@ describe("FocusScope", () => {
       function Group(props: any) {
         const focusManager = useFocusManager();
         const onMouseDown = (e: Event) => {
-          focusManager().focusNext({ from: e.target as HTMLElement, tabbable: true });
+          focusManager.focusNext({ from: e.target as HTMLElement, tabbable: true });
         };
 
         // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
@@ -958,7 +958,7 @@ describe("FocusScope", () => {
     it("should move focus backward", async () => {
       function Item(props: any) {
         const focusManager = useFocusManager();
-        const onClick = () => focusManager().focusPrevious();
+        const onClick = () => focusManager.focusPrevious();
 
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events
         return <div {...props} tabIndex={-1} role="button" onClick={onClick} />;
@@ -1002,7 +1002,7 @@ describe("FocusScope", () => {
     it("should move focus backward and wrap around", async () => {
       function Item(props: any) {
         const focusManager = useFocusManager();
-        const onClick = () => focusManager().focusPrevious({ wrap: true });
+        const onClick = () => focusManager.focusPrevious({ wrap: true });
 
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events
         return <div {...props} tabIndex={-1} role="button" onClick={onClick} />;
@@ -1046,7 +1046,7 @@ describe("FocusScope", () => {
     it("should move focus backward but only to tabbable elements", async () => {
       function Item(props: any) {
         const focusManager = useFocusManager();
-        const onClick = () => focusManager().focusPrevious({ tabbable: true });
+        const onClick = () => focusManager.focusPrevious({ tabbable: true });
 
         // eslint-disable-next-line jsx-a11y/click-events-have-key-events
         return <div tabIndex={0} {...props} role="button" onClick={onClick} />;
@@ -1087,7 +1087,7 @@ describe("FocusScope", () => {
       function Group(props: any) {
         const focusManager = useFocusManager();
         const onMouseDown = (e: Event) => {
-          focusManager().focusPrevious({ from: e.target as HTMLElement, tabbable: true });
+          focusManager.focusPrevious({ from: e.target as HTMLElement, tabbable: true });
         };
 
         // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
@@ -1261,6 +1261,8 @@ describe("FocusScope", () => {
       const child3 = screen.getByTestId("child3");
 
       expect(document.activeElement).toBe(child1);
+
+      await Promise.resolve();
 
       await userEvent.tab();
       expect(document.activeElement).toBe(child2);
