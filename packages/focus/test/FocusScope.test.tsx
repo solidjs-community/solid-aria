@@ -415,14 +415,19 @@ describe("FocusScope", () => {
 
       const input2 = screen.getByTestId("input2");
 
-      waitFor(async () => {
-        expect(document.activeElement).toBe(input2);
+      waitFor(
+        async () => {
+          expect(document.activeElement).toBe(input2);
 
-        fireEvent.click(toggleShowButton);
-        await Promise.resolve();
+          fireEvent.click(toggleShowButton);
+          await Promise.resolve();
 
-        expect(document.activeElement).toBe(outside);
-      });
+          expect(document.activeElement).toBe(outside);
+        },
+        {
+          timeout: 3000
+        }
+      );
     });
 
     it("should move focus after the previously focused node when tabbing away from a scope with autoFocus", async () => {
@@ -459,12 +464,17 @@ describe("FocusScope", () => {
 
       const input3 = screen.getByTestId("input3");
 
-      waitFor(async () => {
-        expect(document.activeElement).toBe(input3);
+      waitFor(
+        async () => {
+          expect(document.activeElement).toBe(input3);
 
-        await userEvent.tab();
-        expect(document.activeElement).toBe(screen.getByTestId("after"));
-      });
+          await userEvent.tab();
+          expect(document.activeElement).toBe(screen.getByTestId("after"));
+        },
+        {
+          timeout: 3000
+        }
+      );
     });
 
     it("should move focus before the previously focused node when tabbing away from a scope with Shift+Tab", async () => {
@@ -501,12 +511,17 @@ describe("FocusScope", () => {
 
       const input1 = screen.getByTestId("input1");
 
-      waitFor(async () => {
-        expect(document.activeElement).toBe(input1);
+      waitFor(
+        async () => {
+          expect(document.activeElement).toBe(input1);
 
-        await userEvent.tab({ shift: true });
-        expect(document.activeElement).toBe(screen.getByTestId("before"));
-      });
+          await userEvent.tab({ shift: true });
+          expect(document.activeElement).toBe(screen.getByTestId("before"));
+        },
+        {
+          timeout: 3000
+        }
+      );
     });
 
     it("should restore focus to the previously focused node after children change", async () => {
@@ -778,7 +793,9 @@ describe("FocusScope", () => {
 
       const input2 = screen.getByTestId("input2");
 
-      waitFor(() => expect(document.activeElement).toBe(input2));
+      waitFor(() => expect(document.activeElement).toBe(input2), {
+        timeout: 3000
+      });
     });
   });
 
@@ -1222,18 +1239,23 @@ describe("FocusScope", () => {
 
       await userEvent.tab();
 
-      waitFor(async () => {
-        expect(document.activeElement).toBe(child2);
+      waitFor(
+        async () => {
+          expect(document.activeElement).toBe(child2);
 
-        await userEvent.tab();
-        expect(document.activeElement).toBe(child3);
+          await userEvent.tab();
+          expect(document.activeElement).toBe(child3);
 
-        await userEvent.tab();
-        expect(document.activeElement).toBe(child1);
+          await userEvent.tab();
+          expect(document.activeElement).toBe(child1);
 
-        await userEvent.tab({ shift: true });
-        expect(document.activeElement).toBe(child3);
-      });
+          await userEvent.tab({ shift: true });
+          expect(document.activeElement).toBe(child3);
+        },
+        {
+          timeout: 3000
+        }
+      );
     });
 
     it("should lock tab navigation inside nested child focus scope", async () => {
@@ -1269,18 +1291,23 @@ describe("FocusScope", () => {
 
       await userEvent.tab();
 
-      waitFor(async () => {
-        expect(document.activeElement).toBe(child2);
+      waitFor(
+        async () => {
+          expect(document.activeElement).toBe(child2);
 
-        await userEvent.tab();
-        expect(document.activeElement).toBe(child3);
+          await userEvent.tab();
+          expect(document.activeElement).toBe(child3);
 
-        await userEvent.tab();
-        expect(document.activeElement).toBe(child1);
+          await userEvent.tab();
+          expect(document.activeElement).toBe(child1);
 
-        await userEvent.tab({ shift: true });
-        expect(document.activeElement).toBe(child3);
-      });
+          await userEvent.tab({ shift: true });
+          expect(document.activeElement).toBe(child3);
+        },
+        {
+          timeout: 3000
+        }
+      );
     });
 
     it("should not lock tab navigation inside a nested focus scope without contain", async () => {
