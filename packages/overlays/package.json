@@ -1,0 +1,72 @@
+{
+  "name": "@solid-aria/overlays",
+  "version": "0.0.0",
+  "private": false,
+  "description": "Primitives for building accessible overlay components such as dialogs, popovers, and menus.",
+  "keywords": [
+    "solid",
+    "aria",
+    "headless",
+    "design",
+    "system",
+    "components"
+  ],
+  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/overlays#readme",
+  "bugs": {
+    "url": "https://github.com/solidjs-community/solid-aria/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solidjs-community/solid-aria.git"
+  },
+  "license": "MIT",
+  "author": "Fabien Marie-Louise <fabienml.dev@gmail.com>",
+  "contributors": [],
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "solid": "./dist/source/index.js",
+      "import": "./dist/esm/index.js",
+      "browser": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "node": "./dist/cjs/index.js"
+    }
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "dev": "vite serve dev --host",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch --passWithNoTests",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@solid-aria/button": "workspace:^",
+    "@solid-aria/i18n": "workspace:^",
+    "@solid-aria/interactions": "workspace:^",
+    "@solid-aria/types": "workspace:^",
+    "@solid-aria/utils": "workspace:^",
+    "@solid-aria/visually-hidden": "workspace:^"
+  },
+  "peerDependencies": {
+    "@solid-primitives/props": "^2.1.2",
+    "@solid-primitives/utils": "^2.0.1",
+    "solid-js": "^1.4.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "primitive": {
+    "name": "overlays",
+    "stage": 0,
+    "list": [],
+    "category": ""
+  }
+}

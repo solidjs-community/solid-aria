@@ -1,7 +1,20 @@
+/*
+ * Copyright 2020 Adobe. All rights reserved.
+ * This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ * OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
 import { createFocusable } from "@solid-aria/focus";
 import { createPress } from "@solid-aria/interactions";
 import { ElementType } from "@solid-aria/types";
-import { combineProps, filterDOMProps } from "@solid-aria/utils";
+import { filterDOMProps } from "@solid-aria/utils";
+import { combineProps } from "@solid-primitives/props";
 import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
 
 import { AriaButtonProps } from "./types";
@@ -108,8 +121,14 @@ export function createButton(
       "aria-expanded": props["aria-expanded"],
       "aria-controls": props["aria-controls"],
       "aria-pressed": props["aria-pressed"],
-      tabIndex: props.allowFocusWhenDisabled && props.isDisabled ? -1 : focusableProps().tabIndex
-    });
+      tabIndex: props.allowFocusWhenDisabled && props.isDisabled ? -1 : focusableProps().tabIndex,
+      onClick: (e: MouseEvent) => {
+        if (props.onClick) {
+          props.onClick(e);
+          console.warn("onClick is deprecated, please use onPress");
+        }
+      }
+    }) as JSX.HTMLAttributes<any>;
   });
 
   return { buttonProps, isPressed };

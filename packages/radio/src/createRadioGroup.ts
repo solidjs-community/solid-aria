@@ -1,3 +1,15 @@
+/*
+ * Copyright 2020 Adobe. All rights reserved.
+ * This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ * OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
 import { getFocusableTreeWalker } from "@solid-aria/focus";
 import { useLocale } from "@solid-aria/i18n";
 import { createFocusWithin } from "@solid-aria/interactions";
@@ -13,13 +25,14 @@ import {
   Validation,
   ValueBase
 } from "@solid-aria/types";
-import { combineProps, createId, filterDOMProps } from "@solid-aria/utils";
+import { createId, filterDOMProps } from "@solid-aria/utils";
+import { combineProps } from "@solid-primitives/props";
 import {
   Accessor,
-  Component,
   createComponent,
   createContext,
   createMemo,
+  FlowComponent,
   JSX,
   mergeProps,
   useContext
@@ -74,7 +87,7 @@ interface RadioGroupAria<
   /**
    * Provide the radio group state to descendant elements.
    */
-  RadioGroupProvider: Component;
+  RadioGroupProvider: FlowComponent;
 
   /**
    * Props for the radio group wrapper element.
@@ -212,12 +225,12 @@ export function createRadioGroup<
       onKeyDown,
       ...fieldProps(),
       ...focusWithinProps()
-    });
+    }) as JSX.IntrinsicElements[GroupElementType];
   });
 
   const name = createMemo(() => props.name ?? defaultGroupName);
 
-  const RadioGroupProvider: Component = props => {
+  const RadioGroupProvider: FlowComponent = props => {
     return createComponent(RadioGroupContext.Provider, {
       value: { state, name },
       get children() {

@@ -1,5 +1,5 @@
 import { createFocusRing } from "@solid-aria/focus";
-import { combineProps } from "@solid-aria/utils";
+import { combineProps } from "@solid-primitives/props";
 import { Show } from "solid-js";
 import { render } from "solid-js/web";
 

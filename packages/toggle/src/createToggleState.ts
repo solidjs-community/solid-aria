@@ -1,3 +1,15 @@
+/*
+ * Copyright 2020 Adobe. All rights reserved.
+ * This file is licensed to you under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License. You may obtain a copy
+ * of the License at http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR REPRESENTATIONS
+ * OF ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
 import { createControllableBooleanSignal } from "@solid-aria/utils";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor } from "solid-js";
@@ -45,27 +57,23 @@ export interface ToggleState {
  * Provides state management for toggle components like checkboxes and switches.
  */
 export function createToggleState(props: CreateToggleStateProps = {}): ToggleState {
-  const [isSelected, setSelected] = createControllableBooleanSignal({
+  const [isSelected, _setSelected] = createControllableBooleanSignal({
     value: () => access(props.isSelected),
     defaultValue: () => !!access(props.defaultSelected),
     onChange: props.onChange
   });
 
-  const updateSelected = (value: boolean) => {
+  const setSelected = (value: boolean) => {
     if (!access(props.isReadOnly)) {
-      setSelected(value);
+      _setSelected(value);
     }
   };
 
-  const toggleSelected = () => {
+  const toggle = () => {
     if (!access(props.isReadOnly)) {
-      setSelected(!isSelected());
+      _setSelected(!isSelected());
     }
   };
 
-  return {
-    isSelected,
-    setSelected: updateSelected,
-    toggle: toggleSelected
-  };
+  return { isSelected, setSelected, toggle };
 }
