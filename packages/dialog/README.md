@@ -12,6 +12,8 @@
 
 Dialog is an overlay shown above other content in an application.
 
+- [`createDialog`](#createdialog) - Provides the behavior and accessibility implementation for a dialog component.
+
 ## Installation
 
 ```bash
@@ -171,6 +173,8 @@ function Example() {
 
 function App() {
   return (
+    // Application must be wrapped in an OverlayProvider so that it can be
+    // hidden from screen readers when a modal opens.
     <OverlayProvider>
       <Example />
     </OverlayProvider>

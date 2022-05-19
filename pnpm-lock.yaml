@@ -11,6 +11,7 @@ importers:
       '@commitlint/cli': 16.2.3
       '@commitlint/config-conventional': 16.2.1
       '@commitlint/cz-commitlint': 16.2.3
+      '@floating-ui/dom': ^0.5.0
       '@solid-primitives/props': 2.1.2
       '@solid-primitives/refs': 0.2.0
       '@solid-primitives/utils': 2.0.1
@@ -57,6 +58,7 @@ importers:
       '@commitlint/cli': 16.2.3
       '@commitlint/config-conventional': 16.2.1
       '@commitlint/cz-commitlint': 16.2.3_commitizen@4.2.4+inquirer@8.2.2
+      '@floating-ui/dom': 0.5.0
       '@solid-primitives/props': 2.1.2_solid-js@1.4.0
       '@solid-primitives/refs': 0.2.0_solid-js@1.4.0
       '@solid-primitives/utils': 2.0.1_solid-js@1.4.0
@@ -1912,6 +1914,16 @@ packages:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@floating-ui/core/0.7.0:
+    resolution: {integrity: sha512-W7+i5Suhhvv97WDTW//KqUA43f/2a4abprM1rWqtLM9lIlJ29tbFI8h232SvqunXon0WmKNEKVjbOsgBhTnbLw==}
+    dev: true
+
+  /@floating-ui/dom/0.5.0:
+    resolution: {integrity: sha512-PS75dnMg4GdWjDFOiOs15cDzYJpukRNHqQn0ugrBlsrpk2n+y8bwZ24XrsdLSL7kxshmxxr2nTNycLnmRIvV7g==}
+    dependencies:
+      '@floating-ui/core': 0.7.0
     dev: true
 
   /@humanwhocodes/config-array/0.9.5:

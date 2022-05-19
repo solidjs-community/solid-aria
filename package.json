@@ -47,6 +47,7 @@
     "@commitlint/cli": "16.2.3",
     "@commitlint/config-conventional": "16.2.1",
     "@commitlint/cz-commitlint": "16.2.3",
+    "@floating-ui/dom": "^0.5.0",
     "@solid-primitives/props": "2.1.2",
     "@solid-primitives/refs": "0.2.0",
     "@solid-primitives/utils": "2.0.1",
