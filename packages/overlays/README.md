@@ -46,6 +46,14 @@ function App() {
 }
 ```
 
+## `DismissButton`
+
+`DismissButton` is a visually hidden button that can be used by screen reader users to close an overlay in the absence of a visual dismiss button. This may typically be used with a menu or a popover since they often forgo a visual dismiss button, instead allowing users to use the `Escape` key to dismiss the menu or popover.
+
+### How to use it
+
+See `createOverlayTrigger` for an example of how to use `DismissButton` with popover.
+
 ## Changelog
 
 All notable changes are described in the [CHANGELOG.md](./CHANGELOG.md) file.

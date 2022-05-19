@@ -35,6 +35,7 @@ A library of high-quality primitives that help you build accessible user interfa
 
 ### Overlays
 
+- [dialog](./packages/dialog/) - Provides the behavior and accessibility implementation for a dialog component.
 - [overlays](./packages/overlays/) - Provides the behavior and accessibility implementation for overlay components such as dialogs, popovers, and menus.
 
 ### Utilities
