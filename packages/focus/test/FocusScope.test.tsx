@@ -406,7 +406,7 @@ describe("FocusScope", () => {
           <div>
             <input data-testid="outside" />
             <Show when={show()}>
-              <FocusScope restoreFocus>
+              <FocusScope restoreFocus autoFocus>
                 <input data-testid="input1" />
                 <input data-testid="input2" autofocus />
                 <input data-testid="input3" />
@@ -420,7 +420,7 @@ describe("FocusScope", () => {
       }
 
       render(() => <Test />);
-      await Promise.resolve();
+      //await Promise.resolve();
 
       const outside = screen.getByTestId("outside");
       const toggleShowButton = screen.getByTestId("toggle-show-button");
@@ -1234,7 +1234,6 @@ describe("FocusScope", () => {
       }
 
       render(() => <Test />);
-      await Promise.resolve();
 
       const child1 = screen.getByTestId("child1");
       const child2 = screen.getByTestId("child2");
@@ -1243,16 +1242,19 @@ describe("FocusScope", () => {
       expect(document.activeElement).toBe(child1);
 
       await userEvent.tab();
-      expect(document.activeElement).toBe(child2);
 
-      await userEvent.tab();
-      expect(document.activeElement).toBe(child3);
+      waitFor(async () => {
+        expect(document.activeElement).toBe(child2);
 
-      await userEvent.tab();
-      expect(document.activeElement).toBe(child1);
+        await userEvent.tab();
+        expect(document.activeElement).toBe(child3);
 
-      await userEvent.tab({ shift: true });
-      expect(document.activeElement).toBe(child3);
+        await userEvent.tab();
+        expect(document.activeElement).toBe(child1);
+
+        await userEvent.tab({ shift: true });
+        expect(document.activeElement).toBe(child3);
+      });
     });
 
     it("should lock tab navigation inside nested child focus scope", async () => {
@@ -1288,17 +1290,20 @@ describe("FocusScope", () => {
       expect(document.activeElement).toBe(child1);
 
       await userEvent.tab();
-      expect(document.activeElement).toBe(child2);
 
-      await userEvent.tab();
-      expect(document.activeElement).toBe(child3);
+      waitFor(async () => {
+        expect(document.activeElement).toBe(child2);
 
-      await userEvent.tab();
+        await userEvent.tab();
+        expect(document.activeElement).toBe(child3);
 
-      expect(document.activeElement).toBe(child1);
+        await userEvent.tab();
 
-      await userEvent.tab({ shift: true });
-      expect(document.activeElement).toBe(child3);
+        expect(document.activeElement).toBe(child1);
+
+        await userEvent.tab({ shift: true });
+        expect(document.activeElement).toBe(child3);
+      });
     });
 
     it("should not lock tab navigation inside a nested focus scope without contain", async () => {
