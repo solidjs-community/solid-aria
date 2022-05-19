@@ -15,6 +15,7 @@ Primitives for building accessible overlay components such as dialogs, popovers,
 - [`DismissButton`](#dismissbutton) - A visually hidden button that can be used to allow screen reader users to dismiss a modal or popup when there is no visual affordance to do so.
 - [`createModal`](#createmodal) - Hides content outside the current `<OverlayContainer>` from screen readers on mount and restores it on unmount.
 - [`createOverlay`](#createoverlay) - Provides the behavior for overlays such as dialogs, popovers, and menus.
+- [`createOverlayPosition`](#createoverlayposition) - Handles positioning overlays like popovers and menus relative to a trigger element, and updating the position when the window resizes.
 - [`createOverlayTrigger`](#createoverlaytrigger) - Handles the behavior and accessibility for an overlay trigger.
 - [`createPreventScroll`](#createpreventscroll) - Prevents scrolling on the document body on mount, and restores it on unmount.
 
@@ -52,19 +53,28 @@ Provides the behavior for overlays such as dialogs, popovers, and menus. Hides t
 
 See [`createDialog`](../dialog/) and `createOverlayTrigger` for examples of using `createOverlay` to provide common overlay behavior to a component.
 
+## `createOverlayPosition`
+
+Handles positioning overlays like popovers and menus relative to a trigger element, and updating the position when the window resizes.
+
+### How to use it
+
+See `createOverlayTrigger` for an example of using `createOverlayPosition` to position a popover relative to its trigger button.
+
 ## `createOverlayTrigger`
 
 Handles the behavior and accessibility for an overlay trigger, e.g. a button that opens a popover, menu, or other overlay that is positioned relative to the trigger.
 
 ### Features
 
-There is no built in way to create popovers or other types of overlays in HTML. `createOverlayTrigger` helps achieve accessible overlays that can be styled as needed.
+There is no built in way to create popovers or other types of overlays in HTML. `createOverlayTrigger` combined with `createOverlayPosition`, helps achieve accessible overlays that can be styled as needed.
 
 - Exposes overlay trigger and connects trigger to overlay with ARIA
+- Positions the overlay relative to the trigger when combined with `createOverlayPosition`
 - Hides content behind the overlay from screen readers when combined with `createModal`
 - Handles closing the overlay when interacting outside and pressing the `Escape` key, when combined with `createOverlay`
 
-**Note:** `createOverlayTrigger` only handles the overlay itself. It should be combined with `createDialog` to create fully accessible popovers. You might also need a positioning engine like [`@floating-ui/dom`](https://floating-ui.com/) to positions the overlay relative to the trigger.
+**Note:** `createOverlayTrigger` only handles the overlay itself. It should be combined with `createDialog` to create fully accessible popovers.
 
 ### How to use it
 
@@ -79,7 +89,138 @@ To allow screen reader users to more easily dismiss the popover, a visually hidd
 The application is contained in an `OverlayProvider`, which is used to hide the content from screen readers with `aria-hidden` while an overlay is open. In addition, each overlay must be contained in an `OverlayContainer`, which uses a SolidJS Portal to render the overlay at the end of the document body. If a nested overlay is opened, then the first overlay will also be set to `aria-hidden`, so that only the top-most overlay is accessible to screen readers.
 
 ```tsx
+import { createButton } from "@solid-aria/button";
+import { createDialog } from "@solid-aria/dialog";
+import { FocusScope } from "@solid-aria/focus";
+import {
+  AriaOverlayProps,
+  createModal,
+  createOverlay,
+  createOverlayPosition,
+  createOverlayTrigger,
+  DismissButton,
+  FocusScope,
+  OverlayContainer,
+  OverlayProvider
+} from "@solid-aria/overlays";
+import { combineProps } from "@solid-primitives/props";
+import { mergeRefs } from "@solid-primitives/refs";
+import { access } from "@solid-primitives/utils";
+import { createMemo, JSX, Ref, splitProps, Show } from "solid-js";
 
+interface PopoverProps extends AriaOverlayProps {
+  ref: Ref<HTMLDivElement | undefined>;
+  title?: JSX.Element;
+  children?: JSX.Element;
+}
+
+function Popover(props: PopoverProps) {
+  let ref: HTMLDivElement | undefined;
+
+  const [local, others] = splitProps(props, ["ref", "title", "children", "isOpen", "onClose"]);
+
+  // Handle interacting outside the dialog and pressing
+  // the Escape key to close the modal.
+  const { overlayProps } = createOverlay(
+    {
+      onClose: local.onClose,
+      isOpen: () => access(local.isOpen),
+      isDismissable: true
+    },
+    () => ref
+  );
+
+  // Hide content outside the modal from screen readers.
+  const { modalProps } = createModal();
+
+  // Get props for the dialog and its title
+  const { dialogProps, titleProps } = createDialog({}, () => ref);
+
+  const rootProps = createMemo(() => {
+    return combineProps(overlayProps(), dialogProps(), modalProps(), others);
+  });
+
+  return (
+    <FocusScope restoreFocus>
+      <div
+        {...rootProps()}
+        ref={mergeRefs(el => (ref = el), local.ref)}
+        style={{
+          position: "absolute",
+          background: "white",
+          color: "black",
+          padding: "30px",
+          "max-width": "300px"
+        }}
+      >
+        <h3 {...titleProps} style={{ "margin-top": 0 }}>
+          {props.title}
+        </h3>
+        {props.children}
+        <DismissButton onDismiss={local.onClose} />
+      </div>
+    </FocusScope>
+  );
+}
+
+function Example() {
+  let triggerRef: HTMLButtonElement | undefined;
+  let overlayRef: HTMLDivElement | undefined;
+
+  // Get props for the trigger and overlay.
+  const { triggerProps, overlayProps, state } = createOverlayTrigger({ type: "dialog" });
+
+  // Get popover positioning props relative to the trigger
+  const { overlayPositionProps } = createOverlayPosition({
+    triggerRef: () => triggerRef,
+    overlayRef: () => overlayRef,
+    placement: "top",
+    offset: 5,
+    isOpen: state.isOpen
+  });
+
+  // createButton ensures that focus management is handled correctly,
+  // across all browsers. Focus is restored to the button once the
+  // popover closes.
+  const { buttonProps } = createButton(
+    {
+      onPress: () => state.open()
+    },
+    () => triggerRef
+  );
+
+  return (
+    <>
+      <button {...buttonProps()} {...triggerProps()} ref={triggerRef}>
+        Open Popover
+      </button>
+      <Show when={state.isOpen()}>
+        <OverlayContainer>
+          <Popover
+            {...overlayProps()}
+            {...overlayPositionProps()}
+            ref={overlayRef}
+            title="Popover title"
+            isOpen={state.isOpen()}
+            onClose={state.close}
+          >
+            This is the content of the popover.
+          </Popover>
+        </OverlayContainer>
+      </Show>
+    </>
+  );
+}
+
+function App() {
+  return (
+    // Application must be wrapped in an OverlayProvider so that it can be
+    // hidden from screen readers when an overlay opens.
+    <OverlayProvider>
+      <Example />
+    </OverlayProvider>
+  );
+}
 ```
 
 ## `createPreventScroll`
