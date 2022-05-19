@@ -1328,7 +1328,6 @@ describe("FocusScope", () => {
       }
 
       render(() => <Test />);
-      await Promise.resolve();
 
       const parent = screen.getByTestId("parent");
       const child1 = screen.getByTestId("child1");
@@ -1338,19 +1337,22 @@ describe("FocusScope", () => {
       expect(document.activeElement).toBe(parent);
 
       await userEvent.tab();
-      expect(document.activeElement).toBe(child1);
 
-      await userEvent.tab();
-      expect(document.activeElement).toBe(child2);
+      waitFor(async () => {
+        expect(document.activeElement).toBe(child1);
 
-      await userEvent.tab();
-      expect(document.activeElement).toBe(child3);
+        await userEvent.tab();
+        expect(document.activeElement).toBe(child2);
 
-      await userEvent.tab();
-      expect(document.activeElement).toBe(parent);
+        await userEvent.tab();
+        expect(document.activeElement).toBe(child3);
 
-      await userEvent.tab({ shift: true });
-      expect(document.activeElement).toBe(child3);
+        await userEvent.tab();
+        expect(document.activeElement).toBe(parent);
+
+        await userEvent.tab({ shift: true });
+        expect(document.activeElement).toBe(child3);
+      });
     });
 
     it("should restore to the correct scope on unmount", async () => {
@@ -1554,7 +1556,6 @@ describe("FocusScope", () => {
       }
 
       render(() => <Test />);
-      await Promise.resolve();
 
       const beforeScope = screen.getByTestId("beforeScope");
       const inScope = screen.getByTestId("inScope");
@@ -1564,13 +1565,16 @@ describe("FocusScope", () => {
       await Promise.resolve();
 
       await userEvent.tab();
-      expect(document.activeElement).toBe(afterScope);
 
-      inScope.focus();
-      await Promise.resolve();
+      waitFor(async () => {
+        expect(document.activeElement).toBe(afterScope);
 
-      await userEvent.tab({ shift: true });
-      expect(document.activeElement).toBe(beforeScope);
+        inScope.focus();
+        await Promise.resolve();
+
+        await userEvent.tab({ shift: true });
+        expect(document.activeElement).toBe(beforeScope);
+      });
     });
   });
 });
