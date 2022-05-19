@@ -173,11 +173,11 @@ function FocusScopeContainer(props: FocusScopeProps) {
 
     activeScope = ctx.scopeRef();
 
-    // Use `requestAnimationFrame` to ensure DOM elements has been rendered
+    // Use `queueMicrotask` to ensure DOM elements has been rendered
     // and things like browser `autofocus` has run first.
-    requestAnimationFrame(() => {
+    queueMicrotask(() => {
       if (activeScope && !isElementInScope(document.activeElement, activeScope)) {
-        focusFirstInScope(activeScope);
+        focusFirstInScope(ctx.scopeRef());
       }
     });
   });

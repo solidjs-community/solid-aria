@@ -420,6 +420,7 @@ describe("FocusScope", () => {
       }
 
       render(() => <Test />);
+      await Promise.resolve();
 
       const outside = screen.getByTestId("outside");
       const toggleShowButton = screen.getByTestId("toggle-show-button");
@@ -486,7 +487,6 @@ describe("FocusScope", () => {
       });
     });
 
-    /*
     it("should move focus before the previously focused node when tabbing away from a scope with Shift+Tab", async () => {
       function Test() {
         const [show, setShow] = createSignal(false);
@@ -497,7 +497,7 @@ describe("FocusScope", () => {
             <input data-testid="outside" />
             <input data-testid="after" />
             <Show when={show()}>
-              <FocusScope restoreFocus>
+              <FocusScope restoreFocus autoFocus>
                 <input data-testid="input1" autofocus />
                 <input data-testid="input2" />
                 <input data-testid="input3" />
@@ -523,14 +523,11 @@ describe("FocusScope", () => {
 
       const input1 = screen.getByTestId("input1");
 
-      waitFor(async () => {
-        expect(document.activeElement).toBe(input1);
+      expect(document.activeElement).toBe(input1);
 
-        await userEvent.tab({ shift: true });
-        expect(document.activeElement).toBe(screen.getByTestId("before"));
-      });
+      await userEvent.tab({ shift: true });
+      expect(document.activeElement).toBe(screen.getByTestId("before"));
     });
-    */
 
     it("should restore focus to the previously focused node after children change", async () => {
       function Test() {
@@ -774,7 +771,7 @@ describe("FocusScope", () => {
   });
 
   describe("auto focus", () => {
-    it("should auto focus the first tabbable element in the scope on mount", () => {
+    it("should auto focus the first tabbable element in the scope on mount", async () => {
       render(() => (
         <FocusScope autoFocus>
           <div />
@@ -783,6 +780,7 @@ describe("FocusScope", () => {
           <input data-testid="input3" />
         </FocusScope>
       ));
+      await Promise.resolve();
 
       const input1 = screen.getByTestId("input1");
 
@@ -1216,7 +1214,6 @@ describe("FocusScope", () => {
       expect(document.activeElement).toBe(input3);
     });
 
-    /*
     it("should lock tab navigation inside direct child focus scope", async () => {
       function Test() {
         return (
@@ -1237,6 +1234,7 @@ describe("FocusScope", () => {
       }
 
       render(() => <Test />);
+      await Promise.resolve();
 
       const child1 = screen.getByTestId("child1");
       const child2 = screen.getByTestId("child2");
@@ -1281,14 +1279,13 @@ describe("FocusScope", () => {
       }
 
       render(() => <Test />);
+      await Promise.resolve();
 
       const child1 = screen.getByTestId("child1");
       const child2 = screen.getByTestId("child2");
       const child3 = screen.getByTestId("child3");
 
       expect(document.activeElement).toBe(child1);
-
-      await Promise.resolve();
 
       await userEvent.tab();
       expect(document.activeElement).toBe(child2);
@@ -1326,6 +1323,7 @@ describe("FocusScope", () => {
       }
 
       render(() => <Test />);
+      await Promise.resolve();
 
       const parent = screen.getByTestId("parent");
       const child1 = screen.getByTestId("child1");
@@ -1349,7 +1347,6 @@ describe("FocusScope", () => {
       await userEvent.tab({ shift: true });
       expect(document.activeElement).toBe(child3);
     });
-    */
 
     it("should restore to the correct scope on unmount", async () => {
       function Test() {
@@ -1392,6 +1389,7 @@ describe("FocusScope", () => {
       }
 
       render(() => <Test />);
+      await Promise.resolve();
 
       const parent = screen.getByTestId("parent");
       const toggleShow1Button = screen.getByTestId("toggle-show1-button");
@@ -1480,6 +1478,7 @@ describe("FocusScope", () => {
       }
 
       render(() => <Test />);
+      await Promise.resolve();
 
       const parent = screen.getByTestId("parent");
       const child = screen.getByTestId("child");
@@ -1516,6 +1515,7 @@ describe("FocusScope", () => {
       }
 
       render(() => <Test />);
+      await Promise.resolve();
 
       const parent = screen.getByTestId("parent");
       const child = screen.getByTestId("child");
@@ -1534,7 +1534,6 @@ describe("FocusScope", () => {
     });
   });
 
-  /*
   describe("scope child of document.body", () => {
     it("should navigate in and out of scope in DOM order when the nodeToRestore is the document.body", async () => {
       function Test() {
@@ -1550,6 +1549,7 @@ describe("FocusScope", () => {
       }
 
       render(() => <Test />);
+      await Promise.resolve();
 
       const beforeScope = screen.getByTestId("beforeScope");
       const inScope = screen.getByTestId("inScope");
@@ -1568,5 +1568,4 @@ describe("FocusScope", () => {
       expect(document.activeElement).toBe(beforeScope);
     });
   });
-  */
 });
