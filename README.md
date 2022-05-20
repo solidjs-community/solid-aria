@@ -33,6 +33,11 @@ A library of high-quality primitives that help you build accessible user interfa
 - [switch](./packages/switch/) - Provides the behavior and accessibility implementation for switch component.
 - [toggle](./packages/toggle/) - Handles interactions for toggle elements, e.g. checkboxes and switches.
 
+### Overlays
+
+- [dialog](./packages/dialog/) - Provides the behavior and accessibility implementation for a dialog component.
+- [overlays](./packages/overlays/) - Provides the behavior and accessibility implementation for overlay components such as dialogs, popovers, and menus.
+
 ### Utilities
 
 - [i18n](./packages/i18n/) - Primitives for dealing with locale and layout direction.
@@ -57,7 +62,7 @@ A library of high-quality primitives that help you build accessible user interfa
 - [ ] Menu
 - [ ] Meter
 - [ ] NumberField
-- [ ] Overlays
+- [x] Overlays
 - [ ] Pagination
 - [ ] Progress
 - [x] Radio
