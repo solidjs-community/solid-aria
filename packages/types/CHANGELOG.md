@@ -1,3 +1,11 @@
+# @solid-aria/types
+
+## 0.0.4
+
+### Patch Changes
+
+- 7eebd05: Add FocusScope, Dialog and Overlays related primitives
+
 ## 0.0.3
 
 ### Patch Changes
@@ -12,4 +20,4 @@
 
 ## 0.0.1
 
-- Initial release as a Stage-0 primitive.
+- Initial release.

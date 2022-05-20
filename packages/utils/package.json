@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/utils",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "private": false,
   "description": "A collection of utility types and functions, for building Solid Aria primitives.",
   "keywords": [

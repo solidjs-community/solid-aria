@@ -1,5 +1,14 @@
 # @solid-aria/switch
 
+## 0.0.6
+
+### Patch Changes
+
+- 7eebd05: Add FocusScope, Dialog and Overlays related primitives
+- Updated dependencies [7eebd05]
+  - @solid-aria/toggle@0.0.6
+  - @solid-aria/types@0.0.4
+
 ## 0.0.5
 
 ### Patch Changes

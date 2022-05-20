@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/toggle",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "private": false,
   "description": "Primitives for building toggle components like checkboxes and switches.",
   "keywords": [

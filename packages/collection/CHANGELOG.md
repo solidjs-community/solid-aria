@@ -1,5 +1,14 @@
 # @solid-aria/collection
 
+## 0.0.4
+
+### Patch Changes
+
+- 7eebd05: Add FocusScope, Dialog and Overlays related primitives
+- Updated dependencies [7eebd05]
+  - @solid-aria/types@0.0.4
+  - @solid-aria/utils@0.0.5
+
 ## 0.0.3
 
 ### Patch Changes
