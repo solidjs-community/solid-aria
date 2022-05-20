@@ -1,8 +1,8 @@
 {
-  "name": "@solid-aria/primitives",
-  "version": "0.0.7",
+  "name": "@solid-aria/link",
+  "version": "0.0.0",
   "private": false,
-  "description": "A library of high-quality primitives that help you build accessible user interfaces with SolidJS.",
+  "description": "Primitives for building accessible link component.",
   "keywords": [
     "solid",
     "aria",
@@ -11,7 +11,7 @@
     "system",
     "components"
   ],
-  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/primitives#readme",
+  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/link#readme",
   "bugs": {
     "url": "https://github.com/solidjs-community/solid-aria/issues"
   },
@@ -39,26 +39,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/button": "workspace:^",
-    "@solid-aria/checkbox": "workspace:^",
-    "@solid-aria/collection": "workspace:^",
-    "@solid-aria/dialog": "workspace:^",
     "@solid-aria/focus": "workspace:^",
-    "@solid-aria/i18n": "workspace:^",
     "@solid-aria/interactions": "workspace:^",
-    "@solid-aria/label": "workspace:^",
-    "@solid-aria/link": "workspace:^",
-    "@solid-aria/listbox": "workspace:^",
-    "@solid-aria/overlays": "workspace:^",
-    "@solid-aria/radio": "workspace:^",
-    "@solid-aria/selection": "workspace:^",
-    "@solid-aria/switch": "workspace:^",
-    "@solid-aria/toggle": "workspace:^",
     "@solid-aria/types": "workspace:^",
-    "@solid-aria/utils": "workspace:^",
-    "@solid-aria/visually-hidden": "workspace:^"
+    "@solid-aria/utils": "workspace:^"
   },
   "peerDependencies": {
+    "@solid-primitives/props": "^2.1.2",
     "@solid-primitives/utils": "^2.0.1",
     "solid-js": "^1.4.0"
   },
@@ -66,7 +53,7 @@
     "access": "public"
   },
   "primitive": {
-    "name": "primitives",
+    "name": "link",
     "stage": 0,
     "list": [],
     "category": ""
