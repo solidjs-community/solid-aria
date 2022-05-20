@@ -11,7 +11,6 @@ importers:
       '@commitlint/cli': 16.2.3
       '@commitlint/config-conventional': 16.2.1
       '@commitlint/cz-commitlint': 16.2.3
-      '@floating-ui/dom': ^0.5.0
       '@solid-primitives/props': 2.1.2
       '@solid-primitives/refs': 0.2.0
       '@solid-primitives/utils': 2.0.1
@@ -58,7 +57,6 @@ importers:
       '@commitlint/cli': 16.2.3
       '@commitlint/config-conventional': 16.2.1
       '@commitlint/cz-commitlint': 16.2.3_commitizen@4.2.4+inquirer@8.2.2
-      '@floating-ui/dom': 0.5.0
       '@solid-primitives/props': 2.1.2_solid-js@1.4.0
       '@solid-primitives/refs': 0.2.0_solid-js@1.4.0
       '@solid-primitives/utils': 2.0.1_solid-js@1.4.0
@@ -202,7 +200,6 @@ importers:
       '@solid-aria/types': workspace:^
       '@solid-aria/utils': workspace:^
       '@solid-aria/visually-hidden': workspace:^
-      dom-helpers: ^5.2.1
     dependencies:
       '@solid-aria/button': link:../button
       '@solid-aria/i18n': link:../i18n
@@ -210,7 +207,6 @@ importers:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
       '@solid-aria/visually-hidden': link:../visually-hidden
-      dom-helpers: 5.2.1
 
   packages/primitives:
     specifiers:
@@ -1487,6 +1483,7 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.13.9
+    dev: true
 
   /@babel/template/7.16.7:
     resolution: {integrity: sha512-I8j/x8kHUrbYRTUxXrrMbfCa7jxkE7tZre39x3kjr9hvI82cK1FfqLygotcWN5kdPGWcLdWMHpSBavse5tWw3w==}
@@ -1915,16 +1912,6 @@ packages:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
-    dev: true
-
-  /@floating-ui/core/0.7.0:
-    resolution: {integrity: sha512-W7+i5Suhhvv97WDTW//KqUA43f/2a4abprM1rWqtLM9lIlJ29tbFI8h232SvqunXon0WmKNEKVjbOsgBhTnbLw==}
-    dev: true
-
-  /@floating-ui/dom/0.5.0:
-    resolution: {integrity: sha512-PS75dnMg4GdWjDFOiOs15cDzYJpukRNHqQn0ugrBlsrpk2n+y8bwZ24XrsdLSL7kxshmxxr2nTNycLnmRIvV7g==}
-    dependencies:
-      '@floating-ui/core': 0.7.0
     dev: true
 
   /@humanwhocodes/config-array/0.9.5:
@@ -3553,10 +3540,6 @@ packages:
       cssom: 0.3.8
     dev: true
 
-  /csstype/3.1.0:
-    resolution: {integrity: sha512-uX1KG+x9h5hIJsaKR9xHUeUraxf8IODOwq9JLNPq6BwB04a/xgpq3rcx47l5BZu5zBPlgD342tdke3Hom/nJRA==}
-    dev: false
-
   /csv-generate/3.4.3:
     resolution: {integrity: sha512-w/T+rqR0vwvHqWs/1ZyMDWtHHSJaN06klRqJXBEpDJaM/+dZkso0OKh1VcuuYvK3XM53KysVNq8Ko/epCK8wOw==}
     dev: true
@@ -3759,13 +3742,6 @@ packages:
   /dom-accessibility-api/0.5.13:
     resolution: {integrity: sha512-R305kwb5CcMDIpSHUnLyIAp7SrSPBx6F0VfQFB3M75xVMHhXJJIdePYgbPPh1o57vCHNu5QztokWUPsLjWzFqw==}
     dev: true
-
-  /dom-helpers/5.2.1:
-    resolution: {integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==}
-    dependencies:
-      '@babel/runtime': 7.17.9
-      csstype: 3.1.0
-    dev: false
 
   /domexception/2.0.1:
     resolution: {integrity: sha512-yxJ2mFy/sibVQlu5qHjOkf9J3K6zgmCxgJ94u2EdvDOV09H+32LtRswEcUsmUWN72pVLOEnTSRaIVVzVQgS0dg==}
@@ -6730,6 +6706,7 @@ packages:
 
   /regenerator-runtime/0.13.9:
     resolution: {integrity: sha512-p3VT+cOEgxFsRRA9X4lkI1E+k2/CtnKtU4gcxyaCUreilL/vqI6CdZ3wxVUx3UOUg+gnUOQQcRI7BmSI656MYA==}
+    dev: true
 
   /regenerator-transform/0.15.0:
     resolution: {integrity: sha512-LsrGtPmbYg19bcPHwdtmXwbW+TqNvtY4riE3P83foeHRroMbH6/2ddFBfab3t7kbzc7v7p4wbkIecHImqt0QNg==}
