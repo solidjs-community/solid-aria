@@ -174,6 +174,18 @@ importers:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 
+  packages/link:
+    specifiers:
+      '@solid-aria/focus': workspace:^
+      '@solid-aria/interactions': workspace:^
+      '@solid-aria/types': workspace:^
+      '@solid-aria/utils': workspace:^
+    dependencies:
+      '@solid-aria/focus': link:../focus
+      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
   packages/listbox:
     specifiers:
       '@solid-aria/collection': workspace:^
@@ -218,6 +230,7 @@ importers:
       '@solid-aria/i18n': workspace:^
       '@solid-aria/interactions': workspace:^
       '@solid-aria/label': workspace:^
+      '@solid-aria/link': workspace:^
       '@solid-aria/listbox': workspace:^
       '@solid-aria/overlays': workspace:^
       '@solid-aria/radio': workspace:^
@@ -236,6 +249,7 @@ importers:
       '@solid-aria/i18n': link:../i18n
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/label': link:../label
+      '@solid-aria/link': link:../link
       '@solid-aria/listbox': link:../listbox
       '@solid-aria/overlays': link:../overlays
       '@solid-aria/radio': link:../radio
