@@ -74,7 +74,36 @@ This example shows a client handled link using press events. It sets `elementTyp
 In addition, this example shows usage of the `isPressed` value returned by `createLink` to properly style the links's active state. You could use the CSS `:active` pseudo class for this, but `isPressed` properly handles when the user drags their pointer off of the link, along with keyboard support and better touch screen support.
 
 ```tsx
+import { AriaLinkProps, createLink } from "@solid-aria/link";
+import { JSX, mergeProps } from "solid-js";
 
+type LinkProps = AriaLinkProps & JSX.HTMLAttributes<HTMLSpanElement>;
+
+function Link(props: LinkProps) {
+  let ref: HTMLSpanElement | undefined;
+
+  props = mergeProps({ elementType: "span" }, props);
+
+  const { linkProps, isPressed } = createLink<"span", HTMLSpanElement>(props, () => ref);
+
+  return (
+    <span
+      {...linkProps()}
+      ref={ref}
+      style={{
+        color: isPressed() ? "blue" : "dodgerblue",
+        "text-decoration": "underline",
+        cursor: "pointer"
+      }}
+    >
+      {props.children}
+    </span>
+  );
+}
+
+function App() {
+  return <Link onPress={() => alert("Pressed link")}>SolidJS</Link>;
+}
 ```
 
 ### Disabled links
@@ -82,7 +111,39 @@ In addition, this example shows usage of the `isPressed` value returned by `crea
 A link can be disabled by passing the `isDisabled` property. This will work with both native link elements as well as client handled links. Native navigation will be disabled, and the `onPress` event will not be fired. The link will be exposed as disabled to assistive technology with ARIA.
 
 ```tsx
+import { AriaLinkProps, createLink } from "@solid-aria/link";
+import { JSX } from "solid-js";
 
+type LinkProps = AriaLinkProps & JSX.AnchorHTMLAttributes<HTMLAnchorElement>;
+
+function Link(props: LinkProps) {
+  let ref: HTMLAnchorElement | undefined;
+
+  const { linkProps } = createLink(props, () => ref);
+
+  return (
+    <a
+      {...linkProps()}
+      ref={ref}
+      href={props.href}
+      target={props.target}
+      style={{
+        color: props.isDisabled ? "gray" : "blue",
+        cursor: props.isDisabled ? "default" : "pointer"
+      }}
+    >
+      {props.children}
+    </a>
+  );
+}
+
+function App() {
+  return (
+    <Link href="https://www.solidjs.com" target="_blank" isDisabled>
+      Disabled link
+    </Link>
+  );
+}
 ```
 
 ## Changelog
