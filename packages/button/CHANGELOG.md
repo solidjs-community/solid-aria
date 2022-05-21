@@ -1,5 +1,13 @@
 # @solid-aria/button
 
+## 0.0.3
+
+### Patch Changes
+
+- Updated dependencies [20da459]
+  - @solid-aria/focus@0.0.6
+  - @solid-aria/toggle@0.0.7
+
 ## 0.0.2
 
 ### Patch Changes

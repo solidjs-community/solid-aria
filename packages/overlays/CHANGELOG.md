@@ -1,5 +1,11 @@
 # @solid-aria/overlays
 
+## 0.0.2
+
+### Patch Changes
+
+- @solid-aria/button@0.0.3
+
 ## 0.0.1
 
 ### Patch Changes

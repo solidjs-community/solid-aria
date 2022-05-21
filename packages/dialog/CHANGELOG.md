@@ -1,5 +1,12 @@
 # @solid-aria/dialog
 
+## 0.0.2
+
+### Patch Changes
+
+- Updated dependencies [20da459]
+  - @solid-aria/focus@0.0.6
+
 ## 0.0.1
 
 ### Patch Changes

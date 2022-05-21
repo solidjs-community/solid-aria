@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/link",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": false,
   "description": "Primitives for building accessible link component.",
   "keywords": [

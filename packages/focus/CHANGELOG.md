@@ -1,5 +1,11 @@
 # @solid-aria/focus
 
+## 0.0.6
+
+### Patch Changes
+
+- 20da459: Add link package
+
 ## 0.0.5
 
 ### Patch Changes

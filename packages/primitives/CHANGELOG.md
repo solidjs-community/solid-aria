@@ -1,5 +1,22 @@
 # @solid-aria/primitives
 
+## 0.0.8
+
+### Patch Changes
+
+- 20da459: Add link package
+- Updated dependencies [20da459]
+  - @solid-aria/focus@0.0.6
+  - @solid-aria/link@0.0.1
+  - @solid-aria/button@0.0.3
+  - @solid-aria/dialog@0.0.2
+  - @solid-aria/listbox@0.0.6
+  - @solid-aria/radio@0.0.8
+  - @solid-aria/toggle@0.0.7
+  - @solid-aria/overlays@0.0.2
+  - @solid-aria/checkbox@0.0.7
+  - @solid-aria/switch@0.0.7
+
 ## 0.0.7
 
 ### Patch Changes

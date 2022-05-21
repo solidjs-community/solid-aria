@@ -1,5 +1,12 @@
 # @solid-aria/radio
 
+## 0.0.8
+
+### Patch Changes
+
+- Updated dependencies [20da459]
+  - @solid-aria/focus@0.0.6
+
 ## 0.0.7
 
 ### Patch Changes
