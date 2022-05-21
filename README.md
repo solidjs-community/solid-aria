@@ -33,6 +33,10 @@ A library of high-quality primitives that help you build accessible user interfa
 - [switch](./packages/switch/) - Provides the behavior and accessibility implementation for switch component.
 - [toggle](./packages/toggle/) - Handles interactions for toggle elements, e.g. checkboxes and switches.
 
+### Navigation
+
+- [link](./packages/link/) - Provides the behavior and accessibility implementation for a link component.
+
 ### Overlays
 
 - [dialog](./packages/dialog/) - Provides the behavior and accessibility implementation for a dialog component.
@@ -55,7 +59,7 @@ A library of high-quality primitives that help you build accessible user interfa
 - [ ] DatePicker
 - [x] Dialog
 - [x] Label
-- [ ] Link
+- [x] Link
 - [ ] List
 - [x] Listbox
 - [ ] LiveAnnouncer
