@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/primitives",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "private": false,
   "description": "A library of high-quality primitives that help you build accessible user interfaces with SolidJS.",
   "keywords": [

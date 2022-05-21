@@ -1,5 +1,13 @@
 # @solid-aria/primitives
 
+## 0.0.9
+
+### Patch Changes
+
+- 2737827: add breadcrumbs package
+- Updated dependencies [2737827]
+  - @solid-aria/breadcrumbs@0.0.1
+
 ## 0.0.8
 
 ### Patch Changes
