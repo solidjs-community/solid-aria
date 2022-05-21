@@ -96,6 +96,16 @@ importers:
       vite: 2.9.5
       vite-plugin-solid: 2.2.6
 
+  packages/breadcrumbs:
+    specifiers:
+      '@solid-aria/link': workspace:^
+      '@solid-aria/types': workspace:^
+      '@solid-aria/utils': workspace:^
+    dependencies:
+      '@solid-aria/link': link:../link
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
   packages/button:
     specifiers:
       '@solid-aria/focus': workspace:^
@@ -222,6 +232,7 @@ importers:
 
   packages/primitives:
     specifiers:
+      '@solid-aria/breadcrumbs': workspace:^
       '@solid-aria/button': workspace:^
       '@solid-aria/checkbox': workspace:^
       '@solid-aria/collection': workspace:^
@@ -241,6 +252,7 @@ importers:
       '@solid-aria/utils': workspace:^
       '@solid-aria/visually-hidden': workspace:^
     dependencies:
+      '@solid-aria/breadcrumbs': link:../breadcrumbs
       '@solid-aria/button': link:../button
       '@solid-aria/checkbox': link:../checkbox
       '@solid-aria/collection': link:../collection
