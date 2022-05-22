@@ -1,5 +1,11 @@
 # @solid-aria/focus
 
+## 0.0.7
+
+### Patch Changes
+
+- e2c1d42: Fix export for SSR
+
 ## 0.0.6
 
 ### Patch Changes

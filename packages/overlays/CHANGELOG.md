@@ -1,5 +1,12 @@
 # @solid-aria/overlays
 
+## 0.0.3
+
+### Patch Changes
+
+- e2c1d42: Fix export for SSR
+  - @solid-aria/button@0.0.4
+
 ## 0.0.2
 
 ### Patch Changes

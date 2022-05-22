@@ -1,5 +1,23 @@
 # @solid-aria/primitives
 
+## 0.0.10
+
+### Patch Changes
+
+- e2c1d42: Fix export for SSR
+- Updated dependencies [e2c1d42]
+  - @solid-aria/focus@0.0.7
+  - @solid-aria/overlays@0.0.3
+  - @solid-aria/button@0.0.4
+  - @solid-aria/dialog@0.0.3
+  - @solid-aria/link@0.0.2
+  - @solid-aria/listbox@0.0.7
+  - @solid-aria/radio@0.0.9
+  - @solid-aria/toggle@0.0.8
+  - @solid-aria/breadcrumbs@0.0.2
+  - @solid-aria/checkbox@0.0.8
+  - @solid-aria/switch@0.0.8
+
 ## 0.0.9
 
 ### Patch Changes
