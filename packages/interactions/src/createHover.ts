@@ -106,7 +106,7 @@ function setupGlobalTouchEvents() {
  * Handles pointer hover interactions for an element. Normalizes behavior
  * across browsers and platforms, and ignores emulated mouse events on touch devices.
  */
-export function createHover(props: CreateHoverProps): HoverResult {
+export function createHover(props: CreateHoverProps = {}): HoverResult {
   const [isHovered, setIsHovered] = createSignal(false);
   const [ignoreEmulatedMouseEvents, setIgnoreEmulatedMouseEvents] = createSignal(false);
   const [pointerType, setPointerType] = createSignal("");
