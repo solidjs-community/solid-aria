@@ -1,5 +1,11 @@
 # @solid-aria/types
 
+## 0.0.5
+
+### Patch Changes
+
+- 84e543b: Bump solid-js peer dep to ^1.4.3
+
 ## 0.0.4
 
 ### Patch Changes

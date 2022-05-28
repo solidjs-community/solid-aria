@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/radio",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "private": false,
   "description": "Primitives for building accessible radio and radio group component.",
   "keywords": [

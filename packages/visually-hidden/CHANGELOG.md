@@ -1,5 +1,15 @@
 # @solid-aria/visually-hidden
 
+## 0.0.7
+
+### Patch Changes
+
+- 84e543b: Bump solid-js peer dep to ^1.4.3
+- Updated dependencies [84e543b]
+  - @solid-aria/interactions@0.0.7
+  - @solid-aria/types@0.0.5
+  - @solid-aria/utils@0.0.6
+
 ## 0.0.6
 
 ### Patch Changes

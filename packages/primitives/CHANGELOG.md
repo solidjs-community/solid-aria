@@ -1,5 +1,31 @@
 # @solid-aria/primitives
 
+## 0.0.12
+
+### Patch Changes
+
+- 84e543b: Bump solid-js peer dep to ^1.4.3
+- Updated dependencies [84e543b]
+  - @solid-aria/breadcrumbs@0.0.4
+  - @solid-aria/button@0.0.6
+  - @solid-aria/checkbox@0.0.10
+  - @solid-aria/collection@0.0.5
+  - @solid-aria/dialog@0.0.5
+  - @solid-aria/focus@0.0.9
+  - @solid-aria/i18n@0.0.7
+  - @solid-aria/interactions@0.0.7
+  - @solid-aria/label@0.0.6
+  - @solid-aria/link@0.0.4
+  - @solid-aria/listbox@0.0.9
+  - @solid-aria/overlays@0.0.5
+  - @solid-aria/radio@0.0.11
+  - @solid-aria/selection@0.0.5
+  - @solid-aria/switch@0.0.10
+  - @solid-aria/toggle@0.0.10
+  - @solid-aria/types@0.0.5
+  - @solid-aria/utils@0.0.6
+  - @solid-aria/visually-hidden@0.0.7
+
 ## 0.0.11
 
 ### Patch Changes

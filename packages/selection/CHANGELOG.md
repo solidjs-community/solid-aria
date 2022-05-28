@@ -1,5 +1,16 @@
 # @solid-aria/selection
 
+## 0.0.5
+
+### Patch Changes
+
+- 84e543b: Bump solid-js peer dep to ^1.4.3
+- Updated dependencies [84e543b]
+  - @solid-aria/collection@0.0.5
+  - @solid-aria/i18n@0.0.7
+  - @solid-aria/types@0.0.5
+  - @solid-aria/utils@0.0.6
+
 ## 0.0.4
 
 ### Patch Changes

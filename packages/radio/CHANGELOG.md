@@ -1,5 +1,18 @@
 # @solid-aria/radio
 
+## 0.0.11
+
+### Patch Changes
+
+- 84e543b: Bump solid-js peer dep to ^1.4.3
+- Updated dependencies [84e543b]
+  - @solid-aria/focus@0.0.9
+  - @solid-aria/i18n@0.0.7
+  - @solid-aria/interactions@0.0.7
+  - @solid-aria/label@0.0.6
+  - @solid-aria/types@0.0.5
+  - @solid-aria/utils@0.0.6
+
 ## 0.0.10
 
 ### Patch Changes
