@@ -1,5 +1,14 @@
 # @solid-aria/overlays
 
+## 0.0.4
+
+### Patch Changes
+
+- Updated dependencies [af59eb8]
+  - @solid-aria/interactions@0.0.6
+  - @solid-aria/button@0.0.5
+  - @solid-aria/visually-hidden@0.0.6
+
 ## 0.0.3
 
 ### Patch Changes

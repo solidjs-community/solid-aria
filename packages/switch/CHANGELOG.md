@@ -1,5 +1,11 @@
 # @solid-aria/switch
 
+## 0.0.9
+
+### Patch Changes
+
+- @solid-aria/toggle@0.0.9
+
 ## 0.0.8
 
 ### Patch Changes

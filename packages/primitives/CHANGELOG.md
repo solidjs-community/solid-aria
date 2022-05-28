@@ -1,5 +1,24 @@
 # @solid-aria/primitives
 
+## 0.0.11
+
+### Patch Changes
+
+- Updated dependencies [af59eb8]
+  - @solid-aria/interactions@0.0.6
+  - @solid-aria/button@0.0.5
+  - @solid-aria/focus@0.0.8
+  - @solid-aria/link@0.0.3
+  - @solid-aria/listbox@0.0.8
+  - @solid-aria/overlays@0.0.4
+  - @solid-aria/radio@0.0.10
+  - @solid-aria/toggle@0.0.9
+  - @solid-aria/visually-hidden@0.0.6
+  - @solid-aria/dialog@0.0.4
+  - @solid-aria/breadcrumbs@0.0.3
+  - @solid-aria/checkbox@0.0.9
+  - @solid-aria/switch@0.0.9
+
 ## 0.0.10
 
 ### Patch Changes

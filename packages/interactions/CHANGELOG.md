@@ -1,5 +1,11 @@
 # @solid-aria/interactions
 
+## 0.0.6
+
+### Patch Changes
+
+- af59eb8: Add default props for createHover primitive
+
 ## 0.0.5
 
 ### Patch Changes

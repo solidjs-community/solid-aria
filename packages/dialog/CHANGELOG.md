@@ -1,5 +1,11 @@
 # @solid-aria/dialog
 
+## 0.0.4
+
+### Patch Changes
+
+- @solid-aria/focus@0.0.8
+
 ## 0.0.3
 
 ### Patch Changes

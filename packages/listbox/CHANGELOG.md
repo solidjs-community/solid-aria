@@ -1,5 +1,13 @@
 # @solid-aria/listbox
 
+## 0.0.8
+
+### Patch Changes
+
+- Updated dependencies [af59eb8]
+  - @solid-aria/interactions@0.0.6
+  - @solid-aria/focus@0.0.8
+
 ## 0.0.7
 
 ### Patch Changes
