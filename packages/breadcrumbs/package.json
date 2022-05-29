@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/breadcrumbs",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "private": false,
   "description": "Primitives for building accessible breadcrumbs component.",
   "keywords": [

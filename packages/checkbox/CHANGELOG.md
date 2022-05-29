@@ -1,5 +1,12 @@
 # @solid-aria/checkbox
 
+## 0.0.11
+
+### Patch Changes
+
+- Updated dependencies [fd9302b]
+  - @solid-aria/label@0.0.7
+
 ## 0.0.10
 
 ### Patch Changes

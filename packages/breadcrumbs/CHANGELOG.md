@@ -1,5 +1,11 @@
 # @solid-aria/breadcrumbs
 
+## 0.0.5
+
+### Patch Changes
+
+- fd9302b: fix reactivity with mergeProps
+
 ## 0.0.4
 
 ### Patch Changes

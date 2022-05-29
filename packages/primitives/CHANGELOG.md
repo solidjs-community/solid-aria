@@ -1,5 +1,16 @@
 # @solid-aria/primitives
 
+## 0.0.13
+
+### Patch Changes
+
+- Updated dependencies [fd9302b]
+  - @solid-aria/breadcrumbs@0.0.5
+  - @solid-aria/label@0.0.7
+  - @solid-aria/checkbox@0.0.11
+  - @solid-aria/listbox@0.0.10
+  - @solid-aria/radio@0.0.12
+
 ## 0.0.12
 
 ### Patch Changes

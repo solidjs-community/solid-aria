@@ -1,5 +1,12 @@
 # @solid-aria/radio
 
+## 0.0.12
+
+### Patch Changes
+
+- Updated dependencies [fd9302b]
+  - @solid-aria/label@0.0.7
+
 ## 0.0.11
 
 ### Patch Changes

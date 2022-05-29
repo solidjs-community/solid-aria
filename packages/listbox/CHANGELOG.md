@@ -1,5 +1,12 @@
 # @solid-aria/listbox
 
+## 0.0.10
+
+### Patch Changes
+
+- Updated dependencies [fd9302b]
+  - @solid-aria/label@0.0.7
+
 ## 0.0.9
 
 ### Patch Changes

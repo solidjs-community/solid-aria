@@ -1,5 +1,11 @@
 # @solid-aria/label
 
+## 0.0.7
+
+### Patch Changes
+
+- fd9302b: fix reactivity with mergeProps
+
 ## 0.0.6
 
 ### Patch Changes
