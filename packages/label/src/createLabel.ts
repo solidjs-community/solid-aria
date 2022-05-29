@@ -54,8 +54,10 @@ export function createLabel<T extends DOMElements = "label">(props: AriaLabelPro
     isHTMLLabelElement: true
   };
 
-  const propsWithDefault = mergeProps(defaultProps, props);
-  const [local] = splitProps(propsWithDefault, [
+  // eslint-disable-next-line solid/reactivity
+  props = mergeProps(defaultProps, props);
+
+  const [local] = splitProps(props, [
     "id",
     "label",
     "aria-labelledby",

@@ -67,6 +67,7 @@ export function createBreadcrumbItem<
     elementType: "a"
   };
 
+  // eslint-disable-next-line solid/reactivity
   props = mergeProps(defaultProps, props);
 
   const [local, others] = splitProps(props, [
@@ -76,14 +77,16 @@ export function createBreadcrumbItem<
     "elementType"
   ]);
 
-  const memoizedCreateLink = createMemo(() => {
-    const createLinkProps = mergeProps(others, {
-      isDisabled: local.isDisabled || local.isCurrent,
-      elementType: local.elementType
-    });
-
-    return createLink(createLinkProps, ref);
+  const createLinkProps = mergeProps(others, {
+    get isDisabled() {
+      return local.isDisabled || local.isCurrent;
+    },
+    get elementType() {
+      return local.elementType;
+    }
   });
+
+  const { linkProps } = createLink(createLinkProps, ref);
 
   const isHeading = createMemo(() => /^h[1-6]$/.test(local.elementType ?? ""));
 
@@ -95,7 +98,7 @@ export function createBreadcrumbItem<
     if (!isHeading()) {
       itemProps = {
         ...itemProps,
-        ...memoizedCreateLink().linkProps()
+        ...linkProps()
       };
     }
 
