@@ -15,7 +15,7 @@
  * governing permissions and limitations under the License.
  */
 
-import { createMemo, JSX } from "solid-js";
+import { children, createMemo, JSX } from "solid-js";
 
 import { ItemMetaData, ItemProps, PartialNode } from "./types";
 
@@ -29,7 +29,9 @@ export function Item<T>(props: ItemProps<T>) {
 }
 
 function* getCollectionNodeForItem<T>(props: ItemProps<T>): Generator<PartialNode<T>> {
-  const rendered = () => props.title || props.children;
+  const resolvedChildren = children(() => props.children);
+
+  const rendered = createMemo(() => props.title || resolvedChildren());
 
   const ariaLabel = () => props["aria-label"];
 
@@ -47,13 +49,29 @@ function* getCollectionNodeForItem<T>(props: ItemProps<T>): Generator<PartialNod
     return ariaLabel() || "";
   });
 
+  const hasChildItems = createMemo(() => {
+    if (props.hasChildItems != null) {
+      return props.hasChildItems;
+    }
+
+    if (props.childItems) {
+      return true;
+    }
+
+    if (props.title != null && resolvedChildren() != null) {
+      return true;
+    }
+
+    return false;
+  });
+
   yield {
     type: "item",
     props: props,
     rendered,
     textValue,
     "aria-label": ariaLabel,
-    hasChildNodes: hasChildItems(props),
+    hasChildNodes: hasChildItems(),
     *childNodes() {
       if (props.childItems) {
         for (const item of props.childItems) {
@@ -63,13 +81,19 @@ function* getCollectionNodeForItem<T>(props: ItemProps<T>): Generator<PartialNod
           };
         }
       } else if (props.title) {
-        const items: PartialNode<T>[] = [];
+        let childs = resolvedChildren();
 
-        if (props.children == null) {
-          yield* items;
+        // No childs, yield "nothing" and return.
+        if (childs == null) {
+          yield* [];
+          return;
         }
 
-        const childs = Array.isArray(props.children) ? props.children : [props.children];
+        const items: PartialNode<T>[] = [];
+
+        if (!Array.isArray(childs)) {
+          childs = [childs];
+        }
 
         childs.forEach(child => {
           items.push({
@@ -82,20 +106,4 @@ function* getCollectionNodeForItem<T>(props: ItemProps<T>): Generator<PartialNod
       }
     }
   };
-}
-
-function hasChildItems<T>(props: ItemProps<T>) {
-  if (props.hasChildItems != null) {
-    return props.hasChildItems;
-  }
-
-  if (props.childItems) {
-    return true;
-  }
-
-  if (props.title != null && props.children != null) {
-    return true;
-  }
-
-  return false;
 }

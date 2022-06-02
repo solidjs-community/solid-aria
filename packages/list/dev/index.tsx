@@ -1,23 +1,22 @@
-import { Item, Section } from "@solid-aria/collection";
+import { CollectionBase, Item, Section } from "@solid-aria/collection";
 import { createSignal, For, Show } from "solid-js";
 import { render } from "solid-js/web";
 
 import { createListState } from "../src";
 
-function ListBox(props: any) {
+function ListBox<T>(props: CollectionBase<T>) {
   // Create state based on the incoming props
   const state = createListState<any>(props);
 
   return (
     <>
-      <div>{props.label}</div>
       <ul
         style={{
           padding: 0,
           margin: "5px 0",
           "list-style": "none",
           border: "1px solid gray",
-          "max-width": "450px"
+          "max-width": "250px"
         }}
       >
         <For each={[...state.collection()]}>
@@ -52,12 +51,12 @@ function OptGroup(props: any) {
               padding: "2px 5px"
             }}
           >
-            {props.section.key} - {props.section.rendered()}
+            {props.section.rendered()}
           </span>
         </Show>
         <ul
           style={{
-            padding: props.section.level * 10 || 10,
+            padding: 0,
             "list-style": "none"
           }}
         >
@@ -78,39 +77,72 @@ function OptGroup(props: any) {
 }
 
 function Option(props: any) {
-  return (
-    <li style={{ padding: "2px 5px" }}>
-      {props.key} - {props.item.rendered()}
-    </li>
-  );
+  return <li style={{ padding: "2px 5px" }}>{props.item.rendered()}</li>;
 }
 
 function App() {
-  const [foo, setFoo] = createSignal(0);
-  const [fruits, setFruits] = createSignal(["Banana", "Peach"]);
-
-  const incrementFoo = () => setFoo(prev => prev + 1);
-  const addApple = () => setFruits(prev => [...prev, "Apple"]);
-
+  const [sections, setSections] = createSignal([
+    {
+      name: "People",
+      items: [{ name: "David" }, { name: "Same" }, { name: "Jane" }]
+    },
+    {
+      name: "Animals",
+      items: [{ name: "Aardvark" }, { name: "Kangaroo" }, { name: "Snake" }]
+    }
+  ]);
   return (
     <>
-      <button onClick={incrementFoo}>Increment foo</button>
-      <button onClick={addApple}>Add Apple</button>
-      <ListBox>
-        <Item>Dashboard</Item>
-        <Section title="Sales">
-          <Item>Invoices</Item>
-          <Item>Customers</Item>
-          <Item title="Create New">
-            <Item>Create invoice</Item>
-            <Item>Create customer {foo()}</Item>
+      {/* <ListBox>
+        <Item>
+          {(() => {
+            console.log(`Rendered item children`);
+            return <span>Content</span>;
+          })()}
+        </Item>
+        <Section>
+          <Item>
+            {(() => {
+              console.log(`Rendered section children`);
+              return <span>Content</span>;
+            })()}
           </Item>
         </Section>
-        <Section title="Expenses">
-          <Item>Incomes</Item>
-          <Item>Outcomes</Item>
-        </Section>
-        <Item>Settings</Item>
+      </ListBox> */}
+      {/* <ListBox items={sections()}>
+        {section => (
+          <Section key={section.name} title={section.name} items={section.items}>
+            {item => (
+              <Item key={item.name}>
+                {(() => {
+                  console.log(`Rendered ${item.name} children`);
+                  return <span>{item.name}</span>;
+                })()}
+              </Item>
+            )}
+          </Section>
+        )}
+      </ListBox> */}
+      <ListBox>
+        <For each={["Banana", "Peach", "Apple"]}>{fruit => <Item key={fruit}>{fruit}</Item>}</For>
+      </ListBox>
+      <ListBox>
+        <For each={sections()}>
+          {section => (
+            <Section key={section.name} title={section.name}>
+              <For each={section.items}>
+                {item => (
+                  <Item key={item.name}>
+                    {(() => {
+                      console.log(`Rendered ${item.name} children`);
+                      return <span>{item.name}</span>;
+                    })()}
+                  </Item>
+                )}
+              </For>
+            </Section>
+          )}
+        </For>
       </ListBox>
     </>
   );

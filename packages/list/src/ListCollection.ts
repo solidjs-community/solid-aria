@@ -27,8 +27,6 @@ export class ListCollection<T> implements Collection<Node<T>> {
     this.iterable = nodes;
 
     const visit = (node: Node<T>) => {
-      console.log(node.key);
-
       this.keyMap.set(node.key, node);
 
       if (node.childNodes && node.type === "section") {

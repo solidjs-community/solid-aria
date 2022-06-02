@@ -15,7 +15,7 @@
  * governing permissions and limitations under the License.
  */
 
-import { JSX } from "solid-js";
+import { children, JSX } from "solid-js";
 
 import {
   CollectionBase,
@@ -39,28 +39,38 @@ export class CollectionBuilder<T extends object> {
   }
 
   private *iterateCollection(props: CollectionBase<T>) {
+    const resolvedChildren = children(() => props.children as any);
+
     if (props.items) {
-      if (typeof props.children !== "function") {
+      if (typeof resolvedChildren() !== "function") {
         throw new Error(
           "[solid-aria]: props.items was present but props.children is not a function"
         );
       }
 
       for (const item of props.items) {
-        yield* this.getFullNode({ value: item }, { renderer: props.children as any });
+        yield* this.getFullNode({ value: item }, { renderer: resolvedChildren() as any });
       }
     } else {
-      if (props.children == null) {
+      let items = resolvedChildren();
+
+      if (items == null) {
         return;
       }
 
-      const items = (Array.isArray(props.children)
-        ? props.children
-        : [props.children]) as unknown as ItemMetaData<T>[];
+      if (!Array.isArray(items)) {
+        items = [items];
+      }
 
       let index = 0;
       for (const item of items) {
-        const nodes = this.getFullNode({ metadata: item, index: index }, {});
+        const nodes = this.getFullNode(
+          {
+            metadata: item as unknown as ItemMetaData<T>,
+            index: index
+          },
+          {}
+        );
 
         for (const node of nodes) {
           index++;

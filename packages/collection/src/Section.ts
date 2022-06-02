@@ -15,7 +15,7 @@
  * governing permissions and limitations under the License.
  */
 
-import { JSX } from "solid-js";
+import { children, createMemo, JSX } from "solid-js";
 
 import { ItemMetaData, ItemRenderer, PartialNode, SectionProps } from "./types";
 
@@ -29,7 +29,10 @@ export function Section<T>(props: SectionProps<T>) {
 }
 
 function* getCollectionNodeForSection<T>(props: SectionProps<T>): Generator<PartialNode<T>> {
-  const rendered = () => props.title;
+  const resolvedChildren = children(() => props.children as any);
+
+  const rendered = createMemo(() => props.title);
+
   const ariaLabel = () => props["aria-label"];
 
   yield {
@@ -39,7 +42,7 @@ function* getCollectionNodeForSection<T>(props: SectionProps<T>): Generator<Part
     "aria-label": ariaLabel,
     *childNodes() {
       if (props.items) {
-        if (typeof props.children !== "function") {
+        if (typeof resolvedChildren() !== "function") {
           throw new Error(
             "[solid-aria]: props.items was present but props.children is not a function"
           );
@@ -49,22 +52,30 @@ function* getCollectionNodeForSection<T>(props: SectionProps<T>): Generator<Part
           yield {
             type: "item",
             value: item,
-            renderer: props.children as ItemRenderer<T>
+            renderer: resolvedChildren() as unknown as ItemRenderer<T>
           };
         }
       } else {
+        let childs = resolvedChildren();
+
+        // No childs yield "nothing" and return.
+        if (childs == null) {
+          yield* [];
+          return;
+        }
+
         const items: PartialNode<T>[] = [];
 
-        if (props.children != null) {
-          const childs = Array.isArray(props.children) ? props.children : [props.children];
-
-          childs.forEach(child => {
-            items.push({
-              type: "item",
-              metadata: child as unknown as ItemMetaData<T>
-            });
-          });
+        if (!Array.isArray(childs)) {
+          childs = [childs];
         }
+
+        childs.forEach(child => {
+          items.push({
+            type: "item",
+            metadata: child as unknown as ItemMetaData<T>
+          });
+        });
 
         yield* items;
       }
