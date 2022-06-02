@@ -1,8 +1,8 @@
 {
-  "name": "@solid-aria/utils",
-  "version": "0.0.6",
+  "name": "@solid-aria/list",
+  "version": "0.0.5",
   "private": false,
-  "description": "A collection of utility types and functions, for building Solid Aria primitives.",
+  "description": "Primitives for managing list collections.",
   "keywords": [
     "solid",
     "aria",
@@ -11,7 +11,7 @@
     "system",
     "components"
   ],
-  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/utils#readme",
+  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/list#readme",
   "bugs": {
     "url": "https://github.com/solidjs-community/solid-aria/issues"
   },
@@ -33,12 +33,15 @@
   "scripts": {
     "build": "tsup",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "dev": "vite serve dev --host",
     "test": "jest --passWithNoTests",
     "test:watch": "jest --watch --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/types": "workspace:^"
+    "@solid-aria/collection": "workspace:^",
+    "@solid-aria/types": "workspace:^",
+    "@solid-aria/utils": "workspace:^"
   },
   "peerDependencies": {
     "@solid-primitives/utils": "^2.0.1",
@@ -48,7 +51,7 @@
     "access": "public"
   },
   "primitive": {
-    "name": "utils",
+    "name": "list",
     "stage": 0,
     "list": [],
     "category": ""

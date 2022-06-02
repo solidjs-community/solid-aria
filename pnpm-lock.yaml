@@ -194,6 +194,16 @@ importers:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 
+  packages/list:
+    specifiers:
+      '@solid-aria/collection': workspace:^
+      '@solid-aria/types': workspace:^
+      '@solid-aria/utils': workspace:^
+    dependencies:
+      '@solid-aria/collection': link:../collection
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
   packages/listbox:
     specifiers:
       '@solid-aria/collection': workspace:^
@@ -334,10 +344,8 @@ importers:
   packages/utils:
     specifiers:
       '@solid-aria/types': workspace:^
-      '@solid-primitives/utils': ^2.0.1
     dependencies:
       '@solid-aria/types': link:../types
-      '@solid-primitives/utils': 2.0.3
 
   packages/visually-hidden:
     specifiers:
@@ -2433,12 +2441,6 @@ packages:
     dependencies:
       solid-js: 1.4.3
     dev: true
-
-  /@solid-primitives/utils/2.0.3:
-    resolution: {integrity: sha512-dIv339WSJZ8C50kcJ7Ys5aLPSs59+GMsSrtJ/bGnA38gkLgmKry1XIZJLAUVz/uiOiZ661GUJ+IMngsqG8u09g==}
-    peerDependencies:
-      solid-js: ^1.4.1
-    dev: false
 
   /@solid-primitives/utils/2.0.3_solid-js@1.4.3:
     resolution: {integrity: sha512-dIv339WSJZ8C50kcJ7Ys5aLPSs59+GMsSrtJ/bGnA38gkLgmKry1XIZJLAUVz/uiOiZ661GUJ+IMngsqG8u09g==}
