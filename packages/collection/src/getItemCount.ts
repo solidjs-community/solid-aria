@@ -19,7 +19,7 @@ import { Node } from "./types";
 
 const cache = new WeakMap<Iterable<unknown>, number>();
 
-export function getItemCount<T>(collection: Iterable<Node<T>>): number {
+export function getItemCount(collection: Iterable<Node>): number {
   let count = cache.get(collection);
   if (count != null) {
     return count;

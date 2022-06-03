@@ -20,22 +20,22 @@ import { Accessor } from "solid-js";
 
 import { ListCollection } from "./ListCollection";
 
-export interface ListProps<T> extends CollectionBase<T> {
+export interface ListProps extends CollectionBase {
   /** Filter function to generate a filtered list of nodes. */
-  filter?: (nodes: Iterable<Node<T>>) => Iterable<Node<T>>;
+  filter?: (nodes: Iterable<Node>) => Iterable<Node>;
 }
 
-export interface ListState<T> {
+export interface ListState {
   /** A collection of items in the list. */
-  collection: Accessor<Collection<Node<T>>>;
+  collection: Accessor<Collection<Node>>;
 }
 
 /**
  * Provides state management for list-like components. Handles building a collection
  * of items from props, and manages multiple selection state.
  */
-export function createListState<T extends object>(props: ListProps<T>): ListState<T> {
-  const factory = (nodes: Iterable<Node<T>>) => {
+export function createListState(props: ListProps): ListState {
+  const factory = (nodes: Iterable<Node>) => {
     return props.filter ? new ListCollection(props.filter(nodes)) : new ListCollection(nodes);
   };
 
