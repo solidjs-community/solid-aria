@@ -15,18 +15,18 @@
  * governing permissions and limitations under the License.
  */
 
-import { Collection, Key, Node } from "@solid-aria/collection";
+import { Collection, ItemKey, Node } from "@solid-aria/collection";
 
-export class ListCollection<T> implements Collection<Node<T>> {
-  private keyMap: Map<Key, Node<T>> = new Map();
-  private iterable: Iterable<Node<T>>;
-  private firstKey?: Key;
-  private lastKey?: Key;
+export class ListCollection implements Collection<Node> {
+  private keyMap: Map<ItemKey, Node> = new Map();
+  private iterable: Iterable<Node>;
+  private firstKey?: ItemKey;
+  private lastKey?: ItemKey;
 
-  constructor(nodes: Iterable<Node<T>>) {
+  constructor(nodes: Iterable<Node>) {
     this.iterable = nodes;
 
-    const visit = (node: Node<T>) => {
+    const visit = (node: Node) => {
       this.keyMap.set(node.key, node);
 
       if (node.childNodes && node.type === "section") {
@@ -44,7 +44,7 @@ export class ListCollection<T> implements Collection<Node<T>> {
       return;
     }
 
-    let last!: Node<T>;
+    let last!: Node;
     let index = 0;
     for (const [key, node] of this.keyMap) {
       if (last) {
@@ -81,12 +81,12 @@ export class ListCollection<T> implements Collection<Node<T>> {
     return this.keyMap.keys();
   }
 
-  getKeyBefore(key: Key) {
+  getKeyBefore(key: ItemKey) {
     const node = this.keyMap.get(key);
     return node?.prevKey;
   }
 
-  getKeyAfter(key: Key) {
+  getKeyAfter(key: ItemKey) {
     const node = this.keyMap.get(key);
     return node?.nextKey;
   }
@@ -99,7 +99,7 @@ export class ListCollection<T> implements Collection<Node<T>> {
     return this.lastKey;
   }
 
-  getItem(key: Key) {
+  getItem(key: ItemKey) {
     return this.keyMap.get(key);
   }
 

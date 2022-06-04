@@ -17,18 +17,18 @@
 
 import { children, createMemo, JSX } from "solid-js";
 
-import { ItemMetaData, ItemRenderer, PartialNode, SectionProps } from "./types";
+import { ItemMetaData, PartialNode, SectionProps } from "./types";
 
-export function Section<T>(props: SectionProps<T>) {
-  const metadata: ItemMetaData<T> = {
+export function Section(props: SectionProps) {
+  const metadata: ItemMetaData = {
     key: () => props.key,
-    getCollectionNode: () => getCollectionNodeForSection<T>(props)
+    getCollectionNode: () => getCollectionNodeForSection(props)
   };
 
   return metadata as unknown as JSX.Element;
 }
 
-function* getCollectionNodeForSection<T>(props: SectionProps<T>): Generator<PartialNode<T>> {
+function* getCollectionNodeForSection(props: SectionProps): Generator<PartialNode> {
   const title = createMemo(() => props.title);
 
   const resolvedChildren = children(() => props.children as any);
@@ -41,36 +41,20 @@ function* getCollectionNodeForSection<T>(props: SectionProps<T>): Generator<Part
     rendered: title,
     "aria-label": ariaLabel,
     *childNodes() {
-      if (props.items) {
-        if (typeof resolvedChildren() !== "function") {
-          throw new Error(
-            "[solid-aria]: props.items was present but props.children is not a function"
-          );
-        }
+      let childs = resolvedChildren() ?? [];
 
-        for (const item of props.items) {
-          yield {
-            type: "item",
-            value: item,
-            renderer: resolvedChildren() as unknown as ItemRenderer<T>
-          };
-        }
-      } else {
-        let childs = resolvedChildren() ?? [];
-
-        if (!Array.isArray(childs)) {
-          childs = [childs];
-        }
-
-        const items: PartialNode<T>[] = childs.map(child => {
-          return {
-            type: "item",
-            metadata: child as unknown as ItemMetaData<T>
-          } as PartialNode<T>;
-        });
-
-        yield* items;
+      if (!Array.isArray(childs)) {
+        childs = [childs];
       }
+
+      const items: PartialNode[] = childs.map(child => {
+        return {
+          type: "item",
+          metadata: child as unknown as ItemMetaData
+        } as PartialNode;
+      });
+
+      yield* items;
     }
   };
 }

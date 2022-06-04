@@ -17,17 +17,15 @@
 
 import { Accessor, JSX } from "solid-js";
 
-export type Key = string | number;
+export type ItemKey = string | number;
 
 export type ItemType = "item" | "section" | "cell";
 
 export type ElementWrapper = (element: JSX.Element) => JSX.Element;
 
-export type ItemRenderer<T> = (item: T) => JSX.Element;
-
-export interface ItemProps<T> {
+export interface ItemProps {
   /** A unique key for the item. */
-  key?: Key;
+  key: ItemKey;
 
   /** Rendered contents of the item or child items. */
   children: JSX.Element;
@@ -41,24 +39,21 @@ export interface ItemProps<T> {
   /** An accessibility label for this item. */
   "aria-label"?: string;
 
-  /** A list of child item objects. Used for dynamic collections. */
-  childItems?: Iterable<T>;
-
   /** Whether this item has children, even if not loaded yet. */
   hasChildItems?: boolean;
 }
 
-export interface ItemMetaData<T> {
+export interface ItemMetaData {
   /** A unique key for the item. */
-  key?: Accessor<Key | undefined>;
+  key: Accessor<ItemKey>;
 
   /** A generator for getting a `PartialNode` from the item metadata used to build a collection `Node`. */
-  getCollectionNode: () => Generator<PartialNode<T>>;
+  getCollectionNode: Accessor<Generator<PartialNode>>;
 }
 
-export interface SectionProps<T> {
+export interface SectionProps {
   /** A unique key for the section. */
-  key?: Key;
+  key: ItemKey;
 
   /** Rendered contents of the section, e.g. a header. */
   title?: JSX.Element;
@@ -66,22 +61,16 @@ export interface SectionProps<T> {
   /** An accessibility label for the section. */
   "aria-label"?: string;
 
-  /** Static child items or a function to render children. */
-  children: JSX.Element | ItemRenderer<T>;
-
-  /** Item objects in the section. */
-  items?: Iterable<T>;
+  /** Child items. */
+  children: JSX.Element;
 }
 
-export interface CollectionBase<T> {
+export interface CollectionBase {
   /** The contents of the collection. */
-  children: JSX.Element | ItemRenderer<T>;
-
-  /** Item objects in the collection. */
-  items?: Iterable<T>;
+  children: JSX.Element;
 
   /** The item keys that are disabled. These items cannot be selected, focused, or otherwise interacted with. */
-  disabledKeys?: Iterable<Key>;
+  disabledKeys?: Iterable<ItemKey>;
 }
 
 /**
@@ -93,36 +82,33 @@ export interface Collection<T> extends Iterable<T> {
   readonly size: number;
 
   /** Iterate over all keys in the collection. */
-  getKeys(): Iterable<Key>;
+  getKeys(): Iterable<ItemKey>;
 
   /** Get an item by its key. */
-  getItem(key: Key): T | undefined;
+  getItem(key: ItemKey): T | undefined;
 
   /** Get an item by the index of its key. */
   at(idx: number): T | undefined;
 
   /** Get the key that comes before the given key in the collection. */
-  getKeyBefore(key: Key): Key | undefined;
+  getKeyBefore(key: ItemKey): ItemKey | undefined;
 
   /** Get the key that comes after the given key in the collection. */
-  getKeyAfter(key: Key): Key | undefined;
+  getKeyAfter(key: ItemKey): ItemKey | undefined;
 
   /** Get the first key in the collection. */
-  getFirstKey(): Key | undefined;
+  getFirstKey(): ItemKey | undefined;
 
   /** Get the last key in the collection. */
-  getLastKey(): Key | undefined;
+  getLastKey(): ItemKey | undefined;
 }
 
-export interface Node<T> {
+export interface Node {
   /** The type of item this node represents. */
   type: ItemType;
 
   /** A unique key for the node. */
-  key: Key;
-
-  /** The object value the node was created from. */
-  value: T;
+  key: ItemKey;
 
   /** The level of depth this node is at in the heirarchy. */
   level: number;
@@ -131,7 +117,7 @@ export interface Node<T> {
   hasChildNodes: boolean;
 
   /** The loaded children of this node. */
-  childNodes: Iterable<Node<T>>;
+  childNodes: Iterable<Node>;
 
   /** The rendered contents of this node (e.g. JSX). */
   rendered: Accessor<JSX.Element>;
@@ -149,13 +135,13 @@ export interface Node<T> {
   wrapper?: ElementWrapper;
 
   /** The key of the parent node. */
-  parentKey?: Key;
+  parentKey?: ItemKey;
 
   /** The key of the node before this node. */
-  prevKey?: Key;
+  prevKey?: ItemKey;
 
   /** The key of the node after this node. */
-  nextKey?: Key;
+  nextKey?: ItemKey;
 
   /** Additional properties specific to a particular node type. */
   props?: any;
@@ -164,18 +150,15 @@ export interface Node<T> {
   shouldInvalidate?: (context: unknown) => boolean;
 }
 
-export interface PartialNode<T> {
+export interface PartialNode {
   /** The type of item this node represents. */
   type?: ItemType;
 
   /** A unique key for the node. */
-  key?: Key;
-
-  /** The object value the node was created from. */
-  value?: T;
+  key?: ItemKey;
 
   /** Meta data about the item used to create this node. */
-  metadata?: ItemMetaData<T>;
+  metadata?: ItemMetaData;
 
   /** A function that should be called to wrap the rendered node. */
   wrapper?: ElementWrapper;
@@ -192,14 +175,11 @@ export interface PartialNode<T> {
   /** The index of this node within its parent. */
   index?: number;
 
-  /** A function to render the content of this node. */
-  renderer?: ItemRenderer<T>;
-
   /** Whether this item has children, even if not loaded yet. */
   hasChildNodes?: boolean;
 
   /** The loaded children of this node. */
-  childNodes?: () => IterableIterator<PartialNode<T>>;
+  childNodes?: Accessor<IterableIterator<PartialNode>>;
 
   /** Additional properties specific to a particular node type. */
   props?: any;

@@ -16,6 +16,7 @@
  */
 
 export * from "./createCollection";
+export * from "./ForItems";
 export * from "./getItemCount";
 export * from "./Item";
 export * from "./Section";

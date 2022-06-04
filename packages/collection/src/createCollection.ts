@@ -16,32 +16,30 @@
  */
 
 import { Accessor, children, createEffect, createSignal, on } from "solid-js";
+import { ResolvedChildren } from "solid-js/types/reactive/signal";
 
 import { CollectionBuilder } from "./CollectionBuilder";
-import { Collection, CollectionBase, Node } from "./types";
+import { Collection, CollectionBase, ItemMetaData, Node } from "./types";
 
-type CollectionFactory<T, C extends Collection<Node<T>>> = (node: Iterable<Node<T>>) => C;
+type CollectionFactory<C extends Collection<Node>> = (node: Iterable<Node>) => C;
 
-export function createCollection<
-  T extends object,
-  C extends Collection<Node<T>> = Collection<Node<T>>
->(
-  props: CollectionBase<T>,
-  factory: CollectionFactory<T, C>,
+export function createCollection<C extends Collection<Node> = Collection<Node>>(
+  props: CollectionBase,
+  factory: CollectionFactory<C>,
   deps: Accessor<any>[] = []
 ): Accessor<C> {
-  const builder = new CollectionBuilder<T>();
+  const resolvedChildren = children(() => props.children);
 
-  const nodes = builder.build(props);
+  const builder = new CollectionBuilder();
+
+  const nodes = createNodes(builder, resolvedChildren);
   const [collection, setCollection] = createSignal<C>(factory(nodes));
-
-  const resolvedChildren = children(() => props.children as any);
 
   createEffect(
     on(
-      [() => props.items, resolvedChildren, ...deps],
+      [resolvedChildren, ...deps],
       () => {
-        const nodes = builder.build(props);
+        const nodes = createNodes(builder, resolvedChildren);
         setCollection(() => factory(nodes));
       },
       {
@@ -51,4 +49,17 @@ export function createCollection<
   );
 
   return collection;
+}
+
+/**
+ * Create an Iterable of `Nodes` with the given builder and resolved children.
+ */
+function createNodes(builder: CollectionBuilder, resolvedChildren: Accessor<ResolvedChildren>) {
+  let items = resolvedChildren() ?? [];
+
+  if (!Array.isArray(items)) {
+    items = [items];
+  }
+
+  return builder.build(items as unknown as ItemMetaData[]);
 }
