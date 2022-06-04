@@ -29,16 +29,16 @@ export function Section<T>(props: SectionProps<T>) {
 }
 
 function* getCollectionNodeForSection<T>(props: SectionProps<T>): Generator<PartialNode<T>> {
-  const resolvedChildren = children(() => props.children as any);
+  const title = createMemo(() => props.title);
 
-  const rendered = createMemo(() => props.title);
+  const resolvedChildren = children(() => props.children as any);
 
   const ariaLabel = () => props["aria-label"];
 
   yield {
     type: "section",
     hasChildNodes: true,
-    rendered,
+    rendered: title,
     "aria-label": ariaLabel,
     *childNodes() {
       if (props.items) {
@@ -56,25 +56,17 @@ function* getCollectionNodeForSection<T>(props: SectionProps<T>): Generator<Part
           };
         }
       } else {
-        let childs = resolvedChildren();
-
-        // No childs yield "nothing" and return.
-        if (childs == null) {
-          yield* [];
-          return;
-        }
-
-        const items: PartialNode<T>[] = [];
+        let childs = resolvedChildren() ?? [];
 
         if (!Array.isArray(childs)) {
           childs = [childs];
         }
 
-        childs.forEach(child => {
-          items.push({
+        const items: PartialNode<T>[] = childs.map(child => {
+          return {
             type: "item",
             metadata: child as unknown as ItemMetaData<T>
-          });
+          } as PartialNode<T>;
         });
 
         yield* items;

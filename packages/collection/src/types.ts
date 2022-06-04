@@ -19,7 +19,9 @@ import { Accessor, JSX } from "solid-js";
 
 export type Key = string | number;
 
-export type Wrapper = (element: JSX.Element) => JSX.Element;
+export type ItemType = "item" | "section" | "cell";
+
+export type ElementWrapper = (element: JSX.Element) => JSX.Element;
 
 export type ItemRenderer<T> = (item: T) => JSX.Element;
 
@@ -114,7 +116,7 @@ export interface Collection<T> extends Iterable<T> {
 
 export interface Node<T> {
   /** The type of item this node represents. */
-  type: string;
+  type: ItemType;
 
   /** A unique key for the node. */
   key: Key;
@@ -132,7 +134,7 @@ export interface Node<T> {
   childNodes: Iterable<Node<T>>;
 
   /** The rendered contents of this node (e.g. JSX). */
-  rendered: () => JSX.Element;
+  rendered: Accessor<JSX.Element>;
 
   /** A string value for this node, used for features like typeahead. */
   textValue: Accessor<string>;
@@ -144,7 +146,7 @@ export interface Node<T> {
   index?: number;
 
   /** A function that should be called to wrap the rendered node. */
-  wrapper?: Wrapper;
+  wrapper?: ElementWrapper;
 
   /** The key of the parent node. */
   parentKey?: Key;
@@ -163,18 +165,45 @@ export interface Node<T> {
 }
 
 export interface PartialNode<T> {
-  type?: string;
+  /** The type of item this node represents. */
+  type?: ItemType;
+
+  /** A unique key for the node. */
   key?: Key;
+
+  /** The object value the node was created from. */
   value?: T;
+
+  /** Meta data about the item used to create this node. */
   metadata?: ItemMetaData<T>;
-  wrapper?: Wrapper;
-  rendered?: () => JSX.Element;
+
+  /** A function that should be called to wrap the rendered node. */
+  wrapper?: ElementWrapper;
+
+  /** The rendered contents of this node (e.g. JSX). */
+  rendered?: Accessor<JSX.Element>;
+
+  /** A string value for this node, used for features like typeahead. */
   textValue?: Accessor<string>;
+
+  /** An accessibility label for this node. */
   "aria-label"?: Accessor<string | undefined>;
+
+  /** The index of this node within its parent. */
   index?: number;
+
+  /** A function to render the content of this node. */
   renderer?: ItemRenderer<T>;
+
+  /** Whether this item has children, even if not loaded yet. */
   hasChildNodes?: boolean;
+
+  /** The loaded children of this node. */
   childNodes?: () => IterableIterator<PartialNode<T>>;
+
+  /** Additional properties specific to a particular node type. */
   props?: any;
+
+  /** @private */
   shouldInvalidate?: (context: unknown) => boolean;
 }

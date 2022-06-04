@@ -19,12 +19,12 @@ import { children, JSX } from "solid-js";
 
 import {
   CollectionBase,
+  ElementWrapper,
   ItemMetaData,
   ItemRenderer,
   Key,
   Node,
-  PartialNode,
-  Wrapper
+  PartialNode
 } from "./types";
 
 interface CollectionBuilderState {
@@ -52,11 +52,7 @@ export class CollectionBuilder<T extends object> {
         yield* this.getFullNode({ value: item }, { renderer: resolvedChildren() as any });
       }
     } else {
-      let items = resolvedChildren();
-
-      if (items == null) {
-        return;
-      }
+      let items = resolvedChildren() ?? [];
 
       if (!Array.isArray(items)) {
         items = [items];
@@ -266,7 +262,10 @@ function iterable<T>(iterator: () => IterableIterator<Node<T>>): Iterable<Node<T
   };
 }
 
-function compose(outer?: Wrapper, inner?: Wrapper | void): Wrapper | undefined {
+function compose(
+  outer?: ElementWrapper,
+  inner?: ElementWrapper | void
+): ElementWrapper | undefined {
   if (outer && inner) {
     return element => outer(inner(element));
   }

@@ -29,9 +29,11 @@ export function Item<T>(props: ItemProps<T>) {
 }
 
 function* getCollectionNodeForItem<T>(props: ItemProps<T>): Generator<PartialNode<T>> {
+  const title = createMemo(() => props.title);
+
   const resolvedChildren = children(() => props.children);
 
-  const rendered = createMemo(() => props.title || resolvedChildren());
+  const rendered = createMemo(() => title() || resolvedChildren());
 
   const ariaLabel = () => props["aria-label"];
 
@@ -58,7 +60,7 @@ function* getCollectionNodeForItem<T>(props: ItemProps<T>): Generator<PartialNod
       return true;
     }
 
-    if (props.title != null && resolvedChildren() != null) {
+    if (title() != null && resolvedChildren() != null) {
       return true;
     }
 
@@ -80,26 +82,18 @@ function* getCollectionNodeForItem<T>(props: ItemProps<T>): Generator<PartialNod
             value: item
           };
         }
-      } else if (props.title) {
-        let childs = resolvedChildren();
-
-        // No childs, yield "nothing" and return.
-        if (childs == null) {
-          yield* [];
-          return;
-        }
-
-        const items: PartialNode<T>[] = [];
+      } else if (title()) {
+        let childs = resolvedChildren() ?? [];
 
         if (!Array.isArray(childs)) {
           childs = [childs];
         }
 
-        childs.forEach(child => {
-          items.push({
+        const items: PartialNode<T>[] = childs.map(child => {
+          return {
             type: "item",
             metadata: child as unknown as ItemMetaData<T>
-          });
+          } as PartialNode<T>;
         });
 
         yield* items;

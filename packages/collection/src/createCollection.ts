@@ -15,7 +15,7 @@
  * governing permissions and limitations under the License.
  */
 
-import { Accessor, createEffect, createSignal, on } from "solid-js";
+import { Accessor, children, createEffect, createSignal, on } from "solid-js";
 
 import { CollectionBuilder } from "./CollectionBuilder";
 import { Collection, CollectionBase, Node } from "./types";
@@ -28,16 +28,18 @@ export function createCollection<
 >(
   props: CollectionBase<T>,
   factory: CollectionFactory<T, C>,
-  deps: Array<Accessor<any>> = []
+  deps: Accessor<any>[] = []
 ): Accessor<C> {
   const builder = new CollectionBuilder<T>();
 
   const nodes = builder.build(props);
   const [collection, setCollection] = createSignal<C>(factory(nodes));
 
+  const resolvedChildren = children(() => props.children as any);
+
   createEffect(
     on(
-      [() => props.items, ...deps],
+      [() => props.items, resolvedChildren, ...deps],
       () => {
         const nodes = builder.build(props);
         setCollection(() => factory(nodes));
