@@ -179,7 +179,7 @@ export interface PartialNode {
   hasChildNodes?: boolean;
 
   /** The loaded children of this node. */
-  childNodes?: Accessor<IterableIterator<PartialNode>>;
+  childNodes?: () => IterableIterator<PartialNode>;
 
   /** Additional properties specific to a particular node type. */
   props?: any;

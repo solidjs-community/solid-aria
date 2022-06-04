@@ -52,7 +52,11 @@ export class CollectionBuilder {
 
         partialNode.index = index;
 
-        const nodeKey = childNode.metadata ? childNode.key : metadata.key();
+        let nodeKey = childNode.key;
+
+        if (!nodeKey) {
+          nodeKey = childNode.metadata ? undefined : metadata.key();
+        }
 
         const nodes = this.getFullNode(
           {
@@ -116,7 +120,9 @@ export class CollectionBuilder {
         let index = 0;
         for (const child of partialNode.childNodes()) {
           child.index = index;
+
           const nodes = builder.getFullNode(child, node);
+
           for (const node of nodes) {
             index++;
             yield node;

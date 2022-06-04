@@ -31,7 +31,7 @@ export function Section(props: SectionProps) {
 function* getCollectionNodeForSection(props: SectionProps): Generator<PartialNode> {
   const title = createMemo(() => props.title);
 
-  const resolvedChildren = children(() => props.children as any);
+  const resolvedChildren = children(() => props.children);
 
   const ariaLabel = () => props["aria-label"];
 
