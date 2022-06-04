@@ -15,28 +15,29 @@
  * governing permissions and limitations under the License.
  */
 
-import { Accessor, children, createEffect, createSignal, on } from "solid-js";
+import { Accessor, createEffect, createSignal, on } from "solid-js";
 
 import { CollectionBuilder } from "./CollectionBuilder";
 import { Collection, CollectionBase, Node } from "./types";
 
-type CollectionFactory<C extends Collection<Node>> = (node: Iterable<Node>) => C;
+type CollectionFactory<T, C extends Collection<Node<T>>> = (node: Iterable<Node<T>>) => C;
 
-export function createCollection<C extends Collection<Node> = Collection<Node>>(
-  props: CollectionBase,
-  factory: CollectionFactory<C>,
-  deps: Accessor<any>[] = []
+export function createCollection<
+  T extends object,
+  C extends Collection<Node<T>> = Collection<Node<T>>
+>(
+  props: CollectionBase<T>,
+  factory: CollectionFactory<T, C>,
+  deps: Array<Accessor<any>> = []
 ): Accessor<C> {
-  const builder = new CollectionBuilder();
+  const builder = new CollectionBuilder<T>();
 
   const nodes = builder.build(props);
-  const [collection, setCollection] = createSignal(factory(nodes));
-
-  const resolvedChildren = children(() => props.children);
+  const [collection, setCollection] = createSignal<C>(factory(nodes));
 
   createEffect(
     on(
-      [resolvedChildren, ...deps],
+      [() => props.items, ...deps],
       () => {
         const nodes = builder.build(props);
         setCollection(() => factory(nodes));

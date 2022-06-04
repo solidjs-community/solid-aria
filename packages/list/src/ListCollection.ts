@@ -17,16 +17,16 @@
 
 import { Collection, Key, Node } from "@solid-aria/collection";
 
-export class ListCollection implements Collection<Node> {
-  private keyMap: Map<Key, Node> = new Map();
-  private iterable: Iterable<Node>;
+export class ListCollection<T> implements Collection<Node<T>> {
+  private keyMap: Map<Key, Node<T>> = new Map();
+  private iterable: Iterable<Node<T>>;
   private firstKey?: Key;
   private lastKey?: Key;
 
-  constructor(nodes: Iterable<Node>) {
+  constructor(nodes: Iterable<Node<T>>) {
     this.iterable = nodes;
 
-    const visit = (node: Node) => {
+    const visit = (node: Node<T>) => {
       this.keyMap.set(node.key, node);
 
       if (node.childNodes && node.type === "section") {
@@ -44,7 +44,7 @@ export class ListCollection implements Collection<Node> {
       return;
     }
 
-    let last!: Node;
+    let last!: Node<T>;
     let index = 0;
     for (const [key, node] of this.keyMap) {
       if (last) {

@@ -19,11 +19,11 @@ import { Accessor, JSX } from "solid-js";
 
 export type Key = string | number;
 
-export type ItemType = "item" | "section" | "cell";
+export type Wrapper = (element: JSX.Element) => JSX.Element;
 
-export type ElementWrapper = (element: JSX.Element) => JSX.Element;
+export type ItemRenderer<T> = (item: T) => JSX.Element;
 
-export interface ItemProps {
+export interface ItemProps<T> {
   /** A unique key for the item. */
   key?: Key;
 
@@ -39,19 +39,22 @@ export interface ItemProps {
   /** An accessibility label for this item. */
   "aria-label"?: string;
 
+  /** A list of child item objects. Used for dynamic collections. */
+  childItems?: Iterable<T>;
+
   /** Whether this item has children, even if not loaded yet. */
   hasChildItems?: boolean;
 }
 
-export interface ItemMetaData {
+export interface ItemMetaData<T> {
   /** A unique key for the item. */
   key?: Accessor<Key | undefined>;
 
   /** A generator for getting a `PartialNode` from the item metadata used to build a collection `Node`. */
-  getCollectionNode: () => Generator<PartialNode>;
+  getCollectionNode: () => Generator<PartialNode<T>>;
 }
 
-export interface SectionProps {
+export interface SectionProps<T> {
   /** A unique key for the section. */
   key?: Key;
 
@@ -61,13 +64,19 @@ export interface SectionProps {
   /** An accessibility label for the section. */
   "aria-label"?: string;
 
-  /** Child items. */
-  children: JSX.Element;
+  /** Static child items or a function to render children. */
+  children: JSX.Element | ItemRenderer<T>;
+
+  /** Item objects in the section. */
+  items?: Iterable<T>;
 }
 
-export interface CollectionBase {
+export interface CollectionBase<T> {
   /** The contents of the collection. */
-  children: JSX.Element;
+  children: JSX.Element | ItemRenderer<T>;
+
+  /** Item objects in the collection. */
+  items?: Iterable<T>;
 
   /** The item keys that are disabled. These items cannot be selected, focused, or otherwise interacted with. */
   disabledKeys?: Iterable<Key>;
@@ -103,12 +112,15 @@ export interface Collection<T> extends Iterable<T> {
   getLastKey(): Key | undefined;
 }
 
-export interface Node {
+export interface Node<T> {
   /** The type of item this node represents. */
-  type: ItemType;
+  type: string;
 
   /** A unique key for the node. */
   key: Key;
+
+  /** The object value the node was created from. */
+  value: T;
 
   /** The level of depth this node is at in the heirarchy. */
   level: number;
@@ -117,10 +129,10 @@ export interface Node {
   hasChildNodes: boolean;
 
   /** The loaded children of this node. */
-  childNodes: Iterable<Node>;
+  childNodes: Iterable<Node<T>>;
 
   /** The rendered contents of this node (e.g. JSX). */
-  rendered: Accessor<JSX.Element>;
+  rendered: () => JSX.Element;
 
   /** A string value for this node, used for features like typeahead. */
   textValue: Accessor<string>;
@@ -132,7 +144,7 @@ export interface Node {
   index?: number;
 
   /** A function that should be called to wrap the rendered node. */
-  wrapper?: ElementWrapper;
+  wrapper?: Wrapper;
 
   /** The key of the parent node. */
   parentKey?: Key;
@@ -145,39 +157,24 @@ export interface Node {
 
   /** Additional properties specific to a particular node type. */
   props?: any;
+
+  /** @private */
+  shouldInvalidate?: (context: unknown) => boolean;
 }
 
-export interface PartialNode {
-  /** The type of item this node represents. */
-  type?: ItemType;
-
-  /** A unique key for the node. */
+export interface PartialNode<T> {
+  type?: string;
   key?: Key;
-
-  /** Meta data about the item. */
-  metadata?: ItemMetaData;
-
-  /** A function that should be called to wrap the rendered node. */
-  wrapper?: ElementWrapper;
-
-  /** The rendered contents of this node (e.g. JSX). */
-  rendered?: Accessor<JSX.Element>;
-
-  /** A string value for this node, used for features like typeahead. */
+  value?: T;
+  metadata?: ItemMetaData<T>;
+  wrapper?: Wrapper;
+  rendered?: () => JSX.Element;
   textValue?: Accessor<string>;
-
-  /** An accessibility label for this node. */
   "aria-label"?: Accessor<string | undefined>;
-
-  /** The index of this node within its parent. */
   index?: number;
-
-  /** Whether this item has children, even if not loaded yet. */
+  renderer?: ItemRenderer<T>;
   hasChildNodes?: boolean;
-
-  /** The loaded children of this node. */
-  childNodes?: () => IterableIterator<PartialNode>;
-
-  /** Additional properties specific to a particular node type. */
+  childNodes?: () => IterableIterator<PartialNode<T>>;
   props?: any;
+  shouldInvalidate?: (context: unknown) => boolean;
 }

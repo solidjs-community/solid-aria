@@ -17,21 +17,21 @@
 
 import { children, createMemo, JSX } from "solid-js";
 
-import { ItemMetaData, PartialNode, SectionProps } from "./types";
+import { ItemMetaData, ItemRenderer, PartialNode, SectionProps } from "./types";
 
-export function Section(props: SectionProps) {
-  const metadata: ItemMetaData = {
+export function Section<T>(props: SectionProps<T>) {
+  const metadata: ItemMetaData<T> = {
     key: () => props.key,
-    getCollectionNode: () => getCollectionNodeForSection(props)
+    getCollectionNode: () => getCollectionNodeForSection<T>(props)
   };
 
   return metadata as unknown as JSX.Element;
 }
 
-function* getCollectionNodeForSection(props: SectionProps): Generator<PartialNode> {
-  const rendered = createMemo(() => props.title);
+function* getCollectionNodeForSection<T>(props: SectionProps<T>): Generator<PartialNode<T>> {
+  const resolvedChildren = children(() => props.children as any);
 
-  const resolvedChildren = children(() => props.children);
+  const rendered = createMemo(() => props.title);
 
   const ariaLabel = () => props["aria-label"];
 
@@ -41,20 +41,44 @@ function* getCollectionNodeForSection(props: SectionProps): Generator<PartialNod
     rendered,
     "aria-label": ariaLabel,
     *childNodes() {
-      let childs = resolvedChildren() ?? [];
+      if (props.items) {
+        if (typeof resolvedChildren() !== "function") {
+          throw new Error(
+            "[solid-aria]: props.items was present but props.children is not a function"
+          );
+        }
 
-      if (!Array.isArray(childs)) {
-        childs = [childs];
+        for (const item of props.items) {
+          yield {
+            type: "item",
+            value: item,
+            renderer: resolvedChildren() as unknown as ItemRenderer<T>
+          };
+        }
+      } else {
+        let childs = resolvedChildren();
+
+        // No childs yield "nothing" and return.
+        if (childs == null) {
+          yield* [];
+          return;
+        }
+
+        const items: PartialNode<T>[] = [];
+
+        if (!Array.isArray(childs)) {
+          childs = [childs];
+        }
+
+        childs.forEach(child => {
+          items.push({
+            type: "item",
+            metadata: child as unknown as ItemMetaData<T>
+          });
+        });
+
+        yield* items;
       }
-
-      const items: PartialNode[] = childs.map(child => {
-        return {
-          type: "item",
-          metadata: child as unknown as ItemMetaData
-        } as PartialNode;
-      });
-
-      yield* items;
     }
   };
 }
