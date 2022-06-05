@@ -31,13 +31,19 @@ import { Selection } from "./Selection";
 import { MultipleSelectionState } from "./types";
 
 export interface MultipleSelectionStateProps extends MultipleSelection {
-  /** How multiple selection should behave in the collection. */
+  /**
+   * How multiple selection should behave in the collection.
+   */
   selectionBehavior?: MaybeAccessor<SelectionBehavior | undefined>;
 
-  /** Whether onSelectionChange should fire even if the new set of keys is the same as the last. */
+  /**
+   * Whether onSelectionChange should fire even if the new set of keys is the same as the last.
+   */
   allowDuplicateSelectionEvents?: MaybeAccessor<boolean | undefined>;
 
-  /** Whether `disabledKeys` applies to all interactions, or only selection. */
+  /**
+   * Whether `disabledKeys` applies to all interactions, or only selection.
+   */
   disabledBehavior?: MaybeAccessor<DisabledBehavior | undefined>;
 }
 

@@ -150,6 +150,7 @@ export class ListKeyboardDelegate implements KeyboardDelegate {
 
       if (item) {
         const substring = item.textValue().slice(0, search.length);
+
         if (item.textValue() && this.collator.compare(substring, search) === 0) {
           return key;
         }

@@ -19,7 +19,7 @@ export * from "./createMultipleSelectionState";
 // export * from "./createSelectableCollection";
 // export * from "./createSelectableItem";
 // export * from "./createSelectableList";
-// export * from "./createTypeSelect";
+export * from "./createTypeSelect";
 export * from "./ListKeyboardDelegate";
 export * from "./SelectionManager";
 export * from "./types";
