@@ -15,14 +15,24 @@
  * governing permissions and limitations under the License.
  */
 
-export * from "./collection";
-export * from "./dom";
-export * from "./element";
-export * from "./events";
-export * from "./focusable";
-export * from "./inputs";
-export * from "./label";
-export * from "./locale";
-export * from "./orientation";
-export * from "./polymorphic";
-export * from "./selection";
+import { isAppleDevice, isMac } from "@solid-aria/utils";
+
+interface Event {
+  altKey: boolean;
+  ctrlKey: boolean;
+  metaKey: boolean;
+}
+
+export function isNonContiguousSelectionModifier(e: Event) {
+  // Ctrl + Arrow Up/Arrow Down has a system wide meaning on macOS, so use Alt instead.
+  // On Windows and Ubuntu, Alt + Space has a system wide meaning.
+  return isAppleDevice() ? e.altKey : e.ctrlKey;
+}
+
+export function isCtrlKeyPressed(e: Event) {
+  if (isMac()) {
+    return e.metaKey;
+  }
+
+  return e.ctrlKey;
+}

@@ -17,7 +17,7 @@
 
 import { MaybeAccessor } from "@solid-primitives/utils";
 
-export type ItemKey = string | number;
+import { ItemKey } from "./collection";
 
 export interface SingleSelection {
   /** Whether the collection allows empty selection. */
