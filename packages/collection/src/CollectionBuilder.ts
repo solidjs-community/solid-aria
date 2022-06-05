@@ -105,7 +105,7 @@ export class CollectionBuilder {
       key: partialNode.key,
       parentKey: parentNode?.key,
       level: parentNode ? parentNode.level + 1 : 0,
-      index: partialNode.index,
+      index: partialNode.index ?? 0,
       rendered: () => partialNode.rendered?.(),
       textValue: () => partialNode.textValue?.() ?? "",
       "aria-label": partialNode["aria-label"],

@@ -15,7 +15,8 @@
  * governing permissions and limitations under the License.
  */
 
-import { Collection, ItemKey, Node } from "@solid-aria/collection";
+import { Collection, Node } from "@solid-aria/collection";
+import { ItemKey } from "@solid-aria/types";
 
 export class ListCollection implements Collection<Node> {
   private keyMap: Map<ItemKey, Node> = new Map();

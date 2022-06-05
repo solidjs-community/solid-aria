@@ -15,6 +15,21 @@
  * governing permissions and limitations under the License.
  */
 
-export * from "./createMultipleSelectionState";
-export * from "./SelectionManager";
-export * from "./types";
+import { createControllableSignal, CreateControllableSignalProps } from "@solid-aria/utils";
+import { Accessor } from "solid-js";
+
+import { Selection } from "./Selection";
+
+/**
+ * Creates a simple reactive `Selection` state with a getter, setter and a fallback value of an empty selection,
+ * that can be controlled with `value` and `onChange` props.
+ */
+export function createControllableSelectionSignal(
+  props: CreateControllableSignalProps<"all" | Selection>
+) {
+  const [_value, setValue] = createControllableSignal(props);
+
+  const value: Accessor<"all" | Selection> = () => _value() ?? new Selection();
+
+  return [value, setValue] as const;
+}

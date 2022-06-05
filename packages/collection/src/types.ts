@@ -15,9 +15,8 @@
  * governing permissions and limitations under the License.
  */
 
+import { ItemKey } from "@solid-aria/types";
 import { Accessor, JSX } from "solid-js";
-
-export type ItemKey = string | number;
 
 export type ItemType = "item" | "section" | "cell";
 
@@ -113,6 +112,9 @@ export interface Node {
   /** The level of depth this node is at in the heirarchy. */
   level: number;
 
+  /** The index of this node within its parent. */
+  index: number;
+
   /** Whether this item has children, even if not loaded yet. */
   hasChildNodes: boolean;
 
@@ -127,9 +129,6 @@ export interface Node {
 
   /** An accessibility label for this node. */
   "aria-label"?: Accessor<string | undefined>;
-
-  /** The index of this node within its parent. */
-  index?: number;
 
   /** A function that should be called to wrap the rendered node. */
   wrapper?: ElementWrapper;

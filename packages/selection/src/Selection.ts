@@ -15,6 +15,24 @@
  * governing permissions and limitations under the License.
  */
 
-export * from "./createMultipleSelectionState";
-export * from "./SelectionManager";
-export * from "./types";
+import { ItemKey } from "@solid-aria/types";
+
+/**
+ * A Selection is a special Set containing ItemKeys, which also has an anchor
+ * and current selected key for use when range selecting.
+ */
+export class Selection extends Set<ItemKey> {
+  anchorKey?: ItemKey;
+  currentKey?: ItemKey;
+
+  constructor(keys?: Iterable<ItemKey> | Selection, anchorKey?: ItemKey, currentKey?: ItemKey) {
+    super(keys);
+    if (keys instanceof Selection) {
+      this.anchorKey = anchorKey || keys.anchorKey;
+      this.currentKey = currentKey || keys.currentKey;
+    } else {
+      this.anchorKey = anchorKey;
+      this.currentKey = currentKey;
+    }
+  }
+}
