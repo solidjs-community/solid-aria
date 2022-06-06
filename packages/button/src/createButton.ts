@@ -82,6 +82,7 @@ export function createButton(
     type: "button"
   };
 
+  // eslint-disable-next-line solid/reactivity
   props = mergeProps(defaultProps, props);
 
   const additionalProps = createMemo(() => {

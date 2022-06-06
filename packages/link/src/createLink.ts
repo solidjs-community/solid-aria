@@ -17,7 +17,7 @@
 
 import { createFocusable } from "@solid-aria/focus";
 import { createPress } from "@solid-aria/interactions";
-import { AriaLabelingProps, DOMElements, FocusableProps, PressEvents } from "@solid-aria/types";
+import { AriaLabelingProps, FocusableProps, PressEvents } from "@solid-aria/types";
 import { filterDOMProps } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
 import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
@@ -40,11 +40,11 @@ export interface AriaLinkProps extends AriaLabelingProps, PressEvents, Focusable
   onClick?: (e: MouseEvent) => void;
 }
 
-export interface LinkAria<T extends DOMElements> {
+export interface LinkAria<T extends HTMLElement> {
   /**
    * Props for the link element.
    */
-  linkProps: Accessor<JSX.IntrinsicElements[T]>;
+  linkProps: Accessor<JSX.HTMLAttributes<T>>;
 
   /**
    * Whether the link is currently pressed.
@@ -57,14 +57,15 @@ export interface LinkAria<T extends DOMElements> {
  * A link allows a user to navigate to another page or resource within a web page
  * or application.
  */
-export function createLink<
-  T extends DOMElements = "a",
-  RefElement extends HTMLElement = HTMLAnchorElement
->(props: AriaLinkProps, ref: Accessor<RefElement | undefined>): LinkAria<T> {
+export function createLink<T extends HTMLElement = HTMLAnchorElement>(
+  props: AriaLinkProps,
+  ref: Accessor<T | undefined>
+): LinkAria<T> {
   const defaultProps: AriaLinkProps = {
     elementType: "a"
   };
 
+  // eslint-disable-next-line solid/reactivity
   props = mergeProps(defaultProps, props);
 
   const [local, createPressProps, others] = splitProps(
@@ -98,7 +99,7 @@ export function createLink<
           console.warn("onClick is deprecated, please use onPress");
         }
       }
-    }) as JSX.IntrinsicElements[T];
+    }) as JSX.HTMLAttributes<T>;
   });
 
   return { linkProps, isPressed };

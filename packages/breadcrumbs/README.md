@@ -71,7 +71,7 @@ function BreadcrumbItem(props: AriaBreadcrumbItemProps) {
 
   props = mergeProps({ elementType: "span" }, props);
 
-  const { itemProps } = createBreadcrumbItem<"span", HTMLSpanElement>(props, () => ref);
+  const { itemProps } = createBreadcrumbItem<HTMLSpanElement>(props, () => ref);
 
   return (
     <li>

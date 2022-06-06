@@ -82,7 +82,7 @@ function Checkbox(props: AriaCheckboxProps) {
 
   const { inputProps, state } = createCheckbox(props, () => ref);
   const { isFocusVisible, focusProps } = createFocusRing();
-  const { visuallyHiddenProps } = createVisuallyHidden<HTMLDivElement>();
+  const { visuallyHiddenProps } = createVisuallyHidden();
 
   return (
     <label style={{ display: "flex", "align-items": "center" }}>

@@ -16,7 +16,7 @@
  */
 
 import { focusSafely } from "@solid-aria/focus";
-import { AriaLabelingProps, DOMElements, DOMProps } from "@solid-aria/types";
+import { AriaLabelingProps, DOMProps } from "@solid-aria/types";
 import { createSlotId, filterDOMProps } from "@solid-aria/utils";
 import { Accessor, createMemo, JSX, onCleanup, onMount } from "solid-js";
 
@@ -28,33 +28,26 @@ export interface AriaDialogProps extends DOMProps, AriaLabelingProps {
   role?: "dialog" | "alertdialog";
 }
 
-export interface DialogAria<
-  DialogElementType extends DOMElements,
-  TitleElementType extends DOMElements
-> {
+export interface DialogAria {
   /**
    * Props for the dialog container element.
    */
-  dialogProps: Accessor<JSX.IntrinsicElements[DialogElementType]>;
+  dialogProps: Accessor<JSX.HTMLAttributes<any>>;
 
   /**
    * Props for the dialog title element.
    */
-  titleProps: Accessor<JSX.IntrinsicElements[TitleElementType]>;
+  titleProps: Accessor<JSX.HTMLAttributes<any>>;
 }
 
 /**
  * Provides the behavior and accessibility implementation for a dialog component.
  * A dialog is an overlay shown above other content in an application.
  */
-export function createDialog<
-  DialogElementType extends DOMElements = "div",
-  TitleElementType extends DOMElements = "h3",
-  RefElement extends HTMLElement = HTMLDivElement
->(
+export function createDialog<T extends HTMLElement>(
   props: AriaDialogProps,
-  ref: Accessor<RefElement | undefined>
-): DialogAria<DialogElementType, TitleElementType> {
+  ref: Accessor<T | undefined>
+): DialogAria {
   const defaultTitleId = createSlotId();
 
   const titleId = createMemo(() => {

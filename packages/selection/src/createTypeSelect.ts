@@ -15,7 +15,7 @@
  * governing permissions and limitations under the License.
  */
 
-import { DOMElements, ItemKey, KeyboardDelegate } from "@solid-aria/types";
+import { ItemKey, KeyboardDelegate } from "@solid-aria/types";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor, createMemo, createSignal, JSX } from "solid-js";
 
@@ -38,19 +38,17 @@ interface CreateTypeSelectProps {
   onTypeSelect?: (key: ItemKey) => void;
 }
 
-interface TypeSelectAria<T extends DOMElements> {
+interface TypeSelectAria {
   /**
    * Props to be spread on the owner of the options.
    */
-  typeSelectProps: Accessor<JSX.IntrinsicElements[T]>;
+  typeSelectProps: Accessor<JSX.HTMLAttributes<any>>;
 }
 
 /**
  * Handles typeahead interactions with collections.
  */
-export function createTypeSelect<T extends DOMElements = "ul">(
-  props: CreateTypeSelectProps
-): TypeSelectAria<T> {
+export function createTypeSelect(props: CreateTypeSelectProps): TypeSelectAria {
   const [search, setSearch] = createSignal("");
   const [timeoutId, setTimeoutId] = createSignal(-1);
 
@@ -98,7 +96,7 @@ export function createTypeSelect<T extends DOMElements = "ul">(
 
     return {
       onKeyDown: keyboardDelegate.getKeyForSearch ? onKeyDown : null
-    } as JSX.IntrinsicElements[T];
+    } as JSX.HTMLAttributes<any>;
   });
 
   return { typeSelectProps };

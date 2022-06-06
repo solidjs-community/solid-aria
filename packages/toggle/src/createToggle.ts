@@ -102,6 +102,7 @@ export function createToggle(
     validationState: "valid"
   };
 
+  // eslint-disable-next-line solid/reactivity
   props = mergeProps(defaultProps, props);
 
   const state = createToggleState(props);

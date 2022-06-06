@@ -20,7 +20,7 @@ import { createMemo } from "solid-js";
 import { fireEvent, render, screen } from "solid-testing-library";
 
 import { createOverlay } from "../src";
-import { installMouseEvent, installPointerEvent } from "../src/test-utils";
+import { installMouseEvent, installPointerEvent } from "./test-utils";
 
 function noop() {
   return;

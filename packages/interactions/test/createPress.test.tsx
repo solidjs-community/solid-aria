@@ -15,7 +15,6 @@
  * governing permissions and limitations under the License.
  */
 
-import { DOMElements } from "@solid-aria/types";
 import { createSignal, JSX, mergeProps, splitProps } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { fireEvent, render, screen } from "solid-testing-library";
@@ -23,9 +22,9 @@ import { fireEvent, render, screen } from "solid-testing-library";
 import { createPress, CreatePressProps } from "../src";
 import { installPointerEvent } from "./test-utils";
 
-function Example<T extends DOMElements = "div">(
+function Example(
   props: CreatePressProps &
-    JSX.IntrinsicElements[T] & { elementType?: T; style?: any; draggable?: boolean }
+    JSX.HTMLAttributes<any> & { elementType?: any; style?: any; draggable?: boolean; href?: string }
 ) {
   let ref: any;
 

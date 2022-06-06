@@ -35,7 +35,7 @@ interface BreadcrumbsAria {
   /**
    * Props for the breadcrumbs navigation element.
    */
-  navProps: Accessor<JSX.HTMLAttributes<HTMLElement>>;
+  navProps: Accessor<JSX.HTMLAttributes<any>>;
 }
 
 /**
@@ -45,10 +45,12 @@ interface BreadcrumbsAria {
 export function createBreadcrumbs(props: AriaBreadcrumbsProps): BreadcrumbsAria {
   const [local, others] = splitProps(props, ["aria-label"]);
 
-  const navProps = createMemo(() => ({
-    ...filterDOMProps(others, { labelable: true }),
-    "aria-label": local["aria-label"] || "Breadcrumbs"
-  }));
+  const navProps = createMemo(() => {
+    return {
+      ...filterDOMProps(others, { labelable: true }),
+      "aria-label": local["aria-label"] || "Breadcrumbs"
+    } as JSX.HTMLAttributes<any>;
+  });
 
   return { navProps };
 }

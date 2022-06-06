@@ -16,7 +16,7 @@
  */
 
 import { AriaLinkProps, createLink } from "@solid-aria/link";
-import { DOMElements, DOMProps } from "@solid-aria/types";
+import { DOMProps } from "@solid-aria/types";
 import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
 
 export interface AriaBreadcrumbItemProps extends AriaLinkProps, DOMProps {
@@ -48,21 +48,21 @@ export interface AriaBreadcrumbItemProps extends AriaLinkProps, DOMProps {
   children?: JSX.Element;
 }
 
-interface BreadcrumbItemAria<T extends DOMElements> {
+interface BreadcrumbItemAria<T extends HTMLElement> {
   /**
    * Props for the breadcrumb item link element.
    */
-  itemProps: Accessor<JSX.IntrinsicElements[T]>;
+  itemProps: Accessor<JSX.HTMLAttributes<T>>;
 }
 
 /**
  * Provides the behavior and accessibility implementation for an in a breadcrumbs component.
  * See `useBreadcrumbs` for details about breadcrumbs.
  */
-export function createBreadcrumbItem<
-  T extends DOMElements = "a",
-  RefElement extends HTMLElement = HTMLAnchorElement
->(props: AriaBreadcrumbItemProps, ref: Accessor<RefElement | undefined>): BreadcrumbItemAria<T> {
+export function createBreadcrumbItem<T extends HTMLElement = HTMLAnchorElement>(
+  props: AriaBreadcrumbItemProps,
+  ref: Accessor<T | undefined>
+): BreadcrumbItemAria<T> {
   const defaultProps: AriaBreadcrumbItemProps = {
     elementType: "a"
   };
@@ -91,7 +91,7 @@ export function createBreadcrumbItem<
   const isHeading = createMemo(() => /^h[1-6]$/.test(local.elementType ?? ""));
 
   const itemProps = createMemo(() => {
-    let itemProps: JSX.IntrinsicElements[T] = {
+    let itemProps: JSX.HTMLAttributes<T> = {
       "aria-disabled": local.isDisabled
     };
 

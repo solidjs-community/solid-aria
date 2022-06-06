@@ -16,7 +16,6 @@
  */
 
 import { AriaButtonProps } from "@solid-aria/button";
-import { DOMElements, ElementType } from "@solid-aria/types";
 import { createId } from "@solid-aria/utils";
 import { MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor, createMemo, JSX } from "solid-js";
@@ -34,19 +33,16 @@ interface CreateOverlayTriggerProps extends CreateOverlayTriggerStateProps {
   type: MaybeAccessor<Exclude<AriaButtonProps["aria-haspopup"], boolean | undefined>>;
 }
 
-interface OverlayTriggerAria<
-  TriggerElementType extends ElementType,
-  OverlayElementType extends DOMElements
-> {
+interface OverlayTriggerAria {
   /**
    * Props for the trigger element.
    */
-  triggerProps: Accessor<AriaButtonProps<TriggerElementType>>;
+  triggerProps: Accessor<AriaButtonProps>;
 
   /**
    * Props for the overlay container element.
    */
-  overlayProps: Accessor<JSX.IntrinsicElements[OverlayElementType]>;
+  overlayProps: Accessor<JSX.HTMLAttributes<any>>;
 
   /**
    * State for the overlay trigger, as returned by `createOverlayTriggerState`.
@@ -58,10 +54,7 @@ interface OverlayTriggerAria<
  * Handles the behavior and accessibility for an overlay trigger, e.g. a button
  * that opens a popover, menu, or other overlay that is positioned relative to the trigger.
  */
-export function createOverlayTrigger<
-  TriggerElementType extends ElementType = "button",
-  OverlayElementType extends DOMElements = "div"
->(props: CreateOverlayTriggerProps): OverlayTriggerAria<TriggerElementType, OverlayElementType> {
+export function createOverlayTrigger(props: CreateOverlayTriggerProps): OverlayTriggerAria {
   const overlayId = createId();
 
   const state = createOverlayTriggerState(props);

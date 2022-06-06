@@ -22,7 +22,6 @@ import { AriaLabelProps, createLabel } from "@solid-aria/label";
 import {
   AriaLabelingProps,
   AriaValidationProps,
-  DOMElements,
   DOMProps,
   InputBase,
   LabelableProps,
@@ -85,10 +84,7 @@ export interface AriaRadioGroupProps
   name?: string;
 }
 
-interface RadioGroupAria<
-  GroupElementType extends DOMElements,
-  LabelElementType extends DOMElements
-> {
+interface RadioGroupAria {
   /**
    * Provide the radio group state to descendant elements.
    */
@@ -97,12 +93,12 @@ interface RadioGroupAria<
   /**
    * Props for the radio group wrapper element.
    */
-  groupProps: Accessor<JSX.IntrinsicElements[GroupElementType]>;
+  groupProps: Accessor<JSX.HTMLAttributes<any>>;
 
   /**
    * Props for the radio group's visible label (if any).
    *  */
-  labelProps: Accessor<JSX.IntrinsicElements[LabelElementType]>;
+  labelProps: Accessor<JSX.HTMLAttributes<any>>;
 
   /**
    * State for the radio group, as returned by `createRadioGroupState`.
@@ -115,10 +111,7 @@ interface RadioGroupAria<
  * Radio groups allow users to select a single item from a list of mutually exclusive options.
  * @param props - Props for the radio group.
  */
-export function createRadioGroup<
-  GroupElementType extends DOMElements = "div",
-  LabelElementType extends DOMElements = "span"
->(props: AriaRadioGroupProps): RadioGroupAria<GroupElementType, LabelElementType> {
+export function createRadioGroup(props: AriaRadioGroupProps): RadioGroupAria {
   const state = createRadioGroupState(props);
 
   const defaultGroupName = createId();
@@ -141,7 +134,7 @@ export function createRadioGroup<
 
   const createLabelProps = mergeProps(defaultCreateLabelProps, props);
 
-  const { labelProps, fieldProps } = createLabel<LabelElementType>(createLabelProps);
+  const { labelProps, fieldProps } = createLabel(createLabelProps);
 
   const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
 
@@ -230,7 +223,7 @@ export function createRadioGroup<
       onKeyDown,
       ...fieldProps(),
       ...focusWithinProps()
-    }) as JSX.IntrinsicElements[GroupElementType];
+    }) as JSX.HTMLAttributes<any>;
   });
 
   const name = createMemo(() => props.name ?? defaultGroupName);

@@ -15,7 +15,7 @@
  * governing permissions and limitations under the License.
  */
 
-import { AriaLabelingProps, DOMElements, DOMProps, LabelableProps } from "@solid-aria/types";
+import { AriaLabelingProps, DOMProps, LabelableProps } from "@solid-aria/types";
 import { createId, mergeAriaLabels } from "@solid-aria/utils";
 import { MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
@@ -28,11 +28,11 @@ export interface AriaLabelProps extends LabelableProps, DOMProps, AriaLabelingPr
   isHTMLLabelElement?: MaybeAccessor<boolean | undefined>;
 }
 
-export interface LabelAria<T extends DOMElements> {
+export interface LabelAria {
   /**
    * Props to apply to the label container element.
    */
-  labelProps: Accessor<JSX.IntrinsicElements[T]>;
+  labelProps: Accessor<JSX.LabelHTMLAttributes<HTMLLabelElement>>;
 
   /**
    * Props to apply to the field container element being labeled.
@@ -45,7 +45,7 @@ export interface LabelAria<T extends DOMElements> {
  * Labels provide context for user inputs.
  * @param props - The props for labels and fields.
  */
-export function createLabel<T extends DOMElements = "label">(props: AriaLabelProps): LabelAria<T> {
+export function createLabel(props: AriaLabelProps): LabelAria {
   const defaultFieldId = createId();
   const labelId = createId();
 
@@ -65,7 +65,7 @@ export function createLabel<T extends DOMElements = "label">(props: AriaLabelPro
     "isHTMLLabelElement"
   ]);
 
-  const labelProps: Accessor<JSX.IntrinsicElements[T]> = createMemo(() => {
+  const labelProps: Accessor<JSX.LabelHTMLAttributes<HTMLLabelElement>> = createMemo(() => {
     if (!local.label) {
       return {};
     }

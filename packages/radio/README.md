@@ -127,7 +127,7 @@ function Radio(props: AriaRadioProps) {
 
   const { inputProps, state } = createRadio(props, () => ref);
   const { isFocusVisible, focusProps } = createFocusRing();
-  const { visuallyHiddenProps } = createVisuallyHidden<"div">();
+  const { visuallyHiddenProps } = createVisuallyHidden();
 
   const isSelected = () => state.selectedValue() === props.value;
   const strokeWidth = () => (isSelected() ? 6 : 2);
