@@ -40,11 +40,14 @@
   },
   "dependencies": {
     "@solid-aria/collection": "workspace:^",
+    "@solid-aria/focus": "workspace:^",
     "@solid-aria/i18n": "workspace:^",
+    "@solid-aria/interactions": "workspace:^",
     "@solid-aria/types": "workspace:^",
     "@solid-aria/utils": "workspace:^"
   },
   "peerDependencies": {
+    "@solid-primitives/props": "^2.1.2",
     "@solid-primitives/utils": "^2.0.1",
     "solid-js": "^1.4.3"
   },

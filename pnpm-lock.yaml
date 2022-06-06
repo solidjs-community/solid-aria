@@ -309,12 +309,16 @@ importers:
   packages/selection:
     specifiers:
       '@solid-aria/collection': workspace:^
+      '@solid-aria/focus': workspace:^
       '@solid-aria/i18n': workspace:^
+      '@solid-aria/interactions': workspace:^
       '@solid-aria/types': workspace:^
       '@solid-aria/utils': workspace:^
     dependencies:
       '@solid-aria/collection': link:../collection
+      '@solid-aria/focus': link:../focus
       '@solid-aria/i18n': link:../i18n
+      '@solid-aria/interactions': link:../interactions
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 
