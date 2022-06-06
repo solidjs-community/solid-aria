@@ -19,7 +19,7 @@ import { createSignal } from "solid-js";
 import { fireEvent, render, screen } from "solid-testing-library";
 
 import { createHover, CreateHoverProps } from "../src";
-import { installPointerEvent } from "../src/test-utils";
+import { installPointerEvent } from "./test-utils";
 
 function Example(props: CreateHoverProps) {
   const { hoverProps, isHovered } = createHover(props);

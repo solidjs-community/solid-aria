@@ -21,7 +21,7 @@ import { Dynamic } from "solid-js/web";
 import { fireEvent, render, screen } from "solid-testing-library";
 
 import { createPress, CreatePressProps } from "../src";
-import { installPointerEvent } from "../src/test-utils";
+import { installPointerEvent } from "./test-utils";
 
 function Example<T extends DOMElements = "div">(
   props: CreatePressProps &
