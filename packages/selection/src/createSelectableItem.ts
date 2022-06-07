@@ -37,11 +37,6 @@ export interface CreateSelectableItemProps {
   key: MaybeAccessor<ItemKey>;
 
   /**
-   * Ref to the item.
-   */
-  ref: Accessor<HTMLElement | undefined>;
-
-  /**
    * By default, selection occurs on pointer down. This can be strange if selecting an
    * item causes the UI to disappear immediately (e.g. menus).
    */
@@ -120,9 +115,12 @@ export interface SelectableItemAria<T extends HTMLElement> extends SelectableIte
 
 /**
  * Handles interactions with an item in a selectable collection.
+ * @param props Props for the item.
+ * @param ref Ref to the item.
  */
 export function createSelectableItem<T extends HTMLElement>(
-  props: CreateSelectableItemProps
+  props: CreateSelectableItemProps,
+  ref: Accessor<T | undefined>
 ): SelectableItemAria<T> {
   const onSelect = (e: PressEvent | LongPressEvent | PointerEvent) => {
     const manager = access(props.selectionManager);
@@ -337,8 +335,8 @@ export function createSelectableItem<T extends HTMLElement>(
   const itemProps = createMemo(() => {
     const manager = access(props.selectionManager);
     const key = access(props.key);
-    const ref = access(props.ref);
     const shouldUseVirtualFocus = access(props.shouldUseVirtualFocus);
+    const refEl = ref();
 
     let itemProps: JSX.HTMLAttributes<T> & { "data-key"?: ItemKey } = {};
 
@@ -349,7 +347,7 @@ export function createSelectableItem<T extends HTMLElement>(
       itemProps = {
         tabIndex: key === manager.focusedKey() ? 0 : -1,
         onFocus(e) {
-          if (e.target === ref) {
+          if (refEl && e.target === refEl) {
             manager.setFocusedKey(key);
           }
         }
@@ -372,22 +370,22 @@ export function createSelectableItem<T extends HTMLElement>(
   createEffect(() => {
     const manager = access(props.selectionManager);
     const key = access(props.key);
-    const ref = access(props.ref);
     const shouldUseVirtualFocus = access(props.shouldUseVirtualFocus);
+    const refEl = ref();
 
     const isFocused = key === manager.focusedKey();
 
     if (
-      ref &&
       isFocused &&
       manager.isFocused() &&
       !shouldUseVirtualFocus &&
-      document.activeElement !== ref
+      refEl &&
+      document.activeElement !== refEl
     ) {
       if (props.focus) {
         props.focus();
       } else {
-        focusSafely(ref);
+        focusSafely(refEl);
       }
     }
   });
