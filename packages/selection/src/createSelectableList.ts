@@ -25,7 +25,7 @@ import { createSelectableCollection } from "./createSelectableCollection";
 import { ListKeyboardDelegate } from "./ListKeyboardDelegate";
 import { MultipleSelectionManager } from "./types";
 
-interface CreateSelectableListProps {
+export interface CreateSelectableListProps {
   /**
    * An interface for reading and updating multiple selection state.
    */
@@ -102,7 +102,7 @@ interface SelectableListAria {
 /**
  * Handles interactions with a selectable list.
  * @param props Props for the list.
- * @param ref A ref to the item
+ * @param ref A ref to the list element.
  */
 export function createSelectableList<T extends HTMLElement>(
   props: CreateSelectableListProps,

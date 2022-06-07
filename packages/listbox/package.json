@@ -43,6 +43,7 @@
     "@solid-aria/focus": "workspace:^",
     "@solid-aria/interactions": "workspace:^",
     "@solid-aria/label": "workspace:^",
+    "@solid-aria/list": "workspace:^",
     "@solid-aria/selection": "workspace:^",
     "@solid-aria/types": "workspace:^",
     "@solid-aria/utils": "workspace:^"

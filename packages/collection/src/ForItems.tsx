@@ -18,11 +18,11 @@
 import { Key } from "@solid-primitives/keyed";
 import { Accessor, JSX } from "solid-js";
 
-import { Collection, Node } from "./types";
+import { Node } from "./types";
 
 interface ForItemsProps<T extends JSX.Element> {
   /** The collection to loop on. */
-  in: Collection<Node>;
+  in: Iterable<Node>;
 
   /** Render prop that receives an item and index signals and returns a JSX-Element. */
   children: (item: Accessor<Node>, index: Accessor<number>) => T;

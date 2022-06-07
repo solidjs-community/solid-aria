@@ -58,6 +58,7 @@
     "@solid-aria/interactions": "workspace:^",
     "@solid-aria/label": "workspace:^",
     "@solid-aria/link": "workspace:^",
+    "@solid-aria/list": "workspace:^",
     "@solid-aria/listbox": "workspace:^",
     "@solid-aria/overlays": "workspace:^",
     "@solid-aria/radio": "workspace:^",

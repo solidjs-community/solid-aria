@@ -53,8 +53,8 @@ export function createTypeSelect(props: CreateTypeSelectProps): TypeSelectAria {
   const [timeoutId, setTimeoutId] = createSignal(-1);
 
   const onKeyDown = (e: KeyboardEvent) => {
-    const keyboardDelegate = access(props.keyboardDelegate);
-    const selectionManager = access(props.selectionManager);
+    const delegate = access(props.keyboardDelegate);
+    const manager = access(props.selectionManager);
 
     const character = getStringForKey(e.key);
     if (!character || e.ctrlKey || e.metaKey) {
@@ -74,15 +74,15 @@ export function createTypeSelect(props: CreateTypeSelectProps): TypeSelectAria {
 
     // Use the delegate to find a key to focus.
     // Prioritize items after the currently focused item, falling back to searching the whole list.
-    let key = keyboardDelegate.getKeyForSearch?.(newSearch, selectionManager.focusedKey());
+    let key = delegate.getKeyForSearch?.(newSearch, manager.focusedKey());
 
     // If no key found, search from the top.
     if (key == null) {
-      key = keyboardDelegate.getKeyForSearch?.(newSearch);
+      key = delegate.getKeyForSearch?.(newSearch);
     }
 
     if (key != null) {
-      selectionManager.setFocusedKey(key);
+      manager.setFocusedKey(key);
       props.onTypeSelect?.(key);
     }
 

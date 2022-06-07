@@ -16,6 +16,7 @@
  */
 
 import { ItemKey } from "@solid-aria/types";
+import { MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor, JSX } from "solid-js";
 
 export type ItemType = "item" | "section" | "cell";
@@ -69,7 +70,7 @@ export interface CollectionBase {
   children: JSX.Element;
 
   /** The item keys that are disabled. These items cannot be selected, focused, or otherwise interacted with. */
-  disabledKeys?: Iterable<ItemKey>;
+  disabledKeys?: MaybeAccessor<Iterable<ItemKey> | undefined>;
 }
 
 /**

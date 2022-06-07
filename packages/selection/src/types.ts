@@ -51,7 +51,7 @@ export interface FocusState {
   /**
    * Sets the focused key, and optionally, whether the first or last child of that key should receive focus.
    */
-  setFocusedKey(key: ItemKey, child?: FocusStrategy): void;
+  setFocusedKey(key?: ItemKey, child?: FocusStrategy): void;
 }
 
 export interface SingleSelectionState extends FocusState {

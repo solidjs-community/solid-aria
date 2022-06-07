@@ -15,6 +15,7 @@
  * governing permissions and limitations under the License.
  */
 
+export * from "./createControllableSelectionSignal";
 export * from "./createMultipleSelectionState";
 export * from "./createSelectableCollection";
 export * from "./createSelectableItem";

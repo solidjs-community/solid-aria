@@ -107,7 +107,7 @@ export function createMultipleSelectionState(
   const disallowEmptySelection = () => access(props.disallowEmptySelection) ?? false;
   const disabledBehavior = () => access(props.disabledBehavior) ?? "all";
 
-  const setFocusedKey = (key: ItemKey, childFocusStrategy: FocusStrategy = "first") => {
+  const setFocusedKey = (key?: ItemKey, childFocusStrategy: FocusStrategy = "first") => {
     setChildFocusStrategy(childFocusStrategy);
     _setFocusedKey(key);
   };

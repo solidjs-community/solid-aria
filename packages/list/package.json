@@ -40,6 +40,7 @@
   },
   "dependencies": {
     "@solid-aria/collection": "workspace:^",
+    "@solid-aria/selection": "workspace:^",
     "@solid-aria/types": "workspace:^",
     "@solid-aria/utils": "workspace:^"
   },
