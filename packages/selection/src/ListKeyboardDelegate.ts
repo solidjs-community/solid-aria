@@ -17,17 +17,18 @@
 
 import { Collection, Node } from "@solid-aria/collection";
 import { ItemKey, KeyboardDelegate } from "@solid-aria/types";
+import { Accessor } from "solid-js";
 
 export class ListKeyboardDelegate implements KeyboardDelegate {
   private collection: Collection<Node>;
   private disabledKeys: Set<ItemKey>;
-  private ref?: HTMLElement;
+  private ref: Accessor<HTMLElement | undefined>;
   private collator?: Intl.Collator;
 
   constructor(
     collection: Collection<Node>,
     disabledKeys: Set<ItemKey>,
-    ref?: HTMLElement,
+    ref: Accessor<HTMLElement | undefined>,
     collator?: Intl.Collator
   ) {
     this.collection = collection;
@@ -91,11 +92,11 @@ export class ListKeyboardDelegate implements KeyboardDelegate {
   }
 
   private getItem(key: ItemKey): HTMLElement | null {
-    return this.ref?.querySelector(`[data-key="${key}"]`) ?? null;
+    return this.ref()?.querySelector(`[data-key="${key}"]`) ?? null;
   }
 
   getKeyPageAbove(key: ItemKey) {
-    const menu = this.ref;
+    const menu = this.ref();
     let item = this.getItem(key);
 
     if (!menu || !item) {
@@ -115,7 +116,7 @@ export class ListKeyboardDelegate implements KeyboardDelegate {
   }
 
   getKeyPageBelow(key: ItemKey) {
-    const menu = this.ref;
+    const menu = this.ref();
     let item = this.getItem(key);
 
     if (!menu || !item) {

@@ -23,8 +23,8 @@ import { createSelectableList, CreateSelectableListProps } from "@solid-aria/sel
 import {
   AriaLabelingProps,
   DOMProps,
-  FocusEvents,
   FocusStrategy,
+  FocusWithinEvents,
   KeyboardDelegate,
   MultipleSelection
 } from "@solid-aria/types";
@@ -44,7 +44,7 @@ import {
 export interface AriaListBoxProps
   extends CollectionBase,
     MultipleSelection,
-    FocusEvents,
+    FocusWithinEvents,
     DOMProps,
     AriaLabelingProps {
   /**
@@ -136,9 +136,9 @@ export function createListBox<T extends HTMLElement>(
   const { listProps } = createSelectableList(createSelectableListProps, ref);
 
   const { focusWithinProps } = createFocusWithin({
-    onFocusIn: props.onFocus,
-    onFocusOut: props.onBlur,
-    onFocusWithinChange: props.onFocusChange
+    onFocusIn: props.onFocusIn,
+    onFocusOut: props.onFocusOut,
+    onFocusWithinChange: props.onFocusWithinChange
   });
 
   const defaultCreateLabelProps: AriaLabelProps = {

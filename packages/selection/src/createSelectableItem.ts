@@ -336,7 +336,6 @@ export function createSelectableItem<T extends HTMLElement>(
     const manager = access(props.selectionManager);
     const key = access(props.key);
     const shouldUseVirtualFocus = access(props.shouldUseVirtualFocus);
-    const refEl = ref();
 
     let itemProps: JSX.HTMLAttributes<T> & { "data-key"?: ItemKey } = {};
 
@@ -346,7 +345,9 @@ export function createSelectableItem<T extends HTMLElement>(
     if (!shouldUseVirtualFocus) {
       itemProps = {
         tabIndex: key === manager.focusedKey() ? 0 : -1,
-        onFocus(e) {
+        onFocus: e => {
+          const refEl = ref();
+
           if (refEl && e.target === refEl) {
             manager.setFocusedKey(key);
           }

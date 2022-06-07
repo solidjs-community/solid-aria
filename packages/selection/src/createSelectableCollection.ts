@@ -116,7 +116,7 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
   // eslint-disable-next-line solid/reactivity
   props = mergeProps(defaultProps, props);
 
-  const _scrollRef = createMemo(() => (scrollRef ? scrollRef() : ref()));
+  const _scrollRef = () => (scrollRef ? scrollRef() : ref());
 
   const locale = useLocale();
 
@@ -148,10 +148,10 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
       return;
     }
 
-    const navigateToKey = (key: ItemKey | undefined, childFocus?: FocusStrategy) => {
-      const manager = access(props.selectionManager);
-      const selectOnFocus = access(props.selectOnFocus);
+    const manager = access(props.selectionManager);
+    const selectOnFocus = access(props.selectOnFocus);
 
+    const navigateToKey = (key: ItemKey | undefined, childFocus?: FocusStrategy) => {
       if (key != null) {
         manager.setFocusedKey(key, childFocus);
 
@@ -163,10 +163,8 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
       }
     };
 
-    const manager = access(props.selectionManager);
     const delegate = access(props.keyboardDelegate);
     const shouldFocusWrap = access(props.shouldFocusWrap);
-    const selectOnFocus = access(props.selectOnFocus);
 
     const focusedKey = manager.focusedKey();
 
@@ -334,7 +332,7 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
     }
   };
 
-  const onFocus: JSX.EventHandlerUnion<HTMLElement, FocusEvent> = e => {
+  const onFocusIn: JSX.EventHandlerUnion<HTMLElement, FocusEvent> = e => {
     const manager = access(props.selectionManager);
     const delegate = access(props.keyboardDelegate);
     const selectOnFocus = access(props.selectOnFocus);
@@ -396,7 +394,7 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
     }
   };
 
-  const onBlur: JSX.EventHandlerUnion<HTMLElement, FocusEvent> = e => {
+  const onFocusOut: JSX.EventHandlerUnion<HTMLElement, FocusEvent> = e => {
     const manager = access(props.selectionManager);
 
     // Don't set blurred and then focused again if moving focus within the collection.
@@ -477,8 +475,8 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
   const collectionProps = createMemo(() => {
     let handlers: JSX.HTMLAttributes<any> = {
       onKeyDown,
-      onFocus,
-      onBlur,
+      onFocusIn,
+      onFocusOut,
       onMouseDown
     };
 

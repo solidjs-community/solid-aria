@@ -122,7 +122,7 @@ export function createSelectableList<T extends HTMLElement>(
     const collection = access(props.collection);
     const disabledKeys = access(props.disabledKeys);
 
-    return new ListKeyboardDelegate(collection, disabledKeys, ref(), collator());
+    return new ListKeyboardDelegate(collection, disabledKeys, ref, collator());
   });
 
   const { collectionProps } = createSelectableCollection(
