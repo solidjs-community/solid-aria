@@ -302,10 +302,6 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
         }
         break;
       case "Tab": {
-        console.log("onKeyDown - Tab");
-
-        break;
-        /*
         if (!access(props.allowsTabNavigation) && refEl) {
           // There may be elements that are "tabbable" inside a collection (e.g. in a grid cell).
           // However, collections should be treated as a single tab stop, with arrow key navigation internally.
@@ -332,14 +328,11 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
           }
           break;
         }
-        */
       }
     }
   };
 
-  const onFocus: JSX.EventHandlerUnion<HTMLElement, FocusEvent> = e => {
-    console.log("onFocus");
-
+  const onFocusIn: JSX.EventHandlerUnion<HTMLElement, FocusEvent> = e => {
     const manager = access(props.selectionManager);
     const delegate = access(props.keyboardDelegate);
     const selectOnFocus = access(props.selectOnFocus);
@@ -405,9 +398,7 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
     }
   };
 
-  const onBlur: JSX.EventHandlerUnion<HTMLElement, FocusEvent> = e => {
-    console.log("onBlur");
-
+  const onFocusOut: JSX.EventHandlerUnion<HTMLElement, FocusEvent> = e => {
     const manager = access(props.selectionManager);
 
     // Don't set blurred and then focused again if moving focus within the collection.
@@ -494,8 +485,8 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
   const collectionProps = createMemo(() => {
     let handlers: JSX.HTMLAttributes<any> = {
       onKeyDown,
-      onFocus,
-      onBlur,
+      onFocusIn,
+      onFocusOut,
       onMouseDown
     };
 

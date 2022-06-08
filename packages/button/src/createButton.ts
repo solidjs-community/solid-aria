@@ -121,6 +121,15 @@ export function createButton(
 
   const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
 
+  const onClick = (e: MouseEvent) => {
+    if (!props.onClick) {
+      return;
+    }
+
+    props.onClick(e);
+    console.warn("onClick is deprecated, please use onPress");
+  };
+
   const buttonProps = createMemo(() => {
     return combineProps(additionalProps(), focusableProps(), pressProps(), domProps(), {
       "aria-haspopup": props["aria-haspopup"],
@@ -128,12 +137,7 @@ export function createButton(
       "aria-controls": props["aria-controls"],
       "aria-pressed": props["aria-pressed"],
       tabIndex: props.allowFocusWhenDisabled && props.isDisabled ? -1 : focusableProps().tabIndex,
-      onClick: (e: MouseEvent) => {
-        if (props.onClick) {
-          props.onClick(e);
-          console.warn("onClick is deprecated, please use onPress");
-        }
-      }
+      onClick
     }) as JSX.HTMLAttributes<any>;
   });
 

@@ -106,7 +106,7 @@ describe("createListBox", () => {
     const listbox = screen.getByRole("listbox");
     const options = screen.getAllByRole("option");
 
-    fireEvent.focus(listbox);
+    fireEvent.focusIn(listbox);
     await Promise.resolve();
 
     expect(document.activeElement).toBe(options[0]);
@@ -134,7 +134,7 @@ describe("createListBox", () => {
     const listbox = screen.getByRole("listbox");
     const options = screen.getAllByRole("option");
 
-    fireEvent.focus(listbox);
+    fireEvent.focusIn(listbox);
     await Promise.resolve();
 
     expect(document.activeElement).toBe(options[0]);
@@ -166,7 +166,7 @@ describe("createListBox", () => {
       const options = screen.getAllByRole("option");
       const selectedOption = options[1];
 
-      fireEvent.focus(listbox);
+      fireEvent.focusIn(listbox);
       await Promise.resolve();
 
       expect(document.activeElement).toBe(selectedOption);
@@ -194,7 +194,7 @@ describe("createListBox", () => {
       const options = screen.getAllByRole("option");
       const selectedOption = options[1];
 
-      fireEvent.focus(listbox);
+      fireEvent.focusIn(listbox);
       await Promise.resolve();
 
       expect(document.activeElement).toBe(selectedOption);
@@ -229,7 +229,7 @@ describe("createListBox", () => {
       const listbox = screen.getByRole("listbox");
       const options = screen.getAllByRole("option");
 
-      fireEvent.focus(listbox);
+      fireEvent.focusIn(listbox);
       await Promise.resolve();
 
       const nextSelectedOption = options[2];
@@ -258,7 +258,7 @@ describe("createListBox", () => {
       const listbox = screen.getByRole("listbox");
       const options = screen.getAllByRole("option");
 
-      fireEvent.focus(listbox);
+      fireEvent.focusIn(listbox);
       await Promise.resolve();
 
       const nextSelectedOption = options[2];
@@ -302,7 +302,7 @@ describe("createListBox", () => {
       // Verify onSelectionChange is not called
       expect(onSelectionChangeSpy).not.toHaveBeenCalled();
 
-      fireEvent.focus(listbox);
+      fireEvent.focusIn(listbox);
       await Promise.resolve();
 
       expect(document.activeElement).toBe(options[0]);
@@ -537,7 +537,7 @@ describe("createListBox", () => {
     const listbox = screen.getByRole("listbox");
     const options = screen.getAllByRole("option");
 
-    fireEvent.focus(listbox);
+    fireEvent.focusIn(listbox);
     await Promise.resolve();
 
     expect(document.activeElement).toBe(options[0]);
@@ -567,7 +567,7 @@ describe("createListBox", () => {
     const listbox = screen.getByRole("listbox");
     const options = screen.getAllByRole("option");
 
-    fireEvent.focus(listbox);
+    fireEvent.focusIn(listbox);
     await Promise.resolve();
 
     fireEvent.keyDown(listbox, { key: "O" });

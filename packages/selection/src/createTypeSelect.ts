@@ -56,6 +56,10 @@ export function createTypeSelect(props: CreateTypeSelectProps): TypeSelectAria {
     const delegate = access(props.keyboardDelegate);
     const manager = access(props.selectionManager);
 
+    if (!delegate.getKeyForSearch) {
+      return;
+    }
+
     const character = getStringForKey(e.key);
     if (!character || e.ctrlKey || e.metaKey) {
       return;
@@ -78,7 +82,7 @@ export function createTypeSelect(props: CreateTypeSelectProps): TypeSelectAria {
 
     // If no key found, search from the top.
     if (key == null) {
-      key = delegate.getKeyForSearch?.(newSearch);
+      key = delegate.getKeyForSearch(newSearch);
     }
 
     if (key != null) {
@@ -91,13 +95,7 @@ export function createTypeSelect(props: CreateTypeSelectProps): TypeSelectAria {
     setTimeoutId(window.setTimeout(() => setSearch(""), 500));
   };
 
-  const typeSelectProps = createMemo(() => {
-    const keyboardDelegate = access(props.keyboardDelegate);
-
-    return {
-      onKeyDown: keyboardDelegate.getKeyForSearch ? onKeyDown : null
-    } as JSX.HTMLAttributes<any>;
-  });
+  const typeSelectProps = createMemo(() => ({ onKeyDown }));
 
   return { typeSelectProps };
 }
