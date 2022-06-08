@@ -23,7 +23,7 @@ import {
 } from "@solid-aria/selection";
 import { ItemKey } from "@solid-aria/types";
 import { access } from "@solid-primitives/utils";
-import { Accessor, createEffect, createMemo } from "solid-js";
+import { Accessor, createEffect, createMemo, on } from "solid-js";
 
 import { ListCollection } from "./ListCollection";
 
@@ -72,13 +72,15 @@ export function createListState(props: CreateListStateProps): ListState {
   const selectionManager = createMemo(() => new SelectionManager(collection(), selectionState));
 
   // Reset focused key if that item is deleted from the collection.
-  createEffect(() => {
-    const focusedKey = selectionState.focusedKey();
+  createEffect(
+    on([collection, selectionState.focusedKey], newValue => {
+      const [collection, focusedKey] = newValue;
 
-    if (focusedKey != null && !collection().getItem(focusedKey)) {
-      selectionState.setFocusedKey();
-    }
-  });
+      if (focusedKey != null && !collection.getItem(focusedKey)) {
+        selectionState.setFocusedKey(undefined);
+      }
+    })
+  );
 
   return {
     collection,

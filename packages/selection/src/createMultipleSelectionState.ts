@@ -120,17 +120,23 @@ export function createMultipleSelectionState(
 
   // If the selectionBehavior prop is set to replace, but the current state is toggle (e.g. due to long press
   // to enter selection mode on touch), and the selection becomes empty, reset the selection behavior.
-  createEffect(() => {
-    const selection = selectedKeys();
-    if (
-      access(props.selectionBehavior) === "replace" &&
-      selectionBehavior() === "toggle" &&
-      typeof selection === "object" &&
-      selection.size === 0
-    ) {
-      setSelectionBehavior("replace");
-    }
-  });
+  createEffect(
+    on(
+      () => access(props.selectionBehavior),
+      newSelectionBehaviorProp => {
+        const selection = selectedKeys();
+
+        if (
+          newSelectionBehaviorProp === "replace" &&
+          selectionBehavior() === "toggle" &&
+          typeof selection === "object" &&
+          selection.size === 0
+        ) {
+          setSelectionBehavior("replace");
+        }
+      }
+    )
+  );
 
   // If the selectionBehavior prop changes, update the state as well.
   createEffect(

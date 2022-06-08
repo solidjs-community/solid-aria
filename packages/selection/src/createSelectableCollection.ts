@@ -22,7 +22,7 @@ import { focusWithoutScrolling, scrollIntoView } from "@solid-aria/utils";
 import { createEventListener } from "@solid-primitives/event-listener";
 import { combineProps } from "@solid-primitives/props";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createEffect, createMemo, JSX, mergeProps, onMount } from "solid-js";
+import { Accessor, createEffect, createMemo, JSX, mergeProps, on, onMount } from "solid-js";
 
 import { createTypeSelect } from "./createTypeSelect";
 import { MultipleSelectionManager } from "./types";
@@ -142,9 +142,11 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
       e.preventDefault();
     }
 
+    const refEl = ref();
+
     // Keyboard events bubble through portals. Don't handle keyboard events
     // for elements outside the collection (e.g. menus).
-    if (!ref()?.contains(e.target as HTMLElement)) {
+    if (!refEl?.contains(e.target as HTMLElement)) {
       return;
     }
 
@@ -300,8 +302,10 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
         }
         break;
       case "Tab": {
-        const refEl = ref();
+        console.log("onKeyDown - Tab");
 
+        break;
+        /*
         if (!access(props.allowsTabNavigation) && refEl) {
           // There may be elements that are "tabbable" inside a collection (e.g. in a grid cell).
           // However, collections should be treated as a single tab stop, with arrow key navigation internally.
@@ -328,11 +332,14 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
           }
           break;
         }
+        */
       }
     }
   };
 
-  const onFocusIn: JSX.EventHandlerUnion<HTMLElement, FocusEvent> = e => {
+  const onFocus: JSX.EventHandlerUnion<HTMLElement, FocusEvent> = e => {
+    console.log("onFocus");
+
     const manager = access(props.selectionManager);
     const delegate = access(props.keyboardDelegate);
     const selectOnFocus = access(props.selectOnFocus);
@@ -355,13 +362,17 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
 
     if (manager.focusedKey() == null) {
       const navigateToFirstKey = (key: ItemKey | undefined) => {
-        if (key != null) {
-          manager.setFocusedKey(key);
-          if (selectOnFocus) {
-            manager.replaceSelection(key);
-          }
+        if (key == null) {
+          return;
+        }
+
+        manager.setFocusedKey(key);
+
+        if (selectOnFocus) {
+          manager.replaceSelection(key);
         }
       };
+
       // If the user hasn't yet interacted with the collection, there will be no focusedKey set.
       // Attempt to detect whether the user is tabbing forward or backward into the collection
       // and either focus the first or last item accordingly.
@@ -394,7 +405,9 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
     }
   };
 
-  const onFocusOut: JSX.EventHandlerUnion<HTMLElement, FocusEvent> = e => {
+  const onBlur: JSX.EventHandlerUnion<HTMLElement, FocusEvent> = e => {
+    console.log("onBlur");
+
     const manager = access(props.selectionManager);
 
     // Don't set blurred and then focused again if moving focus within the collection.
@@ -452,20 +465,26 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
 
   // If not virtualized, scroll the focused element into view when the focusedKey changes.
   // When virtualized, Virtualizer handles this internally.
-  createEffect(() => {
-    const manager = access(props.selectionManager);
-    const isVirtualized = access(props.isVirtualized);
-    const scrollEl = _scrollRef();
-    const focusedKey = manager.focusedKey();
+  createEffect(
+    on(
+      [
+        _scrollRef,
+        () => access(props.isVirtualized),
+        () => access(props.selectionManager).focusedKey()
+      ],
+      newValue => {
+        const [scrollEl, isVirtualized, focusedKey] = newValue;
 
-    if (!isVirtualized && focusedKey && scrollEl) {
-      const element = scrollEl.querySelector(`[data-key="${focusedKey}"]`);
+        if (!isVirtualized && focusedKey && scrollEl) {
+          const element = scrollEl.querySelector(`[data-key="${focusedKey}"]`);
 
-      if (element) {
-        scrollIntoView(scrollEl, element as HTMLElement);
+          if (element) {
+            scrollIntoView(scrollEl, element as HTMLElement);
+          }
+        }
       }
-    }
-  });
+    )
+  );
 
   const { typeSelectProps } = createTypeSelect({
     keyboardDelegate: () => access(props.keyboardDelegate),
@@ -475,8 +494,8 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
   const collectionProps = createMemo(() => {
     let handlers: JSX.HTMLAttributes<any> = {
       onKeyDown,
-      onFocusIn,
-      onFocusOut,
+      onFocus,
+      onBlur,
       onMouseDown
     };
 

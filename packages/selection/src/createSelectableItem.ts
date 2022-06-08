@@ -20,7 +20,7 @@ import { createLongPress, createPress, CreatePressProps } from "@solid-aria/inte
 import { ItemKey, LongPressEvent, PointerType, PressEvent } from "@solid-aria/types";
 import { combineProps } from "@solid-primitives/props";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createEffect, createMemo, JSX } from "solid-js";
+import { Accessor, createEffect, createMemo, JSX, on } from "solid-js";
 
 import { MultipleSelectionManager } from "./types";
 import { isCtrlKeyPressed, isNonContiguousSelectionModifier } from "./utils";
@@ -301,7 +301,7 @@ export function createSelectableItem<T extends HTMLElement>(
   // selecting, and may toggle the appearance of a UI affordance like checkboxes on each item.
   const { longPressProps } = createLongPress({
     isDisabled: () => !longPressEnabled(),
-    onLongPress(e) {
+    onLongPress: e => {
       const manager = access(props.selectionManager);
 
       if (e.pointerType === "touch") {
@@ -332,64 +332,72 @@ export function createSelectableItem<T extends HTMLElement>(
     }
   };
 
+  const onFocus = (e: FocusEvent) => {
+    const shouldUseVirtualFocus = access(props.shouldUseVirtualFocus);
+    const refEl = ref();
+
+    if (shouldUseVirtualFocus || !refEl) {
+      return;
+    }
+
+    const manager = access(props.selectionManager);
+    const key = access(props.key);
+
+    if (e.target === refEl) {
+      manager.setFocusedKey(key);
+    }
+  };
+
   const itemProps = createMemo(() => {
     const manager = access(props.selectionManager);
     const key = access(props.key);
     const shouldUseVirtualFocus = access(props.shouldUseVirtualFocus);
 
-    let itemProps: JSX.HTMLAttributes<T> & { "data-key"?: ItemKey } = {};
-
-    // Set tabIndex to 0 if the element is focused, or -1 otherwise so that only the last focused
-    // item is tabbable.  If using virtual focus, don't set a tabIndex at all so that VoiceOver
-    // on iOS 14 doesn't try to move real DOM focus to the item anyway.
-    if (!shouldUseVirtualFocus) {
-      itemProps = {
-        tabIndex: key === manager.focusedKey() ? 0 : -1,
-        onFocus: e => {
-          const refEl = ref();
-
-          if (refEl && e.target === refEl) {
-            manager.setFocusedKey(key);
-          }
-        }
-      };
-    }
-
-    if (!access(props.isVirtualized)) {
-      itemProps["data-key"] = key;
-    }
+    const itemProps: JSX.HTMLAttributes<T> & { "data-key"?: ItemKey } = {
+      // Set tabIndex to 0 if the element is focused, or -1 otherwise so that only the last focused
+      // item is tabbable. If using virtual focus, don't set a tabIndex at all so that VoiceOver
+      // on iOS 14 doesn't try to move real DOM focus to the item anyway.
+      tabIndex: shouldUseVirtualFocus ? undefined : key === manager.focusedKey() ? 0 : -1,
+      "data-key": access(props.isVirtualized) ? undefined : key
+    };
 
     return combineProps(
       itemProps,
       allowsSelection() || hasPrimaryAction() ? pressProps() : {},
       longPressEnabled() ? longPressProps() : {},
-      { onDoubleClick, onDragStart }
+      { onDoubleClick, onDragStart, onFocus }
     ) as JSX.HTMLAttributes<T>;
   });
 
   // Focus the associated DOM node when this item becomes the focusedKey
-  createEffect(() => {
-    const manager = access(props.selectionManager);
-    const key = access(props.key);
-    const shouldUseVirtualFocus = access(props.shouldUseVirtualFocus);
-    const refEl = ref();
+  createEffect(
+    on(
+      [
+        ref,
+        () => access(props.key),
+        () => access(props.selectionManager).focusedKey(),
+        () => access(props.selectionManager).isFocused(),
+        () => access(props.shouldUseVirtualFocus),
+        () => access(props.selectionManager).childFocusStrategy()
+      ],
+      newValue => {
+        const [refEl, key, focusedKey, isFocused, shouldUseVirtualFocus] = newValue;
 
-    const isFocused = key === manager.focusedKey();
-
-    if (
-      isFocused &&
-      manager.isFocused() &&
-      !shouldUseVirtualFocus &&
-      refEl &&
-      document.activeElement !== refEl
-    ) {
-      if (props.focus) {
-        props.focus();
-      } else {
-        focusSafely(refEl);
+        if (
+          key === focusedKey &&
+          isFocused &&
+          !shouldUseVirtualFocus &&
+          document.activeElement !== refEl
+        ) {
+          if (props.focus) {
+            props.focus();
+          } else {
+            refEl && focusSafely(refEl);
+          }
+        }
       }
-    }
-  });
+    )
+  );
 
   return {
     itemProps,
