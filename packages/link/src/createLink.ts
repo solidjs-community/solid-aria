@@ -20,7 +20,7 @@ import { createPress } from "@solid-aria/interactions";
 import { AriaLabelingProps, FocusableProps, PressEvents } from "@solid-aria/types";
 import { filterDOMProps } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
-import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
+import { Accessor, JSX, mergeProps, splitProps } from "solid-js";
 
 export interface AriaLinkProps extends AriaLabelingProps, PressEvents, FocusableProps {
   /**
@@ -42,14 +42,14 @@ export interface AriaLinkProps extends AriaLabelingProps, PressEvents, Focusable
 
 export interface LinkAria<T extends HTMLElement> {
   /**
-   * Props for the link element.
-   */
-  linkProps: Accessor<JSX.HTMLAttributes<T>>;
-
-  /**
    * Whether the link is currently pressed.
    */
   isPressed: Accessor<boolean>;
+
+  /**
+   * Props for the link element.
+   */
+  linkProps: JSX.HTMLAttributes<T>;
 }
 
 /**
@@ -89,22 +89,23 @@ export function createLink<T extends HTMLElement = HTMLAnchorElement>(
     console.warn("onClick is deprecated, please use onPress");
   };
 
-  const linkProps = createMemo(() => {
-    let baseProps = {};
+  const isAnchorTag = () => local.elementType === "a";
 
-    if (local.elementType !== "a") {
-      baseProps = {
-        role: "link",
-        tabIndex: !local.isDisabled ? 0 : undefined
-      };
-    }
+  const baseLinkProps: JSX.HTMLAttributes<any> = {
+    get role() {
+      return !isAnchorTag() ? "link" : undefined;
+    },
+    get tabIndex() {
+      return !isAnchorTag() && !local.isDisabled ? 0 : undefined;
+    },
+    get "aria-disabled"() {
+      return local.isDisabled;
+    },
+    onClick
+  };
 
-    return combineProps(domProps, focusableProps, pressProps, {
-      ...baseProps,
-      "aria-disabled": local.isDisabled || undefined,
-      onClick
-    }) as JSX.HTMLAttributes<T>;
-  });
-
-  return { linkProps, isPressed };
+  return {
+    isPressed,
+    linkProps: combineProps(domProps, focusableProps, pressProps, baseLinkProps)
+  };
 }

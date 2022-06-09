@@ -17,7 +17,7 @@
 
 import { AriaLinkProps, createLink } from "@solid-aria/link";
 import { DOMProps } from "@solid-aria/types";
-import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
+import { Accessor, JSX, mergeProps, splitProps } from "solid-js";
 
 export interface AriaBreadcrumbItemProps extends AriaLinkProps, DOMProps {
   /**
@@ -52,7 +52,7 @@ interface BreadcrumbItemAria<T extends HTMLElement> {
   /**
    * Props for the breadcrumb item link element.
    */
-  itemProps: Accessor<JSX.HTMLAttributes<T>>;
+  itemProps: JSX.HTMLAttributes<T>;
 }
 
 /**
@@ -88,32 +88,27 @@ export function createBreadcrumbItem<T extends HTMLElement = HTMLAnchorElement>(
 
   const { linkProps } = createLink(createLinkProps, ref);
 
-  const isHeading = createMemo(() => /^h[1-6]$/.test(local.elementType ?? ""));
+  // This is not reactive but `elementType` is not a dynamic value that should change at runtime.
+  const isHeading = /^h[1-6]$/.test(local.elementType ?? "");
 
-  const itemProps = createMemo(() => {
-    let itemProps: JSX.HTMLAttributes<T> = {
-      "aria-disabled": local.isDisabled
-    };
-
-    if (!isHeading()) {
-      itemProps = {
-        ...itemProps,
-        ...linkProps()
-      };
-    }
-
-    if (local.isCurrent) {
-      itemProps = {
-        ...itemProps,
-        "aria-current": local["aria-current"] || "page",
+  const itemProps: JSX.HTMLAttributes<T> = {
+    ...(!isHeading ? linkProps : {}),
+    get "aria-disabled"() {
+      return local.isDisabled;
+    },
+    get "aria-current"() {
+      return local.isCurrent ? local["aria-current"] || "page" : undefined;
+    },
+    get tabIndex() {
+      if (local.isCurrent) {
         // isCurrent sets isDisabled === true for the current item,
         // so we have to restore the tabIndex in order to support autoFocus.
-        tabIndex: props.autoFocus ? -1 : undefined
-      };
-    }
+        return props.autoFocus ? -1 : undefined;
+      }
 
-    return itemProps;
-  });
+      return !isHeading ? linkProps.tabIndex : undefined;
+    }
+  };
 
   return { itemProps };
 }

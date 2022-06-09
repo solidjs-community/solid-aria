@@ -8,10 +8,10 @@ describe("createBreadcrumbItem", () => {
       const ref = document.createElement("span");
       const { itemProps } = createBreadcrumbItem({ elementType: "span" }, () => ref);
 
-      expect(itemProps().tabIndex).toBe(0);
-      expect(itemProps().role).toBe("link");
-      expect(itemProps()["aria-disabled"]).toBeUndefined();
-      expect(typeof itemProps().onKeyDown).toBe("function");
+      expect(itemProps.tabIndex).toBe(0);
+      expect(itemProps.role).toBe("link");
+      expect(itemProps["aria-disabled"]).toBeUndefined();
+      expect(typeof itemProps.onKeyDown).toBe("function");
 
       dispose();
     });
@@ -25,9 +25,9 @@ describe("createBreadcrumbItem", () => {
         () => ref
       );
 
-      expect(itemProps().tabIndex).toBeUndefined();
-      expect(itemProps().role).toBe("link");
-      expect(itemProps()["aria-current"]).toBe("page");
+      expect(itemProps.tabIndex).toBeUndefined();
+      expect(itemProps.role).toBe("link");
+      expect(itemProps["aria-current"]).toBe("page");
 
       dispose();
     });
@@ -41,9 +41,9 @@ describe("createBreadcrumbItem", () => {
         () => ref
       );
 
-      expect(itemProps().tabIndex).toBeUndefined();
-      expect(itemProps().role).toBe("link");
-      expect(itemProps()["aria-disabled"]).toBe(true);
+      expect(itemProps.tabIndex).toBeUndefined();
+      expect(itemProps.role).toBe("link");
+      expect(itemProps["aria-disabled"]).toBe(true);
 
       dispose();
     });
