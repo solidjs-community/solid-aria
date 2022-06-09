@@ -17,7 +17,7 @@
 
 import { FocusWithinEvents } from "@solid-aria/types";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createMemo, createSignal, JSX } from "solid-js";
+import { createSignal } from "solid-js";
 
 import { createSyntheticBlurEvent } from "./utils";
 
@@ -28,11 +28,13 @@ export interface CreateFocusWithinProps extends FocusWithinEvents {
   isDisabled?: MaybeAccessor<boolean | undefined>;
 }
 
+type FocusWithinProps = Required<Pick<FocusWithinEvents, "onFocusIn" | "onFocusOut">>;
+
 export interface FocusWithinResult {
   /**
    * Props to spread onto the target element.
    */
-  focusWithinProps: Accessor<JSX.HTMLAttributes<any>>;
+  focusWithinProps: FocusWithinProps;
 }
 
 /**
@@ -41,8 +43,10 @@ export interface FocusWithinResult {
 export function createFocusWithin(props: CreateFocusWithinProps): FocusWithinResult {
   const [isFocusWithin, setIsFocusWithin] = createSignal(false);
 
+  const isDisabled = () => access(props.isDisabled) ?? false;
+
   const onFocusOut = (e: FocusEvent) => {
-    if (access(props.isDisabled)) {
+    if (isDisabled()) {
       return;
     }
 
@@ -62,7 +66,7 @@ export function createFocusWithin(props: CreateFocusWithinProps): FocusWithinRes
   const onSyntheticFocus = createSyntheticBlurEvent(onFocusOut);
 
   const onFocusIn = (e: FocusEvent) => {
-    if (access(props.isDisabled)) {
+    if (isDisabled()) {
       return;
     }
 
@@ -74,10 +78,10 @@ export function createFocusWithin(props: CreateFocusWithinProps): FocusWithinRes
     }
   };
 
-  const focusWithinProps = createMemo(() => ({
+  const focusWithinProps: FocusWithinProps = {
     onFocusIn,
     onFocusOut
-  }));
+  };
 
   return { focusWithinProps };
 }

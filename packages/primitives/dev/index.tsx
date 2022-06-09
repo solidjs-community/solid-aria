@@ -46,7 +46,7 @@ function Option(props: ParentProps<AriaListBoxOptionProps>) {
 
   const { isFocusVisible, focusProps } = createFocusRing();
 
-  const rootProps = createMemo(() => combineProps(optionProps(), focusProps()));
+  const rootProps = createMemo(() => combineProps(optionProps(), focusProps));
 
   return (
     <li

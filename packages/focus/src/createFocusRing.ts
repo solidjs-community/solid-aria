@@ -19,10 +19,12 @@ import {
   createFocus,
   createFocusVisibleListener,
   createFocusWithin,
+  FocusResult,
+  FocusWithinResult,
   isKeyboardFocusVisible
 } from "@solid-aria/interactions";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createSignal, JSX } from "solid-js";
+import { Accessor, createSignal } from "solid-js";
 
 export interface CreateFocusRingProps {
   /**
@@ -44,6 +46,8 @@ export interface CreateFocusRingProps {
   autoFocus?: MaybeAccessor<boolean | undefined>;
 }
 
+type FocusRingProps = Required<FocusResult["focusProps"] & FocusWithinResult["focusWithinProps"]>;
+
 export interface FocusRingResult {
   /**
    * Whether the element is currently focused.
@@ -58,7 +62,7 @@ export interface FocusRingResult {
   /**
    * Props to apply to the container element with the focus ring.
    */
-  focusProps: Accessor<JSX.HTMLAttributes<any>>;
+  focusProps: FocusRingProps;
 }
 
 /**
@@ -80,7 +84,7 @@ export function createFocusRing(props: CreateFocusRingProps = {}): FocusRingResu
     { isTextInput: !!access(props.isTextInput) }
   );
 
-  const { focusProps: _focusProps } = createFocus({
+  const { focusProps } = createFocus({
     isDisabled: () => access(props.within),
     onFocusChange: setFocused
   });
@@ -90,9 +94,9 @@ export function createFocusRing(props: CreateFocusRingProps = {}): FocusRingResu
     onFocusWithinChange: setFocused
   });
 
-  const focusProps = () => {
-    return access(props.within) ? focusWithinProps() : _focusProps;
+  return {
+    isFocused,
+    isFocusVisible,
+    focusProps: { ...focusProps, ...focusWithinProps }
   };
-
-  return { isFocused, isFocusVisible, focusProps };
 }

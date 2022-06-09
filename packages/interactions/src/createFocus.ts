@@ -17,7 +17,6 @@
 
 import { FocusEvents } from "@solid-aria/types";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { JSX } from "solid-js";
 
 import { createSyntheticBlurEvent } from "./utils";
 
@@ -28,11 +27,13 @@ export interface CreateFocusProps extends FocusEvents {
   isDisabled?: MaybeAccessor<boolean | undefined>;
 }
 
+type FocusProps = Required<Pick<FocusEvents, "onFocus" | "onBlur">>;
+
 export interface FocusResult {
   /**
    * Props to spread onto the target element.
    */
-  focusProps: JSX.HTMLAttributes<any>;
+  focusProps: FocusProps;
 }
 
 /**
@@ -40,8 +41,10 @@ export interface FocusResult {
  * Focus events on child elements will be ignored.
  */
 export function createFocus(props: CreateFocusProps): FocusResult {
+  const isDisabled = () => access(props.isDisabled) ?? false;
+
   const onBlur = (e: FocusEvent) => {
-    if (access(props.isDisabled) || (!props.onBlur && !props.onFocusChange)) {
+    if (isDisabled() || (!props.onBlur && !props.onFocusChange)) {
       return;
     }
 
@@ -52,7 +55,7 @@ export function createFocus(props: CreateFocusProps): FocusResult {
   const onSyntheticFocus = createSyntheticBlurEvent(onBlur);
 
   const onFocus = (e: FocusEvent) => {
-    if (access(props.isDisabled) || (!props.onFocus && !props.onBlur && !props.onFocusChange)) {
+    if (isDisabled() || (!props.onFocus && !props.onBlur && !props.onFocusChange)) {
       return;
     }
 
@@ -61,7 +64,7 @@ export function createFocus(props: CreateFocusProps): FocusResult {
     onSyntheticFocus(e);
   };
 
-  const focusProps = {
+  const focusProps: FocusProps = {
     onFocus,
     onBlur
   };

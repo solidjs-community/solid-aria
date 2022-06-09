@@ -170,7 +170,7 @@ export function createOverlay<T extends HTMLElement>(
   const overlayProps = createMemo(() => {
     return {
       onKeyDown,
-      ...focusWithinProps()
+      ...focusWithinProps
     } as JSX.HTMLAttributes<any>;
   });
 

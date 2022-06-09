@@ -222,7 +222,7 @@ export function createRadioGroup(props: AriaRadioGroupProps): RadioGroupAria {
       "aria-orientation": props.orientation,
       onKeyDown,
       ...fieldProps(),
-      ...focusWithinProps()
+      ...focusWithinProps
     }) as JSX.HTMLAttributes<any>;
   });
 
