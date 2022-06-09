@@ -15,12 +15,12 @@
  * governing permissions and limitations under the License.
  */
 
-import { createSignal } from "solid-js";
+import { createSignal, ParentProps } from "solid-js";
 import { fireEvent, render, screen } from "solid-testing-library";
 
-import { createFocus } from "../src";
+import { createFocus, CreateFocusProps } from "../src";
 
-function Example(props: any) {
+function Example(props: ParentProps<CreateFocusProps>) {
   const { focusProps } = createFocus(props);
 
   return (

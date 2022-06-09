@@ -17,7 +17,7 @@
 
 import { FocusEvents } from "@solid-aria/types";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createMemo } from "solid-js";
+import { Accessor, createMemo, JSX } from "solid-js";
 
 import { createSyntheticBlurEvent } from "./utils";
 
@@ -28,51 +28,50 @@ export interface CreateFocusProps extends FocusEvents {
   isDisabled?: MaybeAccessor<boolean | undefined>;
 }
 
-export interface FocusElementProps {
-  /**
-   * Handler that is called when the element receives focus.
-   */
-  onFocus: FocusEvents["onFocus"];
-
-  /**
-   * Handler that is called when the element loses focus.
-   */
-  onBlur: FocusEvents["onBlur"];
-}
-
 export interface FocusResult {
   /**
    * Props to spread onto the target element.
    */
-  focusProps: Accessor<FocusElementProps>;
+  focusProps: Accessor<JSX.HTMLAttributes<any>>;
 }
 
 /**
- * Handles focus events for the target.
+ * Handles focus events for the immediate target.
+ * Focus events on child elements will be ignored.
  */
 export function createFocus(props: CreateFocusProps): FocusResult {
-  const onBlur: FocusEvents["onBlur"] = event => {
-    if (access(props.isDisabled)) {
+  const onBlur = (e: FocusEvent) => {
+    if (access(props.isDisabled) || (!props.onBlur && !props.onFocusChange)) {
       return;
     }
 
-    props.onBlur?.(event);
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+
+    props.onBlur?.(e);
     props.onFocusChange?.(false);
+
+    return true;
   };
 
   const onSyntheticFocus = createSyntheticBlurEvent(onBlur);
 
-  const onFocus: FocusEvents["onFocus"] = event => {
-    if (access(props.isDisabled)) {
+  const onFocus = (e: FocusEvent) => {
+    if (access(props.isDisabled) || (!props.onFocus && !props.onBlur && !props.onFocusChange)) {
       return;
     }
 
-    props.onFocus?.(event);
+    if (e.target !== e.currentTarget) {
+      return;
+    }
+
+    props.onFocus?.(e);
     props.onFocusChange?.(true);
-    onSyntheticFocus(event);
+    onSyntheticFocus(e);
   };
 
-  const focusProps: Accessor<FocusElementProps> = createMemo(() => ({
+  const focusProps = createMemo(() => ({
     onFocus,
     onBlur
   }));

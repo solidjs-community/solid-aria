@@ -312,7 +312,7 @@ export function createSelectableItem<T extends HTMLElement>(
   });
 
   // Double clicking with a mouse with selectionBehavior = 'replace' performs an action.
-  const onDoubleClick = (e: Event) => {
+  const onDblClick = (e: Event) => {
     if (!hasSecondaryAction()) {
       return;
     }
@@ -365,7 +365,7 @@ export function createSelectableItem<T extends HTMLElement>(
       itemProps,
       allowsSelection() || hasPrimaryAction() ? pressProps() : {},
       longPressEnabled() ? longPressProps() : {},
-      { onDoubleClick, onDragStart, onFocus }
+      { onDblClick, onDragStart, onFocus }
     ) as JSX.HTMLAttributes<T>;
   });
 

@@ -19,12 +19,10 @@ import {
   createFocus,
   createFocusVisibleListener,
   createFocusWithin,
-  FocusElementProps,
-  FocusWithinElementProps,
   isKeyboardFocusVisible
 } from "@solid-aria/interactions";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createSignal } from "solid-js";
+import { Accessor, createSignal, JSX } from "solid-js";
 
 export interface CreateFocusRingProps {
   /**
@@ -60,7 +58,7 @@ export interface FocusRingResult {
   /**
    * Props to apply to the container element with the focus ring.
    */
-  focusProps: Accessor<FocusElementProps | FocusWithinElementProps>;
+  focusProps: Accessor<JSX.HTMLAttributes<any>>;
 }
 
 /**
