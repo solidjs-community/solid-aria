@@ -120,7 +120,7 @@ export function createRadio(
   });
 
   const inputProps: Accessor<JSX.InputHTMLAttributes<HTMLInputElement>> = createMemo(() => {
-    return combineProps(domProps(), pressProps(), focusableProps, {
+    return combineProps(domProps(), pressProps, focusableProps, {
       type: "radio",
       name: context.name(),
       tabIndex: tabIndex(),

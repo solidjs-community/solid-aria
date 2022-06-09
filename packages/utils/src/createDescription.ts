@@ -17,14 +17,12 @@
 
 import { AriaLabelingProps } from "@solid-aria/types";
 import { isServer } from "@solid-primitives/utils";
-import { Accessor, createEffect, createMemo, createSignal, on, onCleanup } from "solid-js";
+import { Accessor, createEffect, createSignal, on, onCleanup } from "solid-js";
 
 let descriptionId = 0;
 const descriptionNodes = new Map<string, { refCount: number; element: HTMLElement }>();
 
-export function createDescription(
-  description: Accessor<string | undefined>
-): Accessor<AriaLabelingProps> {
+export function createDescription(description: Accessor<string | undefined>): AriaLabelingProps {
   const [id, setId] = createSignal<string>();
 
   createEffect(
@@ -59,9 +57,11 @@ export function createDescription(
     })
   );
 
-  const descriptionProps = createMemo(() => ({
-    "aria-describedby": description() ? id() : undefined
-  }));
+  const descriptionProps: AriaLabelingProps = {
+    get "aria-describedby"() {
+      return description() ? id() : undefined;
+    }
+  };
 
   return descriptionProps;
 }

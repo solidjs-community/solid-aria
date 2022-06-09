@@ -131,7 +131,7 @@ export function createButton(
   };
 
   const buttonProps = createMemo(() => {
-    return combineProps(additionalProps(), focusableProps, pressProps(), domProps(), {
+    return combineProps(additionalProps(), focusableProps, pressProps, domProps(), {
       "aria-haspopup": props["aria-haspopup"],
       "aria-expanded": props["aria-expanded"],
       "aria-controls": props["aria-controls"],

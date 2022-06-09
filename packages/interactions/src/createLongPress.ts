@@ -15,11 +15,11 @@
  * governing permissions and limitations under the License.
  */
 
-import { LongPressEvent } from "@solid-aria/types";
+import { LongPressEvent, PressEvent } from "@solid-aria/types";
 import { createDescription, createGlobalListeners } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
+import { JSX, mergeProps } from "solid-js";
 
 import { createPress } from "./createPress";
 
@@ -62,7 +62,7 @@ export interface LongPressResult<T extends HTMLElement> {
   /**
    * Props to spread on the target element.
    */
-  longPressProps: Accessor<JSX.HTMLAttributes<T>>;
+  longPressProps: JSX.HTMLAttributes<T>;
 }
 
 const DEFAULT_THRESHOLD = 500;
@@ -78,80 +78,79 @@ export function createLongPress<T extends HTMLElement>(
     threshold: DEFAULT_THRESHOLD
   };
 
+  // eslint-disable-next-line solid/reactivity
   props = mergeProps(defaultProps, props);
 
   let timeoutId: number | undefined;
 
   const { addGlobalListener, removeGlobalListener } = createGlobalListeners();
 
-  const { pressProps } = createPress({
-    isDisabled: () => access(props.isDisabled),
-    onPressStart: e => {
-      if (e.pointerType === "mouse" || e.pointerType === "touch") {
-        props.onLongPressStart?.({
+  const isDisabled = () => access(props.isDisabled) ?? false;
+
+  const onPressStart = (e: PressEvent) => {
+    if (e.pointerType === "mouse" || e.pointerType === "touch") {
+      props.onLongPressStart?.({
+        ...e,
+        type: "longpressstart"
+      });
+
+      timeoutId = window.setTimeout(() => {
+        // Prevent other usePress handlers from also handling this event.
+        e.target.dispatchEvent(new PointerEvent("pointercancel", { bubbles: true }));
+
+        props.onLongPress?.({
           ...e,
-          type: "longpressstart"
+          type: "longpress"
         });
 
-        timeoutId = window.setTimeout(() => {
-          // Prevent other usePress handlers from also handling this event.
-          e.target.dispatchEvent(new PointerEvent("pointercancel", { bubbles: true }));
+        timeoutId = undefined;
+      }, access(props.threshold) ?? DEFAULT_THRESHOLD);
 
-          props.onLongPress?.({
-            ...e,
-            type: "longpress"
-          });
+      // Prevent context menu, which may be opened on long press on touch devices
+      if (e.pointerType === "touch") {
+        const onContextMenu = (e: Event) => {
+          e.preventDefault();
+        };
 
-          timeoutId = undefined;
-        }, access(props.threshold) ?? DEFAULT_THRESHOLD);
-
-        // Prevent context menu, which may be opened on long press on touch devices
-        if (e.pointerType === "touch") {
-          const onContextMenu = (e: Event) => {
-            e.preventDefault();
-          };
-
-          addGlobalListener(e.target, "contextmenu", onContextMenu, { once: true });
-          addGlobalListener(
-            window,
-            "pointerup",
-            () => {
-              // If no contextmenu event is fired quickly after pointerup, remove the handler
-              // so future context menu events outside a long press are not prevented.
-              setTimeout(() => {
-                removeGlobalListener(e.target, "contextmenu", onContextMenu);
-              }, 30);
-            },
-            { once: true }
-          );
-        }
-      }
-    },
-    onPressEnd: e => {
-      if (timeoutId) {
-        window.clearTimeout(timeoutId);
-      }
-
-      if (e.pointerType === "mouse" || e.pointerType === "touch") {
-        props.onLongPressEnd?.({
-          ...e,
-          type: "longpressend"
-        });
+        addGlobalListener(e.target, "contextmenu", onContextMenu, { once: true });
+        addGlobalListener(
+          window,
+          "pointerup",
+          () => {
+            // If no contextmenu event is fired quickly after pointerup, remove the handler
+            // so future context menu events outside a long press are not prevented.
+            setTimeout(() => {
+              removeGlobalListener(e.target, "contextmenu", onContextMenu);
+            }, 30);
+          },
+          { once: true }
+        );
       }
     }
-  });
+  };
 
-  const description = createMemo(() => {
-    return props.onLongPress && !access(props.isDisabled)
-      ? access(props.accessibilityDescription)
-      : undefined;
-  });
+  const onPressEnd = (e: PressEvent) => {
+    if (timeoutId) {
+      window.clearTimeout(timeoutId);
+    }
+
+    if (e.pointerType === "mouse" || e.pointerType === "touch") {
+      props.onLongPressEnd?.({
+        ...e,
+        type: "longpressend"
+      });
+    }
+  };
+
+  const { pressProps } = createPress({ isDisabled, onPressStart, onPressEnd });
+
+  const description = () => {
+    return props.onLongPress && !isDisabled() ? access(props.accessibilityDescription) : undefined;
+  };
 
   const descriptionProps = createDescription(description);
 
-  const longPressProps = createMemo(() => {
-    return combineProps(pressProps(), descriptionProps()) as JSX.HTMLAttributes<T>;
-  });
+  const longPressProps = combineProps(pressProps, descriptionProps) as JSX.HTMLAttributes<T>;
 
   return { longPressProps };
 }

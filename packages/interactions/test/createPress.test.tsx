@@ -32,7 +32,7 @@ function Example(
 
   return (
     <Dynamic
-      {...pressProps()}
+      {...pressProps}
       ref={ref}
       component={props.elementType ?? "div"}
       style={props.style}
@@ -2790,7 +2790,7 @@ describe("createPress", () => {
       const { pressProps } = createPress(createPressProps, () => ref);
 
       return (
-        <div style={show() ? local.styleToApply : {}} {...pressProps()}>
+        <div style={show() ? local.styleToApply : {}} {...pressProps}>
           test
         </div>
       );

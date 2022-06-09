@@ -149,7 +149,7 @@ export function createToggle(
         type: "checkbox",
         onChange
       },
-      pressProps(),
+      pressProps,
       focusableProps
     ) as JSX.InputHTMLAttributes<HTMLInputElement>;
   });

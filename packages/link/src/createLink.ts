@@ -99,7 +99,7 @@ export function createLink<T extends HTMLElement = HTMLAnchorElement>(
       };
     }
 
-    return combineProps(domProps(), focusableProps, pressProps(), {
+    return combineProps(domProps(), focusableProps, pressProps, {
       ...baseProps,
       "aria-disabled": local.isDisabled || undefined,
       onClick

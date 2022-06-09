@@ -16,7 +16,7 @@
  */
 
 import { combineProps } from "@solid-primitives/props";
-import { createMemo, splitProps } from "solid-js";
+import { splitProps } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { fireEvent, render, screen } from "solid-testing-library";
 
@@ -29,7 +29,7 @@ function Example(props: any) {
   const { longPressProps } = createLongPress(others);
 
   return (
-    <Dynamic component={local.elementType ?? "div"} {...longPressProps()} tabIndex="0">
+    <Dynamic component={local.elementType ?? "div"} {...longPressProps} tabIndex="0">
       test
     </Dynamic>
   );
@@ -47,10 +47,10 @@ function ExampleWithPress(props: any) {
 
   const { pressProps } = createPress(local);
 
-  const combinedProps = createMemo(() => combineProps(longPressProps(), pressProps()));
+  const combinedProps = combineProps(longPressProps, pressProps);
 
   return (
-    <Dynamic component={local.elementType ?? "div"} {...combinedProps()} tabIndex="0">
+    <Dynamic component={local.elementType ?? "div"} {...combinedProps} tabIndex="0">
       test
     </Dynamic>
   );

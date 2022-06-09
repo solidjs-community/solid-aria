@@ -363,8 +363,8 @@ export function createSelectableItem<T extends HTMLElement>(
 
     return combineProps(
       itemProps,
-      allowsSelection() || hasPrimaryAction() ? pressProps() : {},
-      longPressEnabled() ? longPressProps() : {},
+      allowsSelection() || hasPrimaryAction() ? pressProps : {},
+      longPressEnabled() ? longPressProps : {},
       { onDblClick, onDragStart, onFocus }
     ) as JSX.HTMLAttributes<T>;
   });
