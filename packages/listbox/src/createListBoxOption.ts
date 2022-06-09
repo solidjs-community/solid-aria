@@ -40,21 +40,6 @@ export interface AriaListBoxOptionProps {
 
 interface ListBoxOptionAria {
   /**
-   * Props for the option element.
-   */
-  optionProps: Accessor<JSX.HTMLAttributes<any>>;
-
-  /**
-   * Props for the main text element inside the option.
-   */
-  labelProps: Accessor<JSX.HTMLAttributes<any>>;
-
-  /**
-   * Props for the description text element inside the option, if any.
-   */
-  descriptionProps: Accessor<JSX.HTMLAttributes<any>>;
-
-  /**
    * Whether the option is currently focused.
    */
   isFocused: Accessor<boolean>;
@@ -73,6 +58,21 @@ interface ListBoxOptionAria {
    * Whether the option is disabled.
    */
   isDisabled: Accessor<boolean>;
+
+  /**
+   * Props for the option element.
+   */
+  optionProps: () => JSX.HTMLAttributes<any>;
+
+  /**
+   * Props for the main text element inside the option.
+   */
+  labelProps: JSX.HTMLAttributes<any>;
+
+  /**
+   * Props for the description text element inside the option, if any.
+   */
+  descriptionProps: JSX.HTMLAttributes<any>;
 }
 
 /**
@@ -90,13 +90,15 @@ export function createListBoxOption<T extends HTMLElement>(
   const labelId = createSlotId();
   const descriptionId = createSlotId();
 
-  const isDisabled = createMemo(() => context.state().disabledKeys().has(props.key));
-  const isSelected = createMemo(() => context.state().selectionManager().isSelected(props.key));
-  const isFocused = createMemo(() => context.state().selectionManager().focusedKey() === props.key);
+  const manager = () => context.state().selectionManager();
+
+  const isDisabled = () => context.state().disabledKeys().has(props.key);
+  const isSelected = () => manager().isSelected(props.key);
+  const isFocused = () => manager().focusedKey() === props.key;
 
   const { itemProps, isPressed } = createSelectableItem(
     {
-      selectionManager: () => context.state().selectionManager(),
+      selectionManager: manager,
       key: () => props.key,
       shouldSelectOnPressUp: context.shouldSelectOnPressUp,
       allowsDifferentPressOrigin: context.shouldSelectOnPressUp,
@@ -111,22 +113,18 @@ export function createListBoxOption<T extends HTMLElement>(
     isDisabled: () => isDisabled() || !context.shouldFocusOnHover(),
     onHoverStart: () => {
       if (!isKeyboardFocusVisible()) {
-        const manager = context.state().selectionManager();
-
-        manager.setFocused(true);
-        manager.setFocusedKey(props.key);
+        manager().setFocused(true);
+        manager().setFocusedKey(props.key);
       }
     }
   });
 
   const optionProps = createMemo(() => {
-    const manager = context.state().selectionManager();
-
     const optionProps: JSX.HTMLAttributes<any> = {
       role: "option",
       id: getItemId(context.listboxId(), props.key),
       "aria-disabled": isDisabled(),
-      "aria-selected": manager.selectionMode() !== "none" ? isSelected() : undefined
+      "aria-selected": manager().selectionMode() !== "none" ? isSelected() : undefined
     };
 
     // Safari with VoiceOver on macOS misreads options with aria-labelledby or aria-label as simply "text".
@@ -146,24 +144,28 @@ export function createListBoxOption<T extends HTMLElement>(
       optionProps["aria-setsize"] = getItemCount(collection);
     }
 
-    return combineProps(optionProps, itemProps(), hoverProps()) as JSX.HTMLAttributes<any>;
+    return combineProps(optionProps, itemProps(), hoverProps) as JSX.HTMLAttributes<any>;
   });
 
-  const labelProps: Accessor<JSX.HTMLAttributes<any>> = createMemo(() => ({
-    id: labelId()
-  }));
+  const labelProps = {
+    get id() {
+      return labelId();
+    }
+  };
 
-  const descriptionProps: Accessor<JSX.HTMLAttributes<any>> = createMemo(() => ({
-    id: descriptionId()
-  }));
+  const descriptionProps = {
+    get id() {
+      return descriptionId();
+    }
+  };
 
   return {
-    optionProps,
-    labelProps,
-    descriptionProps,
     isFocused,
     isSelected,
     isDisabled,
-    isPressed
+    isPressed,
+    optionProps,
+    labelProps,
+    descriptionProps
   };
 }
