@@ -136,7 +136,7 @@ export function createRadioGroup(props: AriaRadioGroupProps): RadioGroupAria {
 
   const { labelProps, fieldProps } = createLabel(createLabelProps);
 
-  const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
+  const domProps = filterDOMProps(props, { labelable: true });
 
   // When the radio group loses focus, reset the focusable radio to null if
   // there is no selection. This allows tabbing into the group from either
@@ -212,7 +212,7 @@ export function createRadioGroup(props: AriaRadioGroupProps): RadioGroupAria {
   };
 
   const groupProps = createMemo(() => {
-    return combineProps(domProps(), {
+    return combineProps(domProps, {
       role: "radiogroup",
       "aria-invalid": props.validationState === "invalid" || undefined,
       "aria-errormessage": props["aria-errormessage"],

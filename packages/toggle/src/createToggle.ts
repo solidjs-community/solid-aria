@@ -132,11 +132,11 @@ export function createToggle(
   });
 
   const { focusableProps } = createFocusable(props, inputRef);
-  const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
+  const domProps = filterDOMProps(props, { labelable: true });
 
   const inputProps = createMemo(() => {
     return combineProps(
-      domProps(),
+      domProps,
       {
         "aria-invalid": props.validationState === "invalid" || undefined,
         "aria-errormessage": props["aria-errormessage"],

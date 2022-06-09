@@ -109,7 +109,7 @@ export function createRadio(
 
   const { focusableProps } = createFocusable(createFocusableProps, inputRef);
 
-  const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
+  const domProps = filterDOMProps(props, { labelable: true });
 
   const tabIndex = createMemo(() => {
     if (isDisabled()) {
@@ -120,7 +120,7 @@ export function createRadio(
   });
 
   const inputProps: Accessor<JSX.InputHTMLAttributes<HTMLInputElement>> = createMemo(() => {
-    return combineProps(domProps(), pressProps, focusableProps, {
+    return combineProps(domProps, pressProps, focusableProps, {
       type: "radio",
       name: context.name(),
       tabIndex: tabIndex(),

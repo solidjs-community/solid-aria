@@ -125,7 +125,7 @@ export function createListBox<T extends HTMLElement>(
 
   const state = createListState(props);
 
-  const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
+  const domProps = filterDOMProps(props, { labelable: true });
 
   const createSelectableListProps = mergeProps(props, {
     selectionManager: state.selectionManager,
@@ -153,7 +153,7 @@ export function createListBox<T extends HTMLElement>(
   const { labelProps, fieldProps } = createLabel(createLabelProps);
 
   const listBoxProps = createMemo(() => {
-    return combineProps(domProps(), focusWithinProps, fieldProps(), listProps(), {
+    return combineProps(domProps, focusWithinProps, fieldProps(), listProps(), {
       role: "listbox",
       "aria-multiselectable":
         state.selectionManager().selectionMode() === "multiple" ? true : undefined

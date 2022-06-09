@@ -78,7 +78,7 @@ export function createLink<T extends HTMLElement = HTMLAnchorElement>(
 
   const { pressProps, isPressed } = createPress(createPressProps, ref);
 
-  const domProps = createMemo(() => filterDOMProps(others, { labelable: true }));
+  const domProps = filterDOMProps(others, { labelable: true });
 
   const onClick = (e: MouseEvent) => {
     if (!props.onClick) {
@@ -99,7 +99,7 @@ export function createLink<T extends HTMLElement = HTMLAnchorElement>(
       };
     }
 
-    return combineProps(domProps(), focusableProps, pressProps, {
+    return combineProps(domProps, focusableProps, pressProps, {
       ...baseProps,
       "aria-disabled": local.isDisabled || undefined,
       onClick

@@ -119,7 +119,7 @@ export function createButton(
 
   const { focusableProps } = createFocusable(props, ref);
 
-  const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
+  const domProps = filterDOMProps(props, { labelable: true });
 
   const onClick = (e: MouseEvent) => {
     if (!props.onClick) {
@@ -131,7 +131,7 @@ export function createButton(
   };
 
   const buttonProps = createMemo(() => {
-    return combineProps(additionalProps(), focusableProps, pressProps, domProps(), {
+    return combineProps(additionalProps(), focusableProps, pressProps, domProps, {
       "aria-haspopup": props["aria-haspopup"],
       "aria-expanded": props["aria-expanded"],
       "aria-controls": props["aria-controls"],

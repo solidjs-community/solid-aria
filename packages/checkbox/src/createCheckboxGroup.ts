@@ -111,10 +111,10 @@ export function createCheckboxGroup(props: AriaCheckboxGroupProps): CheckboxGrou
 
   const { labelProps, fieldProps } = createLabel(createLabelProps);
 
-  const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
+  const domProps = filterDOMProps(props, { labelable: true });
 
   const groupProps = createMemo(() => {
-    return combineProps(domProps(), {
+    return combineProps(domProps, {
       role: "group",
       "aria-disabled": props.isDisabled || undefined,
       ...fieldProps()
