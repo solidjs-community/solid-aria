@@ -109,7 +109,7 @@ export function createListBoxOption<T extends HTMLElement>(
 
   const { hoverProps } = createHover({
     isDisabled: () => isDisabled() || !context.shouldFocusOnHover(),
-    onHoverStart() {
+    onHoverStart: () => {
       if (!isKeyboardFocusVisible()) {
         const manager = context.state().selectionManager();
 
@@ -124,6 +124,7 @@ export function createListBoxOption<T extends HTMLElement>(
 
     const optionProps: JSX.HTMLAttributes<any> = {
       role: "option",
+      id: getItemId(context.listboxId(), props.key),
       "aria-disabled": isDisabled(),
       "aria-selected": manager.selectionMode() !== "none" ? isSelected() : undefined
     };
@@ -145,11 +146,7 @@ export function createListBoxOption<T extends HTMLElement>(
       optionProps["aria-setsize"] = getItemCount(collection);
     }
 
-    return {
-      ...optionProps,
-      ...combineProps(itemProps(), hoverProps()),
-      id: getItemId(context.listboxId(), props.key)
-    } as JSX.HTMLAttributes<any>;
+    return combineProps(optionProps, itemProps(), hoverProps()) as JSX.HTMLAttributes<any>;
   });
 
   const labelProps: Accessor<JSX.HTMLAttributes<any>> = createMemo(() => ({

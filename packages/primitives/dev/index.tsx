@@ -6,8 +6,9 @@ import {
   createListBox,
   createListBoxOption
 } from "@solid-aria/listbox";
+import { ItemKey } from "@solid-aria/types";
 import { combineProps } from "@solid-primitives/props";
-import { createMemo, ParentProps } from "solid-js";
+import { createMemo, createSignal, ParentProps } from "solid-js";
 import { render } from "solid-js/web";
 
 function ListBox(props: AriaListBoxProps) {
@@ -64,15 +65,23 @@ function Option(props: ParentProps<AriaListBoxOptionProps>) {
 }
 
 function App() {
+  const [selectedKeys, setSelectedKeys] = createSignal(new Set<ItemKey>(["two"]));
+
   return (
     <>
       <button>Before</button>
-      <ListBox label="Choose an option" selectionMode="single">
+      <ListBox
+        label="Choose an option"
+        selectionMode="single"
+        selectedKeys={selectedKeys}
+        onSelectionChange={setSelectedKeys}
+      >
         <Item key="one">One</Item>
         <Item key="two">Two</Item>
         <Item key="three">Three</Item>
       </ListBox>
       <button>After</button>
+      <p>{[...selectedKeys().values()].join(" ")}</p>
     </>
   );
   //return <div>Hello Solid Aria!</div>;
