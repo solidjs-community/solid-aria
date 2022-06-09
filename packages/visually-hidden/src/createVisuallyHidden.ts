@@ -80,7 +80,7 @@ export function createVisuallyHidden(props: AriaVisuallyHiddenProps = {}): Visua
 
   const visuallyHiddenProps = createMemo(() => {
     return {
-      ...focusProps(),
+      ...focusProps,
       style: combinedStyles()
     } as JSX.HTMLAttributes<any>;
   });

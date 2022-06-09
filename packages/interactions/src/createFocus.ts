@@ -17,7 +17,7 @@
 
 import { FocusEvents } from "@solid-aria/types";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createMemo, JSX } from "solid-js";
+import { JSX } from "solid-js";
 
 import { createSyntheticBlurEvent } from "./utils";
 
@@ -32,7 +32,7 @@ export interface FocusResult {
   /**
    * Props to spread onto the target element.
    */
-  focusProps: Accessor<JSX.HTMLAttributes<any>>;
+  focusProps: JSX.HTMLAttributes<any>;
 }
 
 /**
@@ -45,14 +45,8 @@ export function createFocus(props: CreateFocusProps): FocusResult {
       return;
     }
 
-    if (e.target !== e.currentTarget) {
-      return;
-    }
-
     props.onBlur?.(e);
     props.onFocusChange?.(false);
-
-    return true;
   };
 
   const onSyntheticFocus = createSyntheticBlurEvent(onBlur);
@@ -62,19 +56,15 @@ export function createFocus(props: CreateFocusProps): FocusResult {
       return;
     }
 
-    if (e.target !== e.currentTarget) {
-      return;
-    }
-
     props.onFocus?.(e);
     props.onFocusChange?.(true);
     onSyntheticFocus(e);
   };
 
-  const focusProps = createMemo(() => ({
+  const focusProps = {
     onFocus,
     onBlur
-  }));
+  };
 
   return { focusProps };
 }

@@ -91,7 +91,7 @@ export function createFocusRing(props: CreateFocusRingProps = {}): FocusRingResu
   });
 
   const focusProps = () => {
-    return access(props.within) ? focusWithinProps() : _focusProps();
+    return access(props.within) ? focusWithinProps() : _focusProps;
   };
 
   return { isFocused, isFocusVisible, focusProps };

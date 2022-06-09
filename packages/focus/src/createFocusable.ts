@@ -72,7 +72,7 @@ export function createFocusable(
 
   const focusableProps = createMemo(() => {
     return combineProps(
-      focusProps(),
+      focusProps,
       keyboardProps(),
       {
         tabIndex: access(props.excludeFromTabOrder) && !access(props.isDisabled) ? -1 : undefined
