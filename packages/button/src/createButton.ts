@@ -131,12 +131,12 @@ export function createButton(
   };
 
   const buttonProps = createMemo(() => {
-    return combineProps(additionalProps(), focusableProps(), pressProps(), domProps(), {
+    return combineProps(additionalProps(), focusableProps, pressProps(), domProps(), {
       "aria-haspopup": props["aria-haspopup"],
       "aria-expanded": props["aria-expanded"],
       "aria-controls": props["aria-controls"],
       "aria-pressed": props["aria-pressed"],
-      tabIndex: props.allowFocusWhenDisabled && props.isDisabled ? -1 : focusableProps().tabIndex,
+      tabIndex: props.allowFocusWhenDisabled && props.isDisabled ? -1 : focusableProps.tabIndex,
       onClick
     }) as JSX.HTMLAttributes<any>;
   });

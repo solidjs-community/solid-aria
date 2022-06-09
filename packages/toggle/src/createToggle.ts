@@ -150,7 +150,7 @@ export function createToggle(
         onChange
       },
       pressProps(),
-      focusableProps()
+      focusableProps
     ) as JSX.InputHTMLAttributes<HTMLInputElement>;
   });
 
