@@ -49,7 +49,7 @@
     "@solid-aria/utils": "workspace:^"
   },
   "peerDependencies": {
-    "@solid-primitives/props": "^2.1.3",
+    "@solid-primitives/props": "^2.1.4",
     "@solid-primitives/utils": "^2.0.1",
     "solid-js": "^1.4.4"
   },

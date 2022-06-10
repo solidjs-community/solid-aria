@@ -13,7 +13,7 @@ importers:
       '@commitlint/cz-commitlint': 16.2.3
       '@solid-primitives/event-listener': 2.1.0
       '@solid-primitives/keyed': 1.0.0
-      '@solid-primitives/props': 2.1.3
+      '@solid-primitives/props': 2.1.4
       '@solid-primitives/utils': 2.0.3
       '@testing-library/dom': 8.13.0
       '@testing-library/jest-dom': 5.16.4
@@ -23,7 +23,7 @@ importers:
       '@types/testing-library__jest-dom': 5.14.3
       '@typescript-eslint/eslint-plugin': 5.20.0
       '@typescript-eslint/parser': 5.20.0
-      babel-preset-solid: 1.3.13
+      babel-preset-solid: 1.4.4
       commitizen: 4.2.4
       eslint: 8.12.0
       eslint-config-prettier: 8.5.0
@@ -38,7 +38,7 @@ importers:
       jest: 27.5.1
       lint-staged: 12.3.7
       prettier: 2.6.2
-      rollup: 2.73.0
+      rollup: 2.75.6
       rollup-preset-solid: 1.4.0
       solid-js: 1.4.4
       solid-testing-library: 0.3.0
@@ -59,7 +59,7 @@ importers:
       '@commitlint/cz-commitlint': 16.2.3_m5bc3bhc52kndzzuhyfjcrpiqq
       '@solid-primitives/event-listener': 2.1.0_solid-js@1.4.4
       '@solid-primitives/keyed': 1.0.0_solid-js@1.4.4
-      '@solid-primitives/props': 2.1.3_solid-js@1.4.4
+      '@solid-primitives/props': 2.1.4_solid-js@1.4.4
       '@solid-primitives/utils': 2.0.3_solid-js@1.4.4
       '@testing-library/dom': 8.13.0
       '@testing-library/jest-dom': 5.16.4
@@ -69,7 +69,7 @@ importers:
       '@types/testing-library__jest-dom': 5.14.3
       '@typescript-eslint/eslint-plugin': 5.20.0_6blpuekoxzex54c2saku4mzx54
       '@typescript-eslint/parser': 5.20.0_thk3xo4exzjr5rl6cnexo7v6re
-      babel-preset-solid: 1.3.13_@babel+core@7.17.9
+      babel-preset-solid: 1.4.4_@babel+core@7.17.9
       commitizen: 4.2.4
       eslint: 8.12.0
       eslint-config-prettier: 8.5.0_eslint@8.12.0
@@ -84,7 +84,7 @@ importers:
       jest: 27.5.1
       lint-staged: 12.3.7
       prettier: 2.6.2
-      rollup: 2.73.0
+      rollup: 2.75.6
       rollup-preset-solid: 1.4.0
       solid-js: 1.4.4
       solid-testing-library: 0.3.0_solid-js@1.4.4
@@ -2352,7 +2352,7 @@ packages:
       fastq: 1.13.0
     dev: true
 
-  /@rollup/plugin-babel/5.3.1_qzlmjbpiggkjlpjf4nr7koycvm:
+  /@rollup/plugin-babel/5.3.1_npfz2s2wgmxgwb3ba6hzss3i3i:
     resolution: {integrity: sha512-WFfdLWU/xVWKeRQnKmIAQULUI7Il0gZnBIH/ZFO069wYIfPu+8zrfp/KMW0atmELoRDq8FbiP3VCss9MhCut7Q==}
     engines: {node: '>= 10.0.0'}
     peerDependencies:
@@ -2365,26 +2365,26 @@ packages:
     dependencies:
       '@babel/core': 7.17.9
       '@babel/helper-module-imports': 7.16.7
-      '@rollup/pluginutils': 3.1.0_rollup@2.73.0
-      rollup: 2.73.0
+      '@rollup/pluginutils': 3.1.0_rollup@2.75.6
+      rollup: 2.75.6
     dev: true
 
-  /@rollup/plugin-node-resolve/13.3.0_rollup@2.73.0:
+  /@rollup/plugin-node-resolve/13.3.0_rollup@2.75.6:
     resolution: {integrity: sha512-Lus8rbUo1eEcnS4yTFKLZrVumLPY+YayBdWXgFSHYhTT2iJbMhoaaBL3xl5NCdeRytErGr8tZ0L71BMRmnlwSw==}
     engines: {node: '>= 10.0.0'}
     peerDependencies:
       rollup: ^2.42.0
     dependencies:
-      '@rollup/pluginutils': 3.1.0_rollup@2.73.0
+      '@rollup/pluginutils': 3.1.0_rollup@2.75.6
       '@types/resolve': 1.17.1
       deepmerge: 4.2.2
       is-builtin-module: 3.1.0
       is-module: 1.0.0
       resolve: 1.22.0
-      rollup: 2.73.0
+      rollup: 2.75.6
     dev: true
 
-  /@rollup/pluginutils/3.1.0_rollup@2.73.0:
+  /@rollup/pluginutils/3.1.0_rollup@2.75.6:
     resolution: {integrity: sha512-GksZ6pr6TpIjHm8h9lSQ8pi8BE9VeubNT0OMJ3B5uZJ8pz73NPiqOtCog/x2/QzM1ENChPKxMDhiQuRHsqc+lg==}
     engines: {node: '>= 8.0.0'}
     peerDependencies:
@@ -2393,7 +2393,7 @@ packages:
       '@types/estree': 0.0.39
       estree-walker: 1.0.1
       picomatch: 2.3.1
-      rollup: 2.73.0
+      rollup: 2.75.6
     dev: true
 
   /@sinonjs/commons/1.8.3:
@@ -2425,8 +2425,8 @@ packages:
       solid-js: 1.4.4
     dev: true
 
-  /@solid-primitives/props/2.1.3_solid-js@1.4.4:
-    resolution: {integrity: sha512-ITBpui/nPPHMjye1UT08WckiJTKb4YkcWIVeu2Yf5xSK2wJuW1mPdBuN4rd4y03rzhYw9QtgJj1zJwjNLuTt4A==}
+  /@solid-primitives/props/2.1.4_solid-js@1.4.4:
+    resolution: {integrity: sha512-tq9kGdZogo6mgWKmPjtekAb875DMBz8hzKMdreVlrMCVDZwmAJMtYX71LQG7FVewLgMTF4O/ak0FVFyQlX6rCQ==}
     peerDependencies:
       solid-js: ^1.3.0
     dependencies:
@@ -3146,8 +3146,8 @@ packages:
       '@types/babel__traverse': 7.17.1
     dev: true
 
-  /babel-plugin-jsx-dom-expressions/0.32.17_@babel+core@7.17.9:
-    resolution: {integrity: sha512-S3VLVh4zBsyWqNhMQq/Kof/sxULKZXaIhiNEy8Iy7XlpMXY4rpJ6XYtRVFtN/2+OnH+tyGDpZRWflvwqbuZxmA==}
+  /babel-plugin-jsx-dom-expressions/0.33.8_@babel+core@7.17.9:
+    resolution: {integrity: sha512-D9fNMObv6tepyA0g67aCxf+RS4jMiVAq/gGxEgYlyEE2mcokjV6OmqqowkHq77WIai1oZBALSuEVbJabxE5R5w==}
     dependencies:
       '@babel/helper-module-imports': 7.16.0
       '@babel/plugin-syntax-jsx': 7.17.12_@babel+core@7.17.9
@@ -3224,10 +3224,10 @@ packages:
       babel-preset-current-node-syntax: 1.0.1_@babel+core@7.17.9
     dev: true
 
-  /babel-preset-solid/1.3.13_@babel+core@7.17.9:
-    resolution: {integrity: sha512-MZnmsceI9yiHlwwFCSALTJhadk2eea/+2UP4ec4jkPZFR+XRKTLoIwRkrBh7uLtvHF+3lHGyUaXtZukOmmUwhA==}
+  /babel-preset-solid/1.4.4_@babel+core@7.17.9:
+    resolution: {integrity: sha512-aas2u8tfZppQcrq7rSwOVHBLT1+v3p5D7mJ6a3EHc+9ld8suGxXSQs1yKYCJfm1b2PWfOajxb6daG04PMY991A==}
     dependencies:
-      babel-plugin-jsx-dom-expressions: 0.32.17_@babel+core@7.17.9
+      babel-plugin-jsx-dom-expressions: 0.33.8_@babel+core@7.17.9
     transitivePeerDependencies:
       - '@babel/core'
     dev: true
@@ -7113,14 +7113,14 @@ packages:
       glob: 7.2.3
     dev: true
 
-  /rollup-plugin-terser/7.0.2_rollup@2.73.0:
+  /rollup-plugin-terser/7.0.2_rollup@2.75.6:
     resolution: {integrity: sha512-w3iIaU4OxcF52UUXiZNsNeuXIMDvFrr+ZXK6bFZ0Q60qyVfq4uLptoS4bbq3paG3x216eQllFZX7zt6TIImguQ==}
     peerDependencies:
       rollup: ^2.0.0
     dependencies:
       '@babel/code-frame': 7.16.7
       jest-worker: 26.6.2
-      rollup: 2.73.0
+      rollup: 2.75.6
       serialize-javascript: 4.0.0
       terser: 5.14.0
     dev: true
@@ -7131,22 +7131,22 @@ packages:
       '@babel/core': 7.17.9
       '@babel/preset-env': 7.16.11_@babel+core@7.17.9
       '@babel/preset-typescript': 7.16.7_@babel+core@7.17.9
-      '@rollup/plugin-babel': 5.3.1_qzlmjbpiggkjlpjf4nr7koycvm
-      '@rollup/plugin-node-resolve': 13.3.0_rollup@2.73.0
-      babel-preset-solid: 1.3.13_@babel+core@7.17.9
+      '@rollup/plugin-babel': 5.3.1_npfz2s2wgmxgwb3ba6hzss3i3i
+      '@rollup/plugin-node-resolve': 13.3.0_rollup@2.75.6
+      babel-preset-solid: 1.4.4_@babel+core@7.17.9
       colorette: 2.0.17
       esbuild: 0.14.42
       merge-anything: 5.0.2
-      rollup: 2.73.0
-      rollup-plugin-terser: 7.0.2_rollup@2.73.0
+      rollup: 2.75.6
+      rollup-plugin-terser: 7.0.2_rollup@2.75.6
       typescript: 4.6.3
     transitivePeerDependencies:
       - '@types/babel__core'
       - supports-color
     dev: true
 
-  /rollup/2.73.0:
-    resolution: {integrity: sha512-h/UngC3S4Zt28mB3g0+2YCMegT5yoftnQplwzPqGZcKvlld5e+kT/QRmJiL+qxGyZKOYpgirWGdLyEO1b0dpLQ==}
+  /rollup/2.75.6:
+    resolution: {integrity: sha512-OEf0TgpC9vU6WGROJIk1JA3LR5vk/yvqlzxqdrE2CzzXnqKXNzbAwlWUXis8RS3ZPe7LAq+YUxsRa0l3r27MLA==}
     engines: {node: '>=10.0.0'}
     hasBin: true
     optionalDependencies:
@@ -7878,7 +7878,7 @@ packages:
       joycon: 3.1.1
       postcss-load-config: 3.1.4
       resolve-from: 5.0.0
-      rollup: 2.73.0
+      rollup: 2.75.6
       source-map: 0.7.4
       sucrase: 3.21.0
       tree-kill: 1.2.2
@@ -8176,7 +8176,7 @@ packages:
     dependencies:
       '@babel/core': 7.17.9
       '@babel/preset-typescript': 7.16.7_@babel+core@7.17.9
-      babel-preset-solid: 1.3.13_@babel+core@7.17.9
+      babel-preset-solid: 1.4.4_@babel+core@7.17.9
       merge-anything: 5.0.2
       solid-js: 1.4.4
       solid-refresh: 0.4.0_solid-js@1.4.4
@@ -8207,7 +8207,7 @@ packages:
       esbuild: 0.14.42
       postcss: 8.4.14
       resolve: 1.22.0
-      rollup: 2.73.0
+      rollup: 2.75.6
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
