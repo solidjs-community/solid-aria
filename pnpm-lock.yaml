@@ -13,7 +13,7 @@ importers:
       '@commitlint/cz-commitlint': 16.2.3
       '@solid-primitives/event-listener': 2.1.0
       '@solid-primitives/keyed': 1.0.0
-      '@solid-primitives/props': 2.1.2
+      '@solid-primitives/props': 2.1.3
       '@solid-primitives/utils': 2.0.3
       '@testing-library/dom': 8.13.0
       '@testing-library/jest-dom': 5.16.4
@@ -59,7 +59,7 @@ importers:
       '@commitlint/cz-commitlint': 16.2.3_m5bc3bhc52kndzzuhyfjcrpiqq
       '@solid-primitives/event-listener': 2.1.0_solid-js@1.4.4
       '@solid-primitives/keyed': 1.0.0_solid-js@1.4.4
-      '@solid-primitives/props': 2.1.2_solid-js@1.4.4
+      '@solid-primitives/props': 2.1.3_solid-js@1.4.4
       '@solid-primitives/utils': 2.0.3_solid-js@1.4.4
       '@testing-library/dom': 8.13.0
       '@testing-library/jest-dom': 5.16.4
@@ -2425,8 +2425,8 @@ packages:
       solid-js: 1.4.4
     dev: true
 
-  /@solid-primitives/props/2.1.2_solid-js@1.4.4:
-    resolution: {integrity: sha512-QBvflWiTFveihqHe/Q40Q4kDLf6VYvi53czSzkwhPH+9pQoIjqCwgmAOggihPQVRJ401gFN27ok6LiwxNYTizA==}
+  /@solid-primitives/props/2.1.3_solid-js@1.4.4:
+    resolution: {integrity: sha512-ITBpui/nPPHMjye1UT08WckiJTKb4YkcWIVeu2Yf5xSK2wJuW1mPdBuN4rd4y03rzhYw9QtgJj1zJwjNLuTt4A==}
     peerDependencies:
       solid-js: ^1.3.0
     dependencies:
