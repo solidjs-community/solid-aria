@@ -18,7 +18,7 @@
 import { AriaButtonProps } from "@solid-aria/button";
 import { createId } from "@solid-aria/utils";
 import { MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createMemo, JSX } from "solid-js";
+import { JSX } from "solid-js";
 
 import {
   createOverlayTriggerState,
@@ -37,12 +37,12 @@ interface OverlayTriggerAria {
   /**
    * Props for the trigger element.
    */
-  triggerProps: Accessor<AriaButtonProps>;
+  triggerProps: AriaButtonProps;
 
   /**
    * Props for the overlay container element.
    */
-  overlayProps: Accessor<JSX.HTMLAttributes<any>>;
+  overlayProps: JSX.HTMLAttributes<any>;
 
   /**
    * State for the overlay trigger, as returned by `createOverlayTriggerState`.
@@ -59,29 +59,31 @@ export function createOverlayTrigger(props: CreateOverlayTriggerProps): OverlayT
 
   const state = createOverlayTriggerState(props);
 
-  // Aria 1.1 supports multiple values for aria-haspopup other than just menus.
-  // https://www.w3.org/TR/wai-aria-1.1/#aria-haspopup
-  // However, we only add it for menus for now because screen readers often
-  // announce it as a menu even for other values.
-  const ariaHasPopup: Accessor<AriaButtonProps["aria-haspopup"]> = createMemo(() => {
-    if (props.type === "menu") {
-      return true;
+  const triggerProps: AriaButtonProps = {
+    // Aria 1.1 supports multiple values for aria-haspopup other than just menus.
+    // https://www.w3.org/TR/wai-aria-1.1/#aria-haspopup
+    // However, we only add it for menus for now because screen readers often
+    // announce it as a menu even for other values.
+    get "aria-haspopup"() {
+      if (props.type === "menu") {
+        return true;
+      }
+
+      if (props.type === "listbox") {
+        return "listbox";
+      }
+    },
+    get "aria-expanded"() {
+      return state.isOpen();
+    },
+    get "aria-controls"() {
+      return state.isOpen() ? overlayId : undefined;
     }
+  };
 
-    if (props.type === "listbox") {
-      return "listbox";
-    }
-  });
-
-  const triggerProps = createMemo(() => ({
-    "aria-haspopup": ariaHasPopup(),
-    "aria-expanded": state.isOpen(),
-    "aria-controls": state.isOpen() ? overlayId : undefined
-  }));
-
-  const overlayProps = createMemo(() => ({
+  const overlayProps = {
     id: overlayId
-  }));
+  };
 
   return { triggerProps, overlayProps, state };
 }

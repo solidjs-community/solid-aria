@@ -88,11 +88,10 @@ export function createBreadcrumbItem<T extends HTMLElement = HTMLAnchorElement>(
 
   const { linkProps } = createLink(createLinkProps, ref);
 
-  // This is not reactive but `elementType` is not a dynamic value that should change at runtime.
+  // Not reactive but `elementType` is not intended to change at runtime.
   const isHeading = /^h[1-6]$/.test(local.elementType ?? "");
 
-  const itemProps: JSX.HTMLAttributes<T> = {
-    ...(!isHeading ? linkProps : {}),
+  const itemProps = mergeProps(!isHeading ? linkProps : {}, {
     get "aria-disabled"() {
       return local.isDisabled;
     },
@@ -108,7 +107,7 @@ export function createBreadcrumbItem<T extends HTMLElement = HTMLAnchorElement>(
 
       return !isHeading ? linkProps.tabIndex : undefined;
     }
-  };
+  } as JSX.HTMLAttributes<T>);
 
   return { itemProps };
 }

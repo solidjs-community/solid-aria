@@ -24,7 +24,7 @@ function Example(props: any) {
   const { dialogProps } = createDialog(props, () => ref);
 
   return (
-    <div {...dialogProps()} ref={ref} data-testid="test">
+    <div {...dialogProps} ref={ref} data-testid="test">
       {props.children}
     </div>
   );

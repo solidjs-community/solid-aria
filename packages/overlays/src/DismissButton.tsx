@@ -43,7 +43,7 @@ export function DismissButton(props: DismissButtonProps) {
 
   return (
     <div {...visuallyHiddenProps()}>
-      <button {...ariaLabelsProps()} tabIndex={-1} onClick={onClick} />
+      <button {...ariaLabelsProps} tabIndex={-1} onClick={onClick} />
     </div>
   );
 }

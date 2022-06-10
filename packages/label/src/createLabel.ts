@@ -18,7 +18,7 @@
 import { AriaLabelingProps, DOMProps, LabelableProps } from "@solid-aria/types";
 import { createId, mergeAriaLabels } from "@solid-aria/utils";
 import { MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
+import { JSX, mergeProps, splitProps } from "solid-js";
 
 export interface AriaLabelProps extends LabelableProps, DOMProps, AriaLabelingProps {
   /**
@@ -32,12 +32,12 @@ export interface LabelAria {
   /**
    * Props to apply to the label container element.
    */
-  labelProps: Accessor<JSX.LabelHTMLAttributes<HTMLLabelElement>>;
+  labelProps: JSX.LabelHTMLAttributes<HTMLLabelElement>;
 
   /**
    * Props to apply to the field container element being labeled.
    */
-  fieldProps: Accessor<DOMProps & AriaLabelingProps>;
+  fieldProps: DOMProps & AriaLabelingProps;
 }
 
 /**
@@ -65,24 +65,22 @@ export function createLabel(props: AriaLabelProps): LabelAria {
     "isHTMLLabelElement"
   ]);
 
-  const labelProps: Accessor<JSX.LabelHTMLAttributes<HTMLLabelElement>> = createMemo(() => {
-    if (!local.label) {
-      return {};
+  const labelProps: JSX.LabelHTMLAttributes<HTMLLabelElement> = {
+    get id() {
+      return local.label ? labelId : undefined;
+    },
+    get for() {
+      return local.label && local.isHTMLLabelElement ? local.id : undefined;
     }
+  };
 
-    return {
-      id: labelId,
-      for: local.isHTMLLabelElement ? local.id : undefined
-    };
-  });
-
-  const ariaLabelledby = createMemo(() => {
+  const ariaLabelledby = () => {
     if (!local.label) {
       return local["aria-labelledby"];
     }
 
     return local["aria-labelledby"] ? `${local["aria-labelledby"]} ${labelId}` : labelId;
-  });
+  };
 
   const { ariaLabelsProps: fieldProps } = mergeAriaLabels({
     id: () => local.id,

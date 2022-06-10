@@ -17,7 +17,7 @@
 
 import { createFocusWithin, createInteractOutside } from "@solid-aria/interactions";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createEffect, createMemo, JSX, onCleanup } from "solid-js";
+import { Accessor, createEffect, JSX, mergeProps, onCleanup } from "solid-js";
 
 export interface AriaOverlayProps {
   /**
@@ -60,12 +60,12 @@ export interface OverlayAria {
   /**
    * Props to apply to the overlay container element.
    */
-  overlayProps: Accessor<JSX.HTMLAttributes<any>>;
+  overlayProps: JSX.HTMLAttributes<any>;
 
   /**
    * Props to apply to the underlay element, if any.
    */
-  underlayProps: Accessor<JSX.HTMLAttributes<any>>;
+  underlayProps: JSX.HTMLAttributes<any>;
 }
 
 const visibleOverlays: Array<Accessor<HTMLElement | undefined>> = [];
@@ -167,18 +167,11 @@ export function createOverlay<T extends HTMLElement>(
     }
   };
 
-  const overlayProps = createMemo(() => {
-    return {
-      onKeyDown,
-      ...focusWithinProps
-    } as JSX.HTMLAttributes<any>;
-  });
+  const overlayProps = mergeProps({ onKeyDown }, focusWithinProps);
 
-  const underlayProps = createMemo(() => {
-    return {
-      onPointerDown: onPointerDownUnderlay
-    } as JSX.HTMLAttributes<any>;
-  });
+  const underlayProps: JSX.HTMLAttributes<any> = {
+    onPointerDown: onPointerDownUnderlay
+  };
 
   return { overlayProps, underlayProps };
 }

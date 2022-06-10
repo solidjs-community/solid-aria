@@ -17,7 +17,7 @@
 
 import { AriaToggleProps, createToggle, ToggleState } from "@solid-aria/toggle";
 import { access } from "@solid-primitives/utils";
-import { Accessor, createEffect, createMemo, JSX, on } from "solid-js";
+import { Accessor, createEffect, JSX, mergeProps, on } from "solid-js";
 
 export interface AriaCheckboxProps extends AriaToggleProps {
   /**
@@ -31,7 +31,7 @@ export interface CheckboxAria {
   /**
    * Props for the input element.
    */
-  inputProps: Accessor<JSX.InputHTMLAttributes<HTMLInputElement>>;
+  inputProps: JSX.InputHTMLAttributes<HTMLInputElement>;
 
   /**
    * State for the checkbox, as returned by `createToggleState`.
@@ -78,12 +78,13 @@ export function createCheckbox(
     )
   );
 
-  const inputProps = createMemo(() => {
-    return {
-      ...toggleInputProps(),
-      checked: state.isSelected(),
-      "aria-checked": props.isIndeterminate ? "mixed" : state.isSelected()
-    } as JSX.InputHTMLAttributes<HTMLInputElement>;
+  const inputProps = mergeProps(toggleInputProps, {
+    get checked() {
+      return state.isSelected();
+    },
+    get "aria-checked"() {
+      return props.isIndeterminate ? "mixed" : state.isSelected();
+    }
   });
 
   return { inputProps, state };

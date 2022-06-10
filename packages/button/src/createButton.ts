@@ -20,7 +20,7 @@ import { createPress } from "@solid-aria/interactions";
 import { ElementType } from "@solid-aria/types";
 import { filterDOMProps } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
-import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
+import { Accessor, JSX, mergeProps, splitProps } from "solid-js";
 
 import { AriaButtonProps } from "./types";
 
@@ -28,7 +28,7 @@ export interface ButtonAria<T> {
   /**
    * Props for the button element.
    */
-  buttonProps: Accessor<T>;
+  buttonProps: T;
 
   /**
    * Whether the button is currently pressed.
@@ -85,26 +85,44 @@ export function createButton(
   // eslint-disable-next-line solid/reactivity
   props = mergeProps(defaultProps, props);
 
-  const additionalProps = createMemo(() => {
-    if (props.elementType === "button") {
-      return {
-        type: props.type,
-        disabled: props.isDisabled
-      };
-    }
+  let additionalProps: JSX.ButtonHTMLAttributes<any> | JSX.AnchorHTMLAttributes<any> = {};
 
-    return {
-      role: "button",
-      tabIndex: props.isDisabled ? undefined : 0,
-      href: props.elementType === "a" && props.isDisabled ? undefined : props.href,
-      target: props.elementType === "a" ? props.target : undefined,
-      type: props.elementType === "input" ? props.type : undefined,
-      disabled: props.elementType === "input" ? props.isDisabled : undefined,
-      "aria-disabled":
-        !props.isDisabled || props.elementType === "input" ? undefined : props.isDisabled,
-      rel: props.elementType === "a" ? props.rel : undefined
+  // Not reactive but `elementType` is not intended to change at runtime.
+  if (props.elementType === "button") {
+    additionalProps = {
+      get type() {
+        return props.type;
+      },
+      get disabled() {
+        return props.isDisabled;
+      }
     };
-  });
+  } else {
+    additionalProps = {
+      role: "button",
+      get tabIndex() {
+        return props.isDisabled ? undefined : 0;
+      },
+      get href() {
+        return props.elementType === "a" && props.isDisabled ? undefined : props.href;
+      },
+      get target() {
+        return props.elementType === "a" ? props.target : undefined;
+      },
+      get type() {
+        return props.elementType === "input" ? props.type : undefined;
+      },
+      get disabled() {
+        return props.elementType === "input" ? props.isDisabled : undefined;
+      },
+      get "aria-disabled"() {
+        return !props.isDisabled || props.elementType === "input" ? undefined : props.isDisabled;
+      },
+      get rel() {
+        return props.elementType === "a" ? props.rel : undefined;
+      }
+    };
+  }
 
   const [createPressProps] = splitProps(props, [
     "onPressStart",
@@ -121,25 +139,39 @@ export function createButton(
 
   const domProps = filterDOMProps(props, { labelable: true });
 
-  const onClick = (e: MouseEvent) => {
-    if (!props.onClick) {
-      return;
-    }
+  const baseButtonProps: JSX.HTMLAttributes<any> = {
+    get "aria-haspopup"() {
+      return props["aria-haspopup"];
+    },
+    get "aria-expanded"() {
+      return props["aria-expanded"];
+    },
+    get "aria-controls"() {
+      return props["aria-controls"];
+    },
+    get "aria-pressed"() {
+      return props["aria-pressed"];
+    },
+    get tabIndex() {
+      return props.allowFocusWhenDisabled && props.isDisabled ? -1 : focusableProps.tabIndex;
+    },
+    onClick: e => {
+      if (!props.onClick) {
+        return;
+      }
 
-    props.onClick(e);
-    console.warn("onClick is deprecated, please use onPress");
+      props.onClick(e);
+      console.warn("onClick is deprecated, please use onPress");
+    }
   };
 
-  const buttonProps = createMemo(() => {
-    return combineProps(additionalProps(), focusableProps, pressProps, domProps, {
-      "aria-haspopup": props["aria-haspopup"],
-      "aria-expanded": props["aria-expanded"],
-      "aria-controls": props["aria-controls"],
-      "aria-pressed": props["aria-pressed"],
-      tabIndex: props.allowFocusWhenDisabled && props.isDisabled ? -1 : focusableProps.tabIndex,
-      onClick
-    }) as JSX.HTMLAttributes<any>;
-  });
+  const buttonProps = combineProps(
+    additionalProps,
+    focusableProps,
+    pressProps,
+    domProps,
+    baseButtonProps
+  );
 
   return { buttonProps, isPressed };
 }

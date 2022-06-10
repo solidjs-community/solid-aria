@@ -46,7 +46,7 @@ export interface CreateFocusRingProps {
   autoFocus?: MaybeAccessor<boolean | undefined>;
 }
 
-type FocusRingProps = Required<FocusResult["focusProps"] & FocusWithinResult["focusWithinProps"]>;
+type FocusRingProps = FocusResult["focusProps"] | FocusWithinResult["focusWithinProps"];
 
 export interface FocusRingResult {
   /**
@@ -97,6 +97,7 @@ export function createFocusRing(props: CreateFocusRingProps = {}): FocusRingResu
   return {
     isFocused,
     isFocusVisible,
-    focusProps: { ...focusProps, ...focusWithinProps }
+    // Not reactive but `within` is not intended to change at runtime.
+    focusProps: access(props.within) ? focusWithinProps : focusProps
   };
 }

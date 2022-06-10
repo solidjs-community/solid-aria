@@ -159,7 +159,7 @@ export interface AriaModalProps {
   isDisabled?: boolean;
 }
 
-interface ModalElementProps extends JSX.HTMLAttributes<HTMLElement> {
+interface ModalElementProps extends JSX.HTMLAttributes<any> {
   /**
    * Data attribute marks the dom node as a modal for the aria-modal-polyfill.
    */
@@ -170,7 +170,7 @@ export interface ModalAria {
   /**
    * Props for the modal content element.
    */
-  modalProps: Accessor<ModalElementProps>;
+  modalProps: ModalElementProps;
 }
 
 /**
@@ -187,9 +187,11 @@ export function createModal(props?: AriaModalProps): ModalAria {
     throw new Error("Modal is not contained within a provider");
   }
 
-  const modalProps = createMemo(() => ({
-    "data-ismodal": !props?.isDisabled
-  }));
+  const modalProps = {
+    get "data-ismodal"() {
+      return !props?.isDisabled;
+    }
+  };
 
   createEffect(() => {
     if (props?.isDisabled || !context.parent()) {

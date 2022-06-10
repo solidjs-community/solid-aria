@@ -17,7 +17,7 @@
 
 import { AriaToggleProps, createToggle, ToggleState } from "@solid-aria/toggle";
 import { AriaValidationProps, Validation } from "@solid-aria/types";
-import { Accessor, createMemo, JSX } from "solid-js";
+import { Accessor, JSX, mergeProps } from "solid-js";
 
 export type AriaSwitchProps = Omit<AriaToggleProps, keyof (Validation & AriaValidationProps)>;
 
@@ -25,7 +25,7 @@ export interface SwitchAria {
   /**
    * Props for the input element.
    */
-  inputProps: Accessor<JSX.InputHTMLAttributes<HTMLInputElement>>;
+  inputProps: JSX.InputHTMLAttributes<HTMLInputElement>;
 
   /**
    * State for the switch, as returned by `createToggleState`.
@@ -45,14 +45,15 @@ export function createSwitch(
 ): SwitchAria {
   const { inputProps: toggleInputProps, state } = createToggle(props, inputRef);
 
-  const inputProps = createMemo(() => {
-    return {
-      ...toggleInputProps(),
-      role: "switch",
-      checked: state.isSelected(),
-      "aria-checked": state.isSelected()
-    } as JSX.InputHTMLAttributes<HTMLInputElement>;
-  });
+  const inputProps = mergeProps(toggleInputProps, {
+    role: "switch",
+    get checked() {
+      return state.isSelected();
+    },
+    get "aria-checked"() {
+      return state.isSelected();
+    }
+  } as JSX.InputHTMLAttributes<HTMLInputElement>);
 
   return { inputProps, state };
 }

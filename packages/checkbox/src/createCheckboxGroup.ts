@@ -30,7 +30,6 @@ import {
   Accessor,
   createComponent,
   createContext,
-  createMemo,
   FlowComponent,
   JSX,
   mergeProps,
@@ -80,12 +79,12 @@ interface CheckboxGroupAria {
   /**
    * Props for the checkbox group wrapper element.
    */
-  groupProps: Accessor<JSX.HTMLAttributes<any>>;
+  groupProps: JSX.HTMLAttributes<any>;
 
   /**
    * Props for the checkbox group's visible label (if any).
    *  */
-  labelProps: Accessor<JSX.HTMLAttributes<any>>;
+  labelProps: JSX.HTMLAttributes<any>;
 
   /**
    * State for the checkbox group, as returned by `createCheckboxGroupState`.
@@ -113,15 +112,19 @@ export function createCheckboxGroup(props: AriaCheckboxGroupProps): CheckboxGrou
 
   const domProps = filterDOMProps(props, { labelable: true });
 
-  const groupProps = createMemo(() => {
-    return combineProps(domProps, {
+  const baseGroupProps = mergeProps(
+    {
       role: "group",
-      "aria-disabled": props.isDisabled || undefined,
-      ...fieldProps()
-    }) as JSX.HTMLAttributes<any>;
-  });
+      get "aria-disabled"() {
+        return props.isDisabled || undefined;
+      }
+    } as JSX.HTMLAttributes<any>,
+    fieldProps
+  );
 
-  const name = createMemo(() => props.name);
+  const groupProps = combineProps(domProps, baseGroupProps);
+
+  const name = () => props.name;
 
   const CheckboxGroupProvider: FlowComponent = props => {
     return createComponent(CheckboxGroupContext.Provider, {

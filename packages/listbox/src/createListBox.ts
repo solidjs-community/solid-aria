@@ -108,7 +108,7 @@ interface ListBoxAria {
   /**
    * Props for the listbox's visual label element (if any).
    */
-  labelProps: Accessor<JSX.HTMLAttributes<any>>;
+  labelProps: JSX.HTMLAttributes<any>;
 }
 
 /**
@@ -153,7 +153,7 @@ export function createListBox<T extends HTMLElement>(
   const { labelProps, fieldProps } = createLabel(createLabelProps);
 
   const listBoxProps = createMemo(() => {
-    return combineProps(domProps, focusWithinProps, fieldProps(), listProps(), {
+    return combineProps(domProps, focusWithinProps, fieldProps, listProps(), {
       role: "listbox",
       "aria-multiselectable":
         state.selectionManager().selectionMode() === "multiple" ? true : undefined

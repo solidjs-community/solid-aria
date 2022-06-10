@@ -18,7 +18,7 @@
 import { focusSafely } from "@solid-aria/focus";
 import { AriaLabelingProps, DOMProps } from "@solid-aria/types";
 import { createSlotId, filterDOMProps } from "@solid-aria/utils";
-import { Accessor, createMemo, JSX, onCleanup, onMount } from "solid-js";
+import { Accessor, JSX, mergeProps, onCleanup, onMount } from "solid-js";
 
 export interface AriaDialogProps extends DOMProps, AriaLabelingProps {
   /**
@@ -32,12 +32,12 @@ export interface DialogAria {
   /**
    * Props for the dialog container element.
    */
-  dialogProps: Accessor<JSX.HTMLAttributes<any>>;
+  dialogProps: JSX.HTMLAttributes<any>;
 
   /**
    * Props for the dialog title element.
    */
-  titleProps: Accessor<JSX.HTMLAttributes<any>>;
+  titleProps: JSX.HTMLAttributes<any>;
 }
 
 /**
@@ -50,11 +50,11 @@ export function createDialog<T extends HTMLElement>(
 ): DialogAria {
   const defaultTitleId = createSlotId();
 
-  const titleId = createMemo(() => {
+  const titleId = () => {
     return props["aria-label"] ? undefined : defaultTitleId();
-  });
+  };
 
-  const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
+  const domProps = filterDOMProps(props, { labelable: true });
 
   // Note: aria-modal has a bug in Safari which forces the first focusable element to be focused
   // on mount when inside an iframe, no matter which element we programmatically focus.
@@ -62,17 +62,22 @@ export function createDialog<T extends HTMLElement>(
   //
   // `createModal` sets aria-hidden on all elements outside the dialog, so the dialog will behave as a modal
   // even without aria-modal on the dialog itself.
-  const dialogProps = createMemo(() => ({
-    ...domProps(),
-    role: props.role ?? "dialog",
+  const dialogProps = mergeProps(domProps, {
     tabIndex: -1,
     "aria-modal": true,
-    "aria-labelledby": props["aria-labelledby"] || titleId()
-  }));
+    get role() {
+      return props.role ?? "dialog";
+    },
+    get "aria-labelledby"() {
+      return props["aria-labelledby"] || titleId();
+    }
+  });
 
-  const titleProps = createMemo(() => ({
-    id: titleId()
-  }));
+  const titleProps = {
+    get id() {
+      return titleId();
+    }
+  };
 
   onMount(() => {
     let iosSafariFocusTimeoutId: number;
