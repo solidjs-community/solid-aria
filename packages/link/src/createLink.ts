@@ -80,15 +80,6 @@ export function createLink<T extends HTMLElement = HTMLAnchorElement>(
 
   const domProps = filterDOMProps(others, { labelable: true });
 
-  const onClick = (e: MouseEvent) => {
-    if (!props.onClick) {
-      return;
-    }
-
-    props.onClick(e);
-    console.warn("onClick is deprecated, please use onPress");
-  };
-
   const isAnchorTag = () => local.elementType === "a";
 
   const baseLinkProps: JSX.HTMLAttributes<any> = {
@@ -101,7 +92,14 @@ export function createLink<T extends HTMLElement = HTMLAnchorElement>(
     get "aria-disabled"() {
       return local.isDisabled;
     },
-    onClick
+    onClick: e => {
+      if (!props.onClick) {
+        return;
+      }
+
+      props.onClick(e);
+      console.warn("onClick is deprecated, please use onPress");
+    }
   };
 
   return {
