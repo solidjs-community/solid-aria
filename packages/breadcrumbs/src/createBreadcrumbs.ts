@@ -17,7 +17,7 @@
 
 import { AriaLabelingProps, DOMProps } from "@solid-aria/types";
 import { filterDOMProps } from "@solid-aria/utils";
-import { JSX, mergeProps } from "solid-js";
+import { createMemo, JSX, mergeProps } from "solid-js";
 
 export interface AriaBreadcrumbsProps extends DOMProps, AriaLabelingProps {
   /**
@@ -46,5 +46,7 @@ export function createBreadcrumbs(props: AriaBreadcrumbsProps): BreadcrumbsAria 
   // eslint-disable-next-line solid/reactivity
   props = mergeProps({ "aria-label": "Breadcrumbs" }, props);
 
-  return { navProps: filterDOMProps(props, { labelable: true }) };
+  const navProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
+
+  return { navProps };
 }

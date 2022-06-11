@@ -20,7 +20,7 @@ import { createPress } from "@solid-aria/interactions";
 import { AriaLabelingProps, FocusableProps, PressEvents } from "@solid-aria/types";
 import { filterDOMProps } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
-import { Accessor, JSX, mergeProps, splitProps } from "solid-js";
+import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
 
 export interface AriaLinkProps extends AriaLabelingProps, PressEvents, FocusableProps {
   /**
@@ -78,7 +78,7 @@ export function createLink<T extends HTMLElement = HTMLAnchorElement>(
 
   const { pressProps, isPressed } = createPress(createPressProps, ref);
 
-  const domProps = filterDOMProps(others, { labelable: true });
+  const domProps = mergeProps(createMemo(() => filterDOMProps(others, { labelable: true })));
 
   const isAnchorTag = () => local.elementType === "a";
 

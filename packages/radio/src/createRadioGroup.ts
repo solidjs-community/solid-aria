@@ -35,6 +35,7 @@ import {
   Accessor,
   createComponent,
   createContext,
+  createMemo,
   FlowComponent,
   JSX,
   mergeProps,
@@ -135,7 +136,7 @@ export function createRadioGroup(props: AriaRadioGroupProps): RadioGroupAria {
 
   const { labelProps, fieldProps } = createLabel(createLabelProps);
 
-  const domProps = filterDOMProps(props, { labelable: true });
+  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
 
   // When the radio group loses focus, reset the focusable radio to null if
   // there is no selection. This allows tabbing into the group from either

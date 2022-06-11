@@ -18,7 +18,7 @@
 import { focusSafely } from "@solid-aria/focus";
 import { AriaLabelingProps, DOMProps } from "@solid-aria/types";
 import { createSlotId, filterDOMProps } from "@solid-aria/utils";
-import { Accessor, JSX, mergeProps, onCleanup, onMount } from "solid-js";
+import { Accessor, createMemo, JSX, mergeProps, onCleanup, onMount } from "solid-js";
 
 export interface AriaDialogProps extends DOMProps, AriaLabelingProps {
   /**
@@ -54,7 +54,7 @@ export function createDialog<T extends HTMLElement>(
     return props["aria-label"] ? undefined : defaultTitleId();
   };
 
-  const domProps = filterDOMProps(props, { labelable: true });
+  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
 
   // Note: aria-modal has a bug in Safari which forces the first focusable element to be focused
   // on mount when inside an iframe, no matter which element we programmatically focus.

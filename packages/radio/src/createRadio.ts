@@ -20,7 +20,7 @@ import { createPress } from "@solid-aria/interactions";
 import { AriaLabelingProps, DOMProps, FocusableProps } from "@solid-aria/types";
 import { filterDOMProps } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
-import { Accessor, JSX } from "solid-js";
+import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
 
 import { useRadioGroupContext } from "./createRadioGroup";
 import { RadioGroupState } from "./createRadioGroupState";
@@ -109,7 +109,7 @@ export function createRadio(
 
   const { focusableProps } = createFocusable(createFocusableProps, inputRef);
 
-  const domProps = filterDOMProps(props, { labelable: true });
+  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
 
   const inputProps = combineProps(domProps, pressProps, focusableProps, {
     type: "radio",

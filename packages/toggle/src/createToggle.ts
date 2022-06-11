@@ -27,7 +27,7 @@ import {
 } from "@solid-aria/types";
 import { filterDOMProps } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
-import { Accessor, JSX, mergeProps } from "solid-js";
+import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
 
 import { createToggleState, ToggleState } from "./createToggleState";
 
@@ -132,7 +132,8 @@ export function createToggle(
   });
 
   const { focusableProps } = createFocusable(props, inputRef);
-  const domProps = filterDOMProps(props, { labelable: true });
+
+  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
 
   const baseToggleProps: JSX.InputHTMLAttributes<any> = {
     get "aria-invalid"() {

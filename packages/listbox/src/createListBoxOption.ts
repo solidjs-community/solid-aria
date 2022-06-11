@@ -119,7 +119,7 @@ export function createListBoxOption<T extends HTMLElement>(
     }
   });
 
-  const isNotSafariMacOS = () => !(isMac() && isWebKit());
+  const isNotSafariMacOS = !(isMac() && isWebKit());
 
   const baseOptionProps: JSX.HTMLAttributes<any> = {
     role: "option",
@@ -136,13 +136,13 @@ export function createListBoxOption<T extends HTMLElement>(
     // We should not map slots to the label and description on Safari and instead just have VoiceOver read the textContent.
     // https://bugs.webkit.org/show_bug.cgi?id=209279
     get "aria-label"() {
-      return isNotSafariMacOS() ? props["aria-label"] : undefined;
+      return isNotSafariMacOS ? props["aria-label"] : undefined;
     },
     get "aria-labelledby"() {
-      return isNotSafariMacOS() ? labelId() : undefined;
+      return isNotSafariMacOS ? labelId() : undefined;
     },
     get "aria-describedby"() {
-      return isNotSafariMacOS() ? descriptionId() : undefined;
+      return isNotSafariMacOS ? descriptionId() : undefined;
     },
     get "aria-posinset"() {
       if (!context.isVirtualized()) {

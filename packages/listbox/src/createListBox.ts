@@ -34,6 +34,7 @@ import {
   Accessor,
   createComponent,
   createContext,
+  createMemo,
   FlowComponent,
   JSX,
   mergeProps,
@@ -124,7 +125,7 @@ export function createListBox<T extends HTMLElement>(
 
   const state = createListState(props);
 
-  const domProps = filterDOMProps(props, { labelable: true });
+  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
 
   const createSelectableListProps = mergeProps(props, {
     selectionManager: state.selectionManager,
