@@ -22,7 +22,7 @@ import { focusWithoutScrolling, scrollIntoView } from "@solid-aria/utils";
 import { createEventListener } from "@solid-primitives/event-listener";
 import { combineProps } from "@solid-primitives/props";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createEffect, createMemo, JSX, mergeProps, on, onMount } from "solid-js";
+import { Accessor, createEffect, JSX, mergeProps, on, onMount } from "solid-js";
 
 import { createTypeSelect } from "./createTypeSelect";
 import { MultipleSelectionManager } from "./types";
@@ -95,7 +95,7 @@ interface SelectableCollectionAria {
   /**
    * Props for the collection element.
    */
-  collectionProps: Accessor<JSX.HTMLAttributes<any>>;
+  collectionProps: JSX.HTMLAttributes<any>;
 }
 
 /**
@@ -478,37 +478,30 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
   );
 
   const { typeSelectProps } = createTypeSelect({
+    isDisabled: () => access(props.disallowTypeAhead),
     keyboardDelegate: () => access(props.keyboardDelegate),
     selectionManager: () => access(props.selectionManager)
   });
 
-  const collectionProps = createMemo(() => {
-    let handlers: JSX.HTMLAttributes<any> = {
-      onKeyDown,
-      onFocusIn,
-      onFocusOut,
-      onMouseDown
-    };
-
-    if (!access(props.disallowTypeAhead)) {
-      handlers = combineProps(typeSelectProps(), handlers);
-    }
-
+  const baseCollectionProps: JSX.HTMLAttributes<any> = {
+    onKeyDown,
+    onFocusIn,
+    onFocusOut,
+    onMouseDown,
     // If nothing is focused within the collection, make the collection itself tabbable.
     // This will be marshalled to either the first or last item depending on where focus came from.
     // If using virtual focus, don't set a tabIndex at all so that VoiceOver on iOS 14 doesn't try
     // to move real DOM focus to the element anyway.
-    let tabIndex: number | undefined;
+    get tabIndex() {
+      if (access(props.shouldUseVirtualFocus)) {
+        return undefined;
+      }
 
-    if (!access(props.shouldUseVirtualFocus)) {
-      tabIndex = access(props.selectionManager).focusedKey() == null ? 0 : -1;
+      return access(props.selectionManager).focusedKey() == null ? 0 : -1;
     }
+  };
 
-    return {
-      ...handlers,
-      tabIndex
-    } as JSX.HTMLAttributes<any>;
-  });
+  const collectionProps = combineProps(typeSelectProps, baseCollectionProps);
 
   return { collectionProps };
 }

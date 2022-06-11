@@ -96,7 +96,7 @@ interface SelectableListAria {
   /**
    * Props for the option element.
    */
-  listProps: Accessor<JSX.HTMLAttributes<any>>;
+  listProps: JSX.HTMLAttributes<any>;
 }
 
 /**
@@ -125,7 +125,7 @@ export function createSelectableList<T extends HTMLElement>(
     return new ListKeyboardDelegate(collection, disabledKeys, ref, collator());
   });
 
-  const { collectionProps } = createSelectableCollection(
+  const { collectionProps: listProps } = createSelectableCollection(
     {
       keyboardDelegate: delegate,
       selectionManager: () => access(props.selectionManager),
@@ -141,7 +141,5 @@ export function createSelectableList<T extends HTMLElement>(
     ref
   );
 
-  return {
-    listProps: collectionProps
-  };
+  return { listProps };
 }

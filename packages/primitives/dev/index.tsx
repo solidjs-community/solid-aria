@@ -8,7 +8,7 @@ import {
 } from "@solid-aria/listbox";
 import { ItemKey } from "@solid-aria/types";
 import { combineProps } from "@solid-primitives/props";
-import { createMemo, createSignal, ParentProps } from "solid-js";
+import { createSignal, ParentProps } from "solid-js";
 import { render } from "solid-js/web";
 
 function ListBox(props: AriaListBoxProps) {
@@ -18,9 +18,9 @@ function ListBox(props: AriaListBoxProps) {
 
   return (
     <ListBoxProvider>
-      <div {...labelProps()}>{props.label}</div>
+      <div {...labelProps}>{props.label}</div>
       <ul
-        {...listBoxProps()}
+        {...listBoxProps}
         ref={ref}
         class="listbox"
         style={{
@@ -46,11 +46,11 @@ function Option(props: ParentProps<AriaListBoxOptionProps>) {
 
   const { isFocusVisible, focusProps } = createFocusRing();
 
-  const rootProps = createMemo(() => combineProps(optionProps(), focusProps));
+  const rootProps = combineProps(optionProps, focusProps);
 
   return (
     <li
-      {...rootProps()}
+      {...rootProps}
       ref={ref}
       style={{
         background: isSelected() ? "blueviolet" : "transparent",

@@ -20,7 +20,7 @@ import { createLongPress, createPress, CreatePressProps } from "@solid-aria/inte
 import { ItemKey, LongPressEvent, PointerType, PressEvent } from "@solid-aria/types";
 import { combineProps } from "@solid-primitives/props";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createEffect, createMemo, JSX, on } from "solid-js";
+import { Accessor, createEffect, createMemo, JSX, mergeProps, on } from "solid-js";
 
 import { MultipleSelectionManager } from "./types";
 import { isCtrlKeyPressed, isNonContiguousSelectionModifier } from "./utils";
@@ -110,7 +110,7 @@ export interface SelectableItemAria<T extends HTMLElement> extends SelectableIte
   /**
    * Props to be spread on the item root node.
    */
-  itemProps: Accessor<JSX.HTMLAttributes<T>>;
+  itemProps: JSX.HTMLAttributes<T>;
 }
 
 /**
@@ -122,84 +122,66 @@ export function createSelectableItem<T extends HTMLElement>(
   props: CreateSelectableItemProps,
   ref: Accessor<T | undefined>
 ): SelectableItemAria<T> {
-  const onSelect = (e: PressEvent | LongPressEvent | PointerEvent) => {
-    const manager = access(props.selectionManager);
-    const key = access(props.key);
+  const manager = () => access(props.selectionManager);
+  const key = () => access(props.key);
+  const shouldUseVirtualFocus = () => access(props.shouldUseVirtualFocus);
 
+  const onSelect = (e: PressEvent | LongPressEvent | PointerEvent) => {
     if (e.pointerType === "keyboard" && isNonContiguousSelectionModifier(e)) {
-      manager.toggleSelection(key);
+      manager().toggleSelection(key());
     } else {
-      if (manager.selectionMode() === "none") {
+      if (manager().selectionMode() === "none") {
         return;
       }
 
-      if (manager.selectionMode() === "single") {
-        if (manager.isSelected(key) && !manager.disallowEmptySelection()) {
-          manager.toggleSelection(key);
+      if (manager().selectionMode() === "single") {
+        if (manager().isSelected(key()) && !manager().disallowEmptySelection()) {
+          manager().toggleSelection(key());
         } else {
-          manager.replaceSelection(key);
+          manager().replaceSelection(key());
         }
       } else if (e && e.shiftKey) {
-        manager.extendSelection(key);
+        manager().extendSelection(key());
       } else if (
-        manager.selectionBehavior() === "toggle" ||
+        manager().selectionBehavior() === "toggle" ||
         (e && (isCtrlKeyPressed(e) || e.pointerType === "touch" || e.pointerType === "virtual"))
       ) {
         // if touch or virtual (VO) then we just want to toggle, otherwise it's impossible to multi select because they don't have modifier keys
-        manager.toggleSelection(key);
+        manager().toggleSelection(key());
       } else {
-        manager.replaceSelection(key);
+        manager().replaceSelection(key());
       }
     }
   };
 
-  const isSelected = createMemo(() => {
-    const manager = access(props.selectionManager);
-    const key = access(props.key);
-
-    return manager.isSelected(key);
-  });
+  const isSelected = () => manager().isSelected(key());
 
   // With checkbox selection, onAction (i.e. navigation) becomes primary, and occurs on a single click of the row.
   // Clicking the checkbox enters selection mode, after which clicking anywhere on any row toggles selection for that row.
   // With highlight selection, onAction is secondary, and occurs on double click. Single click selects the row.
   // With touch, onAction occurs on single tap, and long press enters selection mode.
-  const isDisabled = createMemo(() => {
-    const manager = access(props.selectionManager);
-    const key = access(props.key);
+  const isDisabled = () => access(props.isDisabled) || manager().isDisabled(key());
 
-    return access(props.isDisabled) || manager.isDisabled(key);
-  });
+  const allowsSelection = () => !isDisabled() && manager().canSelectItem(key());
 
-  const allowsSelection = createMemo(() => {
-    const manager = access(props.selectionManager);
-    const key = access(props.key);
+  const allowsActions = () => props.onAction != null && !isDisabled();
 
-    return !isDisabled() && manager.canSelectItem(key);
-  });
-
-  const allowsActions = createMemo(() => props.onAction != null && !isDisabled());
-
-  const hasPrimaryAction = createMemo(() => {
-    const manager = access(props.selectionManager);
-
+  const hasPrimaryAction = () => {
     return (
       allowsActions() &&
-      (manager.selectionBehavior() === "replace" ? !allowsSelection() : manager.isEmpty())
+      (manager().selectionBehavior() === "replace" ? !allowsSelection() : manager().isEmpty())
     );
-  });
+  };
 
-  const hasSecondaryAction = createMemo(() => {
-    const manager = access(props.selectionManager);
+  const hasSecondaryAction = () => {
+    return allowsActions() && allowsSelection() && manager().selectionBehavior() === "replace";
+  };
 
-    return allowsActions() && allowsSelection() && manager.selectionBehavior() === "replace";
-  });
-
-  const hasAction = createMemo(() => hasPrimaryAction() || hasSecondaryAction());
+  const hasAction = () => hasPrimaryAction() || hasSecondaryAction();
 
   let modality: PointerType | null = null;
 
-  const longPressEnabled = createMemo(() => hasAction() && allowsSelection());
+  const longPressEnabled = () => hasAction() && allowsSelection();
 
   let longPressEnabledOnPressStart = false;
   let hadPrimaryActionOnPressStart = false;
@@ -211,48 +193,16 @@ export function createSelectableItem<T extends HTMLElement>(
   // we want to be able to have the pointer down on the trigger that opens the menu and
   // the pointer up on the menu item rather than requiring a separate press.
   // For keyboard events, selection still occurs on key down.
-  const itemPressProps: Accessor<CreatePressProps> = createMemo(() => {
-    const itemPressProps: CreatePressProps = {};
+  const itemPressProps: CreatePressProps = {
+    onPressStart: e => {
+      modality = e.pointerType;
+      longPressEnabledOnPressStart = longPressEnabled();
 
-    if (access(props.shouldSelectOnPressUp)) {
-      itemPressProps.onPressStart = e => {
-        modality = e.pointerType;
-        longPressEnabledOnPressStart = longPressEnabled();
-
+      if (access(props.shouldSelectOnPressUp)) {
         if (e.pointerType === "keyboard" && (!hasAction() || isSelectionKey())) {
           onSelect(e);
         }
-      };
-
-      // If allowsDifferentPressOrigin, make selection happen on pressUp (e.g. open menu on press down, selection on menu item happens on press up.)
-      // Otherwise, have selection happen onPress (prevents listview row selection when clicking on interactable elements in the row)
-      if (!access(props.allowsDifferentPressOrigin)) {
-        itemPressProps.onPress = e => {
-          if (hasPrimaryAction() || (hasSecondaryAction() && e.pointerType !== "mouse")) {
-            if (e.pointerType === "keyboard" && !isActionKey()) {
-              return;
-            }
-
-            props.onAction?.();
-          } else if (e.pointerType !== "keyboard") {
-            onSelect(e);
-          }
-        };
       } else {
-        itemPressProps.onPressUp = e => {
-          if (e.pointerType !== "keyboard") {
-            onSelect(e);
-          }
-        };
-
-        if (hasPrimaryAction()) {
-          itemPressProps.onPress = props.onAction;
-        }
-      }
-    } else {
-      itemPressProps.onPressStart = e => {
-        modality = e.pointerType;
-        longPressEnabledOnPressStart = longPressEnabled();
         hadPrimaryActionOnPressStart = hasPrimaryAction();
 
         // Select on mouse down unless there is a primary action which will occur on mouse up.
@@ -264,9 +214,37 @@ export function createSelectableItem<T extends HTMLElement>(
         ) {
           onSelect(e);
         }
-      };
+      }
+    },
+    onPressUp: e => {
+      // If allowsDifferentPressOrigin, make selection happen on pressUp (e.g. open menu on press down, selection on menu item happens on press up.)
+      // Otherwise, have selection happen onPress (prevents listview row selection when clicking on interactable elements in the row)
+      if (
+        access(props.shouldSelectOnPressUp) &&
+        access(props.allowsDifferentPressOrigin) &&
+        e.pointerType !== "keyboard"
+      ) {
+        onSelect(e);
+      }
+    },
+    onPress: e => {
+      if (access(props.shouldSelectOnPressUp)) {
+        if (!access(props.allowsDifferentPressOrigin)) {
+          if (hasPrimaryAction() || (hasSecondaryAction() && e.pointerType !== "mouse")) {
+            if (e.pointerType === "keyboard" && !isActionKey()) {
+              return;
+            }
 
-      itemPressProps.onPress = e => {
+            props.onAction?.();
+          } else if (e.pointerType !== "keyboard") {
+            onSelect(e);
+          }
+        } else {
+          if (hasPrimaryAction()) {
+            props.onAction?.();
+          }
+        }
+      } else {
         // Selection occurs on touch up. Primary actions always occur on pointer up.
         // Both primary and secondary actions occur on Enter key up. The only exception
         // is secondary actions, which occur on double click with a mouse.
@@ -283,30 +261,27 @@ export function createSelectableItem<T extends HTMLElement>(
             onSelect(e);
           }
         }
-      };
+      }
     }
+  };
 
-    return itemPressProps;
-  });
-
-  const { pressProps, isPressed } = createPress({
-    onPressStart: e => itemPressProps().onPressStart?.(e),
-    onPressUp: e => itemPressProps().onPressUp?.(e),
-    onPress: e => itemPressProps().onPress?.(e),
-    preventFocusOnPress: () => access(props.shouldUseVirtualFocus)
+  const { pressProps, isPressed } = createPress<T>({
+    isDisabled: () => !allowsSelection() && !hasPrimaryAction(),
+    onPressStart: itemPressProps.onPressStart,
+    onPressUp: itemPressProps.onPressUp,
+    onPress: itemPressProps.onPress,
+    preventFocusOnPress: shouldUseVirtualFocus
   });
 
   // Long pressing an item with touch when selectionBehavior = 'replace' switches the selection behavior
   // to 'toggle'. This changes the single tap behavior from performing an action (i.e. navigating) to
   // selecting, and may toggle the appearance of a UI affordance like checkboxes on each item.
-  const { longPressProps } = createLongPress({
+  const { longPressProps } = createLongPress<T>({
     isDisabled: () => !longPressEnabled(),
     onLongPress: e => {
-      const manager = access(props.selectionManager);
-
       if (e.pointerType === "touch") {
         onSelect(e);
-        manager.setSelectionBehavior("toggle");
+        manager().setSelectionBehavior("toggle");
       }
     }
   });
@@ -333,39 +308,45 @@ export function createSelectableItem<T extends HTMLElement>(
   };
 
   const onFocus = (e: FocusEvent) => {
-    const shouldUseVirtualFocus = access(props.shouldUseVirtualFocus);
     const refEl = ref();
 
-    if (shouldUseVirtualFocus || !refEl) {
+    if (shouldUseVirtualFocus() || !refEl) {
       return;
     }
 
-    const manager = access(props.selectionManager);
-    const key = access(props.key);
-
     if (e.target === refEl) {
-      manager.setFocusedKey(key);
+      manager().setFocusedKey(key());
     }
   };
 
+  const baseItemProps: JSX.HTMLAttributes<T> & { "data-key"?: ItemKey } = {
+    // Set tabIndex to 0 if the element is focused, or -1 otherwise so that only the last focused
+    // item is tabbable. If using virtual focus, don't set a tabIndex at all so that VoiceOver
+    // on iOS 14 doesn't try to move real DOM focus to the item anyway.
+    get tabIndex() {
+      if (shouldUseVirtualFocus()) {
+        return undefined;
+      }
+
+      return key() === manager().focusedKey() ? 0 : -1;
+    },
+    get "data-key"() {
+      return access(props.isVirtualized) ? undefined : key();
+    }
+  };
+
+  const otherItemPropsEventHandlers: JSX.HTMLAttributes<T> = {
+    onDblClick,
+    onDragStart,
+    onFocus
+  };
+
   const itemProps = createMemo(() => {
-    const manager = access(props.selectionManager);
-    const key = access(props.key);
-    const shouldUseVirtualFocus = access(props.shouldUseVirtualFocus);
-
-    const itemProps: JSX.HTMLAttributes<T> & { "data-key"?: ItemKey } = {
-      // Set tabIndex to 0 if the element is focused, or -1 otherwise so that only the last focused
-      // item is tabbable. If using virtual focus, don't set a tabIndex at all so that VoiceOver
-      // on iOS 14 doesn't try to move real DOM focus to the item anyway.
-      tabIndex: shouldUseVirtualFocus ? undefined : key === manager.focusedKey() ? 0 : -1,
-      "data-key": access(props.isVirtualized) ? undefined : key
-    };
-
     return combineProps(
-      itemProps,
+      baseItemProps,
       allowsSelection() || hasPrimaryAction() ? pressProps : {},
       longPressEnabled() ? longPressProps : {},
-      { onDblClick, onDragStart, onFocus }
+      otherItemPropsEventHandlers
     ) as JSX.HTMLAttributes<T>;
   });
 
@@ -374,14 +355,14 @@ export function createSelectableItem<T extends HTMLElement>(
     on(
       [
         ref,
-        () => access(props.key),
-        () => access(props.selectionManager).focusedKey(),
-        () => access(props.selectionManager).isFocused(),
-        () => access(props.shouldUseVirtualFocus),
-        () => access(props.selectionManager).childFocusStrategy()
+        key,
+        shouldUseVirtualFocus,
+        () => manager().focusedKey(),
+        () => manager().isFocused(),
+        () => manager().childFocusStrategy()
       ],
       newValue => {
-        const [refEl, key, focusedKey, isFocused, shouldUseVirtualFocus] = newValue;
+        const [refEl, key, shouldUseVirtualFocus, focusedKey, isFocused] = newValue;
 
         if (
           key === focusedKey &&
@@ -400,7 +381,7 @@ export function createSelectableItem<T extends HTMLElement>(
   );
 
   return {
-    itemProps,
+    itemProps: mergeProps(itemProps),
     isPressed,
     isSelected,
     isDisabled,

@@ -20,7 +20,7 @@ import { createPress } from "@solid-aria/interactions";
 import { ElementType } from "@solid-aria/types";
 import { filterDOMProps } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
-import { Accessor, JSX, mergeProps, splitProps } from "solid-js";
+import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
 
 import { AriaButtonProps } from "./types";
 
@@ -85,20 +85,17 @@ export function createButton(
   // eslint-disable-next-line solid/reactivity
   props = mergeProps(defaultProps, props);
 
-  let additionalProps: JSX.ButtonHTMLAttributes<any> | JSX.AnchorHTMLAttributes<any> = {};
+  const additionalButtonElementProps: JSX.ButtonHTMLAttributes<any> = {
+    get type() {
+      return props.type;
+    },
+    get disabled() {
+      return props.isDisabled;
+    }
+  };
 
-  // Not reactive but `elementType` is not intended to change at runtime.
-  if (props.elementType === "button") {
-    additionalProps = {
-      get type() {
-        return props.type;
-      },
-      get disabled() {
-        return props.isDisabled;
-      }
-    };
-  } else {
-    additionalProps = {
+  const additionalOtherElementProps: JSX.AnchorHTMLAttributes<any> | JSX.InputHTMLAttributes<any> =
+    {
       role: "button",
       get tabIndex() {
         return props.isDisabled ? undefined : 0;
@@ -122,7 +119,14 @@ export function createButton(
         return props.elementType === "a" ? props.rel : undefined;
       }
     };
-  }
+
+  const additionalProps = mergeProps(
+    createMemo(() => {
+      return props.elementType === "button"
+        ? additionalButtonElementProps
+        : additionalOtherElementProps;
+    })
+  );
 
   const [createPressProps] = splitProps(props, [
     "onPressStart",

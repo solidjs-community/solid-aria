@@ -32,7 +32,7 @@ function ListBoxOption(props: ParentProps<AriaListBoxOptionProps>) {
   const { optionProps } = createListBoxOption(props, () => ref);
 
   return (
-    <li {...optionProps()} ref={ref}>
+    <li {...optionProps} ref={ref}>
       {props.children}
     </li>
   );
@@ -45,7 +45,7 @@ function ListBox(props: AriaListBoxProps) {
 
   return (
     <ListBoxProvider>
-      <ul {...listBoxProps()} ref={ref}>
+      <ul {...listBoxProps} ref={ref}>
         <ForItems in={state.collection()}>
           {item => <ListBoxOption key={item().key}>{item().rendered()}</ListBoxOption>}
         </ForItems>

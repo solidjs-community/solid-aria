@@ -17,7 +17,7 @@
 
 import { createFocus } from "@solid-aria/interactions";
 import { access, isObject, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createMemo, createSignal, JSX } from "solid-js";
+import { createSignal, JSX, mergeProps } from "solid-js";
 
 interface AriaVisuallyHiddenProps {
   /**
@@ -35,7 +35,7 @@ interface VisuallyHiddenAria {
   /**
    * Props to spread onto the target element.
    */
-  visuallyHiddenProps: Accessor<JSX.HTMLAttributes<any>>;
+  visuallyHiddenProps: JSX.HTMLAttributes<any>;
 }
 
 const visuallyHiddenStyles: JSX.CSSProperties = {
@@ -64,7 +64,7 @@ export function createVisuallyHidden(props: AriaVisuallyHiddenProps = {}): Visua
   });
 
   // If focused, don't hide the element.
-  const combinedStyles = createMemo(() => {
+  const combinedStyles = () => {
     const style = access(props.style);
 
     if (isFocused()) {
@@ -76,14 +76,13 @@ export function createVisuallyHidden(props: AriaVisuallyHiddenProps = {}): Visua
     }
 
     return visuallyHiddenStyles;
-  });
+  };
 
-  const visuallyHiddenProps = createMemo(() => {
-    return {
-      ...focusProps,
-      style: combinedStyles()
-    } as JSX.HTMLAttributes<any>;
-  });
+  const visuallyHiddenProps = mergeProps(focusProps, {
+    get style() {
+      return combinedStyles();
+    }
+  } as JSX.HTMLAttributes<any>);
 
   return { visuallyHiddenProps };
 }

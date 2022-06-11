@@ -58,7 +58,7 @@ function Breadcrumbs(props: AriaBreadcrumbsProps) {
   const { navProps } = createBreadcrumbs(props);
 
   return (
-    <nav {...navProps()}>
+    <nav {...navProps}>
       <ol style={{ display: "flex", "list-style": "none", margin: 0, padding: 0 }}>
         {props.children}
       </ol>
@@ -76,7 +76,7 @@ function BreadcrumbItem(props: AriaBreadcrumbItemProps) {
   return (
     <li>
       <span
-        {...itemProps()}
+        {...itemProps}
         ref={ref}
         style={{
           color: "blue",
@@ -124,7 +124,7 @@ function Breadcrumbs(props: AriaBreadcrumbsProps) {
   const { navProps } = createBreadcrumbs(props);
 
   return (
-    <nav {...navProps()}>
+    <nav {...navProps}>
       <ol style={{ display: "flex", "list-style": "none", margin: 0, padding: 0 }}>
         {props.children}
       </ol>
@@ -142,7 +142,7 @@ function BreadcrumbItem(props: BreadcrumbItemProps) {
   return (
     <li>
       <a
-        {...itemProps()}
+        {...itemProps}
         ref={ref}
         href={props.href}
         style={{
@@ -190,7 +190,7 @@ function Breadcrumbs(props: AriaBreadcrumbsProps) {
   const { navProps } = createBreadcrumbs(props);
 
   return (
-    <nav {...navProps()}>
+    <nav {...navProps}>
       <ol style={{ display: "flex", "list-style": "none", margin: 0, padding: 0 }}>
         {props.children}
       </ol>
@@ -220,7 +220,7 @@ function BreadcrumbItem(props: BreadcrumbItemProps) {
         fallback={
           <>
             <a
-              {...itemProps()}
+              {...itemProps}
               ref={ref}
               href={props.href}
               style={{
@@ -238,7 +238,7 @@ function BreadcrumbItem(props: BreadcrumbItemProps) {
         }
       >
         <h3
-          {...itemProps()}
+          {...itemProps}
           ref={ref}
           style={{
             margin: 0,

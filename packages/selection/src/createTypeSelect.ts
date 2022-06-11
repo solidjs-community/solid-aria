@@ -17,11 +17,16 @@
 
 import { ItemKey, KeyboardDelegate } from "@solid-aria/types";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createMemo, createSignal, JSX } from "solid-js";
+import { createSignal, JSX } from "solid-js";
 
 import { MultipleSelectionManager } from "./types";
 
 interface CreateTypeSelectProps {
+  /**
+   * Whether the type to select should be disabled.
+   */
+  isDisabled?: MaybeAccessor<boolean | undefined>;
+
   /**
    * A delegate that returns collection item keys with respect to visual layout.
    */
@@ -42,7 +47,7 @@ interface TypeSelectAria {
   /**
    * Props to be spread on the owner of the options.
    */
-  typeSelectProps: Accessor<JSX.HTMLAttributes<any>>;
+  typeSelectProps: JSX.HTMLAttributes<any>;
 }
 
 /**
@@ -53,6 +58,10 @@ export function createTypeSelect(props: CreateTypeSelectProps): TypeSelectAria {
   const [timeoutId, setTimeoutId] = createSignal(-1);
 
   const onKeyDown = (e: KeyboardEvent) => {
+    if (access(props.isDisabled)) {
+      return;
+    }
+
     const delegate = access(props.keyboardDelegate);
     const manager = access(props.selectionManager);
 
@@ -95,9 +104,9 @@ export function createTypeSelect(props: CreateTypeSelectProps): TypeSelectAria {
     setTimeoutId(window.setTimeout(() => setSearch(""), 500));
   };
 
-  const typeSelectProps = createMemo(() => ({ onKeyDown }));
-
-  return { typeSelectProps };
+  return {
+    typeSelectProps: { onKeyDown }
+  };
 }
 
 function getStringForKey(key: string) {

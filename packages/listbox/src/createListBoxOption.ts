@@ -21,7 +21,7 @@ import { createSelectableItem } from "@solid-aria/selection";
 import { ItemKey } from "@solid-aria/types";
 import { createSlotId, isMac, isWebKit } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
-import { Accessor, createMemo, JSX } from "solid-js";
+import { Accessor, JSX } from "solid-js";
 
 import { useListBoxContext } from "./createListBox";
 import { getItemId } from "./utils";
@@ -62,7 +62,7 @@ interface ListBoxOptionAria {
   /**
    * Props for the option element.
    */
-  optionProps: () => JSX.HTMLAttributes<any>;
+  optionProps: JSX.HTMLAttributes<any>;
 
   /**
    * Props for the main text element inside the option.
@@ -119,33 +119,50 @@ export function createListBoxOption<T extends HTMLElement>(
     }
   });
 
-  const optionProps = createMemo(() => {
-    const optionProps: JSX.HTMLAttributes<any> = {
-      role: "option",
-      id: getItemId(context.listboxId(), props.key),
-      "aria-disabled": isDisabled(),
-      "aria-selected": manager().selectionMode() !== "none" ? isSelected() : undefined
-    };
+  const isNotSafariMacOS = () => !(isMac() && isWebKit());
 
+  const baseOptionProps: JSX.HTMLAttributes<any> = {
+    role: "option",
+    get id() {
+      return getItemId(context.listboxId(), props.key);
+    },
+    get "aria-disabled"() {
+      return isDisabled();
+    },
+    get "aria-selected"() {
+      return manager().selectionMode() !== "none" ? isSelected() : undefined;
+    },
     // Safari with VoiceOver on macOS misreads options with aria-labelledby or aria-label as simply "text".
     // We should not map slots to the label and description on Safari and instead just have VoiceOver read the textContent.
     // https://bugs.webkit.org/show_bug.cgi?id=209279
-    if (!(isMac() && isWebKit())) {
-      optionProps["aria-label"] = props["aria-label"];
-      optionProps["aria-labelledby"] = labelId();
-      optionProps["aria-describedby"] = descriptionId();
+    get "aria-label"() {
+      return isNotSafariMacOS() ? props["aria-label"] : undefined;
+    },
+    get "aria-labelledby"() {
+      return isNotSafariMacOS() ? labelId() : undefined;
+    },
+    get "aria-describedby"() {
+      return isNotSafariMacOS() ? descriptionId() : undefined;
+    },
+    get "aria-posinset"() {
+      if (!context.isVirtualized()) {
+        return undefined;
+      }
+
+      const item = context.state().collection().getItem(props.key);
+
+      return item ? item.index + 1 : undefined;
+    },
+    get "aria-setsize"() {
+      if (!context.isVirtualized()) {
+        return undefined;
+      }
+
+      return getItemCount(context.state().collection());
     }
+  };
 
-    const collection = context.state().collection();
-    const item = collection.getItem(props.key);
-
-    if (context.isVirtualized()) {
-      optionProps["aria-posinset"] = item ? item.index + 1 : undefined;
-      optionProps["aria-setsize"] = getItemCount(collection);
-    }
-
-    return combineProps(optionProps, itemProps(), hoverProps) as JSX.HTMLAttributes<any>;
-  });
+  const optionProps = combineProps(baseOptionProps, itemProps, hoverProps);
 
   const labelProps = {
     get id() {

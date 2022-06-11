@@ -24,7 +24,7 @@ import {
   isKeyboardFocusVisible
 } from "@solid-aria/interactions";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createSignal } from "solid-js";
+import { Accessor, createMemo, createSignal, mergeProps } from "solid-js";
 
 export interface CreateFocusRingProps {
   /**
@@ -94,10 +94,11 @@ export function createFocusRing(props: CreateFocusRingProps = {}): FocusRingResu
     onFocusWithinChange: setFocused
   });
 
+  const focusRingProps = createMemo(() => (access(props.within) ? focusWithinProps : focusProps));
+
   return {
     isFocused,
     isFocusVisible,
-    // Not reactive but `within` is not intended to change at runtime.
-    focusProps: access(props.within) ? focusWithinProps : focusProps
+    focusProps: mergeProps(focusRingProps)
   };
 }

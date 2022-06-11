@@ -16,7 +16,7 @@
  */
 
 import { createId } from "@solid-aria/utils";
-import { Accessor, createMemo, JSX } from "solid-js";
+import { createMemo, JSX } from "solid-js";
 
 export interface AriaListBoxSectionProps {
   /**
@@ -34,17 +34,17 @@ interface ListBoxSectionAria {
   /**
    * Props for the wrapper list item.
    */
-  itemProps: Accessor<JSX.HTMLAttributes<any>>;
+  itemProps: JSX.HTMLAttributes<any>;
 
   /**
    * Props for the heading element, if any.
    */
-  headingProps: Accessor<JSX.HTMLAttributes<any>>;
+  headingProps: JSX.HTMLAttributes<any>;
 
   /**
    * Props for the group element.
    */
-  groupProps: Accessor<JSX.HTMLAttributes<any>>;
+  groupProps: JSX.HTMLAttributes<any>;
 }
 
 /**
@@ -55,33 +55,33 @@ interface ListBoxSectionAria {
 export function createListBoxSection(props: AriaListBoxSectionProps): ListBoxSectionAria {
   const headingId = createId();
 
-  const itemProps = createMemo(() => {
-    return {
-      role: "presentation"
-    } as JSX.HTMLAttributes<any>;
-  });
+  const heading = createMemo(() => props.heading);
 
-  const headingProps = createMemo(() => {
-    if (!props.heading) {
-      return {} as JSX.HTMLAttributes<any>;
+  const itemProps: JSX.HTMLAttributes<any> = {
+    role: "presentation"
+  };
+
+  // Techincally, listbox cannot contain headings according to ARIA.
+  // We hide the heading from assistive technology, and only use it
+  // as a label for the nested group.
+  const headingProps: JSX.HTMLAttributes<any> = {
+    get id() {
+      return heading() ? headingId : undefined;
+    },
+    get "aria-hidden"() {
+      return heading() ? true : undefined;
     }
+  };
 
-    return {
-      // Techincally, listbox cannot contain headings according to ARIA.
-      // We hide the heading from assistive technology, and only use it
-      // as a label for the nested group.
-      id: headingId,
-      "aria-hidden": true
-    } as JSX.HTMLAttributes<any>;
-  });
-
-  const groupProps = createMemo(() => {
-    return {
-      role: "group",
-      "aria-label": props["aria-label"],
-      "aria-labelledby": props.heading ? headingId : undefined
-    } as JSX.HTMLAttributes<any>;
-  });
+  const groupProps: JSX.HTMLAttributes<any> = {
+    role: "group",
+    get "aria-label"() {
+      return props["aria-label"];
+    },
+    get "aria-labelledby"() {
+      return heading() ? headingId : undefined;
+    }
+  };
 
   return { itemProps, headingProps, groupProps };
 }

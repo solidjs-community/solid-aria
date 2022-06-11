@@ -17,7 +17,7 @@
 
 import { AriaLinkProps, createLink } from "@solid-aria/link";
 import { DOMProps } from "@solid-aria/types";
-import { Accessor, JSX, mergeProps, splitProps } from "solid-js";
+import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
 
 export interface AriaBreadcrumbItemProps extends AriaLinkProps, DOMProps {
   /**
@@ -88,10 +88,9 @@ export function createBreadcrumbItem<T extends HTMLElement = HTMLAnchorElement>(
 
   const { linkProps } = createLink(createLinkProps, ref);
 
-  // Not reactive but `elementType` is not intended to change at runtime.
-  const isHeading = /^h[1-6]$/.test(local.elementType ?? "");
+  const isHeading = () => /^h[1-6]$/.test(local.elementType ?? "");
 
-  const itemProps = mergeProps(!isHeading ? linkProps : {}, {
+  const baseItemProps: JSX.HTMLAttributes<T> = {
     get "aria-disabled"() {
       return local.isDisabled;
     },
@@ -105,9 +104,14 @@ export function createBreadcrumbItem<T extends HTMLElement = HTMLAnchorElement>(
         return props.autoFocus ? -1 : undefined;
       }
 
-      return !isHeading ? linkProps.tabIndex : undefined;
+      return !isHeading() ? linkProps.tabIndex : undefined;
     }
-  } as JSX.HTMLAttributes<T>);
+  };
+
+  const itemProps = mergeProps(
+    createMemo(() => (!isHeading() ? linkProps : {})),
+    baseItemProps
+  );
 
   return { itemProps };
 }

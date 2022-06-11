@@ -34,7 +34,6 @@ import {
   Accessor,
   createComponent,
   createContext,
-  createMemo,
   FlowComponent,
   JSX,
   mergeProps,
@@ -103,7 +102,7 @@ interface ListBoxAria {
   /**
    * Props for the listbox element.
    */
-  listBoxProps: Accessor<JSX.HTMLAttributes<any>>;
+  listBoxProps: JSX.HTMLAttributes<any>;
 
   /**
    * Props for the listbox's visual label element (if any).
@@ -152,13 +151,12 @@ export function createListBox<T extends HTMLElement>(
 
   const { labelProps, fieldProps } = createLabel(createLabelProps);
 
-  const listBoxProps = createMemo(() => {
-    return combineProps(domProps, focusWithinProps, fieldProps, listProps(), {
-      role: "listbox",
-      "aria-multiselectable":
-        state.selectionManager().selectionMode() === "multiple" ? true : undefined
-    }) as JSX.HTMLAttributes<any>;
-  });
+  const listBoxProps = combineProps(domProps, focusWithinProps, fieldProps, listProps, {
+    role: "listbox",
+    get "aria-multiselectable"() {
+      return state.selectionManager().selectionMode() === "multiple" ? true : undefined;
+    }
+  } as JSX.HTMLAttributes<any>);
 
   const context: ListBoxContextValue = {
     state: () => state,
