@@ -65,6 +65,7 @@
     "@solid-aria/selection": "workspace:^",
     "@solid-aria/switch": "workspace:^",
     "@solid-aria/toggle": "workspace:^",
+    "@solid-aria/tree": "workspace:^",
     "@solid-aria/types": "workspace:^",
     "@solid-aria/utils": "workspace:^",
     "@solid-aria/visually-hidden": "workspace:^"

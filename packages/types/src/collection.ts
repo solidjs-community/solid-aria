@@ -15,7 +15,26 @@
  * governing permissions and limitations under the License.
  */
 
+import { MaybeAccessor } from "@solid-primitives/utils";
+
 export type ItemKey = string | number;
+
+export interface Expandable {
+  /**
+   * The currently expanded keys in the collection (controlled).
+   */
+  expandedKeys?: MaybeAccessor<Iterable<ItemKey>>;
+
+  /**
+   * The initial expanded keys in the collection (uncontrolled).
+   */
+  defaultExpandedKeys?: MaybeAccessor<Iterable<ItemKey>>;
+
+  /**
+   * Handler that is called when items are expanded or collapsed.
+   */
+  onExpandedChange?: (keys: Set<ItemKey>) => any;
+}
 
 export interface KeyboardDelegate {
   /** Returns the key visually below the given one, or `undefined` for none. */

@@ -32,6 +32,7 @@ export * from "@solid-aria/radio";
 export * from "@solid-aria/selection";
 export * from "@solid-aria/switch";
 export * from "@solid-aria/toggle";
+export * from "@solid-aria/tree";
 export * from "@solid-aria/types";
 export * from "@solid-aria/utils";
 export * from "@solid-aria/visually-hidden";

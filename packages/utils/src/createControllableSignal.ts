@@ -90,3 +90,15 @@ export function createControllableArraySignal<T>(props: CreateControllableSignal
 
   return [value, setValue] as const;
 }
+
+/**
+ * Creates a simple reactive set state with a getter, setter and a fallback value of `Set()`,
+ * that can be controlled with `value` and `onChange` props.
+ */
+export function createControllableSetSignal<T>(props: CreateControllableSignalProps<Set<T>>) {
+  const [_value, setValue] = createControllableSignal(props);
+
+  const value: Accessor<Set<T>> = () => _value() ?? new Set();
+
+  return [value, setValue] as const;
+}
