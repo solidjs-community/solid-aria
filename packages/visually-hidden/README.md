@@ -34,7 +34,7 @@ import { createVisuallyHidden } from "@solid-aria/visually-hidden";
 function Example() {
   const { visuallyHiddenProps } = createVisuallyHidden();
 
-  return <div {...visuallyHiddenProps()}>I am hidden</div>;
+  return <div {...visuallyHiddenProps}>I am hidden</div>;
 }
 ```
 

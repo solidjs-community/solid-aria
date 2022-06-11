@@ -17,6 +17,7 @@ A library of high-quality primitives that help you build accessible user interfa
 ### Collections
 
 - [collection](./packages/collection/) - Primitives for dealing with collection of items.
+- [list](./packages/list/) - Primitives for managing list collections.
 - [listbox](./packages/listbox/) - Provides the behavior and accessibility implementation for listbox component.
 - [selection](./packages/selection/) - Primitives for managing selection in collections.
 

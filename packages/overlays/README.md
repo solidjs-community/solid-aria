@@ -125,14 +125,12 @@ function Popover(props: PopoverProps) {
   // Get props for the dialog and its title
   const { dialogProps, titleProps } = createDialog({}, () => ref);
 
-  const rootProps = createMemo(() => {
-    return combineProps(overlayProps(), dialogProps(), modalProps(), others);
-  });
+  const rootProps = combineProps(overlayProps, dialogProps, modalProps, others);
 
   return (
     <FocusScope restoreFocus>
       <div
-        {...rootProps()}
+        {...rootProps}
         ref={mergeRefs(el => (ref = el), local.ref)}
         style={{
           position: "absolute",
@@ -171,13 +169,13 @@ function Example() {
 
   return (
     <>
-      <button {...buttonProps()} {...triggerProps()} ref={triggerRef}>
+      <button {...buttonProps} {...triggerProps} ref={triggerRef}>
         Open Popover
       </button>
       <Show when={state.isOpen()}>
         <OverlayContainer>
           <Popover
-            {...overlayProps()}
+            {...overlayProps}
             ref={overlayRef}
             title="Popover title"
             isOpen={state.isOpen()}
