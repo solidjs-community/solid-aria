@@ -17,7 +17,6 @@
 
 import { AriaLabelingProps, DOMProps } from "@solid-aria/types";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createMemo } from "solid-js";
 
 import { createId } from "./createId";
 
@@ -43,7 +42,7 @@ export interface AriaLabelsResult {
   /**
    * Props to apply to the field container element being labeled.
    */
-  ariaLabelsProps: Accessor<DOMProps & AriaLabelingProps>;
+  ariaLabelsProps: DOMProps & AriaLabelingProps;
 }
 
 /**
@@ -59,9 +58,8 @@ export function mergeAriaLabels(
 
   const id = () => access(props.id) ?? defaultId;
 
-  const ariaLabelsProps: Accessor<DOMProps & AriaLabelingProps> = createMemo(() => {
-    const defaultLabel = access(defaultAriaLabel);
-    let label = access(props["aria-label"]);
+  const ariaLabelledby = () => {
+    const label = access(props["aria-label"]);
     let labelledBy = access(props["aria-labelledby"]);
 
     // If there is both an aria-label and aria-labelledby,
@@ -74,17 +72,32 @@ export function mergeAriaLabels(
       labelledBy = labelledBy.trim().split(/\s+/).join(" ");
     }
 
+    return labelledBy;
+  };
+
+  const ariaLabel = () => {
+    const defaultLabel = access(defaultAriaLabel);
+    let label = access(props["aria-label"]);
+
     // If no labels are provided, use the default
-    if (!label && !labelledBy && defaultLabel) {
+    if (!label && !ariaLabelledby() && defaultLabel) {
       label = defaultLabel;
     }
 
-    return {
-      id: id(),
-      "aria-label": label,
-      "aria-labelledby": labelledBy
-    };
-  });
+    return label;
+  };
+
+  const ariaLabelsProps: DOMProps & AriaLabelingProps = {
+    get id() {
+      return id();
+    },
+    get "aria-labelledby"() {
+      return ariaLabelledby();
+    },
+    get "aria-label"() {
+      return ariaLabel();
+    }
+  };
 
   return { ariaLabelsProps };
 }

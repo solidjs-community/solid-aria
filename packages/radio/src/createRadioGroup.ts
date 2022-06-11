@@ -22,7 +22,6 @@ import { AriaLabelProps, createLabel } from "@solid-aria/label";
 import {
   AriaLabelingProps,
   AriaValidationProps,
-  DOMElements,
   DOMProps,
   InputBase,
   LabelableProps,
@@ -85,10 +84,7 @@ export interface AriaRadioGroupProps
   name?: string;
 }
 
-interface RadioGroupAria<
-  GroupElementType extends DOMElements,
-  LabelElementType extends DOMElements
-> {
+interface RadioGroupAria {
   /**
    * Provide the radio group state to descendant elements.
    */
@@ -97,12 +93,12 @@ interface RadioGroupAria<
   /**
    * Props for the radio group wrapper element.
    */
-  groupProps: Accessor<JSX.IntrinsicElements[GroupElementType]>;
+  groupProps: JSX.HTMLAttributes<any>;
 
   /**
    * Props for the radio group's visible label (if any).
    *  */
-  labelProps: Accessor<JSX.IntrinsicElements[LabelElementType]>;
+  labelProps: JSX.HTMLAttributes<any>;
 
   /**
    * State for the radio group, as returned by `createRadioGroupState`.
@@ -115,10 +111,7 @@ interface RadioGroupAria<
  * Radio groups allow users to select a single item from a list of mutually exclusive options.
  * @param props - Props for the radio group.
  */
-export function createRadioGroup<
-  GroupElementType extends DOMElements = "div",
-  LabelElementType extends DOMElements = "span"
->(props: AriaRadioGroupProps): RadioGroupAria<GroupElementType, LabelElementType> {
+export function createRadioGroup(props: AriaRadioGroupProps): RadioGroupAria {
   const state = createRadioGroupState(props);
 
   const defaultGroupName = createId();
@@ -141,9 +134,9 @@ export function createRadioGroup<
 
   const createLabelProps = mergeProps(defaultCreateLabelProps, props);
 
-  const { labelProps, fieldProps } = createLabel<LabelElementType>(createLabelProps);
+  const { labelProps, fieldProps } = createLabel(createLabelProps);
 
-  const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
+  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
 
   // When the radio group loses focus, reset the focusable radio to null if
   // there is no selection. This allows tabbing into the group from either
@@ -218,22 +211,36 @@ export function createRadioGroup<
     }
   };
 
-  const groupProps = createMemo(() => {
-    return combineProps(domProps(), {
+  const baseGroupProps = mergeProps(
+    {
       role: "radiogroup",
-      "aria-invalid": props.validationState === "invalid" || undefined,
-      "aria-errormessage": props["aria-errormessage"],
-      "aria-readonly": props.isReadOnly || undefined,
-      "aria-required": props.isRequired || undefined,
-      "aria-disabled": props.isDisabled || undefined,
-      "aria-orientation": props.orientation,
-      onKeyDown,
-      ...fieldProps(),
-      ...focusWithinProps()
-    }) as JSX.IntrinsicElements[GroupElementType];
-  });
+      get "aria-invalid"() {
+        return props.validationState === "invalid" || undefined;
+      },
+      get "aria-errormessage"() {
+        return props["aria-errormessage"];
+      },
+      get "aria-readonly"() {
+        return props.isReadOnly || undefined;
+      },
+      get "aria-required"() {
+        return props.isRequired || undefined;
+      },
+      get "aria-disabled"() {
+        return props.isDisabled || undefined;
+      },
+      get "aria-orientation"() {
+        return props.orientation;
+      },
+      onKeyDown
+    } as JSX.HTMLAttributes<any>,
+    fieldProps,
+    focusWithinProps
+  );
 
-  const name = createMemo(() => props.name ?? defaultGroupName);
+  const groupProps = combineProps(domProps, baseGroupProps);
+
+  const name = () => props.name ?? defaultGroupName;
 
   const RadioGroupProvider: FlowComponent = props => {
     return createComponent(RadioGroupContext.Provider, {

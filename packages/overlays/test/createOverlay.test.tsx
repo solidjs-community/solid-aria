@@ -20,7 +20,7 @@ import { createMemo } from "solid-js";
 import { fireEvent, render, screen } from "solid-testing-library";
 
 import { createOverlay } from "../src";
-import { installMouseEvent, installPointerEvent } from "../src/test-utils";
+import { installMouseEvent, installPointerEvent } from "./test-utils";
 
 function noop() {
   return;
@@ -30,11 +30,11 @@ function Example(props: any) {
   let ref: any;
   const { overlayProps, underlayProps } = createOverlay(props, () => ref);
 
-  const rootProps = createMemo(() => combineProps(underlayProps(), props.underlayProps || {}));
+  const rootProps = createMemo(() => combineProps(underlayProps, props.underlayProps || {}));
 
   return (
     <div {...rootProps}>
-      <div ref={ref} {...overlayProps()} data-testid={props["data-testid"] || "test"}>
+      <div ref={ref} {...overlayProps} data-testid={props["data-testid"] || "test"}>
         {props.children}
       </div>
     </div>

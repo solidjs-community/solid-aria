@@ -15,6 +15,7 @@
  * governing permissions and limitations under the License.
  */
 
+export * from "./collection";
 export * from "./dom";
 export * from "./element";
 export * from "./events";
@@ -24,3 +25,4 @@ export * from "./label";
 export * from "./locale";
 export * from "./orientation";
 export * from "./polymorphic";
+export * from "./selection";

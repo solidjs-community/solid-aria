@@ -16,9 +16,8 @@
  */
 
 import { createFocusWithin, createInteractOutside } from "@solid-aria/interactions";
-import { DOMElements } from "@solid-aria/types";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createEffect, createMemo, JSX, onCleanup } from "solid-js";
+import { Accessor, createEffect, JSX, mergeProps, onCleanup } from "solid-js";
 
 export interface AriaOverlayProps {
   /**
@@ -57,19 +56,16 @@ export interface AriaOverlayProps {
   shouldCloseOnInteractOutside?: (element: HTMLElement) => boolean;
 }
 
-export interface OverlayAria<
-  OverlayElementType extends DOMElements,
-  UnderlayElementType extends DOMElements
-> {
+export interface OverlayAria {
   /**
    * Props to apply to the overlay container element.
    */
-  overlayProps: Accessor<JSX.IntrinsicElements[OverlayElementType]>;
+  overlayProps: JSX.HTMLAttributes<any>;
 
   /**
    * Props to apply to the underlay element, if any.
    */
-  underlayProps: Accessor<JSX.IntrinsicElements[UnderlayElementType]>;
+  underlayProps: JSX.HTMLAttributes<any>;
 }
 
 const visibleOverlays: Array<Accessor<HTMLElement | undefined>> = [];
@@ -79,14 +75,10 @@ const visibleOverlays: Array<Accessor<HTMLElement | undefined>> = [];
  * Hides the overlay when the user interacts outside it, when the Escape key is pressed,
  * or optionally, on blur. Only the top-most overlay will close at once.
  */
-export function createOverlay<
-  OverlayElementType extends DOMElements = "div",
-  UnderlayElementType extends DOMElements = "div",
-  RefElement extends HTMLElement = HTMLDivElement
->(
+export function createOverlay<T extends HTMLElement>(
   props: AriaOverlayProps,
-  ref: Accessor<RefElement | undefined>
-): OverlayAria<OverlayElementType, UnderlayElementType> {
+  ref: Accessor<T | undefined>
+): OverlayAria {
   // Add the overlay ref to the stack of visible overlays on mount, and remove on unmount.
   createEffect(() => {
     if (access(props.isOpen)) {
@@ -175,20 +167,11 @@ export function createOverlay<
     }
   };
 
-  const overlayProps = createMemo(
-    () =>
-      ({
-        onKeyDown,
-        ...focusWithinProps()
-      } as JSX.IntrinsicElements[OverlayElementType])
-  );
+  const overlayProps = mergeProps({ onKeyDown }, focusWithinProps);
 
-  const underlayProps = createMemo(
-    () =>
-      ({
-        onPointerDown: onPointerDownUnderlay
-      } as JSX.IntrinsicElements[UnderlayElementType])
-  );
+  const underlayProps: JSX.HTMLAttributes<any> = {
+    onPointerDown: onPointerDownUnderlay
+  };
 
   return { overlayProps, underlayProps };
 }

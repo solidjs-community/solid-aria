@@ -16,7 +16,7 @@
  */
 
 import { AriaLinkProps, createLink } from "@solid-aria/link";
-import { DOMElements, DOMProps } from "@solid-aria/types";
+import { DOMProps } from "@solid-aria/types";
 import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
 
 export interface AriaBreadcrumbItemProps extends AriaLinkProps, DOMProps {
@@ -48,21 +48,21 @@ export interface AriaBreadcrumbItemProps extends AriaLinkProps, DOMProps {
   children?: JSX.Element;
 }
 
-interface BreadcrumbItemAria<T extends DOMElements> {
+interface BreadcrumbItemAria<T extends HTMLElement> {
   /**
    * Props for the breadcrumb item link element.
    */
-  itemProps: Accessor<JSX.IntrinsicElements[T]>;
+  itemProps: JSX.HTMLAttributes<T>;
 }
 
 /**
  * Provides the behavior and accessibility implementation for an in a breadcrumbs component.
  * See `useBreadcrumbs` for details about breadcrumbs.
  */
-export function createBreadcrumbItem<
-  T extends DOMElements = "a",
-  RefElement extends HTMLElement = HTMLAnchorElement
->(props: AriaBreadcrumbItemProps, ref: Accessor<RefElement | undefined>): BreadcrumbItemAria<T> {
+export function createBreadcrumbItem<T extends HTMLElement = HTMLAnchorElement>(
+  props: AriaBreadcrumbItemProps,
+  ref: Accessor<T | undefined>
+): BreadcrumbItemAria<T> {
   const defaultProps: AriaBreadcrumbItemProps = {
     elementType: "a"
   };
@@ -88,32 +88,30 @@ export function createBreadcrumbItem<
 
   const { linkProps } = createLink(createLinkProps, ref);
 
-  const isHeading = createMemo(() => /^h[1-6]$/.test(local.elementType ?? ""));
+  const isHeading = () => /^h[1-6]$/.test(local.elementType ?? "");
 
-  const itemProps = createMemo(() => {
-    let itemProps: JSX.IntrinsicElements[T] = {
-      "aria-disabled": local.isDisabled
-    };
-
-    if (!isHeading()) {
-      itemProps = {
-        ...itemProps,
-        ...linkProps()
-      };
-    }
-
-    if (local.isCurrent) {
-      itemProps = {
-        ...itemProps,
-        "aria-current": local["aria-current"] || "page",
+  const baseItemProps: JSX.HTMLAttributes<T> = {
+    get "aria-disabled"() {
+      return local.isDisabled;
+    },
+    get "aria-current"() {
+      return local.isCurrent ? local["aria-current"] || "page" : undefined;
+    },
+    get tabIndex() {
+      if (local.isCurrent) {
         // isCurrent sets isDisabled === true for the current item,
         // so we have to restore the tabIndex in order to support autoFocus.
-        tabIndex: props.autoFocus ? -1 : undefined
-      };
-    }
+        return props.autoFocus ? -1 : undefined;
+      }
 
-    return itemProps;
-  });
+      return !isHeading() ? linkProps.tabIndex : undefined;
+    }
+  };
+
+  const itemProps = mergeProps(
+    createMemo(() => (!isHeading() ? linkProps : {})),
+    baseItemProps
+  );
 
   return { itemProps };
 }

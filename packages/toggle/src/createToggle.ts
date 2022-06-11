@@ -80,7 +80,7 @@ export interface ToggleAria {
   /**
    * Props to be spread on the input element.
    */
-  inputProps: Accessor<JSX.InputHTMLAttributes<HTMLInputElement>>;
+  inputProps: JSX.InputHTMLAttributes<HTMLInputElement>;
 
   /**
    * State for the toggle element, as returned by `createToggleState`.
@@ -102,6 +102,7 @@ export function createToggle(
     validationState: "valid"
   };
 
+  // eslint-disable-next-line solid/reactivity
   props = mergeProps(defaultProps, props);
 
   const state = createToggleState(props);
@@ -131,27 +132,39 @@ export function createToggle(
   });
 
   const { focusableProps } = createFocusable(props, inputRef);
-  const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
 
-  const inputProps = createMemo(() => {
-    return combineProps(
-      domProps(),
-      {
-        "aria-invalid": props.validationState === "invalid" || undefined,
-        "aria-errormessage": props["aria-errormessage"],
-        "aria-controls": props["aria-controls"],
-        "aria-readonly": props.isReadOnly || undefined,
-        "aria-required": props.isRequired || undefined,
-        disabled: props.isDisabled,
-        value: props.value,
-        name: props.name,
-        type: "checkbox",
-        onChange
-      },
-      pressProps(),
-      focusableProps()
-    ) as JSX.InputHTMLAttributes<HTMLInputElement>;
-  });
+  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
+
+  const baseToggleProps: JSX.InputHTMLAttributes<any> = {
+    get "aria-invalid"() {
+      return props.validationState === "invalid" || undefined;
+    },
+    get "aria-errormessage"() {
+      return props["aria-errormessage"];
+    },
+    get "aria-controls"() {
+      return props["aria-controls"];
+    },
+    get "aria-readonly"() {
+      return props.isReadOnly || undefined;
+    },
+    get "aria-required"() {
+      return props.isRequired || undefined;
+    },
+    get disabled() {
+      return props.isDisabled;
+    },
+    get value() {
+      return props.value;
+    },
+    get name() {
+      return props.name;
+    },
+    type: "checkbox",
+    onChange
+  };
+
+  const inputProps = combineProps(domProps, baseToggleProps, pressProps, focusableProps);
 
   return { inputProps, state };
 }

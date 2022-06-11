@@ -15,24 +15,16 @@
  * governing permissions and limitations under the License.
  */
 
-import { Item } from "./types";
+import { ItemKey } from "@solid-aria/types";
 
-/**
- * Returns an array of non disabled items that begin with the filter string, case-independent.
- *
- * @param items - The collection of items to search into.
- * @param filter - The filter string to search.
- * @param collator - The collator to use for string comparison.
- */
-export function filterItems(items: Item[], filter: string, collator: Intl.Collator) {
-  return items.filter(item => {
-    if (item.isDisabled()) {
-      return false;
-    }
+function normalizeKey(key: ItemKey): string {
+  if (typeof key === "string") {
+    return key.replace(/\s*/g, "");
+  }
 
-    // Compare with a part of textValue with same length as the filter.
-    const substring = item.textValue.slice(0, filter.length);
+  return "" + key;
+}
 
-    return collator.compare(substring, filter) === 0;
-  });
+export function getItemId(listboxId: string, itemKey: ItemKey): string {
+  return `${listboxId}-option-${normalizeKey(itemKey)}`;
 }

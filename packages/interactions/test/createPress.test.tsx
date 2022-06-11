@@ -15,17 +15,16 @@
  * governing permissions and limitations under the License.
  */
 
-import { DOMElements } from "@solid-aria/types";
 import { createSignal, JSX, mergeProps, splitProps } from "solid-js";
 import { Dynamic } from "solid-js/web";
 import { fireEvent, render, screen } from "solid-testing-library";
 
 import { createPress, CreatePressProps } from "../src";
-import { installPointerEvent } from "../src/test-utils";
+import { installPointerEvent } from "./test-utils";
 
-function Example<T extends DOMElements = "div">(
+function Example(
   props: CreatePressProps &
-    JSX.IntrinsicElements[T] & { elementType?: T; style?: any; draggable?: boolean }
+    JSX.HTMLAttributes<any> & { elementType?: any; style?: any; draggable?: boolean; href?: string }
 ) {
   let ref: any;
 
@@ -33,7 +32,7 @@ function Example<T extends DOMElements = "div">(
 
   return (
     <Dynamic
-      {...pressProps()}
+      {...pressProps}
       ref={ref}
       component={props.elementType ?? "div"}
       style={props.style}
@@ -2791,7 +2790,7 @@ describe("createPress", () => {
       const { pressProps } = createPress(createPressProps, () => ref);
 
       return (
-        <div style={show() ? local.styleToApply : {}} {...pressProps()}>
+        <div style={show() ? local.styleToApply : {}} {...pressProps}>
           test
         </div>
       );

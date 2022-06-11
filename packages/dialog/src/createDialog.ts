@@ -16,9 +16,9 @@
  */
 
 import { focusSafely } from "@solid-aria/focus";
-import { AriaLabelingProps, DOMElements, DOMProps } from "@solid-aria/types";
+import { AriaLabelingProps, DOMProps } from "@solid-aria/types";
 import { createSlotId, filterDOMProps } from "@solid-aria/utils";
-import { Accessor, createMemo, JSX, onCleanup, onMount } from "solid-js";
+import { Accessor, createMemo, JSX, mergeProps, onCleanup, onMount } from "solid-js";
 
 export interface AriaDialogProps extends DOMProps, AriaLabelingProps {
   /**
@@ -28,40 +28,33 @@ export interface AriaDialogProps extends DOMProps, AriaLabelingProps {
   role?: "dialog" | "alertdialog";
 }
 
-export interface DialogAria<
-  DialogElementType extends DOMElements,
-  TitleElementType extends DOMElements
-> {
+export interface DialogAria {
   /**
    * Props for the dialog container element.
    */
-  dialogProps: Accessor<JSX.IntrinsicElements[DialogElementType]>;
+  dialogProps: JSX.HTMLAttributes<any>;
 
   /**
    * Props for the dialog title element.
    */
-  titleProps: Accessor<JSX.IntrinsicElements[TitleElementType]>;
+  titleProps: JSX.HTMLAttributes<any>;
 }
 
 /**
  * Provides the behavior and accessibility implementation for a dialog component.
  * A dialog is an overlay shown above other content in an application.
  */
-export function createDialog<
-  DialogElementType extends DOMElements = "div",
-  TitleElementType extends DOMElements = "h3",
-  RefElement extends HTMLElement = HTMLDivElement
->(
+export function createDialog<T extends HTMLElement>(
   props: AriaDialogProps,
-  ref: Accessor<RefElement | undefined>
-): DialogAria<DialogElementType, TitleElementType> {
+  ref: Accessor<T | undefined>
+): DialogAria {
   const defaultTitleId = createSlotId();
 
-  const titleId = createMemo(() => {
+  const titleId = () => {
     return props["aria-label"] ? undefined : defaultTitleId();
-  });
+  };
 
-  const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
+  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
 
   // Note: aria-modal has a bug in Safari which forces the first focusable element to be focused
   // on mount when inside an iframe, no matter which element we programmatically focus.
@@ -69,17 +62,22 @@ export function createDialog<
   //
   // `createModal` sets aria-hidden on all elements outside the dialog, so the dialog will behave as a modal
   // even without aria-modal on the dialog itself.
-  const dialogProps = createMemo(() => ({
-    ...domProps(),
-    role: props.role ?? "dialog",
+  const dialogProps = mergeProps(domProps, {
     tabIndex: -1,
     "aria-modal": true,
-    "aria-labelledby": props["aria-labelledby"] || titleId()
-  }));
+    get role() {
+      return props.role ?? "dialog";
+    },
+    get "aria-labelledby"() {
+      return props["aria-labelledby"] || titleId();
+    }
+  });
 
-  const titleProps = createMemo(() => ({
-    id: titleId()
-  }));
+  const titleProps = {
+    get id() {
+      return titleId();
+    }
+  };
 
   onMount(() => {
     let iosSafariFocusTimeoutId: number;

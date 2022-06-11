@@ -49,7 +49,7 @@ function Button(props: AriaButtonProps) {
   const { buttonProps } = createButton(props, () => ref);
 
   return (
-    <button {...buttonProps()} ref={ref}>
+    <button {...buttonProps} ref={ref}>
       {props.children}
     </button>
   );
@@ -79,7 +79,7 @@ function Button(props: AriaButtonProps<"span">) {
 
   return (
     <span
-      {...buttonProps()}
+      {...buttonProps}
       style={{
         background: isPressed() ? "darkgreen" : "green",
         color: "white",
@@ -130,7 +130,7 @@ function ToggleButton(props: AriaToggleButtonProps) {
 
   return (
     <button
-      {...buttonProps()}
+      {...buttonProps}
       style={{
         background: isPressed()
           ? state.isSelected()

@@ -16,6 +16,7 @@
  */
 
 export * from "./createControllableSignal";
+export * from "./createDescription";
 export * from "./createGlobalListeners";
 export * from "./createId";
 export * from "./createSyncRef";

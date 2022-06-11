@@ -23,7 +23,6 @@ import {
   Accessor,
   createContext,
   createEffect,
-  createMemo,
   createSignal,
   JSX,
   on,
@@ -74,7 +73,7 @@ export interface PressResult<T extends HTMLElement> {
   /**
    * Props to spread onto the target element.
    */
-  pressProps: Accessor<JSX.HTMLAttributes<T>>;
+  pressProps: JSX.HTMLAttributes<T>;
 }
 
 interface EventBase {
@@ -119,10 +118,10 @@ function usePressResponderContext<RefElement extends HTMLElement>(
  * @param props - Props for the press primitive.
  * @param ref - A ref for the HTML element.
  */
-export function createPress<RefElement extends HTMLElement>(
+export function createPress<T extends HTMLElement>(
   props: CreatePressProps,
-  ref?: Accessor<RefElement | undefined>
-): PressResult<RefElement> {
+  ref?: Accessor<T | undefined>
+): PressResult<T> {
   const [local, domProps] = splitProps(usePressResponderContext(props, ref), [
     "onPress",
     "onPressChange",
@@ -148,6 +147,8 @@ export function createPress<RefElement extends HTMLElement>(
   const [pointerType, setPointerType] = createSignal<PointerType | null>(null);
 
   const { addGlobalListener, removeAllGlobalListeners } = createGlobalListeners();
+
+  const isPressed = () => access(local.isPressed) ?? isTriggerPressed();
 
   const triggerPressStart = (originalEvent: EventBase, pointerType: PointerType) => {
     if (access(local.isDisabled) || didFirePressStart()) {
@@ -360,384 +361,359 @@ export function createPress<RefElement extends HTMLElement>(
     }
   };
 
-  const pressProps = createMemo(() => {
-    const onKeyDown: JSX.EventHandlerUnion<RefElement, KeyboardEvent> = e => {
-      if (isValidKeyboardEvent(e) && e.currentTarget.contains(e.target as HTMLElement)) {
-        if (shouldPreventDefaultKeyboard(e.target as Element)) {
-          e.preventDefault();
-        }
-
-        e.stopPropagation();
-
-        // If the event is repeating, it may have started on a different element
-        // after which focus moved to the current element. Ignore these events and
-        // only handle the first key down event.
-        if (!_isPressed() && !e.repeat) {
-          setTarget(e.currentTarget as HTMLElement);
-          _setIsPressed(true);
-          triggerPressStart(e, "keyboard");
-
-          // Focus may move before the key up event, so register the event on the document
-          // instead of the same element where the key down event occurred.
-          addGlobalListener(document, "keyup", globalOnKeyUp, false);
-        }
+  const onKeyDown: JSX.EventHandlerUnion<T, KeyboardEvent> = e => {
+    if (isValidKeyboardEvent(e) && e.currentTarget.contains(e.target as HTMLElement)) {
+      if (shouldPreventDefaultKeyboard(e.target as Element)) {
+        e.preventDefault();
       }
-    };
 
-    const onKeyUp: JSX.EventHandlerUnion<RefElement, KeyboardEvent> = e => {
+      e.stopPropagation();
+
+      // If the event is repeating, it may have started on a different element
+      // after which focus moved to the current element. Ignore these events and
+      // only handle the first key down event.
+      if (!_isPressed() && !e.repeat) {
+        setTarget(e.currentTarget as HTMLElement);
+        _setIsPressed(true);
+        triggerPressStart(e, "keyboard");
+
+        // Focus may move before the key up event, so register the event on the document
+        // instead of the same element where the key down event occurred.
+        addGlobalListener(document, "keyup", globalOnKeyUp, false);
+      }
+    }
+  };
+
+  const onKeyUp: JSX.EventHandlerUnion<T, KeyboardEvent> = e => {
+    if (isValidKeyboardEvent(e) && !e.repeat && e.currentTarget.contains(e.target as HTMLElement)) {
+      triggerPressUp(createEvent(target()!, e), "keyboard");
+    }
+  };
+
+  const onClick: JSX.EventHandlerUnion<T, MouseEvent> = e => {
+    if (e && !e.currentTarget.contains(e.target as HTMLElement)) {
+      return;
+    }
+
+    if (e && e.button === 0) {
+      e.stopPropagation();
+
+      if (access(local.isDisabled)) {
+        e.preventDefault();
+      }
+
+      // If triggered from a screen reader or by using element.click(),
+      // trigger as if it were a keyboard click.
       if (
-        isValidKeyboardEvent(e) &&
-        !e.repeat &&
-        e.currentTarget.contains(e.target as HTMLElement)
+        !ignoreClickAfterPress() &&
+        !ignoreEmulatedMouseEvents() &&
+        (pointerType() === "virtual" || isVirtualClick(e))
       ) {
-        triggerPressUp(createEvent(target()!, e), "keyboard");
-      }
-    };
+        // Ensure the element receives focus (VoiceOver on iOS does not do this)
+        if (!access(local.isDisabled) && !access(local.preventFocusOnPress)) {
+          focusWithoutScrolling(e.currentTarget);
+        }
 
-    const onClick: JSX.EventHandlerUnion<RefElement, MouseEvent> = e => {
-      if (e && !e.currentTarget.contains(e.target as HTMLElement)) {
+        triggerPressStart(e, "virtual");
+        triggerPressUp(e, "virtual");
+        triggerPressEnd(e, "virtual");
+      }
+
+      setIgnoreEmulatedMouseEvents(false);
+      setIgnoreClickAfterPress(false);
+    }
+  };
+
+  const pressProps: JSX.HTMLAttributes<T> = {
+    onKeyDown,
+    onKeyUp,
+    onClick
+  };
+
+  if (typeof PointerEvent !== "undefined") {
+    pressProps.onPointerDown = e => {
+      // Only handle left clicks, and ignore events that bubbled through portals.
+      if (e.button !== 0 || !e.currentTarget.contains(e.target as HTMLElement)) {
         return;
       }
 
-      if (e && e.button === 0) {
-        e.stopPropagation();
+      // iOS safari fires pointer events from VoiceOver with incorrect coordinates/target.
+      // Ignore and let the onClick handler take care of it instead.
+      // https://bugs.webkit.org/show_bug.cgi?id=222627
+      // https://bugs.webkit.org/show_bug.cgi?id=223202
+      if (isVirtualPointerEvent(e)) {
+        setPointerType("virtual");
+        return;
+      }
 
-        if (access(local.isDisabled)) {
+      // Due to browser inconsistencies, especially on mobile browsers, we prevent
+      // default on pointer down and handle focusing the pressable element ourselves.
+      if (shouldPreventDefault(e.currentTarget as HTMLElement)) {
+        e.preventDefault();
+      }
+
+      const newPointerType = setPointerType(e.pointerType as PointerType);
+
+      e.stopPropagation();
+
+      if (_isPressed()) {
+        return;
+      }
+
+      _setIsPressed(true);
+      setIsOverTarget(true);
+      setActivePointerId(e.pointerId);
+      const newTarget = setTarget(e.currentTarget as any);
+
+      if (!access(local.isDisabled) && !access(local.preventFocusOnPress)) {
+        focusWithoutScrolling(e.currentTarget);
+      }
+
+      if (!access(local.allowTextSelectionOnPress)) {
+        disableTextSelection(newTarget);
+      }
+
+      triggerPressStart(e, newPointerType);
+
+      addGlobalListener(document, "pointermove", globalOnPointerMove, false);
+      addGlobalListener(document, "pointerup", globalOnPointerUp, false);
+      addGlobalListener(document, "pointercancel", globalOnPointerCancel, false);
+    };
+
+    pressProps.onMouseDown = e => {
+      if (!e.currentTarget.contains(e.target as HTMLElement)) {
+        return;
+      }
+
+      if (e.button === 0) {
+        // Chrome and Firefox on touch Windows devices require mouse down events
+        // to be canceled in addition to pointer events, or an extra asynchronous
+        // focus event will be fired.
+        if (shouldPreventDefault(e.currentTarget as HTMLElement)) {
           e.preventDefault();
         }
 
-        // If triggered from a screen reader or by using element.click(),
-        // trigger as if it were a keyboard click.
-        if (
-          !ignoreClickAfterPress() &&
-          !ignoreEmulatedMouseEvents() &&
-          (pointerType() === "virtual" || isVirtualClick(e))
-        ) {
-          // Ensure the element receives focus (VoiceOver on iOS does not do this)
-          if (!access(local.isDisabled) && !access(local.preventFocusOnPress)) {
-            focusWithoutScrolling(e.currentTarget);
-          }
-
-          triggerPressStart(e, "virtual");
-          triggerPressUp(e, "virtual");
-          triggerPressEnd(e, "virtual");
-        }
-
-        setIgnoreEmulatedMouseEvents(false);
-        setIgnoreClickAfterPress(false);
+        e.stopPropagation();
       }
     };
 
-    const pressProps: JSX.HTMLAttributes<RefElement> = {
-      onKeyDown,
-      onKeyUp,
-      onClick
+    pressProps.onPointerUp = e => {
+      // iOS fires pointerup with zero width and height, so check the pointerType recorded during pointerdown.
+      if (!e.currentTarget.contains(e.target as HTMLElement) || pointerType() === "virtual") {
+        return;
+      }
+
+      // Only handle left clicks
+      // Safari on iOS sometimes fires pointerup events, even
+      // when the touch isn't over the target, so double check.
+      if (e.button === 0 && isPointOverTarget(e, e.currentTarget)) {
+        triggerPressUp(e, pointerType() || (e.pointerType as PointerType));
+      }
     };
 
-    if (typeof PointerEvent !== "undefined") {
-      const onPointerDown: JSX.EventHandlerUnion<RefElement, PointerEvent> = e => {
-        // Only handle left clicks, and ignore events that bubbled through portals.
-        if (e.button !== 0 || !e.currentTarget.contains(e.target as HTMLElement)) {
-          return;
-        }
+    pressProps.onDragStart = e => {
+      if (!e.currentTarget.contains(e.target as HTMLElement)) {
+        return;
+      }
 
-        // iOS safari fires pointer events from VoiceOver with incorrect coordinates/target.
-        // Ignore and let the onClick handler take care of it instead.
-        // https://bugs.webkit.org/show_bug.cgi?id=222627
-        // https://bugs.webkit.org/show_bug.cgi?id=223202
-        if (isVirtualPointerEvent(e)) {
-          setPointerType("virtual");
-          return;
-        }
+      // Safari does not call onPointerCancel when a drag starts, whereas Chrome and Firefox do.
+      cancel(e);
+    };
+  } else {
+    pressProps.onMouseDown = e => {
+      // Only handle left clicks
+      if (e.button !== 0 || !e.currentTarget.contains(e.target as HTMLElement)) {
+        return;
+      }
 
-        // Due to browser inconsistencies, especially on mobile browsers, we prevent
-        // default on pointer down and handle focusing the pressable element ourselves.
-        if (shouldPreventDefault(e.currentTarget as HTMLElement)) {
-          e.preventDefault();
-        }
+      // Due to browser inconsistencies, especially on mobile browsers, we prevent
+      // default on mouse down and handle focusing the pressable element ourselves.
+      if (shouldPreventDefault(e.currentTarget as HTMLElement)) {
+        e.preventDefault();
+      }
 
-        const newPointerType = setPointerType(e.pointerType as PointerType);
+      e.stopPropagation();
+      if (ignoreEmulatedMouseEvents()) {
+        return;
+      }
 
-        e.stopPropagation();
+      _setIsPressed(true);
+      setIsOverTarget(true);
+      setTarget(e.currentTarget as any);
+      const newPointerType = setPointerType(isVirtualClick(e) ? "virtual" : "mouse");
 
-        if (_isPressed()) {
-          return;
-        }
+      if (!access(local.isDisabled) && !access(local.preventFocusOnPress)) {
+        focusWithoutScrolling(e.currentTarget);
+      }
 
-        _setIsPressed(true);
+      triggerPressStart(e, newPointerType);
+
+      addGlobalListener(document, "mouseup", globalOnMouseUp, false);
+    };
+
+    pressProps.onMouseEnter = e => {
+      if (!e.currentTarget.contains(e.target as HTMLElement)) {
+        return;
+      }
+
+      e.stopPropagation();
+
+      if (_isPressed() && !ignoreEmulatedMouseEvents()) {
         setIsOverTarget(true);
-        setActivePointerId(e.pointerId);
-        const newTarget = setTarget(e.currentTarget as any);
+        triggerPressStart(e, pointerType()!);
+      }
+    };
 
-        if (!access(local.isDisabled) && !access(local.preventFocusOnPress)) {
-          focusWithoutScrolling(e.currentTarget);
+    pressProps.onMouseLeave = e => {
+      if (!e.currentTarget.contains(e.target as HTMLElement)) {
+        return;
+      }
+
+      e.stopPropagation();
+
+      if (_isPressed() && !ignoreEmulatedMouseEvents()) {
+        setIsOverTarget(false);
+
+        triggerPressEnd(e, pointerType()!, false);
+
+        if (access(local.shouldCancelOnPointerExit)) {
+          cancel(e);
         }
+      }
+    };
 
-        if (!access(local.allowTextSelectionOnPress)) {
-          disableTextSelection(newTarget);
-        }
+    pressProps.onMouseUp = e => {
+      if (!e.currentTarget.contains(e.target as HTMLElement)) {
+        return;
+      }
 
-        triggerPressStart(e, newPointerType);
+      if (!ignoreEmulatedMouseEvents() && e.button === 0) {
+        triggerPressUp(e, pointerType()!);
+      }
+    };
 
-        addGlobalListener(document, "pointermove", globalOnPointerMove, false);
-        addGlobalListener(document, "pointerup", globalOnPointerUp, false);
-        addGlobalListener(document, "pointercancel", globalOnPointerCancel, false);
-      };
+    pressProps.onTouchStart = e => {
+      if (!e.currentTarget.contains(e.target as HTMLElement)) {
+        return;
+      }
 
-      const onMouseDown: JSX.EventHandlerUnion<RefElement, MouseEvent> = e => {
-        if (!e.currentTarget.contains(e.target as HTMLElement)) {
-          return;
-        }
+      e.stopPropagation();
 
-        if (e.button === 0) {
-          // Chrome and Firefox on touch Windows devices require mouse down events
-          // to be canceled in addition to pointer events, or an extra asynchronous
-          // focus event will be fired.
-          if (shouldPreventDefault(e.currentTarget as HTMLElement)) {
-            e.preventDefault();
-          }
+      const touch = getTouchFromEvent(e);
 
-          e.stopPropagation();
-        }
-      };
+      if (!touch) {
+        return;
+      }
 
-      const onPointerUp: JSX.EventHandlerUnion<RefElement, PointerEvent> = e => {
-        // iOS fires pointerup with zero width and height, so check the pointerType recorded during pointerdown.
-        if (!e.currentTarget.contains(e.target as HTMLElement) || pointerType() === "virtual") {
-          return;
-        }
+      setActivePointerId(touch.identifier);
+      setIgnoreEmulatedMouseEvents(true);
+      setIsOverTarget(true);
+      _setIsPressed(true);
+      const newTarget = setTarget(e.currentTarget as any);
+      const newPointerType = setPointerType("touch");
 
-        // Only handle left clicks
-        // Safari on iOS sometimes fires pointerup events, even
-        // when the touch isn't over the target, so double check.
-        if (e.button === 0 && isPointOverTarget(e, e.currentTarget)) {
-          triggerPressUp(e, pointerType() || (e.pointerType as PointerType));
-        }
-      };
+      // Due to browser inconsistencies, especially on mobile browsers, we prevent default
+      // on the emulated mouse event and handle focusing the pressable element ourselves.
+      if (!access(local.isDisabled) && !access(local.preventFocusOnPress)) {
+        focusWithoutScrolling(e.currentTarget);
+      }
 
-      const onDragStart: JSX.EventHandlerUnion<RefElement, DragEvent> = e => {
-        if (!e.currentTarget.contains(e.target as HTMLElement)) {
-          return;
-        }
+      if (!access(local.allowTextSelectionOnPress)) {
+        disableTextSelection(newTarget);
+      }
 
-        // Safari does not call onPointerCancel when a drag starts, whereas Chrome and Firefox do.
-        cancel(e);
-      };
+      triggerPressStart(e, newPointerType);
 
-      pressProps.onPointerDown = onPointerDown;
-      pressProps.onMouseDown = onMouseDown;
-      pressProps.onPointerUp = onPointerUp;
-      pressProps.onDragStart = onDragStart;
-    } else {
-      const onMouseDown: JSX.EventHandlerUnion<RefElement, MouseEvent> = e => {
-        // Only handle left clicks
-        if (e.button !== 0 || !e.currentTarget.contains(e.target as HTMLElement)) {
-          return;
-        }
+      addGlobalListener(window, "scroll", globalOnScroll, true);
+    };
 
-        // Due to browser inconsistencies, especially on mobile browsers, we prevent
-        // default on mouse down and handle focusing the pressable element ourselves.
-        if (shouldPreventDefault(e.currentTarget as HTMLElement)) {
-          e.preventDefault();
-        }
+    pressProps.onTouchMove = e => {
+      if (!e.currentTarget.contains(e.target as HTMLElement)) {
+        return;
+      }
 
-        e.stopPropagation();
-        if (ignoreEmulatedMouseEvents()) {
-          return;
-        }
+      e.stopPropagation();
 
-        _setIsPressed(true);
-        setIsOverTarget(true);
-        setTarget(e.currentTarget as any);
-        const newPointerType = setPointerType(isVirtualClick(e) ? "virtual" : "mouse");
+      if (!_isPressed()) {
+        return;
+      }
 
-        if (!access(local.isDisabled) && !access(local.preventFocusOnPress)) {
-          focusWithoutScrolling(e.currentTarget);
-        }
+      const touch = getTouchById(e, activePointerId());
 
-        triggerPressStart(e, newPointerType);
-
-        addGlobalListener(document, "mouseup", globalOnMouseUp, false);
-      };
-
-      const onMouseEnter: JSX.EventHandlerUnion<RefElement, MouseEvent> = e => {
-        if (!e.currentTarget.contains(e.target as HTMLElement)) {
-          return;
-        }
-
-        e.stopPropagation();
-
-        if (_isPressed() && !ignoreEmulatedMouseEvents()) {
+      if (touch && isPointOverTarget(touch, e.currentTarget)) {
+        if (!isOverTarget()) {
           setIsOverTarget(true);
           triggerPressStart(e, pointerType()!);
         }
-      };
-
-      const onMouseLeave: JSX.EventHandlerUnion<RefElement, MouseEvent> = e => {
-        if (!e.currentTarget.contains(e.target as HTMLElement)) {
-          return;
-        }
-
-        e.stopPropagation();
-
-        if (_isPressed() && !ignoreEmulatedMouseEvents()) {
-          setIsOverTarget(false);
-
-          triggerPressEnd(e, pointerType()!, false);
-
-          if (access(local.shouldCancelOnPointerExit)) {
-            cancel(e);
-          }
-        }
-      };
-
-      const onMouseUp: JSX.EventHandlerUnion<RefElement, MouseEvent> = e => {
-        if (!e.currentTarget.contains(e.target as HTMLElement)) {
-          return;
-        }
-
-        if (!ignoreEmulatedMouseEvents() && e.button === 0) {
-          triggerPressUp(e, pointerType()!);
-        }
-      };
-
-      const onTouchStart: JSX.EventHandlerUnion<RefElement, TouchEvent> = e => {
-        if (!e.currentTarget.contains(e.target as HTMLElement)) {
-          return;
-        }
-
-        e.stopPropagation();
-
-        const touch = getTouchFromEvent(e);
-
-        if (!touch) {
-          return;
-        }
-
-        setActivePointerId(touch.identifier);
-        setIgnoreEmulatedMouseEvents(true);
-        setIsOverTarget(true);
-        _setIsPressed(true);
-        const newTarget = setTarget(e.currentTarget as any);
-        const newPointerType = setPointerType("touch");
-
-        // Due to browser inconsistencies, especially on mobile browsers, we prevent default
-        // on the emulated mouse event and handle focusing the pressable element ourselves.
-        if (!access(local.isDisabled) && !access(local.preventFocusOnPress)) {
-          focusWithoutScrolling(e.currentTarget);
-        }
-
-        if (!access(local.allowTextSelectionOnPress)) {
-          disableTextSelection(newTarget);
-        }
-
-        triggerPressStart(e, newPointerType);
-
-        addGlobalListener(window, "scroll", globalOnScroll, true);
-      };
-
-      const onTouchMove: JSX.EventHandlerUnion<RefElement, TouchEvent> = e => {
-        if (!e.currentTarget.contains(e.target as HTMLElement)) {
-          return;
-        }
-
-        e.stopPropagation();
-
-        if (!_isPressed()) {
-          return;
-        }
-
-        const touch = getTouchById(e, activePointerId());
-
-        if (touch && isPointOverTarget(touch, e.currentTarget)) {
-          if (!isOverTarget()) {
-            setIsOverTarget(true);
-            triggerPressStart(e, pointerType()!);
-          }
-        } else if (isOverTarget()) {
-          setIsOverTarget(false);
-          triggerPressEnd(e, pointerType()!, false);
-
-          if (access(local.shouldCancelOnPointerExit)) {
-            cancel(e);
-          }
-        }
-      };
-
-      const onTouchEnd: JSX.EventHandlerUnion<RefElement, TouchEvent> = e => {
-        if (!e.currentTarget.contains(e.target as HTMLElement)) {
-          return;
-        }
-
-        e.stopPropagation();
-
-        if (!_isPressed()) {
-          return;
-        }
-
-        const touch = getTouchById(e, activePointerId());
-
-        if (touch && isPointOverTarget(touch, e.currentTarget)) {
-          triggerPressUp(e, pointerType()!);
-          triggerPressEnd(e, pointerType()!);
-        } else if (isOverTarget()) {
-          triggerPressEnd(e, pointerType()!, false);
-        }
-
-        _setIsPressed(false);
-        setActivePointerId(null);
+      } else if (isOverTarget()) {
         setIsOverTarget(false);
-        setIgnoreEmulatedMouseEvents(true);
+        triggerPressEnd(e, pointerType()!, false);
 
-        if (!access(local.allowTextSelectionOnPress)) {
-          restoreTextSelection(target()!);
-        }
-
-        removeAllGlobalListeners();
-      };
-
-      const onTouchCancel: JSX.EventHandlerUnion<RefElement, TouchEvent> = e => {
-        if (!e.currentTarget.contains(e.target as HTMLElement)) {
-          return;
-        }
-
-        e.stopPropagation();
-
-        if (_isPressed()) {
+        if (access(local.shouldCancelOnPointerExit)) {
           cancel(e);
         }
-      };
+      }
+    };
 
-      const onDragStart: JSX.EventHandlerUnion<RefElement, DragEvent> = e => {
-        if (!e.currentTarget.contains(e.target as HTMLElement)) {
-          return;
-        }
+    pressProps.onTouchEnd = e => {
+      if (!e.currentTarget.contains(e.target as HTMLElement)) {
+        return;
+      }
 
+      e.stopPropagation();
+
+      if (!_isPressed()) {
+        return;
+      }
+
+      const touch = getTouchById(e, activePointerId());
+
+      if (touch && isPointOverTarget(touch, e.currentTarget)) {
+        triggerPressUp(e, pointerType()!);
+        triggerPressEnd(e, pointerType()!);
+      } else if (isOverTarget()) {
+        triggerPressEnd(e, pointerType()!, false);
+      }
+
+      _setIsPressed(false);
+      setActivePointerId(null);
+      setIsOverTarget(false);
+      setIgnoreEmulatedMouseEvents(true);
+
+      if (!access(local.allowTextSelectionOnPress)) {
+        restoreTextSelection(target()!);
+      }
+
+      removeAllGlobalListeners();
+    };
+
+    pressProps.onTouchCancel = e => {
+      if (!e.currentTarget.contains(e.target as HTMLElement)) {
+        return;
+      }
+
+      e.stopPropagation();
+
+      if (_isPressed()) {
         cancel(e);
-      };
+      }
+    };
 
-      pressProps.onMouseDown = onMouseDown;
-      pressProps.onMouseEnter = onMouseEnter;
-      pressProps.onMouseLeave = onMouseLeave;
-      pressProps.onMouseUp = onMouseUp;
-      pressProps.onTouchStart = onTouchStart;
-      pressProps.onTouchMove = onTouchMove;
-      pressProps.onTouchEnd = onTouchEnd;
-      pressProps.onTouchCancel = onTouchCancel;
-      pressProps.onDragStart = onDragStart;
-    }
+    pressProps.onDragStart = e => {
+      if (!e.currentTarget.contains(e.target as HTMLElement)) {
+        return;
+      }
 
-    return combineProps(domProps, pressProps) as JSX.HTMLAttributes<RefElement>;
-  });
-
-  const isPressed = createMemo(() => access(local.isPressed) ?? isTriggerPressed());
+      cancel(e);
+    };
+  }
 
   createEffect(
     on(
       () => access(local.allowTextSelectionOnPress),
-      newValue => {
+      allowTextSelectionOnPress => {
         onCleanup(() => {
-          if (!newValue) {
+          if (!allowTextSelectionOnPress) {
             restoreTextSelection(target() ?? undefined);
           }
         });
@@ -745,7 +721,10 @@ export function createPress<RefElement extends HTMLElement>(
     )
   );
 
-  return { pressProps, isPressed };
+  return {
+    isPressed,
+    pressProps: combineProps(domProps, pressProps) as JSX.HTMLAttributes<T>
+  };
 }
 
 function isHTMLAnchorLink(target: HTMLElement): boolean {

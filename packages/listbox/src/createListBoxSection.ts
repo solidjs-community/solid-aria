@@ -15,90 +15,73 @@
  * governing permissions and limitations under the License.
  */
 
-import { DOMElements } from "@solid-aria/types";
 import { createId } from "@solid-aria/utils";
-import { Accessor, createMemo, JSX } from "solid-js";
+import { createMemo, JSX } from "solid-js";
 
 export interface AriaListBoxSectionProps {
-  /**
-   * An accessibility label for the section.
-   * Required if `heading` is not present.
-   */
-  "aria-label"?: string;
-
   /**
    * The heading for the section.
    */
   heading?: JSX.Element;
 
   /**
-   * The rendered contents of the section.
+   * An accessibility label for the section. Required if `heading` is not present.
    */
-  children?: JSX.Element;
+  "aria-label"?: string;
 }
 
-export interface ListBoxSectionAria<
-  ItemElementType extends DOMElements,
-  HeadingElementType extends DOMElements,
-  GroupElementType extends DOMElements
-> {
+interface ListBoxSectionAria {
   /**
    * Props for the wrapper list item.
    */
-  itemProps: Accessor<JSX.IntrinsicElements[ItemElementType]>;
+  itemProps: JSX.HTMLAttributes<any>;
 
   /**
    * Props for the heading element, if any.
    */
-  headingProps: Accessor<JSX.IntrinsicElements[HeadingElementType]>;
+  headingProps: JSX.HTMLAttributes<any>;
 
   /**
    * Props for the group element.
    */
-  groupProps: Accessor<JSX.IntrinsicElements[GroupElementType]>;
+  groupProps: JSX.HTMLAttributes<any>;
 }
 
 /**
  * Provides the behavior and accessibility implementation for a section in a listbox.
- * See `createListBox` for more details about listboxes.
+ * See `useListBox` for more details about listboxes.
  * @param props - Props for the section.
  */
-export function createListBoxSection<
-  ItemElementType extends DOMElements = "li",
-  HeadingElementType extends DOMElements = "span",
-  GroupElementType extends DOMElements = "ul"
->(
-  props: AriaListBoxSectionProps
-): ListBoxSectionAria<ItemElementType, HeadingElementType, GroupElementType> {
+export function createListBoxSection(props: AriaListBoxSectionProps): ListBoxSectionAria {
   const headingId = createId();
 
-  const itemProps = createMemo(() => {
-    return {
-      role: "presentation"
-    } as JSX.IntrinsicElements[ItemElementType];
-  });
+  const heading = createMemo(() => props.heading);
 
-  const headingProps: Accessor<JSX.IntrinsicElements[HeadingElementType]> = createMemo(() => {
-    if (!props.heading) {
-      return {};
+  const itemProps: JSX.HTMLAttributes<any> = {
+    role: "presentation"
+  };
+
+  // Techincally, listbox cannot contain headings according to ARIA.
+  // We hide the heading from assistive technology, and only use it
+  // as a label for the nested group.
+  const headingProps: JSX.HTMLAttributes<any> = {
+    get id() {
+      return heading() ? headingId : undefined;
+    },
+    get "aria-hidden"() {
+      return heading() ? true : undefined;
     }
+  };
 
-    return {
-      // Techincally, listbox cannot contain headings according to ARIA.
-      // We hide the heading from assistive technology, and only use it
-      // as a label for the nested group.
-      id: headingId,
-      "aria-hidden": true
-    };
-  });
-
-  const groupProps = createMemo(() => {
-    return {
-      role: "group",
-      "aria-label": props["aria-label"],
-      "aria-labelledby": props.heading ? headingId : undefined
-    } as JSX.IntrinsicElements[GroupElementType];
-  });
+  const groupProps: JSX.HTMLAttributes<any> = {
+    role: "group",
+    get "aria-label"() {
+      return props["aria-label"];
+    },
+    get "aria-labelledby"() {
+      return heading() ? headingId : undefined;
+    }
+  };
 
   return { itemProps, headingProps, groupProps };
 }

@@ -24,7 +24,7 @@ describe("createBreadcrumbs", () => {
     createRoot(dispose => {
       const { navProps } = createBreadcrumbs({});
 
-      expect(navProps()["aria-label"]).toBe("Breadcrumbs");
+      expect(navProps["aria-label"]).toBe("Breadcrumbs");
 
       dispose();
     });
@@ -34,7 +34,7 @@ describe("createBreadcrumbs", () => {
     createRoot(dispose => {
       const { navProps } = createBreadcrumbs({ "aria-label": "test-label" });
 
-      expect(navProps()["aria-label"]).toBe("test-label");
+      expect(navProps["aria-label"]).toBe("test-label");
 
       dispose();
     });

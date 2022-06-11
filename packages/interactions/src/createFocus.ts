@@ -17,7 +17,6 @@
 
 import { FocusEvents } from "@solid-aria/types";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createMemo } from "solid-js";
 
 import { createSyntheticBlurEvent } from "./utils";
 
@@ -28,54 +27,47 @@ export interface CreateFocusProps extends FocusEvents {
   isDisabled?: MaybeAccessor<boolean | undefined>;
 }
 
-export interface FocusElementProps {
-  /**
-   * Handler that is called when the element receives focus.
-   */
-  onFocus: FocusEvents["onFocus"];
-
-  /**
-   * Handler that is called when the element loses focus.
-   */
-  onBlur: FocusEvents["onBlur"];
-}
+type FocusProps = Required<Pick<FocusEvents, "onFocus" | "onBlur">>;
 
 export interface FocusResult {
   /**
    * Props to spread onto the target element.
    */
-  focusProps: Accessor<FocusElementProps>;
+  focusProps: FocusProps;
 }
 
 /**
- * Handles focus events for the target.
+ * Handles focus events for the immediate target.
+ * Focus events on child elements will be ignored.
  */
 export function createFocus(props: CreateFocusProps): FocusResult {
-  const onBlur: FocusEvents["onBlur"] = event => {
-    if (access(props.isDisabled)) {
+  const isDisabled = () => access(props.isDisabled) ?? false;
+
+  const onBlur = (e: FocusEvent) => {
+    if (isDisabled() || (!props.onBlur && !props.onFocusChange)) {
       return;
     }
 
-    props.onBlur?.(event);
+    props.onBlur?.(e);
     props.onFocusChange?.(false);
   };
 
   const onSyntheticFocus = createSyntheticBlurEvent(onBlur);
 
-  const onFocus: FocusEvents["onFocus"] = event => {
-    if (access(props.isDisabled)) {
+  const onFocus = (e: FocusEvent) => {
+    if (isDisabled() || (!props.onFocus && !props.onBlur && !props.onFocusChange)) {
       return;
     }
 
-    props.onFocus?.(event);
+    props.onFocus?.(e);
     props.onFocusChange?.(true);
-    onSyntheticFocus(event);
+    onSyntheticFocus(e);
   };
 
-  const focusProps: Accessor<FocusElementProps> = createMemo(() => ({
+  const focusProps: FocusProps = {
     onFocus,
     onBlur
-  }));
+  };
 
   return { focusProps };
 }

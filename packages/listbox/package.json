@@ -43,14 +43,15 @@
     "@solid-aria/focus": "workspace:^",
     "@solid-aria/interactions": "workspace:^",
     "@solid-aria/label": "workspace:^",
+    "@solid-aria/list": "workspace:^",
     "@solid-aria/selection": "workspace:^",
     "@solid-aria/types": "workspace:^",
     "@solid-aria/utils": "workspace:^"
   },
   "peerDependencies": {
-    "@solid-primitives/props": "^2.1.2",
+    "@solid-primitives/props": "^2.1.4",
     "@solid-primitives/utils": "^2.0.1",
-    "solid-js": "^1.4.3"
+    "solid-js": "^1.4.4"
   },
   "publishConfig": {
     "access": "public"

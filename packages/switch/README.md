@@ -52,12 +52,12 @@ function Switch(props: AriaSwitchProps) {
 
   const { inputProps, state } = createSwitch(props, () => ref);
   const { isFocusVisible, focusProps } = createFocusRing();
-  const { visuallyHiddenProps } = createVisuallyHidden<"div">();
+  const { visuallyHiddenProps } = createVisuallyHidden();
 
   return (
     <label style={{ display: "flex", "align-items": "center" }}>
-      <div {...visuallyHiddenProps()}>
-        <input {...inputProps()} {...focusProps()} ref={ref} />
+      <div {...visuallyHiddenProps}>
+        <input {...inputProps} {...focusProps} ref={ref} />
       </div>
       <svg width={40} height={24} aria-hidden="true" style={{ "margin-right": "4px" }}>
         <rect

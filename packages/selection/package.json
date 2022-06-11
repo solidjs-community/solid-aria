@@ -40,13 +40,17 @@
   },
   "dependencies": {
     "@solid-aria/collection": "workspace:^",
+    "@solid-aria/focus": "workspace:^",
     "@solid-aria/i18n": "workspace:^",
+    "@solid-aria/interactions": "workspace:^",
     "@solid-aria/types": "workspace:^",
     "@solid-aria/utils": "workspace:^"
   },
   "peerDependencies": {
+    "@solid-primitives/event-listener": "^2.1.0",
+    "@solid-primitives/props": "^2.1.4",
     "@solid-primitives/utils": "^2.0.1",
-    "solid-js": "^1.4.3"
+    "solid-js": "^1.4.4"
   },
   "publishConfig": {
     "access": "public"

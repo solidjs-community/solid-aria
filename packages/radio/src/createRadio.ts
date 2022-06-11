@@ -20,7 +20,7 @@ import { createPress } from "@solid-aria/interactions";
 import { AriaLabelingProps, DOMProps, FocusableProps } from "@solid-aria/types";
 import { filterDOMProps } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
-import { Accessor, createMemo, JSX } from "solid-js";
+import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
 
 import { useRadioGroupContext } from "./createRadioGroup";
 import { RadioGroupState } from "./createRadioGroupState";
@@ -48,7 +48,7 @@ interface RadioAria {
   /**
    * Props for the input element.
    */
-  inputProps: Accessor<JSX.InputHTMLAttributes<HTMLInputElement>>;
+  inputProps: JSX.InputHTMLAttributes<HTMLInputElement>;
 
   /**
    * State for the radio group, as returned by `createRadioGroupState`.
@@ -109,27 +109,31 @@ export function createRadio(
 
   const { focusableProps } = createFocusable(createFocusableProps, inputRef);
 
-  const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
+  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
 
-  const tabIndex = createMemo(() => {
-    if (isDisabled()) {
-      return undefined;
-    }
+  const inputProps = combineProps(domProps, pressProps, focusableProps, {
+    type: "radio",
+    get name() {
+      return context.name();
+    },
+    get tabIndex() {
+      if (isDisabled()) {
+        return undefined;
+      }
 
-    return isLastFocused() || context.state.lastFocusedValue() == null ? 0 : -1;
-  });
-
-  const inputProps: Accessor<JSX.InputHTMLAttributes<HTMLInputElement>> = createMemo(() => {
-    return combineProps(domProps(), pressProps(), focusableProps(), {
-      type: "radio",
-      name: context.name(),
-      tabIndex: tabIndex(),
-      disabled: isDisabled(),
-      checked: isChecked(),
-      value: props.value,
-      onChange
-    });
-  });
+      return isLastFocused() || context.state.lastFocusedValue() == null ? 0 : -1;
+    },
+    get disabled() {
+      return isDisabled();
+    },
+    get checked() {
+      return isChecked();
+    },
+    get value() {
+      return props.value;
+    },
+    onChange
+  } as JSX.InputHTMLAttributes<HTMLInputElement>);
 
   return { inputProps, state: context.state };
 }

@@ -58,6 +58,7 @@
     "@solid-aria/interactions": "workspace:^",
     "@solid-aria/label": "workspace:^",
     "@solid-aria/link": "workspace:^",
+    "@solid-aria/list": "workspace:^",
     "@solid-aria/listbox": "workspace:^",
     "@solid-aria/overlays": "workspace:^",
     "@solid-aria/radio": "workspace:^",
@@ -69,8 +70,7 @@
     "@solid-aria/visually-hidden": "workspace:^"
   },
   "peerDependencies": {
-    "@solid-primitives/utils": "^2.0.1",
-    "solid-js": "^1.4.3"
+    "solid-js": "^1.4.4"
   },
   "publishConfig": {
     "access": "public"

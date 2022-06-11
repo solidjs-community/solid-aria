@@ -28,8 +28,8 @@ function CheckboxGroup(props: AriaCheckboxGroupProps) {
   const { CheckboxGroupProvider, groupProps, labelProps } = createCheckboxGroup(props);
 
   return (
-    <div {...groupProps()}>
-      <span {...labelProps()}>{props.label}</span>
+    <div {...groupProps}>
+      <span {...labelProps}>{props.label}</span>
       <CheckboxGroupProvider>{props.children}</CheckboxGroupProvider>
     </div>
   );
@@ -42,7 +42,7 @@ function Checkbox(props: AriaCheckboxGroupItemProps) {
 
   return (
     <label>
-      <input ref={ref} {...inputProps()} />
+      <input ref={ref} {...inputProps} />
       {props.children}
     </label>
   );

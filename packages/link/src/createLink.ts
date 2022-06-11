@@ -17,7 +17,7 @@
 
 import { createFocusable } from "@solid-aria/focus";
 import { createPress } from "@solid-aria/interactions";
-import { AriaLabelingProps, DOMElements, FocusableProps, PressEvents } from "@solid-aria/types";
+import { AriaLabelingProps, FocusableProps, PressEvents } from "@solid-aria/types";
 import { filterDOMProps } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
 import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
@@ -40,16 +40,16 @@ export interface AriaLinkProps extends AriaLabelingProps, PressEvents, Focusable
   onClick?: (e: MouseEvent) => void;
 }
 
-export interface LinkAria<T extends DOMElements> {
-  /**
-   * Props for the link element.
-   */
-  linkProps: Accessor<JSX.IntrinsicElements[T]>;
-
+export interface LinkAria<T extends HTMLElement> {
   /**
    * Whether the link is currently pressed.
    */
   isPressed: Accessor<boolean>;
+
+  /**
+   * Props for the link element.
+   */
+  linkProps: JSX.HTMLAttributes<T>;
 }
 
 /**
@@ -57,14 +57,15 @@ export interface LinkAria<T extends DOMElements> {
  * A link allows a user to navigate to another page or resource within a web page
  * or application.
  */
-export function createLink<
-  T extends DOMElements = "a",
-  RefElement extends HTMLElement = HTMLAnchorElement
->(props: AriaLinkProps, ref: Accessor<RefElement | undefined>): LinkAria<T> {
+export function createLink<T extends HTMLElement = HTMLAnchorElement>(
+  props: AriaLinkProps,
+  ref: Accessor<T | undefined>
+): LinkAria<T> {
   const defaultProps: AriaLinkProps = {
     elementType: "a"
   };
 
+  // eslint-disable-next-line solid/reactivity
   props = mergeProps(defaultProps, props);
 
   const [local, createPressProps, others] = splitProps(
@@ -77,29 +78,32 @@ export function createLink<
 
   const { pressProps, isPressed } = createPress(createPressProps, ref);
 
-  const domProps = createMemo(() => filterDOMProps(others, { labelable: true }));
+  const domProps = mergeProps(createMemo(() => filterDOMProps(others, { labelable: true })));
 
-  const linkProps = createMemo(() => {
-    let baseProps = {};
+  const isAnchorTag = () => local.elementType === "a";
 
-    if (local.elementType !== "a") {
-      baseProps = {
-        role: "link",
-        tabIndex: !local.isDisabled ? 0 : undefined
-      };
-    }
-
-    return combineProps(domProps(), focusableProps(), pressProps(), {
-      ...baseProps,
-      "aria-disabled": local.isDisabled || undefined,
-      onClick: (e: MouseEvent) => {
-        if (props.onClick) {
-          props.onClick(e);
-          console.warn("onClick is deprecated, please use onPress");
-        }
+  const baseLinkProps: JSX.HTMLAttributes<any> = {
+    get role() {
+      return !isAnchorTag() ? "link" : undefined;
+    },
+    get tabIndex() {
+      return !isAnchorTag() && !local.isDisabled ? 0 : undefined;
+    },
+    get "aria-disabled"() {
+      return local.isDisabled;
+    },
+    onClick: e => {
+      if (!props.onClick) {
+        return;
       }
-    }) as JSX.IntrinsicElements[T];
-  });
 
-  return { linkProps, isPressed };
+      props.onClick(e);
+      console.warn("onClick is deprecated, please use onPress");
+    }
+  };
+
+  return {
+    isPressed,
+    linkProps: combineProps(domProps, focusableProps, pressProps, baseLinkProps)
+  };
 }

@@ -19,12 +19,12 @@ import {
   createFocus,
   createFocusVisibleListener,
   createFocusWithin,
-  FocusElementProps,
-  FocusWithinElementProps,
+  FocusResult,
+  FocusWithinResult,
   isKeyboardFocusVisible
 } from "@solid-aria/interactions";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createSignal } from "solid-js";
+import { Accessor, createMemo, createSignal, mergeProps } from "solid-js";
 
 export interface CreateFocusRingProps {
   /**
@@ -46,6 +46,8 @@ export interface CreateFocusRingProps {
   autoFocus?: MaybeAccessor<boolean | undefined>;
 }
 
+type FocusRingProps = FocusResult["focusProps"] | FocusWithinResult["focusWithinProps"];
+
 export interface FocusRingResult {
   /**
    * Whether the element is currently focused.
@@ -60,7 +62,7 @@ export interface FocusRingResult {
   /**
    * Props to apply to the container element with the focus ring.
    */
-  focusProps: Accessor<FocusElementProps | FocusWithinElementProps>;
+  focusProps: FocusRingProps;
 }
 
 /**
@@ -82,7 +84,7 @@ export function createFocusRing(props: CreateFocusRingProps = {}): FocusRingResu
     { isTextInput: !!access(props.isTextInput) }
   );
 
-  const { focusProps: _focusProps } = createFocus({
+  const { focusProps } = createFocus({
     isDisabled: () => access(props.within),
     onFocusChange: setFocused
   });
@@ -92,60 +94,11 @@ export function createFocusRing(props: CreateFocusRingProps = {}): FocusRingResu
     onFocusWithinChange: setFocused
   });
 
-  const focusProps = () => {
-    return access(props.within) ? focusWithinProps() : _focusProps();
-  };
-
-  return { isFocused, isFocusVisible, focusProps };
-}
-
-/*
-export function createFocusRing(props: CreateFocusRingProps = {}): FocusRingResult {
-  const state = {
-    isFocused: false,
-    isFocusVisible: access(props.autoFocus) || isKeyboardFocusVisible()
-  };
-
-  const [isFocused, setFocused] = createSignal(false);
-  const [isFocusVisibleState, setFocusVisibleState] = createSignal(false);
-
-  const updateState = () => setFocusVisibleState(state.isFocused && state.isFocusVisible);
-
-  const onFocusChange = (isFocused: boolean) => {
-    state.isFocused = isFocused;
-    setFocused(isFocused);
-    updateState();
-  };
-
-  createFocusVisibleListener(
-    isFocusVisible => {
-      state.isFocusVisible = isFocusVisible;
-      updateState();
-    },
-    () => null, // hack for passing a dep that never changes
-    { isTextInput: !!access(props.isTextInput) }
-  );
-
-  const isFocusVisible = () => state.isFocused && isFocusVisibleState();
-
-  const { focusProps: _focusProps } = createFocus({
-    isDisabled: () => access(props.within),
-    onFocusChange
-  });
-
-  const { focusWithinProps } = createFocusWithin({
-    isDisabled: () => !access(props.within),
-    onFocusWithinChange: onFocusChange
-  });
-
-  const focusProps = () => {
-    return access(props.within) ? focusWithinProps() : _focusProps();
-  };
+  const focusRingProps = createMemo(() => (access(props.within) ? focusWithinProps : focusProps));
 
   return {
     isFocused,
     isFocusVisible,
-    focusProps
+    focusProps: mergeProps(focusRingProps)
   };
 }
-*/

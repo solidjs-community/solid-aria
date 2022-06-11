@@ -38,11 +38,11 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/types": "workspace:^",
-    "@solid-primitives/utils": "^2.0.1"
+    "@solid-aria/types": "workspace:^"
   },
   "peerDependencies": {
-    "solid-js": "^1.4.3"
+    "@solid-primitives/utils": "^2.0.1",
+    "solid-js": "^1.4.4"
   },
   "publishConfig": {
     "access": "public"
