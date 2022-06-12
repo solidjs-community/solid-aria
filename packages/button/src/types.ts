@@ -15,6 +15,7 @@
  * governing permissions and limitations under the License.
  */
 
+import { CreateToggleStateProps } from "@solid-aria/toggle";
 import {
   AriaLabelingProps,
   ElementType,
@@ -34,23 +35,6 @@ interface ButtonProps extends PressEvents, FocusableProps {
    * The content to display in the button.
    */
   children?: JSX.Element;
-}
-
-interface ToggleButtonProps extends ButtonProps {
-  /**
-   * Whether the element should be selected (controlled).
-   */
-  isSelected?: boolean;
-
-  /**
-   * Whether the element should be selected (uncontrolled).
-   */
-  defaultSelected?: boolean;
-
-  /**
-   * Handler that is called when the element's selection state changes.
-   */
-  onChange?: (isSelected: boolean) => void;
 }
 
 export interface AriaButtonElementTypeProps<T extends ElementType = "button"> {
@@ -128,6 +112,7 @@ export interface AriaButtonProps<T extends ElementType = "button">
     AriaBaseButtonProps {}
 
 export interface AriaToggleButtonProps<T extends ElementType = "button">
-  extends ToggleButtonProps,
+  extends CreateToggleStateProps,
+    ButtonProps,
     AriaBaseButtonProps,
     AriaButtonElementTypeProps<T> {}
