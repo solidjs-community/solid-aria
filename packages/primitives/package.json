@@ -60,6 +60,7 @@
     "@solid-aria/link": "workspace:^",
     "@solid-aria/list": "workspace:^",
     "@solid-aria/listbox": "workspace:^",
+    "@solid-aria/menu": "workspace:^",
     "@solid-aria/overlays": "workspace:^",
     "@solid-aria/radio": "workspace:^",
     "@solid-aria/selection": "workspace:^",

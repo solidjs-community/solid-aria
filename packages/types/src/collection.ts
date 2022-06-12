@@ -23,12 +23,12 @@ export interface Expandable {
   /**
    * The currently expanded keys in the collection (controlled).
    */
-  expandedKeys?: MaybeAccessor<Iterable<ItemKey>>;
+  expandedKeys?: MaybeAccessor<Iterable<ItemKey> | undefined>;
 
   /**
    * The initial expanded keys in the collection (uncontrolled).
    */
-  defaultExpandedKeys?: MaybeAccessor<Iterable<ItemKey>>;
+  defaultExpandedKeys?: MaybeAccessor<Iterable<ItemKey> | undefined>;
 
   /**
    * Handler that is called when items are expanded or collapsed.

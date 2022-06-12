@@ -77,9 +77,7 @@ export function createTreeState(props: CreateTreeStateProps): TreeState {
     return disabledKeys ? new Set(disabledKeys) : new Set<ItemKey>();
   });
 
-  const factory = (nodes: Iterable<Node>) => {
-    return new TreeCollection(nodes, { expandedKeys: expandedKeys() });
-  };
+  const factory = (nodes: Iterable<Node>) => new TreeCollection(nodes, expandedKeys());
 
   const collection = createCollection(props, factory, [expandedKeys]);
 
@@ -109,10 +107,10 @@ export function createTreeState(props: CreateTreeStateProps): TreeState {
   );
 
   return {
+    selectionManager,
     collection,
     expandedKeys,
     disabledKeys,
-    toggleKey,
-    selectionManager
+    toggleKey
   };
 }

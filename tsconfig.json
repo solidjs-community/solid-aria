@@ -8,7 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
+    "noFallthroughCasesInSwitch": false,
     "isolatedModules": true,
     "jsx": "preserve",
     "jsxImportSource": "solid-js",

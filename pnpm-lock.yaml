@@ -230,11 +230,21 @@ importers:
 
   packages/menu:
     specifiers:
+      '@solid-aria/button': workspace:^
+      '@solid-aria/collection': workspace:^
+      '@solid-aria/interactions': workspace:^
       '@solid-aria/overlays': workspace:^
+      '@solid-aria/selection': workspace:^
+      '@solid-aria/tree': workspace:^
       '@solid-aria/types': workspace:^
       '@solid-aria/utils': workspace:^
     dependencies:
+      '@solid-aria/button': link:../button
+      '@solid-aria/collection': link:../collection
+      '@solid-aria/interactions': link:../interactions
       '@solid-aria/overlays': link:../overlays
+      '@solid-aria/selection': link:../selection
+      '@solid-aria/tree': link:../tree
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 
@@ -268,6 +278,7 @@ importers:
       '@solid-aria/link': workspace:^
       '@solid-aria/list': workspace:^
       '@solid-aria/listbox': workspace:^
+      '@solid-aria/menu': workspace:^
       '@solid-aria/overlays': workspace:^
       '@solid-aria/radio': workspace:^
       '@solid-aria/selection': workspace:^
@@ -290,6 +301,7 @@ importers:
       '@solid-aria/link': link:../link
       '@solid-aria/list': link:../list
       '@solid-aria/listbox': link:../listbox
+      '@solid-aria/menu': link:../menu
       '@solid-aria/overlays': link:../overlays
       '@solid-aria/radio': link:../radio
       '@solid-aria/selection': link:../selection
