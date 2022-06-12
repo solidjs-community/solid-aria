@@ -24,14 +24,12 @@ interface ContextValue<T> {
 /**
  * Syncs ref from context with ref passed to primitve.
  */
-export function createSyncRef<T>(context?: ContextValue<T>, ref?: Accessor<T | undefined>) {
+export function createSyncRef<T>(context: ContextValue<T>, ref: Accessor<T | undefined>) {
   createEffect(() => {
-    if (context && ref) {
-      context.ref = () => ref();
+    context.ref = ref;
 
-      onCleanup(() => {
-        context.ref = () => undefined;
-      });
-    }
+    onCleanup(() => {
+      context.ref = () => undefined;
+    });
   });
 }
