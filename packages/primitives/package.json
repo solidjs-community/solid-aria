@@ -71,6 +71,9 @@
     "@solid-aria/utils": "workspace:^",
     "@solid-aria/visually-hidden": "workspace:^"
   },
+  "devDependencies": {
+    "@solid-primitives/props": "2.1.7"
+  },
   "peerDependencies": {
     "solid-js": "^1.4.4"
   },

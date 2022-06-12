@@ -288,6 +288,7 @@ importers:
       '@solid-aria/types': workspace:^
       '@solid-aria/utils': workspace:^
       '@solid-aria/visually-hidden': workspace:^
+      '@solid-primitives/props': 2.1.7
     dependencies:
       '@solid-aria/breadcrumbs': link:../breadcrumbs
       '@solid-aria/button': link:../button
@@ -311,6 +312,8 @@ importers:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
       '@solid-aria/visually-hidden': link:../visually-hidden
+    devDependencies:
+      '@solid-primitives/props': 2.1.7
 
   packages/radio:
     specifiers:
@@ -2460,12 +2463,26 @@ packages:
       solid-js: 1.4.4
     dev: true
 
+  /@solid-primitives/props/2.1.7:
+    resolution: {integrity: sha512-Sg+JUK+v43x4fe5yNYgKS0IkXG0pkLeCrO7SGKEaOtXSH2NZXthY/OQCSiv5rhM17Z7NoA6E9Q8CjQDrcFUblg==}
+    peerDependencies:
+      solid-js: ^1.3.0
+    dependencies:
+      '@solid-primitives/utils': 2.0.3
+    dev: true
+
   /@solid-primitives/utils/1.5.2_solid-js@1.4.4:
     resolution: {integrity: sha512-dZUHjzasuqS2lDO+PQCY1+jFmtWHlaP3tUvkX1Jr06LI/Ipa2P/ZNVSvuIoqQ0Bg+Ny27LvtrXxflZNeGtptvA==}
     peerDependencies:
       solid-js: ^1.3.1
     dependencies:
       solid-js: 1.4.4
+    dev: true
+
+  /@solid-primitives/utils/2.0.3:
+    resolution: {integrity: sha512-dIv339WSJZ8C50kcJ7Ys5aLPSs59+GMsSrtJ/bGnA38gkLgmKry1XIZJLAUVz/uiOiZ661GUJ+IMngsqG8u09g==}
+    peerDependencies:
+      solid-js: ^1.4.1
     dev: true
 
   /@solid-primitives/utils/2.0.3_solid-js@1.4.4:

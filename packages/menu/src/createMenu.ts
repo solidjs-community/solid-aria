@@ -108,7 +108,8 @@ export function createMenu<T extends HTMLElement>(
 ): MenuAria {
   const defaultProps: Partial<AriaMenuProps> = {
     shouldFocusWrap: true,
-    closeOnSelect: true
+    closeOnSelect: true,
+    selectionMode: "none"
   };
 
   // eslint-disable-next-line solid/reactivity
