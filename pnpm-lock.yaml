@@ -172,9 +172,11 @@ importers:
     specifiers:
       '@solid-aria/types': workspace:^
       '@solid-aria/utils': workspace:^
+      '@solid-primitives/platform': ^0.0.100
     dependencies:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/platform': 0.0.100
 
   packages/label:
     specifiers:
@@ -218,6 +220,7 @@ importers:
       '@solid-aria/selection': workspace:^
       '@solid-aria/types': workspace:^
       '@solid-aria/utils': workspace:^
+      '@solid-primitives/platform': ^0.0.100
     dependencies:
       '@solid-aria/collection': link:../collection
       '@solid-aria/focus': link:../focus
@@ -227,6 +230,7 @@ importers:
       '@solid-aria/selection': link:../selection
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/platform': 0.0.100
 
   packages/menu:
     specifiers:
@@ -2424,6 +2428,12 @@ packages:
     dependencies:
       solid-js: 1.4.4
     dev: true
+
+  /@solid-primitives/platform/0.0.100:
+    resolution: {integrity: sha512-TMGeDtjA8b7xlUQGq3QhdR8SSa49bvqhFJ0iD+iy4fsnEHr9xA5hIDyBX/ntmz70SbOVyz+z9IdXwBnqurr4bQ==}
+    peerDependencies:
+      solid-js: ^1.4.0
+    dev: false
 
   /@solid-primitives/props/2.1.4_solid-js@1.4.4:
     resolution: {integrity: sha512-tq9kGdZogo6mgWKmPjtekAb875DMBz8hzKMdreVlrMCVDZwmAJMtYX71LQG7FVewLgMTF4O/ak0FVFyQlX6rCQ==}

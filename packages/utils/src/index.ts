@@ -25,6 +25,5 @@ export * from "./focusWithoutScrolling";
 export * from "./getScrollParent";
 export * from "./handler";
 export * from "./mergeAriaLabels";
-export * from "./platform";
 export * from "./runAfterTransition";
 export * from "./scrollIntoView";
