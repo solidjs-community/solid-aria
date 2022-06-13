@@ -96,7 +96,7 @@ export interface MenuItemAria {
 
 /**
  * Provides the behavior and accessibility implementation for an item in a menu.
- * See `useMenu` for more details about menus.
+ * See `createMenu` for more details about menus.
  * @param props - Props for the item.
  * @param ref - A ref to the menu item element.
  */
