@@ -22,6 +22,13 @@ import { fireEvent, render, screen } from "solid-testing-library";
 import { createPress, CreatePressProps } from "../src";
 import { installPointerEvent } from "./test-utils";
 
+const mockIsIOS = jest.fn();
+jest.mock("@solid-primitives/platform", () => ({
+  get isIOS() {
+    return mockIsIOS();
+  }
+}));
+
 function Example(
   props: CreatePressProps &
     JSX.HTMLAttributes<any> & { elementType?: any; style?: any; draggable?: boolean; href?: string }
@@ -2775,7 +2782,6 @@ describe("createPress", () => {
     const handler = jest.fn();
     const mockUserSelect = "contain";
     const oldUserSelect = document.documentElement.style.webkitUserSelect;
-    let platformGetter: any;
 
     function TestStyleChange(props: CreatePressProps & { styleToApply?: any }) {
       const [local, others] = splitProps(props, ["styleToApply"]);
@@ -2796,10 +2802,6 @@ describe("createPress", () => {
       );
     }
 
-    beforeAll(() => {
-      platformGetter = jest.spyOn(window.navigator, "platform", "get");
-    });
-
     afterAll(() => {
       handler.mockClear();
       jest.restoreAllMocks();
@@ -2807,7 +2809,6 @@ describe("createPress", () => {
 
     beforeEach(() => {
       document.documentElement.style.webkitUserSelect = mockUserSelect;
-      platformGetter.mockReturnValue("iPhone");
     });
 
     afterEach(() => {
@@ -2815,6 +2816,7 @@ describe("createPress", () => {
     });
 
     it("should add user-select: none to the page on press start (iOS)", async () => {
+      mockIsIOS.mockReturnValue(true);
       render(() => (
         <Example
           onPressStart={handler}
@@ -2838,8 +2840,7 @@ describe("createPress", () => {
     });
 
     it("should not add user-select: none to the page when press start (non-iOS)", async () => {
-      platformGetter.mockReturnValue("Android");
-
+      mockIsIOS.mockReturnValue(false);
       render(() => (
         <Example
           onPressStart={handler}
@@ -2860,6 +2861,7 @@ describe("createPress", () => {
     });
 
     it("should remove user-select: none from the page when press end (iOS)", async () => {
+      mockIsIOS.mockReturnValue(true);
       render(() => (
         <Example
           onPressStart={handler}
@@ -2904,8 +2906,7 @@ describe("createPress", () => {
     });
 
     it("should remove user-select: none from the element when press end (non-iOS)", async () => {
-      platformGetter.mockReturnValue("Android");
-
+      mockIsIOS.mockReturnValue(false);
       render(() => (
         <Example
           style={{ "user-select": "text" }}
@@ -2950,6 +2951,7 @@ describe("createPress", () => {
     });
 
     it("should not remove user-select: none when pressing two different elements quickly (iOS)", async () => {
+      mockIsIOS.mockReturnValue(true);
       render(() => (
         <>
           <Example
@@ -2993,8 +2995,7 @@ describe("createPress", () => {
     });
 
     it("should clean up user-select: none when pressing and releasing two different elements (non-iOS)", async () => {
-      platformGetter.mockReturnValue("Android");
-
+      mockIsIOS.mockReturnValue(false);
       render(() => (
         <>
           <Example
@@ -3041,6 +3042,7 @@ describe("createPress", () => {
     });
 
     it("should remove user-select: none from the page if pressable component unmounts (iOS)", async () => {
+      mockIsIOS.mockReturnValue(true);
       const { unmount } = render(() => (
         <Example
           onPressStart={handler}
@@ -3066,8 +3068,7 @@ describe("createPress", () => {
     });
 
     it("non related style changes during press down shouldn't overwrite user-select on press end (non-iOS)", async () => {
-      platformGetter.mockReturnValue("Android");
-
+      mockIsIOS.mockReturnValue(false);
       render(() => (
         <TestStyleChange
           styleToApply={{ background: "red" }}
@@ -3104,8 +3105,7 @@ describe("createPress", () => {
     });
 
     it("changes to user-select during press down remain on press end (non-iOS)", async () => {
-      platformGetter.mockReturnValue("Android");
-
+      mockIsIOS.mockReturnValue(false);
       render(() => (
         <TestStyleChange
           styleToApply={{ background: "red", "user-select": "text" }}

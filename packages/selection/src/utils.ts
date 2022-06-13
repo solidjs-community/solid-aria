@@ -15,7 +15,7 @@
  * governing permissions and limitations under the License.
  */
 
-import { isAppleDevice, isMac } from "@solid-aria/utils";
+import { isAppleDevice, isMac } from "@solid-primitives/platform";
 
 interface Event {
   altKey: boolean;
@@ -26,11 +26,11 @@ interface Event {
 export function isNonContiguousSelectionModifier(e: Event) {
   // Ctrl + Arrow Up/Arrow Down has a system wide meaning on macOS, so use Alt instead.
   // On Windows and Ubuntu, Alt + Space has a system wide meaning.
-  return isAppleDevice() ? e.altKey : e.ctrlKey;
+  return isAppleDevice ? e.altKey : e.ctrlKey;
 }
 
 export function isCtrlKeyPressed(e: Event) {
-  if (isMac()) {
+  if (isMac) {
     return e.metaKey;
   }
 

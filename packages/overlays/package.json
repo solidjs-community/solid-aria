@@ -53,7 +53,8 @@
     "@solid-aria/interactions": "workspace:^",
     "@solid-aria/types": "workspace:^",
     "@solid-aria/utils": "workspace:^",
-    "@solid-aria/visually-hidden": "workspace:^"
+    "@solid-aria/visually-hidden": "workspace:^",
+    "@solid-primitives/platform": "^0.0.100"
   },
   "peerDependencies": {
     "@solid-primitives/props": "^2.1.4",

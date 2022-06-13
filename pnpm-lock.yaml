@@ -250,6 +250,7 @@ importers:
       '@solid-aria/types': workspace:^
       '@solid-aria/utils': workspace:^
       '@solid-aria/visually-hidden': workspace:^
+      '@solid-primitives/platform': ^0.0.100
     dependencies:
       '@solid-aria/button': link:../button
       '@solid-aria/i18n': link:../i18n
@@ -257,6 +258,7 @@ importers:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
       '@solid-aria/visually-hidden': link:../visually-hidden
+      '@solid-primitives/platform': 0.0.100
 
   packages/primitives:
     specifiers:
@@ -326,6 +328,7 @@ importers:
       '@solid-aria/interactions': workspace:^
       '@solid-aria/types': workspace:^
       '@solid-aria/utils': workspace:^
+      '@solid-primitives/platform': ^0.0.100
     dependencies:
       '@solid-aria/collection': link:../collection
       '@solid-aria/focus': link:../focus
@@ -333,6 +336,7 @@ importers:
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/platform': 0.0.100
 
   packages/switch:
     specifiers:
