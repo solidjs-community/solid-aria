@@ -6,6 +6,8 @@
 
 A library of high-quality primitives that help you build accessible user interfaces with SolidJS.
 
+> ⚠️ Solid Aria is in early stage and **not ready** for production ⚠️
+
 ## Primitives
 
 - [@solid-aria/primitives](./packages/primitives/) - Export all Solid Aria primitives in a single convenient package.
@@ -43,6 +45,7 @@ A library of high-quality primitives that help you build accessible user interfa
 ### Overlays
 
 - [dialog](./packages/dialog/) - Provides the behavior and accessibility implementation for a dialog component.
+- [menu](./packages/menu/) - Provides the behavior and accessibility implementation for a menu component.
 - [overlays](./packages/overlays/) - Provides the behavior and accessibility implementation for overlay components such as dialogs, popovers, and menus.
 
 ### Utilities
@@ -66,7 +69,7 @@ A library of high-quality primitives that help you build accessible user interfa
 - [ ] List
 - [x] Listbox
 - [ ] LiveAnnouncer
-- [ ] Menu
+- [x] Menu
 - [ ] Meter
 - [ ] NumberField
 - [x] Overlays
