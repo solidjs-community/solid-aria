@@ -34,6 +34,6 @@ jobs:
         run: pnpm build
 
       - name: Test
-        run: pnpm turbo run test
+        run: pnpm test
         env:
           CI: true

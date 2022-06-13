@@ -44,8 +44,8 @@
     "@solid-primitives/platform": "^0.0.100"
   },
   "peerDependencies": {
-    "@solid-primitives/props": "^2.1.4",
-    "@solid-primitives/utils": "^2.0.1",
+    "@solid-primitives/props": "^2.1.7",
+    "@solid-primitives/utils": "^2.1.0",
     "solid-js": "^1.4.4"
   },
   "publishConfig": {

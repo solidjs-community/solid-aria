@@ -1,8 +1,8 @@
 {
-  "name": "@solid-aria/types",
-  "version": "0.1.0",
+  "name": "@solid-aria/select",
+  "version": "0.0.0",
   "private": false,
-  "description": "A collection of type definitions, for building Solid Aria primitives.",
+  "description": "Primitives for building accessible select component.",
   "keywords": [
     "solid",
     "aria",
@@ -11,7 +11,7 @@
     "system",
     "components"
   ],
-  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/types#readme",
+  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/select#readme",
   "bugs": {
     "url": "https://github.com/solidjs-community/solid-aria/issues"
   },
@@ -24,16 +24,32 @@
   "contributors": [],
   "sideEffects": false,
   "type": "module",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "solid": "./dist/source/index.jsx",
+      "import": "./dist/esm/index.js",
+      "browser": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "node": "./dist/cjs/index.js"
+    }
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "rollup -c",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "dev": "vite serve dev --host",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch --passWithNoTests",
     "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@solid-aria/types": "workspace:^",
+    "@solid-aria/utils": "workspace:^"
   },
   "peerDependencies": {
     "@solid-primitives/utils": "^2.1.0",
@@ -43,7 +59,7 @@
     "access": "public"
   },
   "primitive": {
-    "name": "types",
+    "name": "select",
     "stage": 0,
     "list": [],
     "category": ""

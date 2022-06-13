@@ -13,8 +13,8 @@ importers:
       '@commitlint/cz-commitlint': 16.2.3
       '@solid-primitives/event-listener': 2.1.0
       '@solid-primitives/keyed': 1.0.0
-      '@solid-primitives/props': 2.1.4
-      '@solid-primitives/utils': 2.0.3
+      '@solid-primitives/props': 2.1.7
+      '@solid-primitives/utils': 2.1.0
       '@testing-library/dom': 8.13.0
       '@testing-library/jest-dom': 5.16.4
       '@testing-library/user-event': 14.1.1
@@ -59,8 +59,8 @@ importers:
       '@commitlint/cz-commitlint': 16.2.3_m5bc3bhc52kndzzuhyfjcrpiqq
       '@solid-primitives/event-listener': 2.1.0_solid-js@1.4.4
       '@solid-primitives/keyed': 1.0.0_solid-js@1.4.4
-      '@solid-primitives/props': 2.1.4_solid-js@1.4.4
-      '@solid-primitives/utils': 2.0.3_solid-js@1.4.4
+      '@solid-primitives/props': 2.1.7_solid-js@1.4.4
+      '@solid-primitives/utils': 2.1.0_solid-js@1.4.4
       '@testing-library/dom': 8.13.0
       '@testing-library/jest-dom': 5.16.4
       '@testing-library/user-event': 14.1.1_tlwynutqiyp5mns3woioasuxnq
@@ -331,6 +331,14 @@ importers:
       '@solid-aria/i18n': link:../i18n
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/label': link:../label
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+
+  packages/select:
+    specifiers:
+      '@solid-aria/types': workspace:^
+      '@solid-aria/utils': workspace:^
+    dependencies:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
 
@@ -2465,12 +2473,12 @@ packages:
       solid-js: ^1.4.0
     dev: false
 
-  /@solid-primitives/props/2.1.4_solid-js@1.4.4:
-    resolution: {integrity: sha512-tq9kGdZogo6mgWKmPjtekAb875DMBz8hzKMdreVlrMCVDZwmAJMtYX71LQG7FVewLgMTF4O/ak0FVFyQlX6rCQ==}
+  /@solid-primitives/props/2.1.7_solid-js@1.4.4:
+    resolution: {integrity: sha512-Sg+JUK+v43x4fe5yNYgKS0IkXG0pkLeCrO7SGKEaOtXSH2NZXthY/OQCSiv5rhM17Z7NoA6E9Q8CjQDrcFUblg==}
     peerDependencies:
       solid-js: ^1.3.0
     dependencies:
-      '@solid-primitives/utils': 2.0.3_solid-js@1.4.4
+      '@solid-primitives/utils': 2.1.0_solid-js@1.4.4
       solid-js: 1.4.4
     dev: true
 
@@ -2482,8 +2490,8 @@ packages:
       solid-js: 1.4.4
     dev: true
 
-  /@solid-primitives/utils/2.0.3_solid-js@1.4.4:
-    resolution: {integrity: sha512-dIv339WSJZ8C50kcJ7Ys5aLPSs59+GMsSrtJ/bGnA38gkLgmKry1XIZJLAUVz/uiOiZ661GUJ+IMngsqG8u09g==}
+  /@solid-primitives/utils/2.1.0_solid-js@1.4.4:
+    resolution: {integrity: sha512-QOiYt7CG/q8zV22C6J630YdnUf+365csXWQbMVFkY5YsfvpfFskI+Sh6Ge7FfD8aQxTPJ7PpqtlN0p5wVuiiAw==}
     peerDependencies:
       solid-js: ^1.4.1
     dependencies:

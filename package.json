@@ -22,7 +22,7 @@
     "release": "turbo run build && changeset publish",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
-    "version-packages": "changeset version"
+    "version": "changeset version"
   },
   "lint-staged": {
     "*.{md,json}": [
@@ -49,8 +49,8 @@
     "@commitlint/cz-commitlint": "16.2.3",
     "@solid-primitives/event-listener": "2.1.0",
     "@solid-primitives/keyed": "1.0.0",
-    "@solid-primitives/props": "2.1.4",
-    "@solid-primitives/utils": "2.0.3",
+    "@solid-primitives/props": "2.1.7",
+    "@solid-primitives/utils": "2.1.0",
     "@testing-library/dom": "8.13.0",
     "@testing-library/jest-dom": "5.16.4",
     "@testing-library/user-event": "14.1.1",
