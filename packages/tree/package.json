@@ -1,8 +1,8 @@
 {
-  "name": "@solid-aria/menu",
+  "name": "@solid-aria/tree",
   "version": "0.0.0",
   "private": false,
-  "description": "Primitives for building accessible menu component.",
+  "description": "Primitives for managing tree-like collections.",
   "keywords": [
     "solid",
     "aria",
@@ -11,7 +11,7 @@
     "system",
     "components"
   ],
-  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/menu#readme",
+  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/tree#readme",
   "bugs": {
     "url": "https://github.com/solidjs-community/solid-aria/issues"
   },
@@ -39,12 +39,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/button": "workspace:^",
     "@solid-aria/collection": "workspace:^",
-    "@solid-aria/interactions": "workspace:^",
-    "@solid-aria/overlays": "workspace:^",
     "@solid-aria/selection": "workspace:^",
-    "@solid-aria/tree": "workspace:^",
     "@solid-aria/types": "workspace:^",
     "@solid-aria/utils": "workspace:^"
   },
@@ -56,7 +52,7 @@
     "access": "public"
   },
   "primitive": {
-    "name": "menu",
+    "name": "tree",
     "stage": 0,
     "list": [],
     "category": ""

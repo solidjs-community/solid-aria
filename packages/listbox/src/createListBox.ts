@@ -15,18 +15,16 @@
  * governing permissions and limitations under the License.
  */
 
-import { CollectionBase } from "@solid-aria/collection";
 import { createFocusWithin } from "@solid-aria/interactions";
 import { AriaLabelProps, createLabel } from "@solid-aria/label";
-import { createListState, ListState } from "@solid-aria/list";
+import { createListState, CreateListStateProps, ListState } from "@solid-aria/list";
 import { createSelectableList, CreateSelectableListProps } from "@solid-aria/selection";
 import {
   AriaLabelingProps,
   DOMProps,
   FocusStrategy,
   FocusWithinEvents,
-  KeyboardDelegate,
-  MultipleSelection
+  KeyboardDelegate
 } from "@solid-aria/types";
 import { createId, filterDOMProps } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
@@ -42,8 +40,7 @@ import {
 } from "solid-js";
 
 export interface AriaListBoxProps
-  extends CollectionBase,
-    MultipleSelection,
+  extends CreateListStateProps,
     FocusWithinEvents,
     DOMProps,
     AriaLabelingProps {
@@ -152,12 +149,20 @@ export function createListBox<T extends HTMLElement>(
 
   const { labelProps, fieldProps } = createLabel(createLabelProps);
 
-  const listBoxProps = combineProps(domProps, focusWithinProps, fieldProps, listProps, {
+  const baseListBoxProps: JSX.HTMLAttributes<any> = {
     role: "listbox",
     get "aria-multiselectable"() {
       return state.selectionManager().selectionMode() === "multiple" ? true : undefined;
     }
-  } as JSX.HTMLAttributes<any>);
+  };
+
+  const listBoxProps = combineProps(
+    domProps,
+    focusWithinProps,
+    fieldProps,
+    listProps,
+    baseListBoxProps
+  );
 
   const context: ListBoxContextValue = {
     state: () => state,

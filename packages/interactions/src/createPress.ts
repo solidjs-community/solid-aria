@@ -91,22 +91,26 @@ interface PressResponderContextValue extends CreatePressProps {
 
 export const PressResponderContext = createContext<PressResponderContextValue>();
 
-function usePressResponderContext<RefElement extends HTMLElement>(
+function usePressResponderContext<T extends HTMLElement>(
   props: CreatePressProps,
-  ref?: Accessor<RefElement | undefined>
+  ref?: Accessor<T | undefined>
 ): CreatePressProps {
   // Consume context from <PressResponder> and merge with props.
   const context = useContext(PressResponderContext);
 
-  if (context) {
-    const [, contextProps] = splitProps(context, ["register"]);
-
-    props = combineProps(contextProps, props) as CreatePressProps;
-
-    context.register();
+  if (!context) {
+    return props;
   }
 
-  createSyncRef(context, ref);
+  const [, contextProps] = splitProps(context, ["register", "ref"]);
+
+  props = combineProps(contextProps, props);
+
+  context.register();
+
+  if (ref) {
+    createSyncRef(context, ref);
+  }
 
   return props;
 }

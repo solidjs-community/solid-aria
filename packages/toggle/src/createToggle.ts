@@ -29,10 +29,11 @@ import { filterDOMProps } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
 import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
 
-import { createToggleState, ToggleState } from "./createToggleState";
+import { createToggleState, CreateToggleStateProps, ToggleState } from "./createToggleState";
 
 export interface AriaToggleProps
-  extends InputBase,
+  extends Omit<CreateToggleStateProps, "isReadOnly">,
+    InputBase,
     Validation,
     FocusableProps,
     FocusableDOMProps,
@@ -49,16 +50,6 @@ export interface AriaToggleProps
   children?: JSX.Element;
 
   /**
-   * Whether the element should be selected (uncontrolled).
-   */
-  defaultSelected?: boolean;
-
-  /**
-   * Whether the element should be selected (controlled).
-   */
-  isSelected?: boolean;
-
-  /**
    * The value of the input element, used when submitting an HTML form.
    * See [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#htmlattrdefvalue).
    */
@@ -69,11 +60,6 @@ export interface AriaToggleProps
    * See [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#htmlattrdefname).
    */
   name?: string;
-
-  /**
-   * Handler that is called when the element's selection state changes.
-   */
-  onChange?: (isSelected: boolean) => void;
 }
 
 export interface ToggleAria {
@@ -136,6 +122,7 @@ export function createToggle(
   const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
 
   const baseToggleProps: JSX.InputHTMLAttributes<any> = {
+    type: "checkbox",
     get "aria-invalid"() {
       return props.validationState === "invalid" || undefined;
     },
@@ -160,7 +147,6 @@ export function createToggle(
     get name() {
       return props.name;
     },
-    type: "checkbox",
     onChange
   };
 

@@ -108,7 +108,7 @@ export class CollectionBuilder {
       index: partialNode.index ?? 0,
       rendered: () => partialNode.rendered?.(),
       textValue: () => partialNode.textValue?.() ?? "",
-      "aria-label": partialNode["aria-label"],
+      "aria-label": () => partialNode["aria-label"]?.(),
       wrapper: partialNode.wrapper,
       shouldInvalidate: partialNode.shouldInvalidate,
       hasChildNodes: partialNode.hasChildNodes ?? false,
