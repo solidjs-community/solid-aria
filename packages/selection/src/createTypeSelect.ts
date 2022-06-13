@@ -15,49 +15,62 @@
  * governing permissions and limitations under the License.
  */
 
-import { Item } from "@solid-aria/collection";
-import { DOMElements } from "@solid-aria/types";
+import { ItemKey, KeyboardDelegate } from "@solid-aria/types";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createMemo, createSignal, JSX } from "solid-js";
+import { createSignal, JSX } from "solid-js";
 
-import { ListFocusManager } from "./types";
+import { MultipleSelectionManager } from "./types";
 
 interface CreateTypeSelectProps {
   /**
-   * An interface that implements behavior for keyboard focus movement in a list.
+   * Whether the type to select should be disabled.
    */
-  focusManager: MaybeAccessor<ListFocusManager>;
+  isDisabled?: MaybeAccessor<boolean | undefined>;
 
   /**
-   * Callback invoked when an item is focused by typing.
+   * A delegate that returns collection item keys with respect to visual layout.
    */
-  onTypeSelect?: (item: Item) => void;
+  keyboardDelegate: MaybeAccessor<KeyboardDelegate>;
+
+  /**
+   * An interface for reading and updating multiple selection state.
+   */
+  selectionManager: MaybeAccessor<MultipleSelectionManager>;
+
+  /**
+   * Called when an item is focused by typing.
+   */
+  onTypeSelect?: (key: ItemKey) => void;
 }
 
-interface TypeSelectAria<T extends DOMElements> {
+interface TypeSelectAria {
   /**
    * Props to be spread on the owner of the options.
    */
-  typeSelectProps: Accessor<JSX.IntrinsicElements[T]>;
+  typeSelectProps: JSX.HTMLAttributes<any>;
 }
 
 /**
  * Handles typeahead interactions with collections.
  */
-export function createTypeSelect<T extends DOMElements = "ul">(
-  props: CreateTypeSelectProps
-): TypeSelectAria<T> {
+export function createTypeSelect(props: CreateTypeSelectProps): TypeSelectAria {
   const [search, setSearch] = createSignal("");
   const [timeoutId, setTimeoutId] = createSignal(-1);
 
-  const onKeyDown = (event: KeyboardEvent) => {
-    window.clearTimeout(timeoutId());
+  const onKeyDown = (e: KeyboardEvent) => {
+    if (access(props.isDisabled)) {
+      return;
+    }
 
-    const focusManager = access(props.focusManager);
+    const delegate = access(props.keyboardDelegate);
+    const manager = access(props.selectionManager);
 
-    const character = getStringForKey(event.key);
+    if (!delegate.getKeyForSearch) {
+      return;
+    }
 
-    if (!character || event.ctrlKey || event.metaKey) {
+    const character = getStringForKey(e.key);
+    if (!character || e.ctrlKey || e.metaKey) {
       return;
     }
 
@@ -66,32 +79,34 @@ export function createTypeSelect<T extends DOMElements = "ul">(
     // Trimming is to account for the case of pressing the Spacebar more than once,
     // which should cycle through the selection/deselection of the focused item.
     if (character === " " && search().trim().length > 0) {
-      event.preventDefault();
-      event.stopPropagation();
+      e.preventDefault();
+      e.stopPropagation();
     }
 
-    // Clear the search after the timeout.
-    const searchTimeoutId = window.setTimeout(() => {
-      setSearch("");
-    }, 500);
+    const newSearch = setSearch(prev => (prev += character));
 
-    setTimeoutId(searchTimeoutId);
+    // Use the delegate to find a key to focus.
+    // Prioritize items after the currently focused item, falling back to searching the whole list.
+    let key = delegate.getKeyForSearch?.(newSearch, manager.focusedKey());
 
-    // Concat the new char to the previous search.
-    setSearch(prev => (prev += character));
-
-    const focusedItem = focusManager.focusItemForSearch(search());
-
-    if (focusedItem) {
-      props.onTypeSelect?.(focusedItem);
+    // If no key found, search from the top.
+    if (key == null) {
+      key = delegate.getKeyForSearch(newSearch);
     }
+
+    if (key != null) {
+      manager.setFocusedKey(key);
+      props.onTypeSelect?.(key);
+    }
+
+    clearTimeout(timeoutId());
+
+    setTimeoutId(window.setTimeout(() => setSearch(""), 500));
   };
 
-  const typeSelectProps = createMemo(() => {
-    return { onKeyDown } as JSX.IntrinsicElements[T];
-  });
-
-  return { typeSelectProps };
+  return {
+    typeSelectProps: { onKeyDown }
+  };
 }
 
 function getStringForKey(key: string) {

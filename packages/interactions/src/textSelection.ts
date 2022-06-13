@@ -15,7 +15,8 @@
  * governing permissions and limitations under the License.
  */
 
-import { isIOS, runAfterTransition } from "@solid-aria/utils";
+import { runAfterTransition } from "@solid-aria/utils";
+import { isIOS } from "@solid-primitives/platform";
 
 // Safari on iOS starts selecting text on long press. The only way to avoid this, it seems,
 // is to add user-select: none to the entire page. Adding it to the pressable element prevents
@@ -39,7 +40,7 @@ let savedUserSelect = "";
 const modifiedElementMap = new WeakMap<HTMLElement, string>();
 
 export function disableTextSelection(target?: HTMLElement) {
-  if (isIOS()) {
+  if (isIOS) {
     if (state === "default") {
       savedUserSelect = document.documentElement.style.webkitUserSelect;
       document.documentElement.style.webkitUserSelect = "none";
@@ -55,7 +56,7 @@ export function disableTextSelection(target?: HTMLElement) {
 }
 
 export function restoreTextSelection(target?: HTMLElement) {
-  if (isIOS()) {
+  if (isIOS) {
     // If the state is already default, there's nothing to do.
     // If it is restoring, then there's no need to queue a second restore.
     if (state !== "disabled") {

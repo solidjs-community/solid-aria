@@ -1,0 +1,60 @@
+{
+  "name": "@solid-aria/list",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Primitives for managing list collections.",
+  "keywords": [
+    "solid",
+    "aria",
+    "headless",
+    "design",
+    "system",
+    "components"
+  ],
+  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/list#readme",
+  "bugs": {
+    "url": "https://github.com/solidjs-community/solid-aria/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solidjs-community/solid-aria.git"
+  },
+  "license": "MIT",
+  "author": "Fabien Marie-Louise <fabienml.dev@gmail.com>",
+  "contributors": [],
+  "sideEffects": false,
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "dev": "vite serve dev --host",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch --passWithNoTests",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@solid-aria/collection": "workspace:^",
+    "@solid-aria/selection": "workspace:^",
+    "@solid-aria/types": "workspace:^",
+    "@solid-aria/utils": "workspace:^"
+  },
+  "peerDependencies": {
+    "@solid-primitives/utils": "^2.0.1",
+    "solid-js": "^1.4.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "primitive": {
+    "name": "list",
+    "stage": 0,
+    "list": [],
+    "category": ""
+  }
+}

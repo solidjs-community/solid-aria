@@ -380,7 +380,7 @@ function createFocusContainment(scopeRef: Accessor<HTMLElement[]>, contain: Acce
     }
   };
 
-  const onFocus = (e: FocusEvent) => {
+  const onFocusIn = (e: FocusEvent) => {
     const scope = scopeRef();
 
     // If focusing an element in a child scope of the currently active scope, the child becomes active.
@@ -401,7 +401,7 @@ function createFocusContainment(scopeRef: Accessor<HTMLElement[]>, contain: Acce
     }
   };
 
-  const onBlur = (e: FocusEvent) => {
+  const onFocusOut = (e: FocusEvent) => {
     const scope = scopeRef();
 
     // Firefox doesn't shift focus back to the Dialog properly without this
@@ -423,17 +423,17 @@ function createFocusContainment(scopeRef: Accessor<HTMLElement[]>, contain: Acce
     }
 
     document.addEventListener("keydown", onKeyDown, false);
-    document.addEventListener("focusin", onFocus, false);
+    document.addEventListener("focusin", onFocusIn, false);
 
-    scope.forEach(element => element.addEventListener("focusin", onFocus, false));
-    scope.forEach(element => element.addEventListener("focusout", onBlur, false));
+    scope.forEach(element => element.addEventListener("focusin", onFocusIn, false));
+    scope.forEach(element => element.addEventListener("focusout", onFocusOut, false));
 
     onCleanup(() => {
       document.removeEventListener("keydown", onKeyDown, false);
-      document.removeEventListener("focusin", onFocus, false);
+      document.removeEventListener("focusin", onFocusIn, false);
 
-      scope.forEach(element => element.removeEventListener("focusin", onFocus, false));
-      scope.forEach(element => element.removeEventListener("focusout", onBlur, false));
+      scope.forEach(element => element.removeEventListener("focusin", onFocusIn, false));
+      scope.forEach(element => element.removeEventListener("focusout", onFocusOut, false));
     });
   });
 

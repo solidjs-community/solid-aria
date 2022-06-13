@@ -26,9 +26,9 @@ describe("createLink", () => {
 
       const { linkProps } = createLink({}, () => ref);
 
-      expect(linkProps().role).toBeUndefined();
-      expect(linkProps().tabIndex).toBeUndefined();
-      expect(typeof linkProps().onKeyDown).toBe("function");
+      expect(linkProps.role).toBeUndefined();
+      expect(linkProps.tabIndex).toBeUndefined();
+      expect(typeof linkProps.onKeyDown).toBe("function");
 
       dispose();
     });
@@ -40,8 +40,8 @@ describe("createLink", () => {
 
       const { linkProps } = createLink({ elementType: "div" }, () => ref);
 
-      expect(linkProps().role).toBe("link");
-      expect(linkProps().tabIndex).toBe(0);
+      expect(linkProps.role).toBe("link");
+      expect(linkProps.tabIndex).toBe(0);
 
       dispose();
     });
@@ -53,10 +53,10 @@ describe("createLink", () => {
 
       const { linkProps } = createLink({ elementType: "span", isDisabled: true }, () => ref);
 
-      expect(linkProps().role).toBe("link");
-      expect(linkProps()["aria-disabled"]).toBe(true);
-      expect(linkProps().tabIndex).toBeUndefined();
-      expect(typeof linkProps().onKeyDown).toBe("function");
+      expect(linkProps.role).toBe("link");
+      expect(linkProps["aria-disabled"]).toBe(true);
+      expect(linkProps.tabIndex).toBeUndefined();
+      expect(typeof linkProps.onKeyDown).toBe("function");
 
       dispose();
     });

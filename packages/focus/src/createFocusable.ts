@@ -19,13 +19,11 @@ import {
   createFocus,
   CreateFocusProps,
   createKeyboard,
-  CreateKeyboardProps,
-  FocusElementProps,
-  KeyboardElementProps
+  CreateKeyboardProps
 } from "@solid-aria/interactions";
 import { combineProps } from "@solid-primitives/props";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createMemo, createSignal, onMount } from "solid-js";
+import { Accessor, createSignal, JSX, onMount } from "solid-js";
 
 export interface CreateFocusableProps extends CreateFocusProps, CreateKeyboardProps {
   /**
@@ -47,14 +45,11 @@ export interface CreateFocusableProps extends CreateFocusProps, CreateKeyboardPr
   excludeFromTabOrder?: MaybeAccessor<boolean | undefined>;
 }
 
-export type FocusableElementProps = FocusElementProps &
-  KeyboardElementProps & { tabIndex?: number };
-
 export interface FocusableResult {
   /**
    * Props to spread onto the target element.
    */
-  focusableProps: Accessor<FocusableElementProps>;
+  focusableProps: JSX.HTMLAttributes<any>;
 }
 
 // TODO: add all the focus provider stuff when needed
@@ -71,20 +66,12 @@ export function createFocusable(
   const { focusProps } = createFocus(props);
   const { keyboardProps } = createKeyboard(props);
 
-  // const interactionProps = createMemo(() => {
-  //   return props.isDisabled ? {} : useFocusableContext(ref);
-  // });
-
-  const focusableProps: Accessor<FocusableElementProps> = createMemo(() => {
-    return combineProps(
-      focusProps(),
-      keyboardProps(),
-      {
-        tabIndex: access(props.excludeFromTabOrder) && !access(props.isDisabled) ? -1 : undefined
-      }
-      // interactionProps()
-    );
-  });
+  const focusableProps = {
+    ...combineProps(focusProps, keyboardProps),
+    get tabIndex() {
+      return access(props.excludeFromTabOrder) && !access(props.isDisabled) ? -1 : undefined;
+    }
+  };
 
   onMount(() => {
     autoFocus() && access(ref)?.focus();

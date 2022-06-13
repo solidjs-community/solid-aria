@@ -52,7 +52,7 @@ function Link(props: LinkProps) {
   const { linkProps } = createLink(props, () => ref);
 
   return (
-    <a {...linkProps()} ref={ref} href={props.href} target={props.target} style={{ color: "blue" }}>
+    <a {...linkProps} ref={ref} href={props.href} target={props.target} style={{ color: "blue" }}>
       {props.children}
     </a>
   );
@@ -88,7 +88,7 @@ function Link(props: LinkProps) {
 
   return (
     <span
-      {...linkProps()}
+      {...linkProps}
       ref={ref}
       style={{
         color: isPressed() ? "blue" : "dodgerblue",
@@ -123,7 +123,7 @@ function Link(props: LinkProps) {
 
   return (
     <a
-      {...linkProps()}
+      {...linkProps}
       ref={ref}
       href={props.href}
       target={props.target}

@@ -19,7 +19,6 @@ import { AriaLabelProps, createLabel } from "@solid-aria/label";
 import {
   AriaLabelingProps,
   AriaValidationProps,
-  DOMElements,
   DOMProps,
   InputBase,
   LabelableProps,
@@ -40,20 +39,6 @@ import {
 
 import { CheckboxGroupState, createCheckboxGroupState } from "./createCheckboxGroupState";
 
-interface CheckboxGroupContextValue {
-  /**
-   * State for the checkbox group, as returned by `createCheckboxGroupState`.
-   */
-  state: CheckboxGroupState;
-
-  /**
-   * The name of the CheckboxGroup, used when submitting an HTML form.
-   */
-  name: Accessor<string | undefined>;
-}
-
-const CheckboxGroupContext = createContext<CheckboxGroupContextValue>();
-
 export interface AriaCheckboxGroupProps
   extends ValueBase<string[]>,
     InputBase,
@@ -72,10 +57,7 @@ export interface AriaCheckboxGroupProps
   name?: string;
 }
 
-interface CheckboxGroupAria<
-  GroupElementType extends DOMElements,
-  LabelElementType extends DOMElements
-> {
+interface CheckboxGroupAria {
   /**
    * Provide the checkbox group state to descendant elements.
    */
@@ -84,12 +66,12 @@ interface CheckboxGroupAria<
   /**
    * Props for the checkbox group wrapper element.
    */
-  groupProps: Accessor<JSX.IntrinsicElements[GroupElementType]>;
+  groupProps: JSX.HTMLAttributes<any>;
 
   /**
    * Props for the checkbox group's visible label (if any).
    *  */
-  labelProps: Accessor<JSX.IntrinsicElements[LabelElementType]>;
+  labelProps: JSX.HTMLAttributes<any>;
 
   /**
    * State for the checkbox group, as returned by `createCheckboxGroupState`.
@@ -102,10 +84,7 @@ interface CheckboxGroupAria<
  * Checkbox groups allow users to select multiple items from a list of options.
  * @param props - Props for the checkbox group.
  */
-export function createCheckboxGroup<
-  GroupElementType extends DOMElements = "div",
-  LabelElementType extends DOMElements = "span"
->(props: AriaCheckboxGroupProps): CheckboxGroupAria<GroupElementType, LabelElementType> {
+export function createCheckboxGroup(props: AriaCheckboxGroupProps): CheckboxGroupAria {
   const state = createCheckboxGroupState(props);
 
   const defaultCreateLabelProps: AriaLabelProps = {
@@ -116,19 +95,23 @@ export function createCheckboxGroup<
 
   const createLabelProps = mergeProps(defaultCreateLabelProps, props);
 
-  const { labelProps, fieldProps } = createLabel<LabelElementType>(createLabelProps);
+  const { labelProps, fieldProps } = createLabel(createLabelProps);
 
-  const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
+  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
 
-  const groupProps = createMemo(() => {
-    return combineProps(domProps(), {
+  const baseGroupProps = mergeProps(
+    {
       role: "group",
-      "aria-disabled": props.isDisabled || undefined,
-      ...fieldProps()
-    }) as JSX.IntrinsicElements[GroupElementType];
-  });
+      get "aria-disabled"() {
+        return props.isDisabled || undefined;
+      }
+    } as JSX.HTMLAttributes<any>,
+    fieldProps
+  );
 
-  const name = createMemo(() => props.name);
+  const groupProps = combineProps(domProps, baseGroupProps);
+
+  const name = () => props.name;
 
   const CheckboxGroupProvider: FlowComponent = props => {
     return createComponent(CheckboxGroupContext.Provider, {
@@ -141,6 +124,20 @@ export function createCheckboxGroup<
 
   return { CheckboxGroupProvider, groupProps, labelProps, state };
 }
+
+interface CheckboxGroupContextValue {
+  /**
+   * State for the checkbox group, as returned by `createCheckboxGroupState`.
+   */
+  state: CheckboxGroupState;
+
+  /**
+   * The name of the CheckboxGroup, used when submitting an HTML form.
+   */
+  name: Accessor<string | undefined>;
+}
+
+const CheckboxGroupContext = createContext<CheckboxGroupContextValue>();
 
 export function useCheckboxGroupContext() {
   const context = useContext(CheckboxGroupContext);

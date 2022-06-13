@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/i18n",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "private": false,
   "description": "Primitives for dealing with locale and layout direction.",
   "keywords": [
@@ -44,7 +44,7 @@
   },
   "peerDependencies": {
     "@solid-primitives/utils": "^2.0.1",
-    "solid-js": "^1.4.3"
+    "solid-js": "^1.4.4"
   },
   "publishConfig": {
     "access": "public"

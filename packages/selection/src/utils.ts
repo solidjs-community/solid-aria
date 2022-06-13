@@ -15,14 +15,22 @@
  * governing permissions and limitations under the License.
  */
 
-import { isMac } from "@solid-aria/utils";
+import { isAppleDevice, isMac } from "@solid-primitives/platform";
 
-/**
- * Returns whether the `ctrl` key is pressed or not.
- * If MacOS check for the `meta` key instead.
- */
-export function isCtrlKeyPressed(e: KeyboardEvent) {
-  if (isMac()) {
+interface Event {
+  altKey: boolean;
+  ctrlKey: boolean;
+  metaKey: boolean;
+}
+
+export function isNonContiguousSelectionModifier(e: Event) {
+  // Ctrl + Arrow Up/Arrow Down has a system wide meaning on macOS, so use Alt instead.
+  // On Windows and Ubuntu, Alt + Space has a system wide meaning.
+  return isAppleDevice ? e.altKey : e.ctrlKey;
+}
+
+export function isCtrlKeyPressed(e: Event) {
+  if (isMac) {
     return e.metaKey;
   }
 

@@ -40,8 +40,8 @@ function ColorField(props: ColorFieldProps) {
 
   return (
     <>
-      <label {...labelProps()}>{props.label}</label>
-      <select {...fieldProps()}>
+      <label {...labelProps}>{props.label}</label>
+      <select {...fieldProps}>
         <option>Indigo</option>
         <option>Maroon</option>
         <option>Chartreuse</option>

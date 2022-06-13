@@ -17,7 +17,6 @@
 
 import { KeyboardEvents } from "@solid-aria/types";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createMemo } from "solid-js";
 
 export interface CreateKeyboardProps extends KeyboardEvents {
   /**
@@ -26,31 +25,23 @@ export interface CreateKeyboardProps extends KeyboardEvents {
   isDisabled?: MaybeAccessor<boolean | undefined>;
 }
 
-export interface KeyboardElementProps {
-  /**
-   * Handler that is called when a key is pressed.
-   */
-  onKeyDown: KeyboardEvents["onKeyDown"];
-
-  /**
-   * Handler that is called when a key is released.
-   */
-  onKeyUp: KeyboardEvents["onKeyUp"];
-}
+type KeyboardProps = Required<Pick<KeyboardEvents, "onKeyDown" | "onKeyUp">>;
 
 export interface KeyboardResult {
   /**
    * Props to spread onto the target element.
    */
-  keyboardProps: Accessor<KeyboardElementProps>;
+  keyboardProps: KeyboardProps;
 }
 
 /**
  * Handles keyboard events for the target.
  */
 export function createKeyboard(props: CreateKeyboardProps): KeyboardResult {
+  const isDisabled = () => access(props.isDisabled) ?? false;
+
   const onKeyDown: CreateKeyboardProps["onKeyDown"] = event => {
-    if (access(props.isDisabled)) {
+    if (isDisabled()) {
       return;
     }
 
@@ -58,17 +49,17 @@ export function createKeyboard(props: CreateKeyboardProps): KeyboardResult {
   };
 
   const onKeyUp: CreateKeyboardProps["onKeyUp"] = event => {
-    if (access(props.isDisabled)) {
+    if (isDisabled()) {
       return;
     }
 
     props.onKeyUp?.(event);
   };
 
-  const keyboardProps: Accessor<KeyboardElementProps> = createMemo(() => ({
+  const keyboardProps: KeyboardProps = {
     onKeyDown,
     onKeyUp
-  }));
+  };
 
   return { keyboardProps };
 }

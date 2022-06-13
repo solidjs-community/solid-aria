@@ -29,10 +29,11 @@ import { filterDOMProps } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
 import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
 
-import { createToggleState, ToggleState } from "./createToggleState";
+import { createToggleState, CreateToggleStateProps, ToggleState } from "./createToggleState";
 
 export interface AriaToggleProps
-  extends InputBase,
+  extends Omit<CreateToggleStateProps, "isReadOnly">,
+    InputBase,
     Validation,
     FocusableProps,
     FocusableDOMProps,
@@ -49,16 +50,6 @@ export interface AriaToggleProps
   children?: JSX.Element;
 
   /**
-   * Whether the element should be selected (uncontrolled).
-   */
-  defaultSelected?: boolean;
-
-  /**
-   * Whether the element should be selected (controlled).
-   */
-  isSelected?: boolean;
-
-  /**
    * The value of the input element, used when submitting an HTML form.
    * See [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#htmlattrdefvalue).
    */
@@ -69,18 +60,13 @@ export interface AriaToggleProps
    * See [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#htmlattrdefname).
    */
   name?: string;
-
-  /**
-   * Handler that is called when the element's selection state changes.
-   */
-  onChange?: (isSelected: boolean) => void;
 }
 
 export interface ToggleAria {
   /**
    * Props to be spread on the input element.
    */
-  inputProps: Accessor<JSX.InputHTMLAttributes<HTMLInputElement>>;
+  inputProps: JSX.InputHTMLAttributes<HTMLInputElement>;
 
   /**
    * State for the toggle element, as returned by `createToggleState`.
@@ -102,6 +88,7 @@ export function createToggle(
     validationState: "valid"
   };
 
+  // eslint-disable-next-line solid/reactivity
   props = mergeProps(defaultProps, props);
 
   const state = createToggleState(props);
@@ -131,27 +118,39 @@ export function createToggle(
   });
 
   const { focusableProps } = createFocusable(props, inputRef);
-  const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
 
-  const inputProps = createMemo(() => {
-    return combineProps(
-      domProps(),
-      {
-        "aria-invalid": props.validationState === "invalid" || undefined,
-        "aria-errormessage": props["aria-errormessage"],
-        "aria-controls": props["aria-controls"],
-        "aria-readonly": props.isReadOnly || undefined,
-        "aria-required": props.isRequired || undefined,
-        disabled: props.isDisabled,
-        value: props.value,
-        name: props.name,
-        type: "checkbox",
-        onChange
-      },
-      pressProps(),
-      focusableProps()
-    ) as JSX.InputHTMLAttributes<HTMLInputElement>;
-  });
+  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
+
+  const baseToggleProps: JSX.InputHTMLAttributes<any> = {
+    type: "checkbox",
+    get "aria-invalid"() {
+      return props.validationState === "invalid" || undefined;
+    },
+    get "aria-errormessage"() {
+      return props["aria-errormessage"];
+    },
+    get "aria-controls"() {
+      return props["aria-controls"];
+    },
+    get "aria-readonly"() {
+      return props.isReadOnly || undefined;
+    },
+    get "aria-required"() {
+      return props.isRequired || undefined;
+    },
+    get disabled() {
+      return props.isDisabled;
+    },
+    get value() {
+      return props.value;
+    },
+    get name() {
+      return props.name;
+    },
+    onChange
+  };
+
+  const inputProps = combineProps(domProps, baseToggleProps, pressProps, focusableProps);
 
   return { inputProps, state };
 }

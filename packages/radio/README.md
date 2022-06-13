@@ -65,8 +65,8 @@ function RadioGroup(props: AriaRadioGroupProps) {
   const { RadioGroupProvider, groupProps, labelProps, state } = createRadioGroup(props);
 
   return (
-    <div {...groupProps()}>
-      <span {...labelProps()}>{props.label}</span>
+    <div {...groupProps}>
+      <span {...labelProps}>{props.label}</span>
       <RadioGroupProvider>{props.children}</RadioGroupProvider>
     </div>
   );
@@ -115,8 +115,8 @@ function RadioGroup(props: AriaRadioGroupProps) {
   const { RadioGroupProvider, groupProps, labelProps, state } = createRadioGroup(props);
 
   return (
-    <div {...groupProps()}>
-      <span {...labelProps()}>{props.label}</span>
+    <div {...groupProps}>
+      <span {...labelProps}>{props.label}</span>
       <RadioGroupProvider>{props.children}</RadioGroupProvider>
     </div>
   );
@@ -127,15 +127,15 @@ function Radio(props: AriaRadioProps) {
 
   const { inputProps, state } = createRadio(props, () => ref);
   const { isFocusVisible, focusProps } = createFocusRing();
-  const { visuallyHiddenProps } = createVisuallyHidden<"div">();
+  const { visuallyHiddenProps } = createVisuallyHidden();
 
   const isSelected = () => state.selectedValue() === props.value;
   const strokeWidth = () => (isSelected() ? 6 : 2);
 
   return (
     <label style={{ display: "flex", "align-items": "center" }}>
-      <div {...visuallyHiddenProps()}>
-        <input {...inputProps()} {...focusProps()} ref={ref} />
+      <div {...visuallyHiddenProps}>
+        <input {...inputProps} {...focusProps} ref={ref} />
       </div>
       <svg width={24} height={24} aria-hidden="true" style={{ "margin-right": 4 }}>
         <circle

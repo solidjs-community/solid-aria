@@ -16,10 +16,9 @@
  */
 
 import { AriaButtonProps } from "@solid-aria/button";
-import { DOMElements, ElementType } from "@solid-aria/types";
 import { createId } from "@solid-aria/utils";
-import { MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createMemo, JSX } from "solid-js";
+import { access, MaybeAccessor } from "@solid-primitives/utils";
+import { JSX } from "solid-js";
 
 import {
   createOverlayTriggerState,
@@ -27,26 +26,23 @@ import {
   OverlayTriggerState
 } from "./createOverlayTriggerState";
 
-interface CreateOverlayTriggerProps extends CreateOverlayTriggerStateProps {
+export interface AriaOverlayTriggerProps extends CreateOverlayTriggerStateProps {
   /**
    * Type of overlay that is opened by the trigger.
    */
-  type: MaybeAccessor<Exclude<AriaButtonProps["aria-haspopup"], boolean | undefined>>;
+  type: MaybeAccessor<"dialog" | "menu" | "listbox" | "tree" | "grid">;
 }
 
-interface OverlayTriggerAria<
-  TriggerElementType extends ElementType,
-  OverlayElementType extends DOMElements
-> {
+export interface OverlayTriggerAria {
   /**
    * Props for the trigger element.
    */
-  triggerProps: Accessor<AriaButtonProps<TriggerElementType>>;
+  triggerProps: AriaButtonProps;
 
   /**
    * Props for the overlay container element.
    */
-  overlayProps: Accessor<JSX.IntrinsicElements[OverlayElementType]>;
+  overlayProps: JSX.HTMLAttributes<any>;
 
   /**
    * State for the overlay trigger, as returned by `createOverlayTriggerState`.
@@ -58,37 +54,38 @@ interface OverlayTriggerAria<
  * Handles the behavior and accessibility for an overlay trigger, e.g. a button
  * that opens a popover, menu, or other overlay that is positioned relative to the trigger.
  */
-export function createOverlayTrigger<
-  TriggerElementType extends ElementType = "button",
-  OverlayElementType extends DOMElements = "div"
->(props: CreateOverlayTriggerProps): OverlayTriggerAria<TriggerElementType, OverlayElementType> {
+export function createOverlayTrigger(
+  props: AriaOverlayTriggerProps,
+  state: OverlayTriggerState = createOverlayTriggerState(props)
+): OverlayTriggerAria {
   const overlayId = createId();
 
-  const state = createOverlayTriggerState(props);
-
-  // Aria 1.1 supports multiple values for aria-haspopup other than just menus.
-  // https://www.w3.org/TR/wai-aria-1.1/#aria-haspopup
-  // However, we only add it for menus for now because screen readers often
-  // announce it as a menu even for other values.
-  const ariaHasPopup: Accessor<AriaButtonProps["aria-haspopup"]> = createMemo(() => {
-    if (props.type === "menu") {
-      return true;
+  const triggerProps: AriaButtonProps = {
+    // Aria 1.1 supports multiple values for aria-haspopup other than just menus.
+    // https://www.w3.org/TR/wai-aria-1.1/#aria-haspopup
+    // However, we only add it for menus for now because screen readers often
+    // announce it as a menu even for other values.
+    get "aria-haspopup"() {
+      switch (access(props.type)) {
+        case "menu":
+          return true;
+        case "listbox":
+          return "listbox";
+        default:
+          return;
+      }
+    },
+    get "aria-expanded"() {
+      return state.isOpen();
+    },
+    get "aria-controls"() {
+      return state.isOpen() ? overlayId : undefined;
     }
+  };
 
-    if (props.type === "listbox") {
-      return "listbox";
-    }
-  });
-
-  const triggerProps = createMemo(() => ({
-    "aria-haspopup": ariaHasPopup(),
-    "aria-expanded": state.isOpen(),
-    "aria-controls": state.isOpen() ? overlayId : undefined
-  }));
-
-  const overlayProps = createMemo(() => ({
+  const overlayProps = {
     id: overlayId
-  }));
+  };
 
   return { triggerProps, overlayProps, state };
 }

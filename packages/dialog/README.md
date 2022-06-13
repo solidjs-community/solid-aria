@@ -100,13 +100,13 @@ function ModalDialog(props: ModalDialogProps) {
         "align-items": "center",
         "justify-content": "center"
       }}
-      {...underlayProps()}
+      {...underlayProps}
     >
       <FocusScope contain restoreFocus autoFocus>
         <div
-          {...overlayProps()}
-          {...dialogProps()}
-          {...modalProps()}
+          {...overlayProps}
+          {...dialogProps}
+          {...modalProps}
           ref={ref}
           style={{
             background: "white",
@@ -114,7 +114,7 @@ function ModalDialog(props: ModalDialogProps) {
             padding: "30px"
           }}
         >
-          <h3 {...titleProps()} style={{ "margin-top": 0 }}>
+          <h3 {...titleProps} style={{ "margin-top": 0 }}>
             {props.title}
           </h3>
           {props.children}
@@ -149,7 +149,7 @@ function Example() {
 
   return (
     <>
-      <button {...openButtonProps()} ref={openButtonRef}>
+      <button {...openButtonProps} ref={openButtonRef}>
         Open Dialog
       </button>
       <Show when={state.isOpen()}>
@@ -160,7 +160,7 @@ function Example() {
               <input id="first-name" />
               <label for="last-name">Last Name:</label>
               <input id="last-name" />
-              <button {...closeButtonProps()} ref={closeButtonRef} style={{ "margin-top": "10px" }}>
+              <button {...closeButtonProps} ref={closeButtonRef} style={{ "margin-top": "10px" }}>
                 Submit
               </button>
             </form>

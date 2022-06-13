@@ -19,7 +19,7 @@ import { createToggleState, ToggleState } from "@solid-aria/toggle";
 import { ElementType } from "@solid-aria/types";
 import { combineProps } from "@solid-primitives/props";
 import { chain } from "@solid-primitives/utils";
-import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
+import { Accessor, JSX, mergeProps } from "solid-js";
 
 import { ButtonAria, createButton } from "./createButton";
 import { AriaToggleButtonProps } from "./types";
@@ -77,11 +77,17 @@ export function createToggleButton(
     onPress: chain([state.toggle, props.onPress])
   });
 
-  const { isPressed, buttonProps: baseButtonProps } = createButton(createButtonProps, ref);
+  const { isPressed, buttonProps } = createButton(createButtonProps, ref);
 
-  const buttonProps = createMemo(() => {
-    return combineProps(baseButtonProps, { "aria-pressed": state.isSelected() });
-  });
+  const toggleButtonProps: JSX.HTMLAttributes<any> = {
+    get "aria-pressed"() {
+      return state.isSelected();
+    }
+  };
 
-  return { buttonProps, isPressed, state };
+  return {
+    buttonProps: combineProps(buttonProps, toggleButtonProps),
+    isPressed,
+    state
+  };
 }

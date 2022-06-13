@@ -17,7 +17,7 @@
 
 import { FocusWithinEvents } from "@solid-aria/types";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createMemo, createSignal } from "solid-js";
+import { createSignal } from "solid-js";
 
 import { createSyntheticBlurEvent } from "./utils";
 
@@ -28,13 +28,13 @@ export interface CreateFocusWithinProps extends FocusWithinEvents {
   isDisabled?: MaybeAccessor<boolean | undefined>;
 }
 
-export type FocusWithinElementProps = Required<Pick<FocusWithinEvents, "onFocusIn" | "onFocusOut">>;
+type FocusWithinProps = Required<Pick<FocusWithinEvents, "onFocusIn" | "onFocusOut">>;
 
 export interface FocusWithinResult {
   /**
    * Props to spread onto the target element.
    */
-  focusWithinProps: Accessor<FocusWithinElementProps>;
+  focusWithinProps: FocusWithinProps;
 }
 
 /**
@@ -43,43 +43,45 @@ export interface FocusWithinResult {
 export function createFocusWithin(props: CreateFocusWithinProps): FocusWithinResult {
   const [isFocusWithin, setIsFocusWithin] = createSignal(false);
 
-  const onFocusOut: FocusWithinEvents["onFocusOut"] = event => {
-    if (access(props.isDisabled)) {
+  const isDisabled = () => access(props.isDisabled) ?? false;
+
+  const onFocusOut = (e: FocusEvent) => {
+    if (isDisabled()) {
       return;
     }
 
-    const currentTarget = event.currentTarget as Element | null;
-    const relatedTarget = event.relatedTarget as Element | null;
+    const currentTarget = e.currentTarget as Element | null;
+    const relatedTarget = e.relatedTarget as Element | null;
 
     // We don't want to trigger onFocusOut and then immediately onFocusIn again
     // when moving focus inside the element. Only trigger if the currentTarget doesn't
     // include the relatedTarget (where focus is moving).
     if (isFocusWithin() && !currentTarget?.contains(relatedTarget)) {
       setIsFocusWithin(false);
-      props.onFocusOut?.(event);
+      props.onFocusOut?.(e);
       props.onFocusWithinChange?.(false);
     }
   };
 
   const onSyntheticFocus = createSyntheticBlurEvent(onFocusOut);
 
-  const onFocusIn: FocusWithinEvents["onFocusIn"] = event => {
-    if (access(props.isDisabled)) {
+  const onFocusIn = (e: FocusEvent) => {
+    if (isDisabled()) {
       return;
     }
 
     if (!isFocusWithin()) {
-      props.onFocusIn?.(event);
+      props.onFocusIn?.(e);
       props.onFocusWithinChange?.(true);
       setIsFocusWithin(true);
-      onSyntheticFocus(event);
+      onSyntheticFocus(e);
     }
   };
 
-  const focusWithinProps: Accessor<FocusWithinElementProps> = createMemo(() => ({
+  const focusWithinProps: FocusWithinProps = {
     onFocusIn,
     onFocusOut
-  }));
+  };
 
   return { focusWithinProps };
 }

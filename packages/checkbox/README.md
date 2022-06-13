@@ -48,7 +48,7 @@ function Checkbox(props: AriaCheckboxProps) {
 
   return (
     <label>
-      <input {...inputProps()} ref={ref} />
+      <input {...inputProps} ref={ref} />
       <span>{props.children}</span>
     </label>
   );
@@ -82,12 +82,12 @@ function Checkbox(props: AriaCheckboxProps) {
 
   const { inputProps, state } = createCheckbox(props, () => ref);
   const { isFocusVisible, focusProps } = createFocusRing();
-  const { visuallyHiddenProps } = createVisuallyHidden<HTMLDivElement>();
+  const { visuallyHiddenProps } = createVisuallyHidden();
 
   return (
     <label style={{ display: "flex", "align-items": "center" }}>
-      <div {...visuallyHiddenProps()}>
-        <input {...inputProps()} {...focusProps()} ref={ref} />
+      <div {...visuallyHiddenProps}>
+        <input {...inputProps} {...focusProps} ref={ref} />
       </div>
       <svg width={24} height={24} aria-hidden="true" style={{ "margin-right": "4px" }}>
         <rect
@@ -161,8 +161,8 @@ function CheckboxGroup(props: AriaCheckboxGroupProps) {
   const { CheckboxGroupProvider, groupProps, labelProps, state } = createCheckboxGroup(props);
 
   return (
-    <div {...groupProps()}>
-      <span {...labelProps()}>{props.label}</span>
+    <div {...groupProps}>
+      <span {...labelProps}>{props.label}</span>
       <CheckboxGroupProvider>{props.children}</CheckboxGroupProvider>
     </div>
   );
@@ -183,7 +183,7 @@ function Checkbox(props: AriaCheckboxGroupItemProps) {
         color: (isDisabled() && "gray") || (isSelected() && "dodgerblue")
       }}
     >
-      <input {...inputProps()} ref={ref} />
+      <input {...inputProps} ref={ref} />
       {props.children}
     </label>
   );

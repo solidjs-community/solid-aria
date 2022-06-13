@@ -42,8 +42,8 @@ export function DismissButton(props: DismissButtonProps) {
   const onClick = () => local.onDismiss?.();
 
   return (
-    <div {...visuallyHiddenProps()}>
-      <button {...ariaLabelsProps()} tabIndex={-1} onClick={onClick} />
+    <div {...visuallyHiddenProps}>
+      <button {...ariaLabelsProps} tabIndex={-1} onClick={onClick} />
     </div>
   );
 }

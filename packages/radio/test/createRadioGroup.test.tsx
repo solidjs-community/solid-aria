@@ -23,8 +23,8 @@ function RadioGroup(props: AriaRadioGroupProps) {
   const { RadioGroupProvider, groupProps, labelProps } = createRadioGroup(props);
 
   return (
-    <div {...groupProps()}>
-      <span {...labelProps()}>{props.label}</span>
+    <div {...groupProps}>
+      <span {...labelProps}>{props.label}</span>
       <RadioGroupProvider>{props.children}</RadioGroupProvider>
     </div>
   );
@@ -37,7 +37,7 @@ function Radio(props: AriaRadioProps) {
 
   return (
     <label>
-      <input ref={ref} {...inputProps()} />
+      <input ref={ref} {...inputProps} />
       {props.children}
     </label>
   );

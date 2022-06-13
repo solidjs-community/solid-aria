@@ -15,96 +15,175 @@
  * governing permissions and limitations under the License.
  */
 
-import { Accessor } from "solid-js";
+import { ItemKey } from "@solid-aria/types";
+import { MaybeAccessor } from "@solid-primitives/utils";
+import { Accessor, JSX } from "solid-js";
 
-export interface Item {
-  /**
-   * A unique key for the item.
-   */
-  key: string;
+export type ItemType = "item" | "section" | "cell";
 
-  /**
-   * A string representation of the item's contents, used for features like typeahead.
-   */
-  textValue: string;
+export type ElementWrapper = (element: JSX.Element) => JSX.Element;
 
-  /**
-   * A ref to the root HTML element of the item.
-   */
-  ref: HTMLElement;
+export interface ItemProps {
+  /** A unique key for the item. */
+  key: ItemKey;
 
-  /**
-   * Whether the item is disabled.
-   */
-  isDisabled: Accessor<boolean>;
+  /** Rendered contents of the item or child items. */
+  children: JSX.Element;
+
+  /** Rendered contents of the item if `children` contains child items. */
+  title?: JSX.Element;
+
+  /** A string representation of the item's contents, used for features like typeahead. */
+  textValue?: string;
+
+  /** An accessibility label for this item. */
+  "aria-label"?: string;
+
+  /** Whether this item has children, even if not loaded yet. */
+  hasChildItems?: boolean;
+}
+
+export interface ItemMetaData {
+  /** A unique key for the item. */
+  key: Accessor<ItemKey>;
+
+  /** A generator for getting a `PartialNode` from the item metadata used to build a collection `Node`. */
+  getCollectionNode: Accessor<Generator<PartialNode>>;
+}
+
+export interface SectionProps {
+  /** A unique key for the section. */
+  key: ItemKey;
+
+  /** Rendered contents of the section, e.g. a header. */
+  title?: JSX.Element;
+
+  /** An accessibility label for the section. */
+  "aria-label"?: string;
+
+  /** Child items. */
+  children: JSX.Element;
+}
+
+export interface CollectionBase {
+  /** The contents of the collection. */
+  children: JSX.Element;
+
+  /** The item keys that are disabled. These items cannot be selected, focused, or otherwise interacted with. */
+  disabledKeys?: MaybeAccessor<Iterable<ItemKey> | undefined>;
 }
 
 /**
- * An interface for dealing with collection.
+ * A generic interface to access a readonly sequential
+ * collection of unique keyed items.
  */
-export interface Collection {
-  /**
-   * Get all items in the collection.
-   */
-  items: Accessor<Array<Item>>;
+export interface Collection<T> extends Iterable<T> {
+  /** The number of items in the collection. */
+  readonly size: number;
 
-  /**
-   * Get all keys in the collection.
-   */
-  keys: Accessor<Array<string>>;
+  /** Iterate over all keys in the collection. */
+  getKeys(): Iterable<ItemKey>;
 
-  /**
-   * Add an item to the collection.
-   */
-  addItem: (item: Item) => void;
+  /** Get an item by its key. */
+  getItem(key: ItemKey): T | undefined;
 
-  /**
-   * Remove a item from the collection.
-   */
-  removeItem: (key: string) => void;
+  /** Get an item by the index of its key. */
+  at(idx: number): T | undefined;
 
-  /**
-   * Find a item by its index.
-   */
-  findByIndex: (index: number) => Item | null;
+  /** Get the key that comes before the given key in the collection. */
+  getKeyBefore(key: ItemKey): ItemKey | undefined;
 
-  /**
-   * Find a item by its key.
-   */
-  findByKey: (key: string) => Item | null;
+  /** Get the key that comes after the given key in the collection. */
+  getKeyAfter(key: ItemKey): ItemKey | undefined;
 
-  /**
-   * Find an index by the item  key.
-   */
-  findIndexByKey: (key?: string) => number;
+  /** Get the first key in the collection. */
+  getFirstKey(): ItemKey | undefined;
 
-  /**
-   * Find an index based on a filter string, returns -1 if not found.
-   * If the filter is multiple iterations of the same letter (e.g "aaa"), then cycle through first-letter matches.
-   *
-   * @param filter - The filter string to search.
-   * @param collator - The collator to use for string comparison.
-   * @param startIndex - The index in the collection to start search from.
-   */
-  findIndexBySearch: (filter: string, collator: Intl.Collator, startIndex: number) => number;
+  /** Get the last key in the collection. */
+  getLastKey(): ItemKey | undefined;
+}
 
-  /**
-   * Get the first index in the collection, or -1 if empty.
-   */
-  getFirstIndex: () => number;
+export interface Node {
+  /** The type of item this node represents. */
+  type: ItemType;
 
-  /**
-   * Get the last index in the collection, or -1 if empty.
-   */
-  getLastIndex: () => number;
+  /** A unique key for the node. */
+  key: ItemKey;
 
-  /**
-   * Return whether the given index is the first one.
-   */
-  isFirstIndex: (index: number) => boolean;
+  /** The level of depth this node is at in the heirarchy. */
+  level: number;
 
-  /**
-   * Return whether the given index is the last one.
-   */
-  isLastIndex: (index: number) => boolean;
+  /** The index of this node within its parent. */
+  index: number;
+
+  /** Whether this item has children, even if not loaded yet. */
+  hasChildNodes: boolean;
+
+  /** The loaded children of this node. */
+  childNodes: Iterable<Node>;
+
+  /** The rendered contents of this node (e.g. JSX). */
+  rendered: Accessor<JSX.Element>;
+
+  /** A string value for this node, used for features like typeahead. */
+  textValue: Accessor<string>;
+
+  /** An accessibility label for this node. */
+  "aria-label": Accessor<string | undefined>;
+
+  /** A function that should be called to wrap the rendered node. */
+  wrapper?: ElementWrapper;
+
+  /** The key of the parent node. */
+  parentKey?: ItemKey;
+
+  /** The key of the node before this node. */
+  prevKey?: ItemKey;
+
+  /** The key of the node after this node. */
+  nextKey?: ItemKey;
+
+  /** Additional properties specific to a particular node type. */
+  props?: any;
+
+  /** @private */
+  shouldInvalidate?: (context: unknown) => boolean;
+}
+
+export interface PartialNode {
+  /** The type of item this node represents. */
+  type?: ItemType;
+
+  /** A unique key for the node. */
+  key?: ItemKey;
+
+  /** Meta data about the item used to create this node. */
+  metadata?: ItemMetaData;
+
+  /** A function that should be called to wrap the rendered node. */
+  wrapper?: ElementWrapper;
+
+  /** The rendered contents of this node (e.g. JSX). */
+  rendered?: Accessor<JSX.Element>;
+
+  /** A string value for this node, used for features like typeahead. */
+  textValue?: Accessor<string>;
+
+  /** An accessibility label for this node. */
+  "aria-label"?: Accessor<string | undefined>;
+
+  /** The index of this node within its parent. */
+  index?: number;
+
+  /** Whether this item has children, even if not loaded yet. */
+  hasChildNodes?: boolean;
+
+  /** The loaded children of this node. */
+  childNodes?: () => IterableIterator<PartialNode>;
+
+  /** Additional properties specific to a particular node type. */
+  props?: any;
+
+  /** @private */
+  shouldInvalidate?: (context: unknown) => boolean;
 }

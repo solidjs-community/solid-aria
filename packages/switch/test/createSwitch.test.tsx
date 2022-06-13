@@ -26,7 +26,7 @@ function Switch(props: AriaSwitchProps) {
 
   return (
     <label data-testid="label">
-      <input data-testid="input" ref={ref} {...inputProps()} />
+      <input data-testid="input" ref={ref} {...inputProps} />
       {props.children}
     </label>
   );

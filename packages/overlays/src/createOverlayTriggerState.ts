@@ -40,7 +40,7 @@ export interface OverlayTriggerState {
   /**
    * Whether the overlay is currently open.
    */
-  readonly isOpen: Accessor<boolean>;
+  isOpen: Accessor<boolean>;
 
   /**
    * Sets whether the overlay is open.

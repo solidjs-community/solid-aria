@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/toggle",
-  "version": "0.0.10",
+  "version": "0.1.0",
   "private": false,
   "description": "Primitives for building toggle components like checkboxes and switches.",
   "keywords": [
@@ -45,9 +45,9 @@
     "@solid-aria/utils": "workspace:^"
   },
   "peerDependencies": {
-    "@solid-primitives/props": "^2.1.2",
+    "@solid-primitives/props": "^2.1.4",
     "@solid-primitives/utils": "^2.0.1",
-    "solid-js": "^1.4.3"
+    "solid-js": "^1.4.4"
   },
   "publishConfig": {
     "access": "public"

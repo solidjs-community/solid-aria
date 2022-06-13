@@ -1,5 +1,19 @@
 # @solid-aria/checkbox
 
+## 0.1.0
+
+### Minor Changes
+
+- dcfaa90: Release menu package, breaking change all primitves return plain object props instead of memoized value
+
+### Patch Changes
+
+- Updated dependencies [dcfaa90]
+  - @solid-aria/label@0.1.0
+  - @solid-aria/toggle@0.1.0
+  - @solid-aria/types@0.1.0
+  - @solid-aria/utils@0.1.0
+
 ## 0.0.11
 
 ### Patch Changes

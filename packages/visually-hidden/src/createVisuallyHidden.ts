@@ -16,9 +16,8 @@
  */
 
 import { createFocus } from "@solid-aria/interactions";
-import { DOMElements } from "@solid-aria/types";
 import { access, isObject, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createMemo, createSignal, JSX } from "solid-js";
+import { createSignal, JSX, mergeProps } from "solid-js";
 
 interface AriaVisuallyHiddenProps {
   /**
@@ -32,11 +31,11 @@ interface AriaVisuallyHiddenProps {
   style?: MaybeAccessor<JSX.CSSProperties | string | undefined>;
 }
 
-interface VisuallyHiddenAria<T extends DOMElements> {
+interface VisuallyHiddenAria {
   /**
    * Props to spread onto the target element.
    */
-  visuallyHiddenProps: Accessor<JSX.IntrinsicElements[T]>;
+  visuallyHiddenProps: JSX.HTMLAttributes<any>;
 }
 
 const visuallyHiddenStyles: JSX.CSSProperties = {
@@ -56,9 +55,7 @@ const visuallyHiddenStyles: JSX.CSSProperties = {
  * Provides props for an element that hides its children visually
  * but keeps content visible to assistive technology.
  */
-export function createVisuallyHidden<T extends DOMElements = "div">(
-  props: AriaVisuallyHiddenProps = {}
-): VisuallyHiddenAria<T> {
+export function createVisuallyHidden(props: AriaVisuallyHiddenProps = {}): VisuallyHiddenAria {
   const [isFocused, setFocused] = createSignal(false);
 
   const { focusProps } = createFocus({
@@ -67,7 +64,7 @@ export function createVisuallyHidden<T extends DOMElements = "div">(
   });
 
   // If focused, don't hide the element.
-  const combinedStyles = createMemo(() => {
+  const combinedStyles = () => {
     const style = access(props.style);
 
     if (isFocused()) {
@@ -79,14 +76,13 @@ export function createVisuallyHidden<T extends DOMElements = "div">(
     }
 
     return visuallyHiddenStyles;
-  });
+  };
 
-  const visuallyHiddenProps = createMemo(() => {
-    return {
-      ...focusProps(),
-      style: combinedStyles()
-    } as JSX.IntrinsicElements[T];
-  });
+  const visuallyHiddenProps = mergeProps(focusProps, {
+    get style() {
+      return combinedStyles();
+    }
+  } as JSX.HTMLAttributes<any>);
 
   return { visuallyHiddenProps };
 }

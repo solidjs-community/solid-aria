@@ -74,7 +74,7 @@ function Example() {
 
   return (
     <button
-      {...focusProps()}
+      {...focusProps}
       style={{
         "-webkit-appearance": "none",
         appearance: "none",
