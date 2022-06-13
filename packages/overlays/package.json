@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/overlays",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "private": false,
   "description": "Primitives for building accessible overlay components such as dialogs, popovers, and menus.",
   "keywords": [

@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/tree",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": false,
   "description": "Primitives for managing tree-like collections.",
   "keywords": [
