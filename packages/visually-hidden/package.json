@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/visually-hidden",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "private": false,
   "description": "Primitives for creating visually hidden element that is still visible to assistive technology.",
   "keywords": [
