@@ -587,7 +587,7 @@ describe("createListBox", () => {
     expect(document.activeElement).toBe(options[0]);
   });
 
-  it("supports aria-label on items", function () {
+  it("supports aria-label on items", () => {
     render(() => (
       <ListBox>
         <Item key="item" aria-label="Item">
@@ -595,6 +595,8 @@ describe("createListBox", () => {
         </Item>
       </ListBox>
     ));
+
+    jest.runAllTimers();
 
     const option = screen.getByRole("option");
 
