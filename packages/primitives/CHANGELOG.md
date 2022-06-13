@@ -1,5 +1,37 @@
 # @solid-aria/primitives
 
+## 0.1.0
+
+### Minor Changes
+
+- dcfaa90: Release menu package, breaking change all primitves return plain object props instead of memoized value
+
+### Patch Changes
+
+- Updated dependencies [dcfaa90]
+  - @solid-aria/breadcrumbs@0.1.0
+  - @solid-aria/button@0.1.0
+  - @solid-aria/checkbox@0.1.0
+  - @solid-aria/collection@0.1.0
+  - @solid-aria/dialog@0.1.0
+  - @solid-aria/focus@0.1.0
+  - @solid-aria/i18n@0.1.0
+  - @solid-aria/interactions@0.1.0
+  - @solid-aria/label@0.1.0
+  - @solid-aria/link@0.1.0
+  - @solid-aria/list@0.1.0
+  - @solid-aria/listbox@0.1.0
+  - @solid-aria/menu@0.1.0
+  - @solid-aria/overlays@0.1.0
+  - @solid-aria/radio@0.1.0
+  - @solid-aria/selection@0.1.0
+  - @solid-aria/switch@0.1.0
+  - @solid-aria/toggle@0.1.0
+  - @solid-aria/tree@0.1.0
+  - @solid-aria/types@0.1.0
+  - @solid-aria/utils@0.1.0
+  - @solid-aria/visually-hidden@0.1.0
+
 ## 0.0.13
 
 ### Patch Changes
