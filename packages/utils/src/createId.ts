@@ -15,33 +15,44 @@
  * governing permissions and limitations under the License.
  */
 
-import { Accessor, createSignal, createUniqueId, onMount } from "solid-js";
+import { Accessor, createRenderEffect, createSignal, createUniqueId, on } from "solid-js";
+
+export const ID_PREFIX = "solid-aria";
 
 /**
  * Create a universal id that is stable across server/browser.
  * @param prefix An optional prefix for the generated id.
  * @returns The generated id.
  */
-export function createId(prefix = "solid-aria"): string {
+export function createId(prefix = ID_PREFIX): string {
   return `${prefix}-${createUniqueId()}`;
 }
 
 /**
- * Create a universal id that is stable across server/browser.
- * The id will be removed if not attached to an element on mount.
+ * Create a universal id that will be set to `undefined` if not attached to an element.
  * @param prefix An optional prefix for the generated id.
+ * @param deps Dependencies that should trigger an id usage check.
  * @returns An accessor for the generated id.
  */
-export function createSlotId(prefix?: string): Accessor<string | undefined> {
-  const [id, setId] = createSignal<string | undefined>(createId(prefix));
+export function createSlotId(
+  prefix?: string,
+  deps: Accessor<any>[] = []
+): Accessor<string | undefined> {
+  const id = createId(prefix);
 
-  onMount(() => {
-    const _id = id();
+  const [slotId, setSlotId] = createSignal<string | undefined>(id);
 
-    if (_id && !document.getElementById(_id)) {
-      setId(undefined);
-    }
-  });
+  createRenderEffect(
+    on(deps, () => {
+      setSlotId(id);
 
-  return id;
+      setTimeout(() => {
+        if (!document.getElementById(id)) {
+          setSlotId(undefined);
+        }
+      });
+    })
+  );
+
+  return slotId;
 }

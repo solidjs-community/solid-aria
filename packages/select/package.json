@@ -48,10 +48,21 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@solid-aria/button": "workspace:^",
+    "@solid-aria/collection": "workspace:^",
+    "@solid-aria/i18n": "workspace:^",
+    "@solid-aria/interactions": "workspace:^",
+    "@solid-aria/label": "workspace:^",
+    "@solid-aria/list": "workspace:^",
+    "@solid-aria/listbox": "workspace:^",
+    "@solid-aria/menu": "workspace:^",
+    "@solid-aria/overlays": "workspace:^",
+    "@solid-aria/selection": "workspace:^",
     "@solid-aria/types": "workspace:^",
     "@solid-aria/utils": "workspace:^"
   },
   "peerDependencies": {
+    "@solid-primitives/props": "^2.1.7",
     "@solid-primitives/utils": "^2.1.0",
     "solid-js": "^1.4.4"
   },
