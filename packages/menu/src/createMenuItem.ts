@@ -54,6 +54,26 @@ export interface AriaMenuItemProps {
 
 export interface MenuItemAria {
   /**
+   * Whether the menu item is currently focused.
+   */
+  isFocused: Accessor<boolean>;
+
+  /**
+   * Whether the menu item is currently selected.
+   */
+  isSelected: Accessor<boolean>;
+
+  /**
+   * Whether the menu item is currently in a pressed state.
+   */
+  isPressed: Accessor<boolean>;
+
+  /**
+   * Whether the menu item is disabled.
+   */
+  isDisabled: Accessor<boolean>;
+
+  /**
    * Props for the menu item element.
    */
   menuItemProps: JSX.HTMLAttributes<any>;
@@ -94,6 +114,8 @@ export function createMenuItem<T extends HTMLElement>(
 
   const isDisabled = () => context.state().disabledKeys().has(props.key);
   const isSelected = () => manager().isSelected(props.key);
+  const isFocused = () => manager().focusedKey() === props.key;
+
   const closeOnSelect = () => props.closeOnSelect ?? context.closeOnSelect();
 
   const onKeyDown = (e: KeyboardEvent) => {
@@ -136,7 +158,7 @@ export function createMenuItem<T extends HTMLElement>(
     }
   };
 
-  const { itemProps } = createSelectableItem(
+  const { itemProps, isPressed } = createSelectableItem(
     {
       key: () => props.key,
       selectionManager: manager,
@@ -149,6 +171,7 @@ export function createMenuItem<T extends HTMLElement>(
   );
 
   const { pressProps } = createPress<T>({ isDisabled, onPressStart, onPressUp });
+
   const { hoverProps } = createHover({
     isDisabled: () => isDisabled() || !context.shouldFocusOnHover(),
     onHoverStart: () => {
@@ -227,6 +250,10 @@ export function createMenuItem<T extends HTMLElement>(
   };
 
   return {
+    isFocused,
+    isSelected,
+    isDisabled,
+    isPressed,
     menuItemProps,
     labelProps,
     descriptionProps,
