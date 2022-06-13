@@ -19,7 +19,8 @@ import { getItemCount } from "@solid-aria/collection";
 import { createHover, isKeyboardFocusVisible } from "@solid-aria/interactions";
 import { createSelectableItem } from "@solid-aria/selection";
 import { ItemKey } from "@solid-aria/types";
-import { createSlotId, isMac, isWebKit } from "@solid-aria/utils";
+import { createSlotId } from "@solid-aria/utils";
+import { isMac, isWebKit } from "@solid-primitives/platform";
 import { combineProps } from "@solid-primitives/props";
 import { Accessor, JSX } from "solid-js";
 
@@ -119,7 +120,7 @@ export function createListBoxOption<T extends HTMLElement>(
     }
   });
 
-  const isNotSafariMacOS = !(isMac() && isWebKit());
+  const isNotSafariMacOS = !(isMac && isWebKit);
 
   const baseOptionProps: JSX.HTMLAttributes<any> = {
     role: "option",

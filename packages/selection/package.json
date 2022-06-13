@@ -44,7 +44,8 @@
     "@solid-aria/i18n": "workspace:^",
     "@solid-aria/interactions": "workspace:^",
     "@solid-aria/types": "workspace:^",
-    "@solid-aria/utils": "workspace:^"
+    "@solid-aria/utils": "workspace:^",
+    "@solid-primitives/platform": "^0.0.100"
   },
   "peerDependencies": {
     "@solid-primitives/event-listener": "^2.1.0",

@@ -15,8 +15,9 @@
  * governing permissions and limitations under the License.
  */
 
-import { getScrollParent, isIOS } from "@solid-aria/utils";
+import { getScrollParent } from "@solid-aria/utils";
 import { access, chain, MaybeAccessor } from "@solid-primitives/utils";
+import { isIOS } from "@solid-primitives/platform";
 import { createEffect, on, onCleanup } from "solid-js";
 
 export interface PreventScrollOptions {
@@ -55,7 +56,7 @@ export function createPreventScroll(options: PreventScrollOptions = {}) {
           return;
         }
 
-        if (isIOS()) {
+        if (isIOS) {
           onCleanup(preventScrollMobileSafari());
         } else {
           onCleanup(preventScrollStandard());

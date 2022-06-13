@@ -15,7 +15,7 @@
  * governing permissions and limitations under the License.
  */
 
-import { isMac } from "@solid-aria/utils";
+import { isMac } from "@solid-primitives/platform";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor, createEffect, createSignal, on, onCleanup, onMount } from "solid-js";
 
@@ -71,7 +71,7 @@ function isValidKey(e: KeyboardEvent) {
   // Control and Shift keys trigger when navigating back to the tab with keyboard.
   return !(
     e.metaKey ||
-    (!isMac() && e.altKey) ||
+    (!isMac && e.altKey) ||
     e.ctrlKey ||
     e.key === "Control" ||
     e.key === "Shift" ||
