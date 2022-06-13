@@ -44,20 +44,6 @@ import {
 
 import { createRadioGroupState, RadioGroupState } from "./createRadioGroupState";
 
-interface RadioGroupContextValue {
-  /**
-   * State for the radio group, as returned by `createRadioGroupState`.
-   */
-  state: RadioGroupState;
-
-  /**
-   * The name of the RadioGroup, used when submitting an HTML form.
-   */
-  name: Accessor<string>;
-}
-
-const RadioGroupContext = createContext<RadioGroupContextValue>();
-
 export interface AriaRadioGroupProps
   extends ValueBase<string>,
     InputBase,
@@ -84,7 +70,7 @@ export interface AriaRadioGroupProps
   name?: string;
 }
 
-interface RadioGroupAria {
+export interface RadioGroupAria {
   /**
    * Provide the radio group state to descendant elements.
    */
@@ -253,6 +239,20 @@ export function createRadioGroup(props: AriaRadioGroupProps): RadioGroupAria {
 
   return { RadioGroupProvider, groupProps, labelProps, state };
 }
+
+interface RadioGroupContextValue {
+  /**
+   * State for the radio group, as returned by `createRadioGroupState`.
+   */
+  state: RadioGroupState;
+
+  /**
+   * The name of the RadioGroup, used when submitting an HTML form.
+   */
+  name: Accessor<string>;
+}
+
+const RadioGroupContext = createContext<RadioGroupContextValue>();
 
 export function useRadioGroupContext() {
   const context = useContext(RadioGroupContext);

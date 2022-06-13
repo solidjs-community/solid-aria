@@ -60,11 +60,13 @@
     "@solid-aria/link": "workspace:^",
     "@solid-aria/list": "workspace:^",
     "@solid-aria/listbox": "workspace:^",
+    "@solid-aria/menu": "workspace:^",
     "@solid-aria/overlays": "workspace:^",
     "@solid-aria/radio": "workspace:^",
     "@solid-aria/selection": "workspace:^",
     "@solid-aria/switch": "workspace:^",
     "@solid-aria/toggle": "workspace:^",
+    "@solid-aria/tree": "workspace:^",
     "@solid-aria/types": "workspace:^",
     "@solid-aria/utils": "workspace:^",
     "@solid-aria/visually-hidden": "workspace:^"

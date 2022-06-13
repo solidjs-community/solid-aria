@@ -19,46 +19,45 @@ import { ForItems, Item } from "@solid-aria/collection";
 import { ParentProps } from "solid-js";
 import { fireEvent, render, screen } from "solid-testing-library";
 
-import {
-  AriaListBoxOptionProps,
-  AriaListBoxProps,
-  createListBox,
-  createListBoxOption
-} from "../src";
+import { AriaMenuItemProps, AriaMenuProps, createMenu, createMenuItem } from "../src";
 
-function ListBoxOption(props: ParentProps<AriaListBoxOptionProps>) {
+function MenuItem(props: ParentProps<AriaMenuItemProps>) {
   let ref: HTMLLIElement | undefined;
 
-  const { optionProps } = createListBoxOption(props, () => ref);
+  const { menuItemProps } = createMenuItem(props, () => ref);
 
   return (
-    <li {...optionProps} ref={ref}>
+    <li {...menuItemProps} ref={ref}>
       {props.children}
     </li>
   );
 }
 
-function ListBox(props: AriaListBoxProps) {
+function Menu(props: AriaMenuProps) {
   let ref: HTMLUListElement | undefined;
 
-  const { ListBoxProvider, listBoxProps, state } = createListBox(props, () => ref);
+  const { MenuProvider, menuProps, state } = createMenu(props, () => ref);
 
   return (
-    <ListBoxProvider>
-      <ul {...listBoxProps} ref={ref}>
+    <MenuProvider>
+      <ul {...menuProps} ref={ref}>
         <ForItems in={state.collection()}>
           {item => (
-            <ListBoxOption aria-label={item()["aria-label"]()} key={item().key}>
+            <MenuItem
+              aria-label={item()["aria-label"]()}
+              key={item().key}
+              onAction={props.onAction}
+            >
               {item().rendered()}
-            </ListBoxOption>
+            </MenuItem>
           )}
         </ForItems>
       </ul>
-    </ListBoxProvider>
+    </MenuProvider>
   );
 }
 
-describe("createListBox", () => {
+describe("createMenu", () => {
   beforeEach(() => {
     jest.useFakeTimers();
     jest.spyOn(window, "requestAnimationFrame").mockImplementation(cb => {
@@ -76,82 +75,81 @@ describe("createListBox", () => {
 
   it("renders properly", () => {
     render(() => (
-      <ListBox selectionMode="single">
+      <Menu aria-label="menu">
         <Item key="1">One</Item>
         <Item key="2">Two</Item>
         <Item key="3">Three</Item>
-      </ListBox>
+      </Menu>
     ));
 
-    const listbox = screen.getByRole("listbox");
-    const options = screen.getAllByRole("option");
+    const menu = screen.getByRole("menu");
+    const menuItems = screen.getAllByRole("menuitem");
 
-    expect(listbox).toBeInTheDocument();
+    expect(menu).toBeInTheDocument();
 
-    expect(options.length).toBe(3);
+    expect(menuItems.length).toBe(3);
 
-    for (const option of options) {
-      expect(option).toBeInTheDocument();
-      expect(option).toHaveAttribute("tabindex");
-      expect(option).toHaveAttribute("aria-selected", "false");
-      expect(option).toHaveAttribute("aria-disabled", "false");
+    for (const menuItem of menuItems) {
+      expect(menuItem).toBeInTheDocument();
+      expect(menuItem).toHaveAttribute("tabindex");
+      expect(menuItem).toHaveAttribute("aria-disabled", "false");
     }
   });
 
-  it("allows user to change option focus via up/down arrow keys", async () => {
+  it("allows user to change menu item focus via up/down arrow keys", async () => {
     render(() => (
-      <ListBox>
+      <Menu aria-label="menu">
         <Item key="1">One</Item>
         <Item key="2">Two</Item>
         <Item key="3">Three</Item>
-      </ListBox>
+      </Menu>
     ));
 
-    const listbox = screen.getByRole("listbox");
-    const options = screen.getAllByRole("option");
+    const menu = screen.getByRole("menu");
+    const menuItems = screen.getAllByRole("menuitem");
 
-    fireEvent.focusIn(listbox);
+    fireEvent.focusIn(menu);
     await Promise.resolve();
 
-    expect(document.activeElement).toBe(options[0]);
+    expect(document.activeElement).toBe(menuItems[0]);
 
-    fireEvent.keyDown(listbox, { key: "ArrowDown" });
+    fireEvent.keyDown(menu, { key: "ArrowDown" });
     await Promise.resolve();
 
-    expect(document.activeElement).toBe(options[1]);
+    expect(document.activeElement).toBe(menuItems[1]);
 
-    fireEvent.keyDown(listbox, { key: "ArrowUp" });
+    fireEvent.keyDown(menu, { key: "ArrowUp" });
     await Promise.resolve();
 
-    expect(document.activeElement).toBe(options[0]);
+    expect(document.activeElement).toBe(menuItems[0]);
   });
 
   it("wraps focus from first to last/last to first item if up/down arrow is pressed if shouldFocusWrap is true", async () => {
     render(() => (
-      <ListBox shouldFocusWrap>
+      <Menu aria-label="menu" shouldFocusWrap>
         <Item key="1">One</Item>
         <Item key="2">Two</Item>
         <Item key="3">Three</Item>
-      </ListBox>
+      </Menu>
     ));
 
-    const listbox = screen.getByRole("listbox");
-    const options = screen.getAllByRole("option");
+    const menu = screen.getByRole("menu");
+    const menuItems = screen.getAllByRole("menuitem");
 
-    fireEvent.focusIn(listbox);
+    fireEvent.focusIn(menu);
     await Promise.resolve();
 
-    expect(document.activeElement).toBe(options[0]);
+    expect(document.activeElement).toBe(menuItems[0]);
 
-    fireEvent.keyDown(listbox, { key: "ArrowUp" });
+    fireEvent.keyDown(menu, { key: "ArrowUp" });
     await Promise.resolve();
 
-    expect(document.activeElement).toBe(options[2]);
+    expect(document.activeElement).toBe(menuItems[2]);
 
-    fireEvent.keyDown(listbox, { key: "ArrowDown" });
+    fireEvent.keyDown(menu, { key: "ArrowDown" });
     await Promise.resolve();
 
-    expect(document.activeElement).toBe(options[0]);
+    expect(document.activeElement).toBe(menuItems[0]);
   });
 
   describe("supports single selection", () => {
@@ -159,22 +157,22 @@ describe("createListBox", () => {
       const defaultSelectedKeys = new Set(["2"]);
 
       render(() => (
-        <ListBox selectionMode="single" defaultSelectedKeys={defaultSelectedKeys}>
+        <Menu aria-label="menu" selectionMode="single" defaultSelectedKeys={defaultSelectedKeys}>
           <Item key="1">One</Item>
           <Item key="2">Two</Item>
           <Item key="3">Three</Item>
-        </ListBox>
+        </Menu>
       ));
 
-      const listbox = screen.getByRole("listbox");
-      const options = screen.getAllByRole("option");
-      const selectedOption = options[1];
+      const menu = screen.getByRole("menu");
+      const menuItems = screen.getAllByRole("menuitemradio");
+      const selectedOption = menuItems[1];
 
-      fireEvent.focusIn(listbox);
+      fireEvent.focusIn(menu);
       await Promise.resolve();
 
       expect(document.activeElement).toBe(selectedOption);
-      expect(selectedOption).toHaveAttribute("aria-selected", "true");
+      expect(selectedOption).toHaveAttribute("aria-checked", "true");
       expect(selectedOption).toHaveAttribute("tabindex", "0");
     });
 
@@ -183,7 +181,8 @@ describe("createListBox", () => {
       const onSelectionChangeSpy = jest.fn();
 
       render(() => (
-        <ListBox
+        <Menu
+          aria-label="menu"
           selectionMode="single"
           selectedKeys={selectedKeys}
           onSelectionChange={onSelectionChangeSpy}
@@ -191,29 +190,29 @@ describe("createListBox", () => {
           <Item key="1">One</Item>
           <Item key="2">Two</Item>
           <Item key="3">Three</Item>
-        </ListBox>
+        </Menu>
       ));
 
-      const listbox = screen.getByRole("listbox");
-      const options = screen.getAllByRole("option");
-      const selectedOption = options[1];
+      const menu = screen.getByRole("menu");
+      const menuItems = screen.getAllByRole("menuitemradio");
+      const selectedOption = menuItems[1];
 
-      fireEvent.focusIn(listbox);
+      fireEvent.focusIn(menu);
       await Promise.resolve();
 
       expect(document.activeElement).toBe(selectedOption);
-      expect(selectedOption).toHaveAttribute("aria-selected", "true");
+      expect(selectedOption).toHaveAttribute("aria-checked", "true");
       expect(selectedOption).toHaveAttribute("tabindex", "0");
 
-      const nextSelectedOption = options[2];
+      const nextSelectedOption = menuItems[2];
 
       // Try select a different option via enter
       fireEvent.keyDown(nextSelectedOption, { key: "Enter" });
       await Promise.resolve();
 
       // Since Listbox is controlled, selection doesn't change
-      expect(nextSelectedOption).toHaveAttribute("aria-selected", "false");
-      expect(selectedOption).toHaveAttribute("aria-selected", "true");
+      expect(nextSelectedOption).toHaveAttribute("aria-checked", "false");
+      expect(selectedOption).toHaveAttribute("aria-checked", "true");
 
       expect(onSelectionChangeSpy).toBeCalledTimes(1);
       expect(onSelectionChangeSpy.mock.calls[0][0].has("3")).toBeTruthy();
@@ -223,26 +222,26 @@ describe("createListBox", () => {
       const onSelectionChangeSpy = jest.fn();
 
       render(() => (
-        <ListBox selectionMode="single" onSelectionChange={onSelectionChangeSpy}>
+        <Menu aria-label="menu" selectionMode="single" onSelectionChange={onSelectionChangeSpy}>
           <Item key="1">One</Item>
           <Item key="2">Two</Item>
           <Item key="3">Three</Item>
-        </ListBox>
+        </Menu>
       ));
 
-      const listbox = screen.getByRole("listbox");
-      const options = screen.getAllByRole("option");
+      const menu = screen.getByRole("menu");
+      const menuItems = screen.getAllByRole("menuitemradio");
 
-      fireEvent.focusIn(listbox);
+      fireEvent.focusIn(menu);
       await Promise.resolve();
 
-      const nextSelectedOption = options[2];
+      const nextSelectedOption = menuItems[2];
 
       // Select an option via spacebar
       fireEvent.keyDown(nextSelectedOption, { key: " " });
       await Promise.resolve();
 
-      expect(nextSelectedOption).toHaveAttribute("aria-selected", "true");
+      expect(nextSelectedOption).toHaveAttribute("aria-checked", "true");
 
       expect(onSelectionChangeSpy).toBeCalledTimes(1);
       expect(onSelectionChangeSpy.mock.calls[0][0].has("3")).toBeTruthy();
@@ -252,36 +251,37 @@ describe("createListBox", () => {
       const onSelectionChangeSpy = jest.fn();
 
       render(() => (
-        <ListBox selectionMode="single" onSelectionChange={onSelectionChangeSpy}>
+        <Menu aria-label="menu" selectionMode="single" onSelectionChange={onSelectionChangeSpy}>
           <Item key="1">One</Item>
           <Item key="2">Two</Item>
           <Item key="3">Three</Item>
-        </ListBox>
+        </Menu>
       ));
 
-      const listbox = screen.getByRole("listbox");
-      const options = screen.getAllByRole("option");
+      const menu = screen.getByRole("menu");
+      const menuItems = screen.getAllByRole("menuitemradio");
 
-      fireEvent.focusIn(listbox);
+      fireEvent.focusIn(menu);
       await Promise.resolve();
 
-      const nextSelectedOption = options[2];
+      const nextSelectedOption = menuItems[2];
 
       // Select an option via click
       fireEvent.click(nextSelectedOption);
       await Promise.resolve();
 
-      expect(nextSelectedOption).toHaveAttribute("aria-selected", "true");
+      expect(nextSelectedOption).toHaveAttribute("aria-checked", "true");
 
       expect(onSelectionChangeSpy).toBeCalledTimes(1);
       expect(onSelectionChangeSpy.mock.calls[0][0].has("3")).toBeTruthy();
     });
 
-    it("supports disabled options", async () => {
+    it("supports disabled menu items", async () => {
       const onSelectionChangeSpy = jest.fn();
 
       render(() => (
-        <ListBox
+        <Menu
+          aria-label="menu"
           selectionMode="single"
           onSelectionChange={onSelectionChangeSpy}
           disabledKeys={["2"]}
@@ -289,13 +289,13 @@ describe("createListBox", () => {
           <Item key="1">One</Item>
           <Item key="2">Two</Item>
           <Item key="3">Three</Item>
-        </ListBox>
+        </Menu>
       ));
 
-      const listbox = screen.getByRole("listbox");
-      const options = screen.getAllByRole("option");
+      const menu = screen.getByRole("menu");
+      const menuItems = screen.getAllByRole("menuitemradio");
 
-      const disabledOption = options[1];
+      const disabledOption = menuItems[1];
 
       expect(disabledOption).toHaveAttribute("aria-disabled", "true");
 
@@ -306,16 +306,16 @@ describe("createListBox", () => {
       // Verify onSelectionChange is not called
       expect(onSelectionChangeSpy).not.toHaveBeenCalled();
 
-      fireEvent.focusIn(listbox);
+      fireEvent.focusIn(menu);
       await Promise.resolve();
 
-      expect(document.activeElement).toBe(options[0]);
+      expect(document.activeElement).toBe(menuItems[0]);
 
-      fireEvent.keyDown(listbox, { key: "ArrowDown" });
+      fireEvent.keyDown(menu, { key: "ArrowDown" });
       await Promise.resolve();
 
       // Verify that keyboard navigation skips the disabled option
-      expect(document.activeElement).toBe(options[2]);
+      expect(document.activeElement).toBe(menuItems[2]);
     });
   });
 
@@ -324,26 +324,23 @@ describe("createListBox", () => {
       const onSelectionChangeSpy = jest.fn();
 
       render(() => (
-        <ListBox selectionMode="multiple" onSelectionChange={onSelectionChangeSpy}>
+        <Menu aria-label="menu" selectionMode="multiple" onSelectionChange={onSelectionChangeSpy}>
           <Item key="1">One</Item>
           <Item key="2">Two</Item>
           <Item key="3">Three</Item>
-        </ListBox>
+        </Menu>
       ));
 
-      const listbox = screen.getByRole("listbox");
-      const options = screen.getAllByRole("option");
+      const menuItems = screen.getAllByRole("menuitemcheckbox");
 
-      expect(listbox).toHaveAttribute("aria-multiselectable", "true");
-
-      fireEvent.click(options[0]);
+      fireEvent.click(menuItems[0]);
       await Promise.resolve();
 
-      fireEvent.click(options[2]);
+      fireEvent.click(menuItems[2]);
       await Promise.resolve();
 
-      expect(options[0]).toHaveAttribute("aria-selected", "true");
-      expect(options[2]).toHaveAttribute("aria-selected", "true");
+      expect(menuItems[0]).toHaveAttribute("aria-checked", "true");
+      expect(menuItems[2]).toHaveAttribute("aria-checked", "true");
 
       expect(onSelectionChangeSpy).toBeCalledTimes(2);
       expect(onSelectionChangeSpy.mock.calls[0][0].has("1")).toBeTruthy();
@@ -356,7 +353,8 @@ describe("createListBox", () => {
       const defaultSelectedKeys = new Set(["1", "2"]);
 
       render(() => (
-        <ListBox
+        <Menu
+          aria-label="menu"
           selectionMode="multiple"
           defaultSelectedKeys={defaultSelectedKeys}
           onSelectionChange={onSelectionChangeSpy}
@@ -364,23 +362,23 @@ describe("createListBox", () => {
           <Item key="1">One</Item>
           <Item key="2">Two</Item>
           <Item key="3">Three</Item>
-        </ListBox>
+        </Menu>
       ));
 
-      const options = screen.getAllByRole("option");
+      const menuItems = screen.getAllByRole("menuitemcheckbox");
 
-      const firstOption = options[0];
-      const secondOption = options[1];
-      const thirdOption = options[2];
+      const firstOption = menuItems[0];
+      const secondOption = menuItems[1];
+      const thirdOption = menuItems[2];
 
-      expect(firstOption).toHaveAttribute("aria-selected", "true");
-      expect(secondOption).toHaveAttribute("aria-selected", "true");
+      expect(firstOption).toHaveAttribute("aria-checked", "true");
+      expect(secondOption).toHaveAttribute("aria-checked", "true");
 
       // Select a different option
       fireEvent.click(thirdOption);
       await Promise.resolve();
 
-      expect(thirdOption).toHaveAttribute("aria-selected", "true");
+      expect(thirdOption).toHaveAttribute("aria-checked", "true");
 
       expect(onSelectionChangeSpy).toBeCalledTimes(1);
       expect(onSelectionChangeSpy.mock.calls[0][0].has("1")).toBeTruthy();
@@ -394,7 +392,8 @@ describe("createListBox", () => {
       const selectedKeys = new Set(["1", "2"]);
 
       render(() => (
-        <ListBox
+        <Menu
+          aria-label="menu"
           selectionMode="multiple"
           selectedKeys={selectedKeys}
           onSelectionChange={onSelectionChangeSpy}
@@ -402,23 +401,23 @@ describe("createListBox", () => {
           <Item key="1">One</Item>
           <Item key="2">Two</Item>
           <Item key="3">Three</Item>
-        </ListBox>
+        </Menu>
       ));
 
-      const options = screen.getAllByRole("option");
+      const menuItems = screen.getAllByRole("menuitemcheckbox");
 
-      const firstOption = options[0];
-      const secondOption = options[1];
-      const thirdOption = options[2];
+      const firstOption = menuItems[0];
+      const secondOption = menuItems[1];
+      const thirdOption = menuItems[2];
 
-      expect(firstOption).toHaveAttribute("aria-selected", "true");
-      expect(secondOption).toHaveAttribute("aria-selected", "true");
+      expect(firstOption).toHaveAttribute("aria-checked", "true");
+      expect(secondOption).toHaveAttribute("aria-checked", "true");
 
       // Select a different option
       fireEvent.click(thirdOption);
       await Promise.resolve();
 
-      expect(thirdOption).toHaveAttribute("aria-selected", "false");
+      expect(thirdOption).toHaveAttribute("aria-checked", "false");
 
       expect(onSelectionChangeSpy).toBeCalledTimes(1);
       expect(onSelectionChangeSpy.mock.calls[0][0].has("3")).toBeTruthy();
@@ -430,7 +429,8 @@ describe("createListBox", () => {
       const defaultSelectedKeys = new Set(["1", "2"]);
 
       render(() => (
-        <ListBox
+        <Menu
+          aria-label="menu"
           selectionMode="multiple"
           defaultSelectedKeys={defaultSelectedKeys}
           onSelectionChange={onSelectionChangeSpy}
@@ -438,34 +438,35 @@ describe("createListBox", () => {
           <Item key="1">One</Item>
           <Item key="2">Two</Item>
           <Item key="3">Three</Item>
-        </ListBox>
+        </Menu>
       ));
 
-      const options = screen.getAllByRole("option");
+      const menuItems = screen.getAllByRole("menuitemcheckbox");
 
-      const firstOption = options[0];
-      const secondOption = options[1];
+      const firstOption = menuItems[0];
+      const secondOption = menuItems[1];
 
-      expect(firstOption).toHaveAttribute("aria-selected", "true");
-      expect(secondOption).toHaveAttribute("aria-selected", "true");
+      expect(firstOption).toHaveAttribute("aria-checked", "true");
+      expect(secondOption).toHaveAttribute("aria-checked", "true");
 
       // Deselect first option
       fireEvent.click(firstOption);
       await Promise.resolve();
 
-      expect(firstOption).toHaveAttribute("aria-selected", "false");
+      expect(firstOption).toHaveAttribute("aria-checked", "false");
 
       expect(onSelectionChangeSpy).toBeCalledTimes(1);
       expect(onSelectionChangeSpy.mock.calls[0][0].has("2")).toBeTruthy();
     });
 
-    it("supports disabled options", async () => {
+    it("supports disabled menu items", async () => {
       const onSelectionChangeSpy = jest.fn();
 
       const defaultSelectedKeys = new Set(["1", "2"]);
 
       render(() => (
-        <ListBox
+        <Menu
+          aria-label="menu"
           selectionMode="multiple"
           defaultSelectedKeys={defaultSelectedKeys}
           onSelectionChange={onSelectionChangeSpy}
@@ -474,14 +475,14 @@ describe("createListBox", () => {
           <Item key="1">One</Item>
           <Item key="2">Two</Item>
           <Item key="3">Three</Item>
-        </ListBox>
+        </Menu>
       ));
 
-      const options = screen.getAllByRole("option");
+      const menuItems = screen.getAllByRole("menuitemcheckbox");
 
-      const firstOption = options[0];
-      const secondOption = options[1];
-      const disabledOption = options[2];
+      const firstOption = menuItems[0];
+      const secondOption = menuItems[1];
+      const disabledOption = menuItems[2];
 
       expect(disabledOption).toHaveAttribute("aria-disabled", "true");
 
@@ -490,8 +491,8 @@ describe("createListBox", () => {
 
       expect(onSelectionChangeSpy).not.toHaveBeenCalled();
 
-      expect(firstOption).toHaveAttribute("aria-selected", "true");
-      expect(secondOption).toHaveAttribute("aria-selected", "true");
+      expect(firstOption).toHaveAttribute("aria-checked", "true");
+      expect(secondOption).toHaveAttribute("aria-checked", "true");
     });
   });
 
@@ -501,7 +502,8 @@ describe("createListBox", () => {
     const defaultSelectedKeys = new Set(["2"]);
 
     render(() => (
-      <ListBox
+      <Menu
+        aria-label="menu"
         selectionMode="single"
         defaultSelectedKeys={defaultSelectedKeys}
         onSelectionChange={onSelectionChangeSpy}
@@ -510,124 +512,201 @@ describe("createListBox", () => {
         <Item key="1">One</Item>
         <Item key="2">Two</Item>
         <Item key="3">Three</Item>
-      </ListBox>
+      </Menu>
     ));
 
-    const options = screen.getAllByRole("option");
+    const menuItems = screen.getAllByRole("menuitemradio");
 
-    const secondOption = options[1];
+    const secondOption = menuItems[1];
 
-    expect(secondOption).toHaveAttribute("aria-selected", "true");
+    expect(secondOption).toHaveAttribute("aria-checked", "true");
 
     // Deselect second option
     fireEvent.click(secondOption);
     await Promise.resolve();
 
-    expect(secondOption).toHaveAttribute("aria-selected", "false");
+    expect(secondOption).toHaveAttribute("aria-checked", "false");
 
     expect(onSelectionChangeSpy).toBeCalledTimes(1);
     expect(onSelectionChangeSpy.mock.calls[0][0].size === 0).toBeTruthy();
   });
 
-  it("supports type to select", async () => {
+  it("supports no selection", async () => {
     render(() => (
-      <ListBox>
+      <Menu aria-label="menu" selectionMode="none">
         <Item key="1">One</Item>
         <Item key="2">Two</Item>
         <Item key="3">Three</Item>
-      </ListBox>
+      </Menu>
     ));
 
-    const listbox = screen.getByRole("listbox");
-    const options = screen.getAllByRole("option");
+    const menuItems = screen.getAllByRole("menuitem");
 
-    fireEvent.focusIn(listbox);
+    // Attempt to select a variety of items via enter, space, and click
+    fireEvent.click(menuItems[0]);
     await Promise.resolve();
 
-    expect(document.activeElement).toBe(options[0]);
+    fireEvent.keyDown(menuItems[1], { key: " ", code: 32, charCode: 32 });
+    await Promise.resolve();
 
-    fireEvent.keyDown(listbox, { key: "T" });
+    fireEvent.keyDown(menuItems[2], { key: "Enter", code: 13, charCode: 13 });
+    await Promise.resolve();
+
+    for (const menuItem of menuItems) {
+      expect(menuItem).not.toHaveAttribute("aria-checked");
+    }
+  });
+
+  it("supports type to select", async () => {
+    render(() => (
+      <Menu aria-label="menu">
+        <Item key="1">One</Item>
+        <Item key="2">Two</Item>
+        <Item key="3">Three</Item>
+      </Menu>
+    ));
+
+    const menu = screen.getByRole("menu");
+    const menuItems = screen.getAllByRole("menuitem");
+
+    fireEvent.focusIn(menu);
+    await Promise.resolve();
+
+    expect(document.activeElement).toBe(menuItems[0]);
+
+    fireEvent.keyDown(menu, { key: "T" });
     jest.runAllTimers();
     await Promise.resolve();
 
-    expect(document.activeElement).toBe(options[1]);
+    expect(document.activeElement).toBe(menuItems[1]);
 
-    fireEvent.keyDown(listbox, { key: "O" });
+    fireEvent.keyDown(menu, { key: "O" });
     jest.runAllTimers();
     await Promise.resolve();
 
-    expect(document.activeElement).toBe(options[0]);
+    expect(document.activeElement).toBe(menuItems[0]);
   });
 
   it("resets the search text after a timeout", async () => {
     render(() => (
-      <ListBox>
+      <Menu aria-label="menu">
         <Item key="1">One</Item>
         <Item key="2">Two</Item>
         <Item key="3">Three</Item>
-      </ListBox>
+      </Menu>
     ));
 
-    const listbox = screen.getByRole("listbox");
-    const options = screen.getAllByRole("option");
+    const menu = screen.getByRole("menu");
+    const menuItems = screen.getAllByRole("menuitem");
 
-    fireEvent.focusIn(listbox);
+    fireEvent.focusIn(menu);
     await Promise.resolve();
 
-    fireEvent.keyDown(listbox, { key: "O" });
+    fireEvent.keyDown(menu, { key: "O" });
     jest.runAllTimers();
     await Promise.resolve();
 
-    expect(document.activeElement).toBe(options[0]);
+    expect(document.activeElement).toBe(menuItems[0]);
 
-    fireEvent.keyDown(listbox, { key: "O" });
+    fireEvent.keyDown(menu, { key: "O" });
     jest.runAllTimers();
     await Promise.resolve();
 
-    expect(document.activeElement).toBe(options[0]);
+    expect(document.activeElement).toBe(menuItems[0]);
+  });
+
+  it("supports actions", async () => {
+    const onActionSpy = jest.fn();
+    const onSelectionChangeSpy = jest.fn();
+
+    render(() => (
+      <Menu aria-label="menu" onSelectionChange={onSelectionChangeSpy} onAction={onActionSpy}>
+        <Item key="1">One</Item>
+        <Item key="2">Two</Item>
+        <Item key="3">Three</Item>
+      </Menu>
+    ));
+
+    const menuItems = screen.getAllByRole("menuitem");
+
+    fireEvent.click(menuItems[0]);
+    await Promise.resolve();
+
+    expect(onActionSpy).toHaveBeenCalledWith("1");
+    expect(onSelectionChangeSpy).toHaveBeenCalledTimes(0);
+
+    fireEvent.click(menuItems[1]);
+    await Promise.resolve();
+
+    expect(onActionSpy).toHaveBeenCalledWith("2");
+    expect(onSelectionChangeSpy).toHaveBeenCalledTimes(0);
+
+    fireEvent.click(menuItems[2]);
+    await Promise.resolve();
+
+    expect(onActionSpy).toHaveBeenCalledWith("3");
+    expect(onSelectionChangeSpy).toHaveBeenCalledTimes(0);
   });
 
   it("supports aria-label on items", function () {
     render(() => (
-      <ListBox>
+      <Menu aria-label="menu">
         <Item key="item" aria-label="Item">
           Item
         </Item>
-      </ListBox>
+      </Menu>
     ));
 
-    const option = screen.getByRole("option");
+    const menuItem = screen.getByRole("menuitem");
 
-    expect(option).toHaveAttribute("aria-label", "Item");
-    expect(option).not.toHaveAttribute("aria-labelledby");
-    expect(option).not.toHaveAttribute("aria-describedby");
+    expect(menuItem).toHaveAttribute("aria-label", "Item");
+    expect(menuItem).not.toHaveAttribute("aria-labelledby");
+    expect(menuItem).not.toHaveAttribute("aria-describedby");
   });
 
   it("supports aria-label", () => {
     render(() => (
-      <ListBox aria-label="Test">
+      <Menu aria-label="Test">
         <Item key="1">One</Item>
         <Item key="2">Two</Item>
         <Item key="3">Three</Item>
-      </ListBox>
+      </Menu>
     ));
 
-    const listbox = screen.getByRole("listbox");
+    const menu = screen.getByRole("menu");
 
-    expect(listbox).toHaveAttribute("aria-label", "Test");
+    expect(menu).toHaveAttribute("aria-label", "Test");
+  });
+
+  it("warns user if no aria-label is provided", () => {
+    const spyWarn = jest.spyOn(console, "warn").mockImplementation(() => {
+      return;
+    });
+
+    render(() => (
+      <Menu>
+        <Item key="1">One</Item>
+        <Item key="2">Two</Item>
+        <Item key="3">Three</Item>
+      </Menu>
+    ));
+
+    expect(spyWarn).toHaveBeenCalledWith(
+      "An aria-label or aria-labelledby prop is required for accessibility."
+    );
   });
 
   it("supports custom data attributes", () => {
     render(() => (
-      <ListBox data-testid="Test">
+      <Menu aria-label="menu" data-testid="Test">
         <Item key="1">One</Item>
         <Item key="2">Two</Item>
         <Item key="3">Three</Item>
-      </ListBox>
+      </Menu>
     ));
 
-    const listbox = screen.getByRole("listbox");
+    const menu = screen.getByRole("menu");
 
-    expect(listbox).toHaveAttribute("data-testid", "Test");
+    expect(menu).toHaveAttribute("data-testid", "Test");
   });
 });

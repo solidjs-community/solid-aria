@@ -129,7 +129,7 @@ export interface Node {
   textValue: Accessor<string>;
 
   /** An accessibility label for this node. */
-  "aria-label"?: Accessor<string | undefined>;
+  "aria-label": Accessor<string | undefined>;
 
   /** A function that should be called to wrap the rendered node. */
   wrapper?: ElementWrapper;

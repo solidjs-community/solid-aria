@@ -99,8 +99,8 @@ export function createListBoxOption<T extends HTMLElement>(
 
   const { itemProps, isPressed } = createSelectableItem(
     {
-      selectionManager: manager,
       key: () => props.key,
+      selectionManager: manager,
       shouldSelectOnPressUp: context.shouldSelectOnPressUp,
       allowsDifferentPressOrigin: context.shouldSelectOnPressUp,
       isVirtualized: context.isVirtualized,

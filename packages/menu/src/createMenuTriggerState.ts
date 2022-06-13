@@ -27,7 +27,7 @@ export interface MenuTriggerState extends OverlayTriggerState {
   /**
    * Controls which item will be auto focused when the menu opens.
    */
-  readonly focusStrategy: Accessor<FocusStrategy | undefined>;
+  focusStrategy: Accessor<FocusStrategy | undefined>;
 
   /**
    * Opens the menu.

@@ -15,21 +15,5 @@
  * governing permissions and limitations under the License.
  */
 
-import { Accessor, createEffect, onCleanup } from "solid-js";
-
-interface ContextValue<T> {
-  ref: Accessor<T | undefined>;
-}
-
-/**
- * Syncs ref from context with ref passed to primitve.
- */
-export function createSyncRef<T>(context: ContextValue<T>, ref: Accessor<T | undefined>) {
-  createEffect(() => {
-    context.ref = ref;
-
-    onCleanup(() => {
-      context.ref = () => undefined;
-    });
-  });
-}
+export * from "./createTreeState";
+export * from "./TreeCollection";

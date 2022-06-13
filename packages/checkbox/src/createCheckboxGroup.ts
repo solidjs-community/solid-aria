@@ -39,20 +39,6 @@ import {
 
 import { CheckboxGroupState, createCheckboxGroupState } from "./createCheckboxGroupState";
 
-interface CheckboxGroupContextValue {
-  /**
-   * State for the checkbox group, as returned by `createCheckboxGroupState`.
-   */
-  state: CheckboxGroupState;
-
-  /**
-   * The name of the CheckboxGroup, used when submitting an HTML form.
-   */
-  name: Accessor<string | undefined>;
-}
-
-const CheckboxGroupContext = createContext<CheckboxGroupContextValue>();
-
 export interface AriaCheckboxGroupProps
   extends ValueBase<string[]>,
     InputBase,
@@ -138,6 +124,20 @@ export function createCheckboxGroup(props: AriaCheckboxGroupProps): CheckboxGrou
 
   return { CheckboxGroupProvider, groupProps, labelProps, state };
 }
+
+interface CheckboxGroupContextValue {
+  /**
+   * State for the checkbox group, as returned by `createCheckboxGroupState`.
+   */
+  state: CheckboxGroupState;
+
+  /**
+   * The name of the CheckboxGroup, used when submitting an HTML form.
+   */
+  name: Accessor<string | undefined>;
+}
+
+const CheckboxGroupContext = createContext<CheckboxGroupContextValue>();
 
 export function useCheckboxGroupContext() {
   const context = useContext(CheckboxGroupContext);

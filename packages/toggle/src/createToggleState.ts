@@ -19,7 +19,7 @@ import { createControllableBooleanSignal } from "@solid-aria/utils";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
 import { Accessor } from "solid-js";
 
-interface CreateToggleStateProps {
+export interface CreateToggleStateProps {
   /**
    * Whether the element should be selected (uncontrolled).
    */

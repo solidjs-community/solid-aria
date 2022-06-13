@@ -17,7 +17,7 @@
 
 import { AriaButtonProps } from "@solid-aria/button";
 import { createId } from "@solid-aria/utils";
-import { MaybeAccessor } from "@solid-primitives/utils";
+import { access, MaybeAccessor } from "@solid-primitives/utils";
 import { JSX } from "solid-js";
 
 import {
@@ -26,14 +26,14 @@ import {
   OverlayTriggerState
 } from "./createOverlayTriggerState";
 
-interface CreateOverlayTriggerProps extends CreateOverlayTriggerStateProps {
+export interface AriaOverlayTriggerProps extends CreateOverlayTriggerStateProps {
   /**
    * Type of overlay that is opened by the trigger.
    */
-  type: MaybeAccessor<Exclude<AriaButtonProps["aria-haspopup"], boolean | undefined>>;
+  type: MaybeAccessor<"dialog" | "menu" | "listbox" | "tree" | "grid">;
 }
 
-interface OverlayTriggerAria {
+export interface OverlayTriggerAria {
   /**
    * Props for the trigger element.
    */
@@ -54,10 +54,11 @@ interface OverlayTriggerAria {
  * Handles the behavior and accessibility for an overlay trigger, e.g. a button
  * that opens a popover, menu, or other overlay that is positioned relative to the trigger.
  */
-export function createOverlayTrigger(props: CreateOverlayTriggerProps): OverlayTriggerAria {
+export function createOverlayTrigger(
+  props: AriaOverlayTriggerProps,
+  state: OverlayTriggerState = createOverlayTriggerState(props)
+): OverlayTriggerAria {
   const overlayId = createId();
-
-  const state = createOverlayTriggerState(props);
 
   const triggerProps: AriaButtonProps = {
     // Aria 1.1 supports multiple values for aria-haspopup other than just menus.
@@ -65,12 +66,13 @@ export function createOverlayTrigger(props: CreateOverlayTriggerProps): OverlayT
     // However, we only add it for menus for now because screen readers often
     // announce it as a menu even for other values.
     get "aria-haspopup"() {
-      if (props.type === "menu") {
-        return true;
-      }
-
-      if (props.type === "listbox") {
-        return "listbox";
+      switch (access(props.type)) {
+        case "menu":
+          return true;
+        case "listbox":
+          return "listbox";
+        default:
+          return;
       }
     },
     get "aria-expanded"() {

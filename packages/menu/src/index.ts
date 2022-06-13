@@ -15,4 +15,9 @@
  * governing permissions and limitations under the License.
  */
 
+export * from "./createMenu";
+export * from "./createMenuItem";
+export * from "./createMenuSection";
+export * from "./createMenuTrigger";
 export * from "./createMenuTriggerState";
+export * from "./types";
