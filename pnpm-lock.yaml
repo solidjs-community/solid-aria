@@ -337,7 +337,6 @@ importers:
   packages/select:
     specifiers:
       '@solid-aria/button': workspace:^
-      '@solid-aria/collection': workspace:^
       '@solid-aria/i18n': workspace:^
       '@solid-aria/interactions': workspace:^
       '@solid-aria/label': workspace:^
@@ -350,7 +349,6 @@ importers:
       '@solid-aria/utils': workspace:^
     dependencies:
       '@solid-aria/button': link:../button
-      '@solid-aria/collection': link:../collection
       '@solid-aria/i18n': link:../i18n
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/label': link:../label

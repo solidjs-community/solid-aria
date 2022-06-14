@@ -19,6 +19,18 @@ import { MaybeAccessor } from "@solid-primitives/utils";
 
 export type ItemKey = string | number;
 
+export interface AsyncLoadable {
+  /**
+   * Whether the items are currently loading.
+   */
+  isLoading?: MaybeAccessor<boolean | undefined>;
+
+  /**
+   * Handler that is called when more items should be loaded, e.g. while scrolling near the bottom.
+   */
+  onLoadMore?: () => any;
+}
+
 export interface Expandable {
   /**
    * The currently expanded keys in the collection (controlled).

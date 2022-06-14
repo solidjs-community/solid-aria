@@ -67,7 +67,7 @@ export interface SectionProps {
 
 export interface CollectionBase {
   /** The contents of the collection. */
-  children: JSX.Element;
+  children?: JSX.Element;
 
   /** The item keys that are disabled. These items cannot be selected, focused, or otherwise interacted with. */
   disabledKeys?: MaybeAccessor<Iterable<ItemKey> | undefined>;

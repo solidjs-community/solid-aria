@@ -49,7 +49,6 @@
   },
   "dependencies": {
     "@solid-aria/button": "workspace:^",
-    "@solid-aria/collection": "workspace:^",
     "@solid-aria/i18n": "workspace:^",
     "@solid-aria/interactions": "workspace:^",
     "@solid-aria/label": "workspace:^",

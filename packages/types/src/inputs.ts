@@ -69,6 +69,13 @@ export interface ValueBase<T, C = T> {
   onChange?: (value: C) => void;
 }
 
+export interface TextInputBase {
+  /**
+   * Temporary text that occupies the text input when it is empty.
+   */
+  placeholder?: string;
+}
+
 export interface HelpTextProps {
   /**
    * A description for the field. Provides a hint such as specific requirements for what to choose.
