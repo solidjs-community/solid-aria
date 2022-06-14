@@ -17,3 +17,4 @@
 
 export * from "./createSelect";
 export * from "./createSelectState";
+export * from "./HiddenSelect";

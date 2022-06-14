@@ -50,12 +50,157 @@ This example uses a `<button>` element for the trigger, with a `<span>` inside t
 
 The listbox popup uses `createListBox` and `createListBoxOption` to render the list of options. In addition, a `<FocusScope>` is used to automatically restore focus to the trigger when the popup closes. A hidden `<DismissButton>` is added at the start and end of the popup to allow screen reader users to dismiss the popup.
 
+The `Popover` component is used to contain the popup listbox for the Select. It can be shared between many other components, including ComboBox, Menu, Dialog, and others. See [`createOverlayTrigger`](../overlays/) for more examples of popovers.
+
+The `ListBox` and `Option` components are used to show the list of options. They can also be shared with other components like a ComboBox. See [`createListBox`](../listbox/) for more examples, including sections and more complex items.
+
 This example does not do any advanced popover positioning or portaling to escape its visual container.
 
-In addition, see [`createListBox`](../listbox/) for examples of sections (option groups), and more complex options.
-
 ```tsx
+import { createButton } from "@solid-aria/button";
+import { ForItems, Item } from "@solid-aria/collection";
+import { FocusScope } from "@solid-aria/focus";
+import { ListState } from "@solid-aria/list";
+import {
+  AriaListBoxOptionProps,
+  AriaListBoxProps,
+  createListBox,
+  createListBoxOption
+} from "@solid-aria/listbox";
+import { AriaOverlayProps, createOverlay, DismissButton } from "@solid-aria/overlays";
+import { AriaSelectProps, createSelect, HiddenSelect } from "@solid-aria/select";
+import { ParentProps, Show } from "solid-js";
+import { render } from "solid-js/web";
 
+function Popover(props: ParentProps<AriaOverlayProps>) {
+  let ref: HTMLDivElement | undefined;
+
+  // Handle events that should cause the popup to close,
+  // e.g. blur, clicking outside, or pressing the escape key.
+  const { overlayProps } = createOverlay(
+    {
+      isOpen: props.isOpen,
+      onClose: props.onClose,
+      shouldCloseOnBlur: true,
+      isDismissable: true
+    },
+    () => ref
+  );
+
+  // Add a hidden <DismissButton> component at the end of the popover
+  // to allow screen reader users to dismiss the popup easily.
+  return (
+    <FocusScope restoreFocus>
+      <div
+        {...overlayProps}
+        ref={ref}
+        style={{
+          position: "absolute",
+          width: "100%",
+          border: "1px solid gray",
+          background: "lightgray",
+          "margin-top": "4px"
+        }}
+      >
+        {props.children}
+        <DismissButton onDismiss={props.onClose} />
+      </div>
+    </FocusScope>
+  );
+}
+
+function ListBox(props: AriaListBoxProps & { state: ListState }) {
+  let ref: HTMLUListElement | undefined;
+
+  const { ListBoxProvider, listBoxProps } = createListBox(props, () => ref, props.state);
+
+  return (
+    <ListBoxProvider>
+      <ul
+        {...listBoxProps}
+        ref={ref}
+        style={{
+          margin: 0,
+          padding: 0,
+          "list-style": "none",
+          "max-height": "150px",
+          overflow: "auto"
+        }}
+      >
+        <ForItems in={props.state.collection()}>
+          {item => <Option key={item().key}>{item().rendered()}</Option>}
+        </ForItems>
+      </ul>
+    </ListBoxProvider>
+  );
+}
+
+function Option(props: ParentProps<AriaListBoxOptionProps>) {
+  let ref: HTMLLIElement | undefined;
+
+  const { optionProps, isSelected, isFocused } = createListBoxOption(props, () => ref);
+
+  return (
+    <li
+      {...optionProps}
+      ref={ref}
+      style={{
+        background: isSelected() ? "blueviolet" : isFocused() ? "gray" : "white",
+        color: isSelected() ? "white" : "black",
+        padding: "2px 5px",
+        outline: "none",
+        cursor: "pointer"
+      }}
+    >
+      {props.children}
+    </li>
+  );
+}
+
+function Select(props: AriaSelectProps) {
+  let ref: HTMLButtonElement | undefined;
+
+  // Get props for child elements from useSelect
+  const { labelProps, triggerProps, valueProps, menuProps, state } = createSelect(props, () => ref);
+
+  // Get props for the button based on the trigger props from useSelect
+  const { buttonProps } = createButton(triggerProps, () => ref);
+
+  return (
+    <div style={{ position: "relative", display: "inline-block" }}>
+      <div {...labelProps}>{props.label}</div>
+      <HiddenSelect state={state} triggerRef={ref} label={props.label} name={props.name} />
+      <button {...buttonProps} ref={ref} style={{ height: "30px", "font-size": "14px" }}>
+        <span {...valueProps}>{state.selectedItem()?.rendered() ?? "Select an option"}</span>
+        <span aria-hidden="true" style={{ "padding-left": "5px" }}>
+          ▼
+        </span>
+      </button>
+      <Show when={state.isOpen()}>
+        <Popover isOpen={state.isOpen()} onClose={state.close}>
+          <ListBox {...menuProps} state={state} />
+        </Popover>
+      </Show>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Select label="Favorite Color">
+      <Item key="red">Red</Item>
+      <Item key="orange">Orange</Item>
+      <Item key="yellow">Yellow</Item>
+      <Item key="green">Green</Item>
+      <Item key="blue">Blue</Item>
+      <Item key="purple">Purple</Item>
+      <Item key="black">Black</Item>
+      <Item key="white">White</Item>
+      <Item key="lime">Lime</Item>
+      <Item key="fuchsia">Fuchsia</Item>
+    </Select>
+  );
+}
 ```
 
 ### Internationalization
