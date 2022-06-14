@@ -15,7 +15,7 @@
  * governing permissions and limitations under the License.
  */
 
-import { Accessor, createRenderEffect, createSignal, createUniqueId, on } from "solid-js";
+import { Accessor, createSignal, createUniqueId, getListener, onCleanup } from "solid-js";
 
 export const ID_PREFIX = "solid-aria";
 
@@ -35,24 +35,19 @@ export function createId(prefix = ID_PREFIX): string {
  * @returns An accessor for the generated id.
  */
 export function createSlotId(
-  prefix?: string,
-  deps: Accessor<any>[] = []
-): Accessor<string | undefined> {
+  prefix?: string
+): [id: Accessor<string | undefined>, track: VoidFunction] {
   const id = createId(prefix);
 
   const [slotId, setSlotId] = createSignal<string | undefined>(id);
 
-  createRenderEffect(
-    on(deps, () => {
-      setSlotId(id);
+  const updateSlotId = () => setSlotId(document.getElementById(id) ? id : undefined);
+  queueMicrotask(updateSlotId);
 
-      setTimeout(() => {
-        if (!document.getElementById(id)) {
-          setSlotId(undefined);
-        }
-      });
-    })
-  );
+  const track = () => {
+    queueMicrotask(updateSlotId);
+    getListener() && onCleanup(updateSlotId);
+  };
 
-  return slotId;
+  return [slotId, track];
 }
