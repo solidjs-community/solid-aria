@@ -70,7 +70,7 @@ export interface MenuTriggerAria {
  * Provides the behavior and accessibility implementation for a menu trigger.
  * @param props - Props for the menu trigger.
  * @param ref - A ref to the menu trigger element.
- * @param state - State for the menu trigger.
+ * @param state - State for the menu trigger, as returned by `createMenuTriggerState`.
  */
 export function createMenuTrigger<T extends HTMLElement>(
   props: AriaMenuTriggerProps,

@@ -63,6 +63,7 @@
     "@solid-aria/menu": "workspace:^",
     "@solid-aria/overlays": "workspace:^",
     "@solid-aria/radio": "workspace:^",
+    "@solid-aria/select": "workspace:^",
     "@solid-aria/selection": "workspace:^",
     "@solid-aria/switch": "workspace:^",
     "@solid-aria/toggle": "workspace:^",
@@ -70,6 +71,9 @@
     "@solid-aria/types": "workspace:^",
     "@solid-aria/utils": "workspace:^",
     "@solid-aria/visually-hidden": "workspace:^"
+  },
+  "devDependencies": {
+    "@solid-primitives/refs": "0.2.0"
   },
   "peerDependencies": {
     "solid-js": "^1.4.4"

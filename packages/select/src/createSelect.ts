@@ -41,7 +41,7 @@ import { combineProps } from "@solid-primitives/props";
 import { chain } from "@solid-primitives/utils";
 import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
 
-import { createSelectState, CreateSelectStateProps } from "./createSelectState";
+import { createSelectState, CreateSelectStateProps, SelectState } from "./createSelectState";
 
 export interface AriaSelectProps
   extends CreateSelectStateProps,
@@ -74,6 +74,11 @@ export interface AriaSelectProps
 }
 
 interface SelectAria {
+  /**
+   * State for the select, as returned by `createSelectState`.
+   */
+  state: SelectState;
+
   /**
    * Props for the label element.
    */
@@ -285,6 +290,7 @@ export function createSelect<T extends HTMLElement>(
   };
 
   return {
+    state,
     labelProps: _labelProps,
     triggerProps: _triggerProps,
     menuProps: _menuProps,
