@@ -18,7 +18,7 @@
 import { HelpTextProps, Validation } from "@solid-aria/types";
 import { createSlotId, ID_PREFIX } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
-import { createMemo, JSX } from "solid-js";
+import { JSX } from "solid-js";
 
 import { AriaLabelProps, createLabel, LabelAria } from "./createLabel";
 
@@ -47,12 +47,8 @@ export interface FieldAria extends LabelAria {
 export function createField(props: AriaFieldProps): FieldAria {
   const { labelProps, fieldProps } = createLabel(props);
 
-  const description = createMemo(() => props.description);
-  const errorMessage = createMemo(() => props.errorMessage);
-  const validationState = createMemo(() => props.validationState);
-
-  const descriptionId = createSlotId(ID_PREFIX, [description, errorMessage, validationState]);
-  const errorMessageId = createSlotId(ID_PREFIX, [description, errorMessage, validationState]);
+  const [descriptionId, trackDescIdUse] = createSlotId(ID_PREFIX);
+  const [errorMessageId, trackErrorIdUse] = createSlotId(ID_PREFIX);
 
   const baseFieldProps: JSX.HTMLAttributes<any> = {
     get "aria-describedby"() {
@@ -72,12 +68,14 @@ export function createField(props: AriaFieldProps): FieldAria {
 
   const descriptionProps: JSX.HTMLAttributes<any> = {
     get id() {
+      trackDescIdUse();
       return descriptionId();
     }
   };
 
   const errorMessageProps: JSX.HTMLAttributes<any> = {
     get id() {
+      trackErrorIdUse();
       return errorMessageId();
     }
   };

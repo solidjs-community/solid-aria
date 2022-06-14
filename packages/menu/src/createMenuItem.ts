@@ -106,9 +106,9 @@ export function createMenuItem<T extends HTMLElement>(
 ): MenuItemAria {
   const context = useMenuContext();
 
-  const labelId = createSlotId();
-  const descriptionId = createSlotId();
-  const keyboardId = createSlotId();
+  const [labelId] = createSlotId();
+  const [descriptionId] = createSlotId();
+  const [keyboardId] = createSlotId();
 
   const manager = () => context.state().selectionManager();
 
