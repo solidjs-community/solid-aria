@@ -70,7 +70,6 @@ import {
 import { AriaOverlayProps, createOverlay, DismissButton } from "@solid-aria/overlays";
 import { AriaSelectProps, createSelect, HiddenSelect } from "@solid-aria/select";
 import { ParentProps, Show } from "solid-js";
-import { render } from "solid-js/web";
 
 function Popover(props: ParentProps<AriaOverlayProps>) {
   let ref: HTMLDivElement | undefined;
