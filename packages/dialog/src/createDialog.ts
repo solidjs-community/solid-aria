@@ -48,12 +48,13 @@ export function createDialog<T extends HTMLElement>(
   props: AriaDialogProps,
   ref: Accessor<T | undefined>
 ): DialogAria {
-  const defaultTitleId = createSlotId();
+  const [defaultTitleId] = createSlotId();
 
   const titleId = () => {
     return props["aria-label"] ? undefined : defaultTitleId();
   };
 
+  // eslint-disable-next-line solid/reactivity
   const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
 
   // Note: aria-modal has a bug in Safari which forces the first focusable element to be focused
