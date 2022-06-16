@@ -39,17 +39,17 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/button": "workspace:^",
-    "@solid-aria/collection": "workspace:^",
-    "@solid-aria/interactions": "workspace:^",
-    "@solid-aria/overlays": "workspace:^",
-    "@solid-aria/selection": "workspace:^",
-    "@solid-aria/tree": "workspace:^",
-    "@solid-aria/types": "workspace:^",
-    "@solid-aria/utils": "workspace:^"
+    "@solid-aria/button": "^0.1.0",
+    "@solid-aria/collection": "^0.1.0",
+    "@solid-aria/interactions": "^0.1.0",
+    "@solid-aria/overlays": "^0.1.0",
+    "@solid-aria/selection": "^0.1.0",
+    "@solid-aria/tree": "^0.1.0",
+    "@solid-aria/types": "^0.1.0",
+    "@solid-aria/utils": "^0.1.0",
+    "@solid-primitives/utils": "^2.1.0"
   },
   "peerDependencies": {
-    "@solid-primitives/utils": "^2.0.1",
     "solid-js": "^1.4.4"
   },
   "publishConfig": {

@@ -35,8 +35,10 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@solid-primitives/utils": "^2.1.0"
+  },
   "peerDependencies": {
-    "@solid-primitives/utils": "^2.0.1",
     "solid-js": "^1.4.4"
   },
   "publishConfig": {

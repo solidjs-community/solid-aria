@@ -98,129 +98,167 @@ importers:
 
   packages/breadcrumbs:
     specifiers:
-      '@solid-aria/link': workspace:^
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/link': ^0.1.0
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/link': link:../link
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/utils': 2.1.0
 
   packages/button:
     specifiers:
-      '@solid-aria/focus': workspace:^
-      '@solid-aria/interactions': workspace:^
-      '@solid-aria/toggle': workspace:^
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/focus': ^0.1.0
+      '@solid-aria/interactions': ^0.1.0
+      '@solid-aria/toggle': ^0.1.0
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-primitives/props': ^2.1.7
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/focus': link:../focus
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/toggle': link:../toggle
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/props': 2.1.7
+      '@solid-primitives/utils': 2.1.0
 
   packages/checkbox:
     specifiers:
-      '@solid-aria/label': workspace:^
-      '@solid-aria/toggle': workspace:^
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/label': ^0.1.0
+      '@solid-aria/toggle': ^0.1.0
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-primitives/props': ^2.1.7
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/label': link:../label
       '@solid-aria/toggle': link:../toggle
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/props': 2.1.7
+      '@solid-primitives/utils': 2.1.0
 
   packages/collection:
     specifiers:
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-primitives/keyed': ^1.0.0
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/keyed': 1.0.0
+      '@solid-primitives/utils': 2.1.0
 
   packages/dialog:
     specifiers:
-      '@solid-aria/focus': workspace:^
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/focus': ^0.1.0
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/focus': link:../focus
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/utils': 2.1.0
 
   packages/focus:
     specifiers:
-      '@solid-aria/interactions': workspace:^
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/interactions': ^0.1.0
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-primitives/props': ^2.1.7
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/props': 2.1.7
+      '@solid-primitives/utils': 2.1.0
 
   packages/i18n:
     specifiers:
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/utils': 2.1.0
 
   packages/interactions:
     specifiers:
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
       '@solid-primitives/platform': ^0.0.100
+      '@solid-primitives/props': ^2.1.7
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
       '@solid-primitives/platform': 0.0.100
+      '@solid-primitives/props': 2.1.7
+      '@solid-primitives/utils': 2.1.0
 
   packages/label:
     specifiers:
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-primitives/props': ^2.1.7
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/props': 2.1.7
+      '@solid-primitives/utils': 2.1.0
 
   packages/link:
     specifiers:
-      '@solid-aria/focus': workspace:^
-      '@solid-aria/interactions': workspace:^
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/focus': ^0.1.0
+      '@solid-aria/interactions': ^0.1.0
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-primitives/props': ^2.1.7
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/focus': link:../focus
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/props': 2.1.7
+      '@solid-primitives/utils': 2.1.0
 
   packages/list:
     specifiers:
-      '@solid-aria/collection': workspace:^
-      '@solid-aria/selection': workspace:^
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/collection': ^0.1.0
+      '@solid-aria/selection': ^0.1.0
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/collection': link:../collection
       '@solid-aria/selection': link:../selection
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/utils': 2.1.0
 
   packages/listbox:
     specifiers:
-      '@solid-aria/collection': workspace:^
-      '@solid-aria/focus': workspace:^
-      '@solid-aria/interactions': workspace:^
-      '@solid-aria/label': workspace:^
-      '@solid-aria/list': workspace:^
-      '@solid-aria/selection': workspace:^
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/collection': ^0.1.0
+      '@solid-aria/focus': ^0.1.0
+      '@solid-aria/interactions': ^0.1.0
+      '@solid-aria/label': ^0.1.0
+      '@solid-aria/list': ^0.1.0
+      '@solid-aria/selection': ^0.1.0
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
       '@solid-primitives/platform': ^0.0.100
+      '@solid-primitives/props': ^2.1.7
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/collection': link:../collection
       '@solid-aria/focus': link:../focus
@@ -231,17 +269,20 @@ importers:
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
       '@solid-primitives/platform': 0.0.100
+      '@solid-primitives/props': 2.1.7
+      '@solid-primitives/utils': 2.1.0
 
   packages/menu:
     specifiers:
-      '@solid-aria/button': workspace:^
-      '@solid-aria/collection': workspace:^
-      '@solid-aria/interactions': workspace:^
-      '@solid-aria/overlays': workspace:^
-      '@solid-aria/selection': workspace:^
-      '@solid-aria/tree': workspace:^
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/button': ^0.1.0
+      '@solid-aria/collection': ^0.1.0
+      '@solid-aria/interactions': ^0.1.0
+      '@solid-aria/overlays': ^0.1.0
+      '@solid-aria/selection': ^0.1.0
+      '@solid-aria/tree': ^0.1.0
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/button': link:../button
       '@solid-aria/collection': link:../collection
@@ -251,16 +292,19 @@ importers:
       '@solid-aria/tree': link:../tree
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/utils': 2.1.0
 
   packages/overlays:
     specifiers:
-      '@solid-aria/button': workspace:^
-      '@solid-aria/i18n': workspace:^
-      '@solid-aria/interactions': workspace:^
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
-      '@solid-aria/visually-hidden': workspace:^
+      '@solid-aria/button': ^0.1.0
+      '@solid-aria/i18n': ^0.1.0
+      '@solid-aria/interactions': ^0.1.0
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-aria/visually-hidden': ^0.1.0
       '@solid-primitives/platform': ^0.0.100
+      '@solid-primitives/props': ^2.1.7
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/button': link:../button
       '@solid-aria/i18n': link:../i18n
@@ -269,31 +313,33 @@ importers:
       '@solid-aria/utils': link:../utils
       '@solid-aria/visually-hidden': link:../visually-hidden
       '@solid-primitives/platform': 0.0.100
+      '@solid-primitives/props': 2.1.7
+      '@solid-primitives/utils': 2.1.0
 
   packages/primitives:
     specifiers:
-      '@solid-aria/breadcrumbs': workspace:^
-      '@solid-aria/button': workspace:^
-      '@solid-aria/checkbox': workspace:^
-      '@solid-aria/collection': workspace:^
-      '@solid-aria/dialog': workspace:^
-      '@solid-aria/focus': workspace:^
-      '@solid-aria/i18n': workspace:^
-      '@solid-aria/interactions': workspace:^
-      '@solid-aria/label': workspace:^
-      '@solid-aria/link': workspace:^
-      '@solid-aria/list': workspace:^
-      '@solid-aria/listbox': workspace:^
-      '@solid-aria/menu': workspace:^
-      '@solid-aria/overlays': workspace:^
-      '@solid-aria/radio': workspace:^
-      '@solid-aria/selection': workspace:^
-      '@solid-aria/switch': workspace:^
-      '@solid-aria/toggle': workspace:^
-      '@solid-aria/tree': workspace:^
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
-      '@solid-aria/visually-hidden': workspace:^
+      '@solid-aria/breadcrumbs': ^0.1.0
+      '@solid-aria/button': ^0.1.0
+      '@solid-aria/checkbox': ^0.1.0
+      '@solid-aria/collection': ^0.1.0
+      '@solid-aria/dialog': ^0.1.0
+      '@solid-aria/focus': ^0.1.0
+      '@solid-aria/i18n': ^0.1.0
+      '@solid-aria/interactions': ^0.1.0
+      '@solid-aria/label': ^0.1.0
+      '@solid-aria/link': ^0.1.0
+      '@solid-aria/list': ^0.1.0
+      '@solid-aria/listbox': ^0.1.0
+      '@solid-aria/menu': ^0.1.0
+      '@solid-aria/overlays': ^0.1.0
+      '@solid-aria/radio': ^0.1.0
+      '@solid-aria/selection': ^0.1.0
+      '@solid-aria/switch': ^0.1.0
+      '@solid-aria/toggle': ^0.1.0
+      '@solid-aria/tree': ^0.1.0
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-aria/visually-hidden': ^0.1.0
     dependencies:
       '@solid-aria/breadcrumbs': link:../breadcrumbs
       '@solid-aria/button': link:../button
@@ -320,12 +366,14 @@ importers:
 
   packages/radio:
     specifiers:
-      '@solid-aria/focus': workspace:^
-      '@solid-aria/i18n': workspace:^
-      '@solid-aria/interactions': workspace:^
-      '@solid-aria/label': workspace:^
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/focus': ^0.1.0
+      '@solid-aria/i18n': ^0.1.0
+      '@solid-aria/interactions': ^0.1.0
+      '@solid-aria/label': ^0.1.0
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-primitives/props': ^2.1.7
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/focus': link:../focus
       '@solid-aria/i18n': link:../i18n
@@ -333,16 +381,21 @@ importers:
       '@solid-aria/label': link:../label
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/props': 2.1.7
+      '@solid-primitives/utils': 2.1.0
 
   packages/selection:
     specifiers:
-      '@solid-aria/collection': workspace:^
-      '@solid-aria/focus': workspace:^
-      '@solid-aria/i18n': workspace:^
-      '@solid-aria/interactions': workspace:^
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/collection': ^0.1.0
+      '@solid-aria/focus': ^0.1.0
+      '@solid-aria/i18n': ^0.1.0
+      '@solid-aria/interactions': ^0.1.0
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-primitives/event-listener': ^2.1.0
       '@solid-primitives/platform': ^0.0.100
+      '@solid-primitives/props': ^2.1.7
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/collection': link:../collection
       '@solid-aria/focus': link:../focus
@@ -350,58 +403,76 @@ importers:
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/event-listener': 2.1.0
       '@solid-primitives/platform': 0.0.100
+      '@solid-primitives/props': 2.1.7
+      '@solid-primitives/utils': 2.1.0
 
   packages/switch:
     specifiers:
-      '@solid-aria/toggle': workspace:^
-      '@solid-aria/types': workspace:^
+      '@solid-aria/toggle': ^0.1.0
+      '@solid-aria/types': ^0.1.0
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/toggle': link:../toggle
       '@solid-aria/types': link:../types
+      '@solid-primitives/utils': 2.1.0
 
   packages/toggle:
     specifiers:
-      '@solid-aria/focus': workspace:^
-      '@solid-aria/interactions': workspace:^
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/focus': ^0.1.0
+      '@solid-aria/interactions': ^0.1.0
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-primitives/props': ^2.1.7
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/focus': link:../focus
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/props': 2.1.7
+      '@solid-primitives/utils': 2.1.0
 
   packages/tree:
     specifiers:
-      '@solid-aria/collection': workspace:^
-      '@solid-aria/selection': workspace:^
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/collection': ^0.1.0
+      '@solid-aria/selection': ^0.1.0
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/collection': link:../collection
       '@solid-aria/selection': link:../selection
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/utils': 2.1.0
 
   packages/types:
-    specifiers: {}
+    specifiers:
+      '@solid-primitives/utils': ^2.1.0
+    dependencies:
+      '@solid-primitives/utils': 2.1.0
 
   packages/utils:
     specifiers:
-      '@solid-aria/types': workspace:^
+      '@solid-aria/types': ^0.1.0
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/types': link:../types
+      '@solid-primitives/utils': 2.1.0
 
   packages/visually-hidden:
     specifiers:
-      '@solid-aria/interactions': workspace:^
-      '@solid-aria/types': workspace:^
-      '@solid-aria/utils': workspace:^
+      '@solid-aria/interactions': ^0.1.0
+      '@solid-aria/types': ^0.1.0
+      '@solid-aria/utils': ^0.1.0
+      '@solid-primitives/utils': ^2.1.0
     dependencies:
       '@solid-aria/interactions': link:../interactions
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
+      '@solid-primitives/utils': 2.1.0
 
 packages:
 
@@ -2442,6 +2513,14 @@ packages:
       '@sinonjs/commons': 1.8.3
     dev: true
 
+  /@solid-primitives/event-listener/2.1.0:
+    resolution: {integrity: sha512-EO80fKPjG3CsACyLY+7an6kZfGRVUjifi8Rl7WvLHK99ryupwHy7uSAPMRivWE30cHJkjCWmdOchgdv02XmNdA==}
+    peerDependencies:
+      solid-js: ^1.3.1
+    dependencies:
+      '@solid-primitives/utils': 1.5.2
+    dev: false
+
   /@solid-primitives/event-listener/2.1.0_solid-js@1.4.4:
     resolution: {integrity: sha512-EO80fKPjG3CsACyLY+7an6kZfGRVUjifi8Rl7WvLHK99ryupwHy7uSAPMRivWE30cHJkjCWmdOchgdv02XmNdA==}
     peerDependencies:
@@ -2450,6 +2529,12 @@ packages:
       '@solid-primitives/utils': 1.5.2_solid-js@1.4.4
       solid-js: 1.4.4
     dev: true
+
+  /@solid-primitives/keyed/1.0.0:
+    resolution: {integrity: sha512-9vznFq6xR1FLEcQH3S3aGZ3iWOY6EZmDEl0raNOXJxdgXnudHepcAOfx8G52bROHJ3AdPnIqv4ITIegPQOK2BA==}
+    peerDependencies:
+      solid-js: ^1.4.0
+    dev: false
 
   /@solid-primitives/keyed/1.0.0_solid-js@1.4.4:
     resolution: {integrity: sha512-9vznFq6xR1FLEcQH3S3aGZ3iWOY6EZmDEl0raNOXJxdgXnudHepcAOfx8G52bROHJ3AdPnIqv4ITIegPQOK2BA==}
@@ -2470,9 +2555,23 @@ packages:
     peerDependencies:
       solid-js: ^1.3.0
     dependencies:
-      '@solid-primitives/utils': 2.0.3_solid-js@1.4.4
+      '@solid-primitives/utils': 2.1.0_solid-js@1.4.4
       solid-js: 1.4.4
     dev: true
+
+  /@solid-primitives/props/2.1.7:
+    resolution: {integrity: sha512-Sg+JUK+v43x4fe5yNYgKS0IkXG0pkLeCrO7SGKEaOtXSH2NZXthY/OQCSiv5rhM17Z7NoA6E9Q8CjQDrcFUblg==}
+    peerDependencies:
+      solid-js: ^1.3.0
+    dependencies:
+      '@solid-primitives/utils': 2.1.0
+    dev: false
+
+  /@solid-primitives/utils/1.5.2:
+    resolution: {integrity: sha512-dZUHjzasuqS2lDO+PQCY1+jFmtWHlaP3tUvkX1Jr06LI/Ipa2P/ZNVSvuIoqQ0Bg+Ny27LvtrXxflZNeGtptvA==}
+    peerDependencies:
+      solid-js: ^1.3.1
+    dev: false
 
   /@solid-primitives/utils/1.5.2_solid-js@1.4.4:
     resolution: {integrity: sha512-dZUHjzasuqS2lDO+PQCY1+jFmtWHlaP3tUvkX1Jr06LI/Ipa2P/ZNVSvuIoqQ0Bg+Ny27LvtrXxflZNeGtptvA==}
@@ -2484,6 +2583,20 @@ packages:
 
   /@solid-primitives/utils/2.0.3_solid-js@1.4.4:
     resolution: {integrity: sha512-dIv339WSJZ8C50kcJ7Ys5aLPSs59+GMsSrtJ/bGnA38gkLgmKry1XIZJLAUVz/uiOiZ661GUJ+IMngsqG8u09g==}
+    peerDependencies:
+      solid-js: ^1.4.1
+    dependencies:
+      solid-js: 1.4.4
+    dev: true
+
+  /@solid-primitives/utils/2.1.0:
+    resolution: {integrity: sha512-QOiYt7CG/q8zV22C6J630YdnUf+365csXWQbMVFkY5YsfvpfFskI+Sh6Ge7FfD8aQxTPJ7PpqtlN0p5wVuiiAw==}
+    peerDependencies:
+      solid-js: ^1.4.1
+    dev: false
+
+  /@solid-primitives/utils/2.1.0_solid-js@1.4.4:
+    resolution: {integrity: sha512-QOiYt7CG/q8zV22C6J630YdnUf+365csXWQbMVFkY5YsfvpfFskI+Sh6Ge7FfD8aQxTPJ7PpqtlN0p5wVuiiAw==}
     peerDependencies:
       solid-js: ^1.4.1
     dependencies:

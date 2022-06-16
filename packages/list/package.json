@@ -39,13 +39,13 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/collection": "workspace:^",
-    "@solid-aria/selection": "workspace:^",
-    "@solid-aria/types": "workspace:^",
-    "@solid-aria/utils": "workspace:^"
+    "@solid-aria/collection": "^0.1.0",
+    "@solid-aria/selection": "^0.1.0",
+    "@solid-aria/types": "^0.1.0",
+    "@solid-aria/utils": "^0.1.0",
+    "@solid-primitives/utils": "^2.1.0"
   },
   "peerDependencies": {
-    "@solid-primitives/utils": "^2.0.1",
     "solid-js": "^1.4.4"
   },
   "publishConfig": {
