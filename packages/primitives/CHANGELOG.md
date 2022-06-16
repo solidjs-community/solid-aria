@@ -1,5 +1,35 @@
 # @solid-aria/primitives
 
+## 0.1.1
+
+### Patch Changes
+
+- 2ca4cfc: Change dependency versions of packages from "workspace^" to "^0.1.0" (current version) — Fixes #29
+  Move solid-primitives packages from peerDependencies to dependencies.
+- Updated dependencies [2ca4cfc]
+  - @solid-aria/breadcrumbs@0.1.1
+  - @solid-aria/button@0.1.1
+  - @solid-aria/checkbox@0.1.1
+  - @solid-aria/collection@0.1.1
+  - @solid-aria/dialog@0.1.1
+  - @solid-aria/focus@0.1.1
+  - @solid-aria/i18n@0.1.1
+  - @solid-aria/interactions@0.1.1
+  - @solid-aria/label@0.1.1
+  - @solid-aria/link@0.1.1
+  - @solid-aria/list@0.1.1
+  - @solid-aria/listbox@0.1.1
+  - @solid-aria/menu@0.1.1
+  - @solid-aria/overlays@0.1.1
+  - @solid-aria/radio@0.1.1
+  - @solid-aria/selection@0.1.1
+  - @solid-aria/switch@0.1.1
+  - @solid-aria/toggle@0.1.1
+  - @solid-aria/tree@0.1.1
+  - @solid-aria/types@0.1.1
+  - @solid-aria/utils@0.1.1
+  - @solid-aria/visually-hidden@0.1.1
+
 ## 0.1.0
 
 ### Minor Changes
