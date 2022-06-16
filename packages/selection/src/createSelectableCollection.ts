@@ -43,7 +43,7 @@ interface CreateSelectableCollectionProps {
    * Whether the collection or one of its items should be automatically focused upon render.
    * @default false
    */
-  autoFocus?: MaybeAccessor<boolean | FocusStrategy | undefined>;
+  autofocus?: MaybeAccessor<boolean | FocusStrategy | undefined>;
 
   /**
    * Whether focus should wrap around when the end/start is reached.
@@ -416,9 +416,9 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
   };
 
   onMount(() => {
-    const autoFocus = access(props.autoFocus);
+    const autofocus = access(props.autofocus);
 
-    if (!autoFocus) {
+    if (!autofocus) {
       return;
     }
 
@@ -428,10 +428,10 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
     let focusedKey: ItemKey | undefined;
 
     // Check focus strategy to determine which item to focus
-    if (autoFocus === "first") {
+    if (autofocus === "first") {
       focusedKey = delegate.getFirstKey?.();
     }
-    if (autoFocus === "last") {
+    if (autofocus === "last") {
       focusedKey = delegate.getLastKey?.();
     }
 

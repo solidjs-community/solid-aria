@@ -262,7 +262,7 @@ export function createSelect<T extends HTMLElement>(
     shouldSelectOnPressUp: true,
     shouldFocusOnHover: true,
     disallowEmptySelection: true,
-    get autoFocus() {
+    get autofocus() {
       return state.focusStrategy() || true;
     },
     get "aria-labelledby"() {

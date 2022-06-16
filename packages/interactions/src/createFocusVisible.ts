@@ -35,7 +35,7 @@ interface CreateFocusVisibleProps {
   /**
    * Whether the element will be auto focused.
    */
-  autoFocus?: MaybeAccessor<boolean | undefined>;
+  autofocus?: MaybeAccessor<boolean | undefined>;
 }
 
 interface FocusVisibleResult {
@@ -268,7 +268,7 @@ export function createFocusVisibleListener(
  */
 export function createFocusVisible(props: CreateFocusVisibleProps = {}): FocusVisibleResult {
   const [isFocusVisible, setFocusVisible] = createSignal(
-    access(props.autoFocus) || isKeyboardFocusVisible()
+    access(props.autofocus) || isKeyboardFocusVisible()
   );
 
   createFocusVisibleListener(setFocusVisible, () => access(props.isTextInput), {

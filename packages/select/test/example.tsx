@@ -91,7 +91,7 @@ export function Select(props: AriaSelectProps) {
       </button>
       <Show when={state.isOpen()}>
         <Popover isOpen={state.isOpen()} onClose={state.close}>
-          <ListBox {...menuProps} autoFocus={state.focusStrategy() || true} state={state} />
+          <ListBox {...menuProps} autofocus={state.focusStrategy() || true} state={state} />
         </Popover>
       </Show>
     </div>

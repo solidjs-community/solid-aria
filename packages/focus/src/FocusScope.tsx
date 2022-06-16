@@ -53,7 +53,7 @@ interface FocusScopeProps {
   /**
    * Whether to auto focus the first focusable element in the focus scope on mount.
    */
-  autoFocus?: boolean;
+  autofocus?: boolean;
 }
 
 interface FocusManagerOptions {
@@ -166,8 +166,8 @@ function FocusScopeContainer(props: FocusScopeProps) {
     () => !!props.contain
   );
 
-  const autoFocusReaction = createReaction(() => {
-    if (!props.autoFocus) {
+  const autofocusReaction = createReaction(() => {
+    if (!props.autofocus) {
       return;
     }
 
@@ -184,7 +184,7 @@ function FocusScopeContainer(props: FocusScopeProps) {
 
   // Auto focus logic is done via a reaction and run only once when scopeRef changes.
   // This ensure scopeRef is not empty when trying to focus an element in the `FocusScope`.
-  autoFocusReaction(ctx.scopeRef);
+  autofocusReaction(ctx.scopeRef);
 
   return (
     <>
@@ -515,7 +515,7 @@ function createRestoreFocus(
   restoreFocus: Accessor<boolean>,
   contain: Accessor<boolean>
 ) {
-  // create a memo to save the active element before a child with autoFocus=true mounts.
+  // create a memo to save the active element before a child with autofocus=true mounts.
   const nodeToRestoreMemo = createMemo(() => {
     return typeof document !== "undefined" ? (document.activeElement as HTMLElement) : null;
   });

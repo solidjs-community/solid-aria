@@ -47,7 +47,7 @@ export interface AriaListBoxProps
   /**
    * Whether to auto focus the listbox or an option.
    */
-  autoFocus?: boolean | FocusStrategy;
+  autofocus?: boolean | FocusStrategy;
 
   /**
    * Whether focus should wrap around when the end/start is reached.

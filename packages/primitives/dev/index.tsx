@@ -1,3 +1,4 @@
+/*
 import { createButton } from "@solid-aria/button";
 import { ForItems, Item } from "@solid-aria/collection";
 import { FocusScope } from "@solid-aria/focus";
@@ -119,7 +120,7 @@ function Select(props: AriaSelectProps) {
       </button>
       <Show when={state.isOpen()}>
         <Popover isOpen={state.isOpen()} onClose={state.close}>
-          <ListBox {...menuProps} autoFocus state={state} />
+          <ListBox {...menuProps} autofocus state={state} />
         </Popover>
       </Show>
     </div>
@@ -140,6 +141,83 @@ function App() {
       <Item key="lime">Lime</Item>
       <Item key="fuchsia">Fuchsia</Item>
     </Select>
+  );
+}
+*/
+
+import { ForItems, Item } from "@solid-aria/collection";
+import { createFocusRing } from "@solid-aria/focus";
+import {
+  AriaListBoxOptionProps,
+  AriaListBoxProps,
+  createListBox,
+  createListBoxOption
+} from "@solid-aria/listbox";
+import { combineProps } from "@solid-primitives/props";
+import { ParentProps } from "solid-js";
+import { render } from "solid-js/web";
+
+function ListBox(props: AriaListBoxProps) {
+  let ref: HTMLUListElement | undefined;
+
+  const { ListBoxProvider, listBoxProps, labelProps, state } = createListBox(props, () => ref);
+
+  return (
+    <ListBoxProvider>
+      <div {...labelProps}>{props.label}</div>
+      <ul
+        {...listBoxProps}
+        ref={ref}
+        style={{
+          padding: 0,
+          margin: "5px 0",
+          "list-style": "none",
+          border: "1px solid gray",
+          "max-width": "250px"
+        }}
+      >
+        <ForItems in={state.collection()}>
+          {item => <Option key={item().key}>{item().rendered()}</Option>}
+        </ForItems>
+      </ul>
+    </ListBoxProvider>
+  );
+}
+
+function Option(props: ParentProps<AriaListBoxOptionProps>) {
+  let ref: HTMLLIElement | undefined;
+
+  const { optionProps, isSelected } = createListBoxOption(props, () => ref);
+
+  // Determine whether we should show a keyboard
+  // focus ring for accessibility
+  const { isFocusVisible, focusProps } = createFocusRing();
+
+  const rootProps = combineProps(optionProps, focusProps);
+
+  return (
+    <li
+      {...rootProps}
+      ref={ref}
+      style={{
+        background: isSelected() ? "blueviolet" : "transparent",
+        color: isSelected() ? "white" : null,
+        padding: "2px 5px",
+        outline: isFocusVisible() ? "2px solid orange" : "none"
+      }}
+    >
+      {props.children}
+    </li>
+  );
+}
+
+function App() {
+  return (
+    <ListBox label="Choose an option" selectionMode="single" autofocus>
+      <Item key="one">One</Item>
+      <Item key="two">Two</Item>
+      <Item key="three">Three</Item>
+    </ListBox>
   );
 }
 

@@ -302,7 +302,7 @@ function MenuButton(props: MenuButtonProps) {
         <MenuPopup
           {...props}
           {...menuProps}
-          autoFocus={state.focusStrategy()}
+          autofocus={state.focusStrategy()}
           onClose={() => state.close()}
         />
       </Show>

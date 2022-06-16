@@ -34,7 +34,7 @@ export interface CreateFocusableProps extends CreateFocusProps, CreateKeyboardPr
   /**
    * Whether the element should receive focus on render.
    */
-  autoFocus?: MaybeAccessor<boolean | undefined>;
+  autofocus?: MaybeAccessor<boolean | undefined>;
 
   /**
    * Whether to exclude the element from the sequential tab order. If true,
@@ -61,7 +61,7 @@ export function createFocusable(
   props: CreateFocusableProps,
   ref: Accessor<HTMLElement | undefined>
 ): FocusableResult {
-  const [autoFocus, setAutoFocus] = createSignal(!!access(props.autoFocus));
+  const [autofocus, setAutofocus] = createSignal(!!access(props.autofocus));
 
   const { focusProps } = createFocus(props);
   const { keyboardProps } = createKeyboard(props);
@@ -74,8 +74,8 @@ export function createFocusable(
   };
 
   onMount(() => {
-    autoFocus() && access(ref)?.focus();
-    setAutoFocus(false);
+    autofocus() && access(ref)?.focus();
+    setAutofocus(false);
   });
 
   return { focusableProps };

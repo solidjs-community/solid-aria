@@ -43,7 +43,7 @@ export interface CreateFocusRingProps {
   /**
    * Whether the element will be auto focused.
    */
-  autoFocus?: MaybeAccessor<boolean | undefined>;
+  autofocus?: MaybeAccessor<boolean | undefined>;
 }
 
 type FocusRingProps = FocusResult["focusProps"] | FocusWithinResult["focusWithinProps"];
@@ -73,7 +73,7 @@ export interface FocusRingResult {
 export function createFocusRing(props: CreateFocusRingProps = {}): FocusRingResult {
   const [isFocused, setFocused] = createSignal(false);
   const [isFocusVisibleState, setFocusVisibleState] = createSignal(
-    access(props.autoFocus) || isKeyboardFocusVisible()
+    access(props.autofocus) || isKeyboardFocusVisible()
   );
 
   const isFocusVisible = () => isFocused() && isFocusVisibleState();
