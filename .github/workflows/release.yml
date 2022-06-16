@@ -31,10 +31,11 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Publish to npm
+      - name: Create Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
         with:
+          version: pnpm version
           commit: "chore: update versions"
           title: "chore: update versions"
           publish: pnpm release

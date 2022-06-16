@@ -22,7 +22,7 @@
     "release": "turbo run build && changeset publish",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck",
-    "version-packages": "changeset version"
+    "version": "changeset version && pnpm install --no-frozen-lockfile && git add ."
   },
   "lint-staged": {
     "*.{md,json}": [
