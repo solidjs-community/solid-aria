@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/focus",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "Primitives for dealing with focus rings and focus management.",
   "keywords": [
@@ -48,9 +48,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/interactions": "^0.1.0",
-    "@solid-aria/types": "^0.1.0",
-    "@solid-aria/utils": "^0.1.0",
+    "@solid-aria/interactions": "^0.1.1",
+    "@solid-aria/types": "^0.1.1",
+    "@solid-aria/utils": "^0.1.1",
     "@solid-primitives/props": "^2.1.7",
     "@solid-primitives/utils": "^2.1.0"
   },
