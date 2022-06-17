@@ -50,7 +50,7 @@ Handles press interactions across mouse, touch, keyboard, and screen readers. It
 
 Read [React Spectrum blog post](https://react-spectrum.adobe.com/blog/building-a-button-part-1.html) about the complexities of press event handling to learn more.
 
-### API
+### How to use it
 
 `createPress` returns props that you should spread onto the target element, along with the current press state:
 
@@ -80,8 +80,6 @@ Each of these handlers is fired with a `PressEvent`, which exposes information a
 | `ctrlKey`     | `boolean`                                            | Whether the ctrl keyboard modifier was held during the press event.  |
 | `metaKey`     | `boolean`                                            | Whether the meta keyboard modifier was held during the press event.  |
 | `altKey`      | `boolean`                                            | Whether the alt keyboard modifier was held during the press event.   |
-
-### How to use it
 
 This example shows a simple target that handles press events with `createPress` and logs them to a list below. It also uses the `isPressed` state to adjust the background color when the target is pressed. Press down on the target and drag your pointer off and over to see when the events are fired, and try focusing the target with a keyboard and pressing the `Enter` or `Space` keys to trigger events as well.
 
@@ -151,7 +149,7 @@ Handles long press interactions across mouse and touch devices. Supports a custo
 - Customizable time threshold for long press
 - Supports an accessibility description to indicate to assistive technology users that a long press action is available
 
-### API
+### How to use it
 
 `createLongPress` returns props that you should spread onto the target element:
 
@@ -181,8 +179,6 @@ Each of these handlers is fired with a `LongPressEvent`, which exposes informati
 | `ctrlKey`     | `boolean`                                           | Whether the ctrl keyboard modifier was held during the press event.  |
 | `metaKey`     | `boolean`                                           | Whether the meta keyboard modifier was held during the press event.  |
 | `altKey`      | `boolean`                                           | Whether the alt keyboard modifier was held during the press event.   |
-
-### How to use it
 
 This example shows a button that has both a normal press action using `createPress`, as well as a long press action using `createLongPress`. Pressing the button will set the mode to "Normal speed", and long pressing it will set the mode to "Hyper speed". All of the emitted events are also logged below. Note that when long pressing the button, only a long press is emitted, and no normal press is emitted on pointer up.
 
@@ -252,7 +248,7 @@ Hover interactions should never be the only way to interact with an element beca
 
 In addition, even on devices with hover support, users may be using a keyboard or screen reader to navigate your app, which also do not trigger hover events. Hover interactions should be paired with focus events in order to expose the content to keyboard users.
 
-### API
+### How to use it
 
 `createHover` returns props that you should spread onto the target element:
 
@@ -276,8 +272,6 @@ Each of these handlers is fired with a `HoverEvent`, which exposes information a
 | `type`        | `'hoverstart' \| 'hoverend'` | The type of hover event being fired.             |
 | `pointerType` | `'mouse' \| 'pen'`           | The pointer type that triggered the hover event. |
 | `target`      | `HTMLElement`                | The target element of the hover event.           |
-
-### How to use it
 
 This example shows a simple target that handles hover events with useHover and logs them to a list below. It also uses the `isHovered` state to adjust the background color when the target is hovered.
 
@@ -336,7 +330,7 @@ Handles focus events for the immediate target. Focus events on child elements wi
 
 To handle focus events on descendants of an element, see [`createFocusWithin`](#createfocuswithin).
 
-### API
+### How to use it
 
 `createFocus` returns props that you should spread onto the target element:
 
@@ -351,8 +345,6 @@ To handle focus events on descendants of an element, see [`createFocusWithin`](#
 | `onFocus`       | `(e: FocusEvent) => void`      | Handler that is called when the element receives focus.         |
 | `onBlur`        | `(e: FocusEvent) => void`      | Handler that is called when the element loses focus.            |
 | `onFocusChange` | `(isFocused: boolean) => void` | Handler that is called when the element's focus status changes. |
-
-### How to use it
 
 This example shows a simple input element that handles focus events with `createFocus` and logs them to a list below.
 
@@ -402,7 +394,7 @@ Handles focus events for the target and its descendants.
 
 To handle focus events on only the target element, and not descendants, see [`createFocus`](#createfocus).
 
-### API
+### How to use it
 
 `createFocusWithin` returns props that you should spread onto the target element:
 
@@ -418,8 +410,6 @@ To handle focus events on only the target element, and not descendants, see [`cr
 | `onFocusOut`          | `(e: FocusEvent) => void`          | Handler that is called when the target element and all descendants lose focus. |
 | `onFocusWithinChange` | `(isFocusWithin: boolean) => void` | Handler that is called when the the focus within state changes.                |
 
-### How to use it
-
 This example shows two text fields inside a div, which handles focus within events. It stores focus within state in local component state, which is updated by an onFocusWithinChange handler. This is used to update the background color and text color of the group while one of the text fields has focus.
 
 Focus within and blur within events are also logged to the list below. Notice that the events are only fired when the wrapper gains and loses focus, not when focus moves within the group.
@@ -434,10 +424,10 @@ function Example() {
 
   let { focusWithinProps } = createFocusWithin({
     onFocusIn: e => {
-      setEvents(events => [...events, "focus within"]);
+      setEvents(events => [...events, "focus in"]);
     },
     onFocusOut: e => {
-      setEvents(events => [...events, "blur within"]);
+      setEvents(events => [...events, "focus out"]);
     },
     onFocusWithinChange: isFocusWithin => {
       setFocusWithin(isFocusWithin);
@@ -514,32 +504,126 @@ function Example() {
 
 ## `createKeyboard`
 
-### Features
-
-### API
+Handles keyboard interactions for a focusable element.
 
 ### How to use it
 
-```tsx
+`createKeyboard` returns props that you should spread onto the target element:
 
+| Name            | Type                      | Description                              |
+| --------------- | ------------------------- | ---------------------------------------- |
+| `keyboardProps` | `JSX.HTMLAttributes<any>` | Props to spread onto the target element. |
+
+`createKeyboard` supports the following event handlers:
+
+| Name        | Type                         | Description                                    |
+| ----------- | ---------------------------- | ---------------------------------------------- |
+| `onKeyDown` | `(e: KeyboardEvent) => void` | Handler that is called when a key is pressed.  |
+| `onKeyUp`   | `(e: KeyboardEvent) => void` | Handler that is called when a key is released. |
+
+This example shows a simple input element that handles keyboard events with `createKeyboard` and logs them to a list below.
+
+```tsx
+import { createKeyboard } from "@solid-aria/interactions";
+import { createSignal, For } from "solid-js";
+
+function Example() {
+  const [events, setEvents] = createSignal<string[]>([]);
+
+  const { keyboardProps } = createKeyboard({
+    onKeyDown: e => {
+      setEvents(events => [...events, `key down: ${e.key}`]);
+    },
+    onKeyUp: e => {
+      setEvents(events => [...events, `key up: ${e.key}`]);
+    }
+  });
+
+  return (
+    <>
+      <label for="example">Example</label>
+      <input {...keyboardProps} id="example" />
+      <ul
+        style={{
+          height: "100px",
+          overflow: "auto",
+          border: "1px solid gray",
+          width: "200px"
+        }}
+      >
+        <For each={events()}>{e => <li>{e}</li>}</For>
+      </ul>
+    </>
+  );
+}
 ```
 
 ## `createInteractOutside`
 
-### Features
-
-### API
+Handles interaction outside a given element. Used in components like Dialogs and Popovers so they can close when a user clicks outside them.
 
 ### How to use it
 
-```tsx
+`createInteractOutside` supports the following event handlers:
 
+| Name                     | Type                 | Description                                                                    |
+| ------------------------ | -------------------- | ------------------------------------------------------------------------------ |
+| `onInteractOutsideStart` | `(e: Event) => void` | Handler that is called when an interaction outside of the `ref` element start. |
+| `onInteractOutside`      | `(e: Event) => void` | Handler that is called when interaction outside of the `ref` element end.      |
+
+This example shows a simple target that handles outside interaction with `createInteractOutside` and logs them to a list below.
+
+```tsx
+import { createInteractOutside } from "@solid-aria/interactions";
+import { createSignal, For } from "solid-js";
+
+function Example() {
+  let ref: HTMLDivElement | undefined;
+
+  const [events, setEvents] = createSignal<string[]>([]);
+  const [isInteractOutside, setInteractOutside] = createSignal(false);
+
+  createInteractOutside(
+    {
+      onInteractOutsideStart: e => {
+        setEvents(events => [...events, "interact outside start"]);
+        setInteractOutside(true);
+      },
+      onInteractOutside: e => {
+        setEvents(events => [...events, "interact outside"]);
+        setInteractOutside(false);
+      }
+    },
+    () => ref
+  );
+
+  return (
+    <>
+      <div
+        ref={ref}
+        style={{
+          display: "inline-block",
+          border: "1px solid gray",
+          padding: "10px",
+          background: isInteractOutside() ? "red" : "",
+          color: isInteractOutside() ? "white" : ""
+        }}
+      >
+        Interact outside me!
+      </div>
+      <ul
+        style={{
+          maxHeight: "200px",
+          overflow: "auto"
+        }}
+      >
+        <For each={events()}>{e => <li>{e}</li>}</For>
+      </ul>
+    </>
+  );
+}
 ```
 
 ## Changelog
 
 All notable changes are described in the [CHANGELOG.md](./CHANGELOG.md) file.
-
-| Name | Type | Description |
-| ---- | ---- | ----------- |
-| ``   | ``   |             |
