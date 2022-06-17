@@ -18,7 +18,7 @@ A collection of low level user interactions primitives.
 - [`createFocus`](#createfocus) - Handles focus events for the immediate target.
 - [`createFocusWithin`](#createfocuswithin) - Handles focus events for the target and its descendants.
 - [`createFocusVisible`](#createfocusvisible) - Manages focus visible state for the page, and subscribes individual components for updates.
-- [`createKeyborad`](#createkeyborad) - Handles keyboard interactions for a focusable element.
+- [`createKeyboard`](#createkeyboard) - Handles keyboard interactions for a focusable element.
 - [`createInteractOutside`](#createinteractoutside) - Handles interaction outside a given element.
 
 ## Installation
