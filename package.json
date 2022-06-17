@@ -14,15 +14,15 @@
   "scripts": {
     "build": "turbo run build",
     "changeset": "changeset",
+    "ci:release": "turbo run build && changeset publish",
+    "ci:version": "changeset version && pnpm install --no-frozen-lockfile && git add .",
     "clean": "turbo run clean && rm -rf node_modules",
     "commit": "git-cz",
     "format": "prettier . --write --ignore-path .gitignore && git update-index --again",
     "lint": "eslint . --ext .ts,.tsx --ignore-path .gitignore",
     "prepare": "husky install",
-    "release": "turbo run build && changeset publish",
     "test": "turbo run test",
-    "typecheck": "turbo run typecheck",
-    "version": "changeset version && pnpm install --no-frozen-lockfile && git add ."
+    "typecheck": "turbo run typecheck"
   },
   "lint-staged": {
     "*.{md,json}": [

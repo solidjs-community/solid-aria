@@ -1,5 +1,11 @@
 # @solid-aria/types
 
+## 0.1.2
+
+### Patch Changes
+
+- Try manual release
+
 ## 0.1.1
 
 ### Patch Changes

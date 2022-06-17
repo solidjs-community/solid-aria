@@ -1,5 +1,34 @@
 # @solid-aria/primitives
 
+## 0.1.2
+
+### Patch Changes
+
+- Try manual release
+- Updated dependencies
+  - @solid-aria/breadcrumbs@0.1.2
+  - @solid-aria/button@0.1.2
+  - @solid-aria/checkbox@0.1.2
+  - @solid-aria/collection@0.1.2
+  - @solid-aria/dialog@0.1.2
+  - @solid-aria/focus@0.1.2
+  - @solid-aria/i18n@0.1.2
+  - @solid-aria/interactions@0.1.2
+  - @solid-aria/label@0.1.2
+  - @solid-aria/link@0.1.2
+  - @solid-aria/list@0.1.2
+  - @solid-aria/listbox@0.1.2
+  - @solid-aria/menu@0.1.2
+  - @solid-aria/overlays@0.1.2
+  - @solid-aria/radio@0.1.2
+  - @solid-aria/selection@0.1.2
+  - @solid-aria/switch@0.1.2
+  - @solid-aria/toggle@0.1.2
+  - @solid-aria/tree@0.1.2
+  - @solid-aria/types@0.1.2
+  - @solid-aria/utils@0.1.2
+  - @solid-aria/visually-hidden@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes

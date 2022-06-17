@@ -1,5 +1,20 @@
 # @solid-aria/listbox
 
+## 0.1.2
+
+### Patch Changes
+
+- Try manual release
+- Updated dependencies
+  - @solid-aria/collection@0.1.2
+  - @solid-aria/focus@0.1.2
+  - @solid-aria/interactions@0.1.2
+  - @solid-aria/label@0.1.2
+  - @solid-aria/list@0.1.2
+  - @solid-aria/selection@0.1.2
+  - @solid-aria/types@0.1.2
+  - @solid-aria/utils@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes
