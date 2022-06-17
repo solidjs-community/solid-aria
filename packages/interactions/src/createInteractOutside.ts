@@ -37,8 +37,7 @@ interface CreateInteractOutsideProps {
 
 /**
  * Handles interaction outside a given element.
- * Used in components like Dialogs and Popovers so they can close
- * when a user clicks outside them.
+ * Used in components like Dialogs and Popovers so they can close when a user clicks outside them.
  * @param props - Props for the interact outside primitive.
  * @param ref - A ref for the HTML element.
  */
