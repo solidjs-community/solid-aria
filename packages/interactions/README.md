@@ -250,7 +250,7 @@ In addition, even on devices with hover support, users may be using a keyboard o
 
 ### How to use it
 
-`createHover` returns props that you should spread onto the target element:
+`createHover` returns props that you should spread onto the target element, along with the current hover state:
 
 | Name         | Type                      | Description                            |
 | ------------ | ------------------------- | -------------------------------------- |
