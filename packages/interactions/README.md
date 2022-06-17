@@ -94,33 +94,27 @@ import { createSignal, For } from "solid-js";
 function Example() {
   const [events, setEvents] = createSignal<string[]>([]);
 
-  let ref: HTMLDivElement | undefined;
-
-  const { pressProps, isPressed } = createPress(
-    {
-      onPressStart: e => {
-        setEvents(events => [...events, `press start with ${e.pointerType}`]);
-      },
-      onPressEnd: e => {
-        setEvents(events => [...events, `press end with ${e.pointerType}`]);
-      },
-      onPress: e => {
-        setEvents(events => [...events, `press with ${e.pointerType}`]);
-      }
+  const { pressProps, isPressed } = createPress<HTMLDivElement>({
+    onPressStart: e => {
+      setEvents(events => [...events, `press start with ${e.pointerType}`]);
     },
-    () => ref
-  );
+    onPressEnd: e => {
+      setEvents(events => [...events, `press end with ${e.pointerType}`]);
+    },
+    onPress: e => {
+      setEvents(events => [...events, `press with ${e.pointerType}`]);
+    }
+  });
 
   return (
     <>
       <div
         {...pressProps}
-        ref={ref}
         style={{
           background: isPressed() ? "darkgreen" : "green",
           color: "white",
           display: "inline-block",
-          padding: 4,
+          padding: "4px",
           cursor: "pointer"
         }}
         role="button"
@@ -141,6 +135,106 @@ function Example() {
 }
 ```
 
+## `createLongPress`
+
+Handles long press interactions across mouse and touch devices. Supports a customizable time threshold, accessibility description, and normalizes behavior across browsers and devices.
+
+### Features
+
+`createLongPress` handles long press interactions across both mouse and touch devices. A long press is triggered when a user presses and holds their pointer over a target for a minimum period of time. If the user moves their pointer off of the target before the time threshold, the interaction is canceled. Once a long press event is triggered, other pointer interactions that may be active such as `createPress` will be canceled so that only the long press is activated.
+
+- Handles mouse and touch events
+- Uses pointer events where available, with fallbacks to mouse and touch events
+- Ignores emulated mouse events in mobile browsers
+- Prevents text selection on touch devices while long pressing
+- Prevents browser and OS context menus from appearing while long pressing
+- Customizable time threshold for long press
+- Supports an accessibility description to indicate to assistive technology users that a long press action is available
+
+### API
+
+`createLongPress` returns props that you should spread onto the target element:
+
+| Name             | Type                      | Description                            |
+| ---------------- | ------------------------- | -------------------------------------- |
+| `longPressProps` | `JSX.HTMLAttributes<any>` | Props to spread on the target element. |
+
+`createLongPress` supports the following event handlers and options:
+
+| Name                       | Type                          | Default | Description                                                                                                                   |
+| -------------------------- | ----------------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `isDisabled`               | `boolean`                     |         | Whether long press events should be disabled.                                                                                 |
+| `onLongPressStart`         | `(e: LongPressEvent) => void` |         | Handler that is called when a long press interaction starts.                                                                  |
+| `onLongPressEnd`           | `(e: LongPressEvent) => void` |         | Handler that is called when a long press interaction ends, either over the target or when the pointer leaves the target.      |
+| `onLongPress`              | `(e: LongPressEvent) => void` |         | Handler that is called when the threshold time is met while the press is over the target.                                     |
+| `threshold`                | `number`                      | 500     | The amount of time in milliseconds to wait before triggering a long press.                                                    |
+| `accessibilityDescription` | `string`                      |         | A description for assistive techology users indicating that a long press action is available, e.g. "Long press to open menu". |
+
+Each of these handlers is fired with a `LongPressEvent`, which exposes information about the target and the type of event that triggered the interaction.
+
+| Name          | Type                                                | Description                                                          |
+| ------------- | --------------------------------------------------- | -------------------------------------------------------------------- |
+| `type`        | `'longpressstart' \| 'longpressend' \| 'longpress'` | The type of long press event being fired.                            |
+| `pointerType` | `PointerType`                                       | The pointer type that triggered the press event.                     |
+| `target`      | `HTMLElement`                                       | The target element of the press event.                               |
+| `shiftKey`    | `boolean`                                           | Whether the shift keyboard modifier was held during the press event. |
+| `ctrlKey`     | `boolean`                                           | Whether the ctrl keyboard modifier was held during the press event.  |
+| `metaKey`     | `boolean`                                           | Whether the meta keyboard modifier was held during the press event.  |
+| `altKey`      | `boolean`                                           | Whether the alt keyboard modifier was held during the press event.   |
+
+### How to use it
+
+This example shows a button that has both a normal press action using `createPress`, as well as a long press action using `createLongPress`. Pressing the button will set the mode to "Normal speed", and long pressing it will set the mode to "Hyper speed". All of the emitted events are also logged below. Note that when long pressing the button, only a long press is emitted, and no normal press is emitted on pointer up.
+
+**Note:** this example does not have a keyboard accessible way to trigger the long press action. Because the method of triggering this action will differ depending on the component, it is outside the scope of `createLongPress`. Make sure to implement a keyboard friendly alternative to all long press interactions if you are using this primitive directly.
+
+```tsx
+import { createLongPress, createPress } from "@solid-aria/interactions";
+import { combineProps } from "@solid-primitives/props";
+import { createSignal, For } from "solid-js";
+
+function Example() {
+  const [events, setEvents] = createSignal<string[]>([]);
+  const [mode, setMode] = createSignal("Activate");
+
+  const { longPressProps } = createLongPress<HTMLButtonElement>({
+    accessibilityDescription: "Long press to activate hyper speed",
+    onLongPressStart: e =>
+      setEvents(events => [`long press start with ${e.pointerType}`, ...events]),
+    onLongPressEnd: e => setEvents(events => [`long press end with ${e.pointerType}`, ...events]),
+    onLongPress: e => {
+      setMode("Hyper speed");
+      setEvents(events => [`long press with ${e.pointerType}`, ...events]);
+    }
+  });
+
+  const { pressProps } = createPress<HTMLButtonElement>({
+    onPress: e => {
+      setMode("Normal speed");
+      setEvents(events => [`press with ${e.pointerType}`, ...events]);
+    }
+  });
+
+  return (
+    <>
+      <button {...combineProps(pressProps, longPressProps)}>{mode}</button>
+      <ul
+        style={{
+          maxHeight: "200px",
+          overflow: "auto"
+        }}
+      >
+        <For each={events()}>{e => <li>{e}</li>}</For>
+      </ul>
+    </>
+  );
+}
+```
+
 ## Changelog
 
 All notable changes are described in the [CHANGELOG.md](./CHANGELOG.md) file.
+
+| Name | Type | Description |
+| ---- | ---- | ----------- |
+| ``   | ``   |             |
