@@ -1,5 +1,14 @@
 # @solid-aria/switch
 
+## 0.0.0-snapshot-20220617074250
+
+### Patch Changes
+
+- 2047248: test snapshot release
+- Updated dependencies [2047248]
+  - @solid-aria/toggle@0.0.0-snapshot-20220617074250
+  - @solid-aria/types@0.0.0-snapshot-20220617074250
+
 ## 0.1.2
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @solid-aria/types
 
+## 0.0.0-snapshot-20220617074250
+
+### Patch Changes
+
+- 2047248: test snapshot release
+
 ## 0.1.2
 
 ### Patch Changes

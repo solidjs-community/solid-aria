@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/interactions",
-  "version": "0.1.2",
+  "version": "0.0.0-snapshot-20220617074250",
   "private": false,
   "description": "A collection of low level user interactions primitives.",
   "keywords": [
@@ -39,8 +39,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/types": "^0.1.2",
-    "@solid-aria/utils": "^0.1.2",
+    "@solid-aria/types": "^0.0.0-snapshot-20220617074250",
+    "@solid-aria/utils": "^0.0.0-snapshot-20220617074250",
     "@solid-primitives/platform": "^0.0.100",
     "@solid-primitives/props": "^2.1.7",
     "@solid-primitives/utils": "^2.1.0"

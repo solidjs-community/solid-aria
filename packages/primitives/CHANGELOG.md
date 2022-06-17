@@ -1,5 +1,34 @@
 # @solid-aria/primitives
 
+## 0.0.0-snapshot-20220617074250
+
+### Patch Changes
+
+- 2047248: test snapshot release
+- Updated dependencies [2047248]
+  - @solid-aria/breadcrumbs@0.0.0-snapshot-20220617074250
+  - @solid-aria/button@0.0.0-snapshot-20220617074250
+  - @solid-aria/checkbox@0.0.0-snapshot-20220617074250
+  - @solid-aria/collection@0.0.0-snapshot-20220617074250
+  - @solid-aria/dialog@0.0.0-snapshot-20220617074250
+  - @solid-aria/focus@0.0.0-snapshot-20220617074250
+  - @solid-aria/i18n@0.0.0-snapshot-20220617074250
+  - @solid-aria/interactions@0.0.0-snapshot-20220617074250
+  - @solid-aria/label@0.0.0-snapshot-20220617074250
+  - @solid-aria/link@0.0.0-snapshot-20220617074250
+  - @solid-aria/list@0.0.0-snapshot-20220617074250
+  - @solid-aria/listbox@0.0.0-snapshot-20220617074250
+  - @solid-aria/menu@0.0.0-snapshot-20220617074250
+  - @solid-aria/overlays@0.0.0-snapshot-20220617074250
+  - @solid-aria/radio@0.0.0-snapshot-20220617074250
+  - @solid-aria/selection@0.0.0-snapshot-20220617074250
+  - @solid-aria/switch@0.0.0-snapshot-20220617074250
+  - @solid-aria/toggle@0.0.0-snapshot-20220617074250
+  - @solid-aria/tree@0.0.0-snapshot-20220617074250
+  - @solid-aria/types@0.0.0-snapshot-20220617074250
+  - @solid-aria/utils@0.0.0-snapshot-20220617074250
+  - @solid-aria/visually-hidden@0.0.0-snapshot-20220617074250
+
 ## 0.1.2
 
 ### Patch Changes

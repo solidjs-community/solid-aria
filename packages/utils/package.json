@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/utils",
-  "version": "0.1.2",
+  "version": "0.0.0-snapshot-20220617074250",
   "private": false,
   "description": "A collection of utility types and functions, for building Solid Aria primitives.",
   "keywords": [
@@ -38,7 +38,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/types": "^0.1.2",
+    "@solid-aria/types": "^0.0.0-snapshot-20220617074250",
     "@solid-primitives/utils": "^2.1.0"
   },
   "devDependencies": {
