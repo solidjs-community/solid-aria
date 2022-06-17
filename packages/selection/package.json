@@ -50,6 +50,9 @@
     "@solid-primitives/props": "^2.1.7",
     "@solid-primitives/utils": "^2.1.0"
   },
+  "devDependencies": {
+    "solid-js": "^1.4.4"
+  },
   "peerDependencies": {
     "solid-js": "^1.4.4"
   },

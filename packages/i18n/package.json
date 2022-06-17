@@ -43,6 +43,9 @@
     "@solid-aria/utils": "^0.1.2",
     "@solid-primitives/utils": "^2.1.0"
   },
+  "devDependencies": {
+    "solid-js": "^1.4.4"
+  },
   "peerDependencies": {
     "solid-js": "^1.4.4"
   },
