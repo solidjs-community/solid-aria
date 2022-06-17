@@ -200,18 +200,18 @@ function Example() {
   const { longPressProps } = createLongPress<HTMLButtonElement>({
     accessibilityDescription: "Long press to activate hyper speed",
     onLongPressStart: e =>
-      setEvents(events => [`long press start with ${e.pointerType}`, ...events]),
-    onLongPressEnd: e => setEvents(events => [`long press end with ${e.pointerType}`, ...events]),
+      setEvents(events => [...events, `long press start with ${e.pointerType}`]),
+    onLongPressEnd: e => setEvents(events => [...events, `long press end with ${e.pointerType}`]),
     onLongPress: e => {
       setMode("Hyper speed");
-      setEvents(events => [`long press with ${e.pointerType}`, ...events]);
+      setEvents(events => [...events, `long press with ${e.pointerType}`]);
     }
   });
 
   const { pressProps } = createPress<HTMLButtonElement>({
     onPress: e => {
       setMode("Normal speed");
-      setEvents(events => [`press with ${e.pointerType}`, ...events]);
+      setEvents(events => [...events, `press with ${e.pointerType}`]);
     }
   });
 
@@ -324,6 +324,216 @@ function Example() {
     </>
   );
 }
+```
+
+## `createFocus`
+
+Handles focus events for the immediate target. Focus events on child elements will be ignored.
+
+### Features
+
+`createFocus` handles focus interactions for an element. This is similar to the `:focus` pseudo class in CSS.
+
+To handle focus events on descendants of an element, see [`createFocusWithin`](#createfocuswithin).
+
+### API
+
+`createFocus` returns props that you should spread onto the target element:
+
+| Name         | Type                      | Description                              |
+| ------------ | ------------------------- | ---------------------------------------- |
+| `focusProps` | `JSX.HTMLAttributes<any>` | Props to spread onto the target element. |
+
+`createFocus` supports the following event handlers:
+
+| Name            | Type                           | Description                                                     |
+| --------------- | ------------------------------ | --------------------------------------------------------------- |
+| `onFocus`       | `(e: FocusEvent) => void`      | Handler that is called when the element receives focus.         |
+| `onBlur`        | `(e: FocusEvent) => void`      | Handler that is called when the element loses focus.            |
+| `onFocusChange` | `(isFocused: boolean) => void` | Handler that is called when the element's focus status changes. |
+
+### How to use it
+
+This example shows a simple input element that handles focus events with `createFocus` and logs them to a list below.
+
+```tsx
+import { createFocus } from "@solid-aria/interactions";
+import { createSignal, For } from "solid-js";
+
+function Example() {
+  const [events, setEvents] = createSignal<string[]>([]);
+
+  const { focusProps } = createFocus({
+    onFocus: e => {
+      setEvents(events => [...events, "focus"]);
+    },
+    onBlur: e => {
+      setEvents(events => [...events, "blur"]);
+    },
+    onFocusChange: isFocused => {
+      setEvents(events => [...events, `focus change: ${isFocused}`]);
+    }
+  });
+
+  return (
+    <>
+      <label for="example">Example</label>
+      <input {...focusProps} id="example" />
+      <ul
+        style={{
+          maxHeight: "200px",
+          overflow: "auto"
+        }}
+      >
+        <For each={events()}>{e => <li>{e}</li>}</For>
+      </ul>
+    </>
+  );
+}
+```
+
+## `createFocusWithin`
+
+Handles focus events for the target and its descendants.
+
+### Features
+
+`createFocusWithin` handles focus interactions for an element and its descendants. Focus is "within" an element when either the element itself or a descendant element has focus. This is similar to the `:focus-within` pseudo class in CSS.
+
+To handle focus events on only the target element, and not descendants, see [`createFocus`](#createfocus).
+
+### API
+
+`createFocusWithin` returns props that you should spread onto the target element:
+
+| Name               | Type                      | Description                              |
+| ------------------ | ------------------------- | ---------------------------------------- |
+| `focusWithinProps` | `JSX.HTMLAttributes<any>` | Props to spread onto the target element. |
+
+`createFocusWithin` supports the following event handlers:
+
+| Name                  | Type                               | Description                                                                    |
+| --------------------- | ---------------------------------- | ------------------------------------------------------------------------------ |
+| `onFocusIn`           | `(e: FocusEvent) => void`          | Handler that is called when the target element or a descendant receives focus. |
+| `onFocusOut`          | `(e: FocusEvent) => void`          | Handler that is called when the target element and all descendants lose focus. |
+| `onFocusWithinChange` | `(isFocusWithin: boolean) => void` | Handler that is called when the the focus within state changes.                |
+
+### How to use it
+
+This example shows two text fields inside a div, which handles focus within events. It stores focus within state in local component state, which is updated by an onFocusWithinChange handler. This is used to update the background color and text color of the group while one of the text fields has focus.
+
+Focus within and blur within events are also logged to the list below. Notice that the events are only fired when the wrapper gains and loses focus, not when focus moves within the group.
+
+```tsx
+import { createFocusWithin } from "@solid-aria/interactions";
+import { createSignal, For } from "solid-js";
+
+function Example() {
+  const [events, setEvents] = createSignal<string[]>([]);
+  const [isFocusWithin, setFocusWithin] = createSignal(false);
+
+  let { focusWithinProps } = createFocusWithin({
+    onFocusIn: e => {
+      setEvents(events => [...events, "focus within"]);
+    },
+    onFocusOut: e => {
+      setEvents(events => [...events, "blur within"]);
+    },
+    onFocusWithinChange: isFocusWithin => {
+      setFocusWithin(isFocusWithin);
+    }
+  });
+
+  return (
+    <>
+      <div
+        {...focusWithinProps}
+        style={{
+          display: "inline-block",
+          border: "1px solid gray",
+          padding: "10px",
+          background: isFocusWithin() ? "goldenrod" : "",
+          color: isFocusWithin() ? "black" : ""
+        }}
+      >
+        <label style={{ display: "block" }}>
+          First Name: <input />
+        </label>
+        <label style={{ display: "block" }}>
+          Last Name: <input />
+        </label>
+      </div>
+      <ul
+        style={{
+          maxHeight: "200px",
+          overflow: "auto"
+        }}
+      >
+        <For each={events()}>{e => <li>{e}</li>}</For>
+      </ul>
+    </>
+  );
+}
+```
+
+## `createFocusVisible`
+
+Manages focus visible state for the page, and subscribes individual components for updates.
+
+### Features
+
+`createFocusVisible` handles focus interactions for the page and determines whether keyboard focus should be visible (e.g. with a focus ring). Focus visibility is computed based on the current interaction mode of the user. When the user interacts via a mouse or touch, then focus is not visible. When the user interacts via a keyboard or screen reader, then focus is visible. This is similar to the `:focus-visible` pseudo class in CSS.
+
+To determine whether a focus ring should be visible for an individual component rather than globally, see [`createFocusRing`](../focus/).
+
+### How to use it
+
+This example shows focus visible state and updates as you interact with the page. By default, when the page loads, it is true. If you press anywhere on the page with a mouse or touch, then focus visible state is set to false. If you keyboard navigate around the page then it is set to true again.
+
+Note that this example uses the `isTextInput` option so that only certain navigation keys cause focus visible state to appear. This prevents focus visible state from appearing when typing text in a text field.
+
+```tsx
+import { createFocusVisible } from "@solid-aria/interactions";
+
+function Example() {
+  const { isFocusVisible } = createFocusVisible({ isTextInput: true });
+
+  return (
+    <>
+      <div>Focus visible: {String(isFocusVisible())}</div>
+      <label style={{ display: "block" }}>
+        First Name: <input />
+      </label>
+      <label style={{ display: "block" }}>
+        Last Name: <input />
+      </label>
+    </>
+  );
+}
+```
+
+## `createKeyboard`
+
+### Features
+
+### API
+
+### How to use it
+
+```tsx
+
+```
+
+## `createInteractOutside`
+
+### Features
+
+### API
+
+### How to use it
+
+```tsx
+
 ```
 
 ## Changelog
