@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/visually-hidden",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": false,
   "description": "Primitives for creating visually hidden element that is still visible to assistive technology.",
   "keywords": [
@@ -39,12 +39,15 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/interactions": "workspace:^",
-    "@solid-aria/types": "workspace:^",
-    "@solid-aria/utils": "workspace:^"
+    "@solid-aria/interactions": "^0.1.2",
+    "@solid-aria/types": "^0.1.2",
+    "@solid-aria/utils": "^0.1.2",
+    "@solid-primitives/utils": "^2.1.0"
+  },
+  "devDependencies": {
+    "solid-js": "^1.4.4"
   },
   "peerDependencies": {
-    "@solid-primitives/utils": "^2.1.0",
     "solid-js": "^1.4.4"
   },
   "publishConfig": {

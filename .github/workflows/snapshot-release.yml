@@ -1,4 +1,4 @@
-name: Release
+name: Snapshot Release
 
 on: [workflow_dispatch]
 
@@ -28,14 +28,14 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Create Release Pull Request or Publish to npm
+      - name: Create Snapshot Release Pull Request or Publish to npm
         id: changesets
         uses: changesets/action@v1
         with:
-          commit: "chore: update versions"
-          title: "chore: update versions"
-          version: pnpm ci:version
-          publish: pnpm ci:release
+          commit: "chore: update snapshot versions"
+          title: "chore: update snapshot versions"
+          version: pnpm ci:version-snapshot
+          publish: pnpm ci:release-snapshot
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

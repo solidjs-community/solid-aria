@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/types",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": false,
   "description": "A collection of type definitions, for building Solid Aria primitives.",
   "keywords": [
@@ -35,8 +35,13 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@solid-primitives/utils": "^2.1.0"
+  },
+  "devDependencies": {
+    "solid-js": "^1.4.4"
+  },
   "peerDependencies": {
-    "@solid-primitives/utils": "^2.1.0",
     "solid-js": "^1.4.4"
   },
   "publishConfig": {

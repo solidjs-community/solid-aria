@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/radio",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": false,
   "description": "Primitives for building accessible radio and radio group component.",
   "keywords": [
@@ -39,16 +39,19 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/focus": "workspace:^",
-    "@solid-aria/i18n": "workspace:^",
-    "@solid-aria/interactions": "workspace:^",
-    "@solid-aria/label": "workspace:^",
-    "@solid-aria/types": "workspace:^",
-    "@solid-aria/utils": "workspace:^"
+    "@solid-aria/focus": "^0.1.2",
+    "@solid-aria/i18n": "^0.1.2",
+    "@solid-aria/interactions": "^0.1.2",
+    "@solid-aria/label": "^0.1.2",
+    "@solid-aria/types": "^0.1.2",
+    "@solid-aria/utils": "^0.1.2",
+    "@solid-primitives/props": "^2.1.7",
+    "@solid-primitives/utils": "^2.1.0"
+  },
+  "devDependencies": {
+    "solid-js": "^1.4.4"
   },
   "peerDependencies": {
-    "@solid-primitives/props": "^2.1.7",
-    "@solid-primitives/utils": "^2.1.0",
     "solid-js": "^1.4.4"
   },
   "publishConfig": {

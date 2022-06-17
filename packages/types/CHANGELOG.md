@@ -1,5 +1,18 @@
 # @solid-aria/types
 
+## 0.1.2
+
+### Patch Changes
+
+- Try manual release
+
+## 0.1.1
+
+### Patch Changes
+
+- 2ca4cfc: Change dependency versions of packages from "workspace^" to "^0.1.0" (current version) — Fixes #29
+  Move solid-primitives packages from peerDependencies to dependencies.
+
 ## 0.1.0
 
 ### Minor Changes
