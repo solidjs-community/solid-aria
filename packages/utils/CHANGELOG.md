@@ -1,5 +1,13 @@
 # @solid-aria/utils
 
+## 0.1.2
+
+### Patch Changes
+
+- Try manual release
+- Updated dependencies
+  - @solid-aria/types@0.1.2
+
 ## 0.1.1
 
 ### Patch Changes
