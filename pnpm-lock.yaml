@@ -123,7 +123,7 @@ importers:
       solid-js: ^1.4.4
     dependencies:
       '@solid-aria/focus': link:../focus
-      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/interactions': 0.1.2_solid-js@1.4.4
       '@solid-aria/toggle': link:../toggle
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
@@ -190,7 +190,7 @@ importers:
       '@solid-primitives/utils': ^2.1.0
       solid-js: ^1.4.4
     dependencies:
-      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/interactions': 0.1.2_solid-js@1.4.4
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
       '@solid-primitives/props': 2.1.7_solid-js@1.4.4
@@ -254,7 +254,7 @@ importers:
       solid-js: ^1.4.4
     dependencies:
       '@solid-aria/focus': link:../focus
-      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/interactions': 0.1.2_solid-js@1.4.4
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
       '@solid-primitives/props': 2.1.7_solid-js@1.4.4
@@ -296,7 +296,7 @@ importers:
     dependencies:
       '@solid-aria/collection': link:../collection
       '@solid-aria/focus': link:../focus
-      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/interactions': 0.1.2_solid-js@1.4.4
       '@solid-aria/label': link:../label
       '@solid-aria/list': link:../list
       '@solid-aria/selection': link:../selection
@@ -323,7 +323,7 @@ importers:
     dependencies:
       '@solid-aria/button': link:../button
       '@solid-aria/collection': link:../collection
-      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/interactions': 0.1.2_solid-js@1.4.4
       '@solid-aria/overlays': link:../overlays
       '@solid-aria/selection': link:../selection
       '@solid-aria/tree': link:../tree
@@ -348,7 +348,7 @@ importers:
     dependencies:
       '@solid-aria/button': link:../button
       '@solid-aria/i18n': link:../i18n
-      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/interactions': 0.1.2_solid-js@1.4.4
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
       '@solid-aria/visually-hidden': link:../visually-hidden
@@ -392,7 +392,7 @@ importers:
       '@solid-aria/dialog': link:../dialog
       '@solid-aria/focus': link:../focus
       '@solid-aria/i18n': link:../i18n
-      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/interactions': 0.1.2_solid-js@1.4.4
       '@solid-aria/label': link:../label
       '@solid-aria/link': link:../link
       '@solid-aria/list': link:../list
@@ -425,7 +425,7 @@ importers:
     dependencies:
       '@solid-aria/focus': link:../focus
       '@solid-aria/i18n': link:../i18n
-      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/interactions': 0.1.2_solid-js@1.4.4
       '@solid-aria/label': link:../label
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
@@ -456,7 +456,7 @@ importers:
     dependencies:
       '@solid-aria/button': link:../button
       '@solid-aria/i18n': link:../i18n
-      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/interactions': 0.1.2_solid-js@1.4.4
       '@solid-aria/label': link:../label
       '@solid-aria/list': link:../list
       '@solid-aria/listbox': link:../listbox
@@ -490,7 +490,7 @@ importers:
       '@solid-aria/collection': link:../collection
       '@solid-aria/focus': link:../focus
       '@solid-aria/i18n': link:../i18n
-      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/interactions': 0.1.2_solid-js@1.4.4
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
       '@solid-primitives/event-listener': 2.2.0_solid-js@1.4.4
@@ -524,7 +524,7 @@ importers:
       solid-js: ^1.4.4
     dependencies:
       '@solid-aria/focus': link:../focus
-      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/interactions': 0.1.2_solid-js@1.4.4
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
       '@solid-primitives/props': 2.1.7_solid-js@1.4.4
@@ -577,7 +577,7 @@ importers:
       '@solid-primitives/utils': ^2.1.0
       solid-js: ^1.4.4
     dependencies:
-      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/interactions': 0.1.2_solid-js@1.4.4
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
       '@solid-primitives/utils': 2.1.1_solid-js@1.4.4
@@ -2622,6 +2622,38 @@ packages:
     dependencies:
       '@sinonjs/commons': 1.8.3
     dev: true
+
+  /@solid-aria/interactions/0.1.2_solid-js@1.4.4:
+    resolution: {integrity: sha512-KRhSBfZHsQsSgQzIkX8qXCJVxIHTc/Gb3F1mbFWIIBqzNmeSrSYqoZGlR14tX7mXt1xSCpaYdO2h3itITEpn6g==}
+    peerDependencies:
+      solid-js: ^1.4.4
+    dependencies:
+      '@solid-aria/types': 0.1.2_solid-js@1.4.4
+      '@solid-aria/utils': 0.1.2_solid-js@1.4.4
+      '@solid-primitives/platform': 0.0.100_solid-js@1.4.4
+      '@solid-primitives/props': 2.1.7_solid-js@1.4.4
+      '@solid-primitives/utils': 2.1.1_solid-js@1.4.4
+      solid-js: 1.4.4
+    dev: false
+
+  /@solid-aria/types/0.1.2_solid-js@1.4.4:
+    resolution: {integrity: sha512-dHCjHB14tkmp6nQEOn5Ug71rPHhISAOs+Kv1q8G0mdsL37C9jABzBAX3JHm3DzVwkh7VadgS0bVvFmiim9aUaw==}
+    peerDependencies:
+      solid-js: ^1.4.4
+    dependencies:
+      '@solid-primitives/utils': 2.1.1_solid-js@1.4.4
+      solid-js: 1.4.4
+    dev: false
+
+  /@solid-aria/utils/0.1.2_solid-js@1.4.4:
+    resolution: {integrity: sha512-FAKTXBdgv4h6/tZeyD2ncfqALVTOeh44IxiZCFSMF1VGv0R4C9KgMunjSujUt+oCQqhqkgdVy9Okn+PfBu2aLA==}
+    peerDependencies:
+      solid-js: ^1.4.4
+    dependencies:
+      '@solid-aria/types': 0.1.2_solid-js@1.4.4
+      '@solid-primitives/utils': 2.1.1_solid-js@1.4.4
+      solid-js: 1.4.4
+    dev: false
 
   /@solid-primitives/event-listener/2.1.0_solid-js@1.4.4:
     resolution: {integrity: sha512-EO80fKPjG3CsACyLY+7an6kZfGRVUjifi8Rl7WvLHK99ryupwHy7uSAPMRivWE30cHJkjCWmdOchgdv02XmNdA==}

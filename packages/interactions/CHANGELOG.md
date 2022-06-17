@@ -1,5 +1,11 @@
 # @solid-aria/interactions
 
+## 0.0.0-snapshot-20220617082757
+
+### Patch Changes
+
+- 197a499: test snapshot release
+
 ## 0.1.2
 
 ### Patch Changes
