@@ -231,6 +231,101 @@ function Example() {
 }
 ```
 
+## `createHover`
+
+Handles pointer hover interactions for an element. Normalizes behavior across browsers and platforms, and ignores emulated mouse events on touch devices.
+
+### Features
+
+`createHover` handles hover interactions for an element. A hover interaction begins when a user moves their pointer over an element, and ends when they move their pointer off of the element.
+
+- Uses pointer events where available, with fallbacks to mouse and touch events
+- Ignores emulated mouse events in mobile browsers
+
+`createHover` is similar to the `:hover` pseudo class in CSS, but `:hover` is problematic on touch devices due to mouse emulation in mobile browsers. Depending on the browser and device, `:hover` may never apply, or may apply continuously until the user touches another element. `createHover` only applies when the pointer is truly capable of hovering, and emulated mouse events are ignored.
+
+Read [React Spectrum blog post](https://react-spectrum.adobe.com/blog/building-a-button-part-2.html) about the complexities of hover event handling to learn more.
+
+### Accessibility
+
+Hover interactions should never be the only way to interact with an element because they are not supported across all devices. Alternative interactions should be provided on touch devices, for example a long press or an explicit button to tap.
+
+In addition, even on devices with hover support, users may be using a keyboard or screen reader to navigate your app, which also do not trigger hover events. Hover interactions should be paired with focus events in order to expose the content to keyboard users.
+
+### API
+
+`createHover` returns props that you should spread onto the target element:
+
+| Name         | Type                      | Description                            |
+| ------------ | ------------------------- | -------------------------------------- |
+| `isHovered`  | `Accessor<boolean>`       | Whether the target element is hovered. |
+| `hoverProps` | `JSX.HTMLAttributes<any>` | Props to spread on the target element. |
+
+`createHover` supports the following event handlers:
+
+| Name            | Type                            | Description                                             |
+| --------------- | ------------------------------- | ------------------------------------------------------- |
+| `onHoverStart`  | `(e: HoverEvent) => void`       | Handler that is called when a hover interaction starts. |
+| `onHoverEnd`    | `(e: HoverEvent) => void`       | Handler that is called when a hover interaction ends.   |
+| `onHoverChange` | `(isHovering: boolean) => void` | Handler that is called when the hover state changes.    |
+
+Each of these handlers is fired with a `HoverEvent`, which exposes information about the target and the type of event that triggered the interaction.
+
+| Name          | Type                         | Description                                      |
+| ------------- | ---------------------------- | ------------------------------------------------ |
+| `type`        | `'hoverstart' \| 'hoverend'` | The type of hover event being fired.             |
+| `pointerType` | `'mouse' \| 'pen'`           | The pointer type that triggered the hover event. |
+| `target`      | `HTMLElement`                | The target element of the hover event.           |
+
+### How to use it
+
+This example shows a simple target that handles hover events with useHover and logs them to a list below. It also uses the `isHovered` state to adjust the background color when the target is hovered.
+
+```tsx
+import { createHover } from "@solid-aria/interactions";
+import { createSignal, For } from "solid-js";
+
+function Example() {
+  const [events, setEvents] = createSignal<string[]>([]);
+
+  const { hoverProps, isHovered } = createHover({
+    onHoverStart: e => {
+      setEvents(events => [...events, `hover start with ${e.pointerType}`]);
+    },
+    onHoverEnd: e => {
+      setEvents(events => [...events, `hover end with ${e.pointerType}`]);
+    }
+  });
+
+  return (
+    <>
+      <div
+        {...hoverProps}
+        style={{
+          background: isHovered() ? "darkgreen" : "green",
+          color: "white",
+          display: "inline-block",
+          padding: "4px",
+          cursor: "pointer"
+        }}
+        role="button"
+        tabIndex={0}
+      >
+        Hover me!
+      </div>
+      <ul
+        style={{
+          maxHeight: "200px",
+          overflow: "auto"
+        }}
+      >
+        <For each={events()}>{e => <li>{e}</li>}</For>
+      </ul>
+    </>
+  );
+}
+```
+
 ## Changelog
 
 All notable changes are described in the [CHANGELOG.md](./CHANGELOG.md) file.
