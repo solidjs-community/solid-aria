@@ -45,7 +45,7 @@ export interface AriaHiddenSelectProps {
 
 /**
  * Provides the behavior and accessibility implementation for a hidden `<select>` element, which
- * can be used in combination with `useSelect` to support browser form autofill, mobile form
+ * can be used in combination with `createSelect` to support browser form autofill, mobile form
  * navigation, and native HTML form submission.
  */
 export function createHiddenSelect<T extends HTMLElement>(
@@ -110,7 +110,9 @@ export function createHiddenSelect<T extends HTMLElement>(
     get value() {
       return state().selectedKey() ?? "";
     },
-    onChange: e => state().setSelectedKey((e.target as HTMLSelectElement).value)
+    onChange: e => {
+      state().setSelectedKey((e.target as HTMLSelectElement).value);
+    }
   };
 
   return {
@@ -157,7 +159,7 @@ export function HiddenSelect<T extends HTMLElement>(props: HiddenSelectProps<T>)
           <input {...inputProps} />
           <label>
             {props.label}
-            <select {...selectProps}>
+            <select {...selectProps} value={selectProps.value}>
               <option />
               <For each={items()}>{item => <option value={item.key}>{item.textValue}</option>}</For>
             </select>

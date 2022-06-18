@@ -72,7 +72,15 @@ export function Select(props: AriaSelectProps) {
   let ref: HTMLButtonElement | undefined;
 
   // Get props for child elements from useSelect
-  const { labelProps, triggerProps, valueProps, menuProps, state } = createSelect(props, () => ref);
+  const {
+    labelProps,
+    triggerProps,
+    valueProps,
+    menuProps,
+    state,
+    descriptionProps,
+    errorMessageProps
+  } = createSelect(props, () => ref);
 
   // Get props for the button based on the trigger props from useSelect
   const { buttonProps } = createButton(triggerProps, () => ref);
@@ -89,6 +97,12 @@ export function Select(props: AriaSelectProps) {
         </span>
         <span aria-hidden="true">▼</span>
       </button>
+      <Show when={props.description}>
+        <div {...descriptionProps}>{props.description}</div>
+      </Show>
+      <Show when={props.errorMessage && props.validationState === "invalid"}>
+        <div {...errorMessageProps}>{props.errorMessage}</div>
+      </Show>
       <Show when={state.isOpen()}>
         <Popover isOpen={state.isOpen()} onClose={state.close}>
           <ListBox {...menuProps} autofocus={state.focusStrategy() || true} state={state} />
