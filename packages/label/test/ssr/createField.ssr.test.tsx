@@ -16,9 +16,8 @@
  */
 
 import { ValidationState } from "@solid-aria/types";
-import { createRoot, Show, createComponent } from "solid-js";
+import { Show } from "solid-js";
 import { renderToString } from "solid-js/web";
-import { render, screen } from "solid-testing-library";
 
 import { createField } from "../../src";
 
@@ -60,22 +59,19 @@ describe("createField", () => {
     });
   });
 
-  // it("should label both the description and error message at the same time", () => {
-  //   render(() => (
-  //     <TextInputField
-  //       label="Test label"
-  //       value="Test value"
-  //       description="I describe the field."
-  //       errorMessage="I'm a helpful error for the field."
-  //       validationState="invalid"
-  //     />
-  //   ));
+  it("should label both the description and error message at the same time", () => {
+    const string = renderToString(() => (
+      <TextInputField
+        label="Test label"
+        value="Test value"
+        description="I describe the field."
+        errorMessage="I'm a helpful error for the field."
+        validationState="invalid"
+      />
+    ));
 
-  //   const input = screen.getByLabelText("Test label");
-  //   const description = screen.getByText("I describe the field.");
-  //   const error = screen.getByText("I'm a helpful error for the field.");
-
-  //   expect(input).toHaveAttribute("aria-describedby", expect.stringContaining(description.id));
-  //   expect(input).toHaveAttribute("aria-describedby", expect.stringContaining(error.id));
-  // });
+    expect(string).toBe(
+      `<div data-hk="0-5"><label id="solid-aria-0-1" for="solid-aria-0-0">Test label</label><input id="solid-aria-0-0" aria-labelledby="solid-aria-0-1" aria-describedby="solid-aria-0-3 solid-aria-0-4"><div id="solid-aria-0-3">I describe the field.</div><!--#--><div data-hk="0-6-0" id="solid-aria-0-4">I'm a helpful error for the field.</div><!--/--></div>`
+    );
+  });
 });
