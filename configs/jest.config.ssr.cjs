@@ -9,7 +9,10 @@ module.exports = {
     "ts-jest": {
       tsconfig: `${pkgRootPath}/tsconfig.json`,
       babelConfig: {
-        presets: ["@babel/preset-env", ["babel-preset-solid", { generate: "ssr" }]]
+        presets: [
+          "@babel/preset-env",
+          ["babel-preset-solid", { generate: "ssr", hydratable: true }]
+        ]
       }
     }
   },
@@ -21,6 +24,8 @@ module.exports = {
     "solid-js/store": `${solidjsPath}/store/dist/server.cjs`,
     "solid-js": `${solidjsPath}/dist/server.cjs`
   },
+
+  setupFilesAfterEnv: [`${pkgRootPath}/../../configs/jest.setup.ssr.ts`],
 
   testMatch: ["**/test/ssr/*.test.(js|ts)?(x)"],
 
