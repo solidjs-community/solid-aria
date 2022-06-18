@@ -16,8 +16,8 @@
  */
 
 import { getScrollParent } from "@solid-aria/utils";
-import { access, chain, MaybeAccessor } from "@solid-primitives/utils";
 import { isIOS } from "@solid-primitives/platform";
+import { access, chain, MaybeAccessor } from "@solid-primitives/utils";
 import { createEffect, on, onCleanup } from "solid-js";
 
 export interface PreventScrollOptions {

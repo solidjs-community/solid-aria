@@ -23,7 +23,7 @@
 
 ### Minor Changes
 
-- dcfaa90: Release menu package, breaking change all primitves return plain object props instead of memoized value
+- dcfaa90: Release menu package, breaking change all primitives return plain object props instead of memoized value
 
 ### Patch Changes
 
