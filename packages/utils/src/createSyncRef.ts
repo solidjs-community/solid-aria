@@ -22,7 +22,7 @@ interface ContextValue<T> {
 }
 
 /**
- * Syncs ref from context with ref passed to primitve.
+ * Syncs ref from context with ref passed to primitive.
  */
 export function createSyncRef<T>(context: ContextValue<T>, ref: Accessor<T | undefined>) {
   createEffect(() => {
