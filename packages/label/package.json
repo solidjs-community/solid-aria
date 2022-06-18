@@ -34,8 +34,9 @@
     "build": "tsup",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "dev": "vite serve dev --host",
-    "test": "jest --passWithNoTests",
-    "test:watch": "jest --watch --passWithNoTests",
+    "test": "pnpm run test:client && pnpm run test:ssr",
+    "test:client": "jest --passWithNoTests",
+    "test:ssr": "jest --passWithNoTests --config jest.config.ssr.cjs",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

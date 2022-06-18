@@ -15,6 +15,7 @@
  * governing permissions and limitations under the License.
  */
 
+import { isServer, noop } from "@solid-primitives/utils";
 import { Accessor, createSignal, createUniqueId, getListener, onCleanup } from "solid-js";
 
 export const ID_PREFIX = "solid-aria";
@@ -38,6 +39,8 @@ export function createSlotId(
   prefix?: string
 ): [id: Accessor<string | undefined>, track: VoidFunction] {
   const id = createId(prefix);
+
+  if (isServer) return [() => id, noop];
 
   const [slotId, setSlotId] = createSignal<string | undefined>(id);
 

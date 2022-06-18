@@ -15,13 +15,15 @@ module.exports = {
 
   testEnvironment: "jsdom",
 
-  setupFilesAfterEnv: [`${pkgRootPath}/../../jest.setup.ts`, "regenerator-runtime"],
+  setupFilesAfterEnv: [`${pkgRootPath}/../../configs/jest.setup.ts`, "regenerator-runtime"],
 
   moduleNameMapper: {
     "solid-js/web": `${solidjsPath}/web/dist/web.cjs`,
     "solid-js/store": `${solidjsPath}/store/dist/store.cjs`,
     "solid-js": `${solidjsPath}/dist/solid.cjs`
   },
+
+  testMatch: ["**/test/*.test.(js|ts)?(x)"],
 
   verbose: true,
   testTimeout: 30000
