@@ -65,7 +65,7 @@ export interface AriaSelectProps
    * Describes the type of autocomplete functionality the input should provide if any.
    * See [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#htmlattrdefautocomplete).
    */
-  autoComplete?: string;
+  autocomplete?: string;
 
   /**
    * The name of the input, used when submitting an HTML form.

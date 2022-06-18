@@ -90,8 +90,15 @@ export function Select(props: AriaSelectProps) {
       <div {...labelProps} data-testid="label">
         {props.label}
       </div>
-      <HiddenSelect state={state} triggerRef={ref} label={props.label} name={props.name} />
-      <button {...buttonProps} ref={ref}>
+      <HiddenSelect
+        autocomplete={props.autocomplete}
+        isDisabled={props.isDisabled}
+        state={state}
+        triggerRef={ref}
+        label={props.label}
+        name={props.name}
+      />
+      <button {...buttonProps} ref={ref} autofocus={props.autofocus}>
         <span {...valueProps} data-testid="value">
           {state.selectedItem()?.rendered() ?? "Select an option"}
         </span>

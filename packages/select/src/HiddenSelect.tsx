@@ -25,7 +25,7 @@ export interface AriaHiddenSelectProps {
   /**
    * Describes the type of autocomplete functionality the input should provide if any. See [MDN](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#htmlattrdefautocomplete).
    */
-  autoComplete?: string;
+  autocomplete?: string;
 
   /**
    *  The text label for the select.
@@ -82,7 +82,7 @@ export function createHiddenSelect<T extends HTMLElement>(
   const inputProps: JSX.InputHTMLAttributes<HTMLInputElement> = {
     type: "text",
     style: {
-      fontSize: "16px"
+      "font-size": "16px"
     },
     get tabIndex() {
       return modality() == null || state().isFocused() || state().isOpen() ? -1 : 0;
@@ -96,7 +96,7 @@ export function createHiddenSelect<T extends HTMLElement>(
   const selectProps: JSX.SelectHTMLAttributes<HTMLSelectElement> = {
     tabIndex: -1,
     get autocomplete() {
-      return props.autoComplete;
+      return props.autocomplete;
     },
     get disabled() {
       return props.isDisabled;

@@ -1,19 +1,22 @@
 import { Item } from "@solid-aria/collection";
+import userEvent from "@testing-library/user-event";
+import { For } from "solid-js";
 import { fireEvent, render, screen, within } from "solid-testing-library";
 
+import { states } from "./data";
 import { Select } from "./example";
 
 describe("createSelect", () => {
   const onSelectionChange = jest.fn();
 
   beforeEach(() => {
-    jest.useFakeTimers();
     jest.spyOn(window, "requestAnimationFrame").mockImplementation(cb => setTimeout(cb, 0));
+    jest.useFakeTimers();
   });
 
   afterEach(() => {
-    jest.clearAllTimers();
     jest.clearAllMocks();
+    jest.clearAllTimers();
   });
 
   it("renders correctly", () => {
@@ -25,7 +28,6 @@ describe("createSelect", () => {
       </Select>
     ));
 
-    // select is the native hidden <select>
     const select = screen.getByRole("textbox", { hidden: true });
 
     expect(select).not.toBeDisabled();
@@ -1580,7 +1582,470 @@ describe("createSelect", () => {
     });
   });
 
-  //
+  describe("type to select", () => {
+    it("supports focusing items by typing letters in rapid succession without opening the menu", async () => {
+      render(() => (
+        <Select label="Test" onSelectionChange={onSelectionChange}>
+          <Item key="one">One</Item>
+          <Item key="two">Two</Item>
+          <Item key="three">Three</Item>
+        </Select>
+      ));
+
+      const trigger = screen.getByRole("button");
+
+      fireEvent.focus(trigger);
+      await Promise.resolve();
+
+      expect(trigger).toHaveTextContent("Select an option");
+
+      fireEvent.keyDown(trigger, { key: "t" });
+      await Promise.resolve();
+
+      fireEvent.keyUp(trigger, { key: "t" });
+      await Promise.resolve();
+
+      expect(onSelectionChange).toHaveBeenCalledTimes(1);
+      expect(onSelectionChange).toHaveBeenLastCalledWith("two");
+      expect(trigger).toHaveTextContent("Two");
+
+      fireEvent.keyDown(trigger, { key: "h" });
+      await Promise.resolve();
+
+      fireEvent.keyUp(trigger, { key: "h" });
+      await Promise.resolve();
+
+      expect(onSelectionChange).toHaveBeenCalledTimes(2);
+      expect(onSelectionChange).toHaveBeenLastCalledWith("three");
+      expect(trigger).toHaveTextContent("Three");
+    });
+
+    it("resets the search text after a timeout", async () => {
+      render(() => (
+        <Select label="Test" onSelectionChange={onSelectionChange}>
+          <Item key="one">One</Item>
+          <Item key="two">Two</Item>
+          <Item key="three">Three</Item>
+        </Select>
+      ));
+
+      const trigger = screen.getByRole("button");
+
+      fireEvent.focus(trigger);
+      await Promise.resolve();
+
+      expect(trigger).toHaveTextContent("Select an option");
+
+      fireEvent.keyDown(trigger, { key: "t" });
+      await Promise.resolve();
+
+      fireEvent.keyUp(trigger, { key: "t" });
+      await Promise.resolve();
+
+      expect(onSelectionChange).toHaveBeenCalledTimes(1);
+      expect(onSelectionChange).toHaveBeenLastCalledWith("two");
+      expect(trigger).toHaveTextContent("Two");
+
+      jest.runAllTimers();
+
+      fireEvent.keyDown(trigger, { key: "h" });
+      await Promise.resolve();
+
+      fireEvent.keyUp(trigger, { key: "h" });
+      await Promise.resolve();
+
+      expect(onSelectionChange).toHaveBeenCalledTimes(1);
+      expect(trigger).toHaveTextContent("Two");
+    });
+
+    it("wraps around when no items past the current one match", async () => {
+      render(() => (
+        <Select label="Test" onSelectionChange={onSelectionChange}>
+          <Item key="one">One</Item>
+          <Item key="two">Two</Item>
+          <Item key="three">Three</Item>
+        </Select>
+      ));
+
+      const trigger = screen.getByRole("button");
+      fireEvent.focus(trigger);
+      await Promise.resolve();
+
+      expect(trigger).toHaveTextContent("Select an option");
+
+      fireEvent.keyDown(trigger, { key: "t" });
+      await Promise.resolve();
+
+      fireEvent.keyUp(trigger, { key: "t" });
+      await Promise.resolve();
+
+      expect(onSelectionChange).toHaveBeenCalledTimes(1);
+      expect(onSelectionChange).toHaveBeenLastCalledWith("two");
+      expect(trigger).toHaveTextContent("Two");
+
+      jest.runAllTimers();
+
+      fireEvent.keyDown(trigger, { key: "o" });
+      await Promise.resolve();
+
+      fireEvent.keyUp(trigger, { key: "o" });
+      await Promise.resolve();
+
+      expect(onSelectionChange).toHaveBeenCalledTimes(2);
+      expect(trigger).toHaveTextContent("One");
+    });
+  });
+
+  describe("autofill", () => {
+    it("should have a hidden select element for form autocomplete", async () => {
+      render(() => (
+        <Select label="Test" autocomplete="address-level1" onSelectionChange={onSelectionChange}>
+          <For each={states}>{item => <Item key={item.abbr}>{item.name}</Item>}</For>
+        </Select>
+      ));
+
+      const trigger = screen.getByRole("button");
+
+      expect(trigger).toHaveTextContent("Select an option");
+
+      const hiddenLabel = screen.getByText("Test", { selector: "label" });
+
+      expect(hiddenLabel.tagName).toBe("LABEL");
+      expect(hiddenLabel.parentElement).toHaveAttribute("aria-hidden", "true");
+
+      // For anyone else who comes through this listbox/combobox path
+      // I can't use combobox here because there is a size attribute on the html select
+      // everything below this line is the path i followed to get to the correct role:
+      //   not sure why i can't use listbox https://github.com/A11yance/aria-query#elements-to-roles
+      //   however, i think this is correct based on https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles
+      //   which says "The listbox role is used for lists from which a user may select one or more items which are static and, unlike HTML <select> elements, may contain images."
+      //   Also, this test in react testing library seems to indicate something about size which we do not currently have, probably a bug
+      //   https://github.com/testing-library/dom-testing-library/blob/master/src/__tests__/element-queries.js#L548
+      const hiddenSelect = screen.getByRole("listbox", { hidden: true });
+
+      expect(hiddenSelect.parentElement).toBe(hiddenLabel);
+      expect(hiddenSelect).toHaveAttribute("tabIndex", "-1");
+      expect(hiddenSelect).toHaveAttribute("autocomplete", "address-level1");
+
+      const options = within(hiddenSelect).getAllByRole("option", { hidden: true });
+
+      expect(options.length).toBe(60);
+
+      options.forEach(
+        (option, index) => index > 0 && expect(option).toHaveTextContent(states[index - 1].name)
+      );
+
+      fireEvent.change(hiddenSelect, { target: { value: "CA" } });
+      await Promise.resolve();
+
+      expect(onSelectionChange).toHaveBeenCalledTimes(1);
+      expect(onSelectionChange).toHaveBeenLastCalledWith("CA");
+      expect(trigger).toHaveTextContent("California");
+    });
+
+    it.skip("should have a hidden input to marshall focus to the button", async () => {
+      render(() => (
+        <Select label="Test" onSelectionChange={onSelectionChange}>
+          <Item key="one">One</Item>
+          <Item key="two">Two</Item>
+          <Item key="three">Three</Item>
+        </Select>
+      ));
+
+      const hiddenInput = screen.getByRole("textbox", { hidden: true }); // get the hidden ones
+
+      expect(hiddenInput).toHaveAttribute("tabIndex", "0");
+      expect(hiddenInput).toHaveAttribute("style", "font-size: 16px;");
+      expect(hiddenInput.parentElement).toHaveAttribute("aria-hidden", "true");
+
+      fireEvent.focus(hiddenInput);
+      await Promise.resolve();
+
+      const button = screen.getByRole("button");
+
+      expect(document.activeElement).toBe(button);
+      expect(hiddenInput).toHaveAttribute("tabIndex", "-1");
+
+      fireEvent.blur(button);
+      await Promise.resolve();
+
+      expect(hiddenInput).toHaveAttribute("tabIndex", "0");
+    });
+  });
+
+  describe("disabled", () => {
+    it("disables the hidden select when isDisabled is true", async () => {
+      render(() => (
+        <Select label="Test" isDisabled onSelectionChange={onSelectionChange}>
+          <Item key="one">One</Item>
+          <Item key="two">Two</Item>
+          <Item key="three">Three</Item>
+        </Select>
+      ));
+
+      const select = screen.getByRole("textbox", { hidden: true });
+
+      expect(select).toBeDisabled();
+    });
+
+    it("does not open on mouse down when isDisabled is true", async () => {
+      const onOpenChange = jest.fn();
+
+      render(() => (
+        <Select label="Test" isDisabled onOpenChange={onOpenChange}>
+          <Item key="one">One</Item>
+          <Item key="two">Two</Item>
+          <Item key="three">Three</Item>
+        </Select>
+      ));
+
+      expect(screen.queryByRole("listbox")).toBeNull();
+
+      const trigger = screen.getByRole("button");
+
+      fireEvent.click(trigger);
+      await Promise.resolve();
+      jest.runAllTimers();
+
+      expect(screen.queryByRole("listbox")).toBeNull();
+
+      expect(onOpenChange).toBeCalledTimes(0);
+
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+    });
+
+    it("does not open on Space key press when isDisabled is true", async () => {
+      const onOpenChange = jest.fn();
+      render(() => (
+        <Select isDisabled label="Test" onOpenChange={onOpenChange}>
+          <Item key="one">One</Item>
+          <Item key="two">Two</Item>
+          <Item key="three">Three</Item>
+        </Select>
+      ));
+
+      expect(screen.queryByRole("listbox")).toBeNull();
+
+      const trigger = screen.getByRole("button");
+
+      fireEvent.keyDown(trigger, { key: " " });
+      await Promise.resolve();
+
+      fireEvent.keyUp(trigger, { key: " " });
+      await Promise.resolve();
+
+      jest.runAllTimers();
+
+      expect(screen.queryByRole("listbox")).toBeNull();
+
+      expect(onOpenChange).toBeCalledTimes(0);
+
+      expect(trigger).toHaveAttribute("aria-expanded", "false");
+      expect(document.activeElement).not.toBe(trigger);
+    });
+  });
+
+  describe("focus", () => {
+    let focusSpies: any;
+
+    beforeEach(() => {
+      focusSpies = {
+        onFocus: jest.fn(),
+        onBlur: jest.fn(),
+        onFocusChange: jest.fn()
+      };
+    });
+
+    it.skip("supports autofocus", async () => {
+      render(() => (
+        <Select label="Test" {...focusSpies} autofocus>
+          <Item key="one">One</Item>
+          <Item key="two">Two</Item>
+          <Item key="three">Three</Item>
+          <Item key="">None</Item>
+        </Select>
+      ));
+
+      const trigger = screen.getByRole("button");
+
+      expect(document.activeElement).toBe(trigger);
+      expect(focusSpies.onFocus).toHaveBeenCalled();
+      expect(focusSpies.onFocusChange).toHaveBeenCalledWith(true);
+    });
+
+    it.skip("calls onBlur and onFocus for the closed Select", async () => {
+      render(() => (
+        <>
+          <button data-testid="before" />
+          <Select data-testid="trigger" label="Test" {...focusSpies}>
+            <Item key="one">One</Item>
+            <Item key="two">Two</Item>
+            <Item key="three">Three</Item>
+            <Item key="">None</Item>
+          </Select>
+          <button data-testid="after" />
+        </>
+      ));
+
+      const beforeBtn = screen.getByTestId("before");
+      const afterBtn = screen.getByTestId("after");
+      const trigger = screen.getByTestId("trigger");
+
+      fireEvent.focus(trigger);
+      await Promise.resolve();
+
+      expect(document.activeElement).toBe(trigger);
+      expect(focusSpies.onFocus).toHaveBeenCalledTimes(1);
+      expect(focusSpies.onFocusChange).toHaveBeenCalledTimes(1);
+      expect(focusSpies.onFocusChange).toHaveBeenNthCalledWith(1, true);
+
+      userEvent.tab();
+
+      expect(document.activeElement).toBe(afterBtn);
+      expect(focusSpies.onBlur).toHaveBeenCalledTimes(1);
+      expect(focusSpies.onFocusChange).toHaveBeenCalledTimes(2);
+      expect(focusSpies.onFocusChange).toHaveBeenNthCalledWith(2, false);
+
+      userEvent.tab({ shift: true });
+
+      expect(document.activeElement).toBe(trigger);
+      expect(focusSpies.onFocus).toHaveBeenCalledTimes(2);
+      expect(focusSpies.onFocusChange).toHaveBeenNthCalledWith(3, true);
+
+      userEvent.tab({ shift: true });
+
+      expect(document.activeElement).toBe(beforeBtn);
+      expect(focusSpies.onBlur).toHaveBeenCalledTimes(2);
+      expect(focusSpies.onFocusChange).toHaveBeenNthCalledWith(4, false);
+    });
+
+    it.skip("calls onBlur and onFocus for the open Select", async () => {
+      render(() => (
+        <>
+          <button data-testid="before" />
+          <Select data-testid="trigger" label="Test" {...focusSpies}>
+            <Item key="one">One</Item>
+            <Item key="two">Two</Item>
+            <Item key="three">Three</Item>
+            <Item key="">None</Item>
+          </Select>
+          <button data-testid="after" />
+        </>
+      ));
+
+      const beforeBtn = screen.getByTestId("before");
+      const afterBtn = screen.getByTestId("after");
+      const trigger = screen.getByTestId("trigger");
+
+      fireEvent.focus(trigger);
+      await Promise.resolve();
+
+      fireEvent.keyDown(trigger, { key: "ArrowDown" });
+      await Promise.resolve();
+
+      fireEvent.keyUp(trigger, { key: "ArrowDown" });
+      await Promise.resolve();
+
+      jest.runAllTimers();
+
+      let listbox = screen.getByRole("listbox");
+
+      expect(listbox).toBeVisible();
+
+      let items = within(listbox).getAllByRole("option");
+
+      expect(document.activeElement).toBe(items[0]);
+
+      userEvent.tab();
+      jest.runAllTimers();
+
+      expect(document.activeElement).toBe(afterBtn);
+      expect(focusSpies.onBlur).toHaveBeenCalledTimes(1);
+
+      userEvent.tab({ shift: true });
+
+      expect(focusSpies.onFocus).toHaveBeenCalledTimes(2);
+      expect(focusSpies.onFocusChange).toHaveBeenNthCalledWith(1, true);
+      expect(focusSpies.onFocusChange).toHaveBeenNthCalledWith(2, false);
+      expect(focusSpies.onFocusChange).toHaveBeenNthCalledWith(3, true);
+
+      fireEvent.keyDown(trigger, { key: "ArrowDown" });
+      await Promise.resolve();
+
+      fireEvent.keyUp(trigger, { key: "ArrowDown" });
+      await Promise.resolve();
+
+      jest.runAllTimers();
+
+      listbox = screen.getByRole("listbox");
+      items = within(listbox).getAllByRole("option");
+
+      expect(document.activeElement).toBe(items[0]);
+
+      userEvent.tab({ shift: true });
+      jest.runAllTimers();
+
+      expect(focusSpies.onBlur).toHaveBeenCalledTimes(2);
+      expect(focusSpies.onFocusChange).toHaveBeenNthCalledWith(4, false);
+
+      expect(document.activeElement).toBe(beforeBtn);
+    });
+
+    it("does not call blur when an item is selected", async () => {
+      const otherButtonFocus = jest.fn();
+
+      render(() => (
+        <>
+          <button data-testid="before" onFocus={otherButtonFocus} />
+          <Select data-testid="trigger" label="Test" {...focusSpies}>
+            <Item key="one">One</Item>
+            <Item key="two">Two</Item>
+            <Item key="three">Three</Item>
+            <Item key="">None</Item>
+          </Select>
+          <button data-testid="after" onFocus={otherButtonFocus} />
+        </>
+      ));
+
+      const trigger = screen.getByTestId("trigger");
+
+      fireEvent.focus(trigger);
+      await Promise.resolve();
+
+      expect(focusSpies.onFocus).toHaveBeenCalledTimes(1);
+      expect(focusSpies.onFocusChange).toHaveBeenCalledTimes(1);
+      expect(focusSpies.onFocusChange).toHaveBeenCalledWith(true);
+
+      fireEvent.keyDown(trigger, { key: "ArrowDown" });
+      await Promise.resolve();
+
+      fireEvent.keyUp(trigger, { key: "ArrowDown" });
+      await Promise.resolve();
+
+      jest.runAllTimers();
+
+      const listbox = screen.getByRole("listbox");
+
+      expect(listbox).toBeVisible();
+
+      const items = within(listbox).getAllByRole("option");
+
+      expect(document.activeElement).toBe(items[0]);
+
+      fireEvent.keyDown(document.activeElement!, { key: "Enter" });
+      await Promise.resolve();
+
+      fireEvent.keyUp(document.activeElement!, { key: "Enter" });
+      await Promise.resolve();
+
+      expect(focusSpies.onFocus).toHaveBeenCalledTimes(1);
+      expect(focusSpies.onFocusChange).toHaveBeenCalledTimes(1);
+      expect(focusSpies.onFocusChange).toHaveBeenCalledWith(true);
+
+      expect(focusSpies.onBlur).not.toHaveBeenCalled();
+      expect(otherButtonFocus).not.toHaveBeenCalled();
+    });
+  });
 
   describe("form", () => {
     it("Should submit empty option by default", async () => {
@@ -1589,12 +2054,12 @@ describe("createSelect", () => {
       const onSubmit = jest.fn(e => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-        value = Object.fromEntries(formData).picker;
+        value = Object.fromEntries(formData).trigger;
       });
 
       render(() => (
         <form data-testid="form" onSubmit={onSubmit}>
-          <Select name="picker" label="Test" autofocus>
+          <Select name="trigger" label="Test" autofocus>
             <Item key="one">One</Item>
             <Item key="two">Two</Item>
             <Item key="three">Three</Item>
