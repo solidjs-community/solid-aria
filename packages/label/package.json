@@ -35,6 +35,7 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "dev": "vite serve dev --host",
     "test": "jest --passWithNoTests",
+    "test:ssr": "jest --passWithNoTests --config jest.config.ssr.cjs",
     "test:watch": "jest --watch --passWithNoTests",
     "typecheck": "tsc --noEmit"
   },

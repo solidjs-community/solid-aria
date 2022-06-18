@@ -9,4 +9,5 @@ __mocks__/
 
 commitlint.config.js
 jest.config.cjs
+jest.config.ssr.cjs
 *.d.ts
