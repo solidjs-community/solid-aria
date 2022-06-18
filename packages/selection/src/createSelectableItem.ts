@@ -365,6 +365,7 @@ export function createSelectableItem<T extends HTMLElement>(
         const [refEl, key, shouldUseVirtualFocus, focusedKey, isFocused] = newValue;
 
         if (
+          refEl &&
           key === focusedKey &&
           isFocused &&
           !shouldUseVirtualFocus &&
@@ -373,7 +374,7 @@ export function createSelectableItem<T extends HTMLElement>(
           if (props.focus) {
             props.focus();
           } else {
-            refEl && focusSafely(refEl);
+            focusSafely(refEl);
           }
         }
       }

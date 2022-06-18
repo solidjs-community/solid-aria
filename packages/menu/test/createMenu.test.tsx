@@ -648,7 +648,7 @@ describe("createMenu", () => {
     expect(onSelectionChangeSpy).toHaveBeenCalledTimes(0);
   });
 
-  it("supports aria-label on items", function () {
+  it("supports aria-label on items", () => {
     render(() => (
       <Menu aria-label="menu">
         <Item key="item" aria-label="Item">
@@ -656,6 +656,8 @@ describe("createMenu", () => {
         </Item>
       </Menu>
     ));
+
+    jest.runAllTimers();
 
     const menuItem = screen.getByRole("menuitem");
 

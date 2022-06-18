@@ -30,6 +30,7 @@ export * from "@solid-aria/listbox";
 export * from "@solid-aria/menu";
 export * from "@solid-aria/overlays";
 export * from "@solid-aria/radio";
+export * from "@solid-aria/select";
 export * from "@solid-aria/selection";
 export * from "@solid-aria/switch";
 export * from "@solid-aria/toggle";

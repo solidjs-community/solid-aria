@@ -47,7 +47,7 @@ export interface AriaListBoxProps
   /**
    * Whether to auto focus the listbox or an option.
    */
-  autoFocus?: boolean | FocusStrategy;
+  autofocus?: boolean | FocusStrategy;
 
   /**
    * Whether focus should wrap around when the end/start is reached.
@@ -113,14 +113,14 @@ interface ListBoxAria {
  * A listbox displays a list of options and allows a user to select one or more of them.
  * @param props - Props for the listbox.
  * @param ref - A ref to the listbox element.
+ * @param state - State for the listbox, as returned by `createListState`.
  */
 export function createListBox<T extends HTMLElement>(
   props: AriaListBoxProps,
-  ref: Accessor<T | undefined>
+  ref: Accessor<T | undefined>,
+  state: ListState = createListState(props)
 ): ListBoxAria {
   const defaultListboxId = createId();
-
-  const state = createListState(props);
 
   const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
 

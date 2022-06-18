@@ -51,7 +51,7 @@ function TextField(props: TextFieldProps) {
 function App() {
   return (
     <>
-      <TextField autoFocus />
+      <TextField autofocus />
       <TextField excludeFromTabOrder />
     </>
   );
@@ -116,7 +116,7 @@ function Example() {
     <>
       <button onClick={() => setOpen(true)}>Open</button>
       <Show when={isOpen()}>
-        <FocusScope contain restoreFocus autoFocus>
+        <FocusScope contain restoreFocus autofocus>
           <label for="first-input">First Input</label>
           <input id="first-input" />
           <label for="second-input">Second Input</label>

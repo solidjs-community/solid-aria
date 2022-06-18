@@ -88,8 +88,8 @@ export function createListBoxOption<T extends HTMLElement>(
 ): ListBoxOptionAria {
   const context = useListBoxContext();
 
-  const labelId = createSlotId();
-  const descriptionId = createSlotId();
+  const [labelId, trackLabelIdUse] = createSlotId();
+  const [descriptionId, trackDescIdUse] = createSlotId();
 
   const manager = () => context.state().selectionManager();
 
@@ -167,12 +167,14 @@ export function createListBoxOption<T extends HTMLElement>(
 
   const labelProps = {
     get id() {
+      trackLabelIdUse();
       return labelId();
     }
   };
 
   const descriptionProps = {
     get id() {
+      trackDescIdUse();
       return descriptionId();
     }
   };

@@ -364,7 +364,7 @@ describe("FocusScope", () => {
           <div>
             <input data-testid="outside" />
             <Show when={show()}>
-              <FocusScope restoreFocus autoFocus>
+              <FocusScope restoreFocus autofocus>
                 <input data-testid="input1" />
                 <input data-testid="input2" />
                 <input data-testid="input3" />
@@ -398,7 +398,7 @@ describe("FocusScope", () => {
       expect(document.activeElement).toBe(outside);
     });
 
-    it.skip("should restore focus to the previously focused node after a child with autoFocus unmounts", async () => {
+    it.skip("should restore focus to the previously focused node after a child with autofocus unmounts", async () => {
       function Test() {
         const [show, setShow] = createSignal(false);
 
@@ -406,7 +406,7 @@ describe("FocusScope", () => {
           <div>
             <input data-testid="outside" />
             <Show when={show()}>
-              <FocusScope restoreFocus autoFocus>
+              <FocusScope restoreFocus autofocus>
                 <input data-testid="input1" />
                 <input data-testid="input2" autofocus />
                 <input data-testid="input3" />
@@ -440,7 +440,7 @@ describe("FocusScope", () => {
       expect(document.activeElement).toBe(outside);
     });
 
-    it.skip("should move focus after the previously focused node when tabbing away from a scope with autoFocus", async () => {
+    it.skip("should move focus after the previously focused node when tabbing away from a scope with autofocus", async () => {
       function Test() {
         const [show, setShow] = createSignal(false);
 
@@ -492,7 +492,7 @@ describe("FocusScope", () => {
             <input data-testid="outside" />
             <input data-testid="after" />
             <Show when={show()}>
-              <FocusScope restoreFocus autoFocus>
+              <FocusScope restoreFocus autofocus>
                 <input data-testid="input1" autofocus />
                 <input data-testid="input2" />
                 <input data-testid="input3" />
@@ -533,7 +533,7 @@ describe("FocusScope", () => {
           <div>
             <input data-testid="outside" />
             <Show when={show()}>
-              <FocusScope restoreFocus autoFocus>
+              <FocusScope restoreFocus autofocus>
                 <input data-testid="input1" />
                 <Show when={showChild()}>
                   <input data-testid="dynamic" />
@@ -591,7 +591,7 @@ describe("FocusScope", () => {
             <button data-testid="trigger" />
             <input data-testid="after" />
             <Show when={show()}>
-              <FocusScope restoreFocus autoFocus>
+              <FocusScope restoreFocus autofocus>
                 <input data-testid="input1" />
                 <input data-testid="input2" />
                 <input data-testid="input3" />
@@ -638,7 +638,7 @@ describe("FocusScope", () => {
             <button data-testid="trigger" />
             <input data-testid="after" />
             <Show when={show()}>
-              <FocusScope restoreFocus autoFocus>
+              <FocusScope restoreFocus autofocus>
                 <input data-testid="input1" />
                 <input data-testid="input2" />
                 <input data-testid="input3" />
@@ -679,7 +679,7 @@ describe("FocusScope", () => {
             <input data-testid="before" />
             <button data-testid="trigger" />
             <Show when={show()}>
-              <FocusScope restoreFocus autoFocus>
+              <FocusScope restoreFocus autofocus>
                 <input data-testid="input1" />
                 <input data-testid="input2" />
                 <input data-testid="input3" />
@@ -726,7 +726,7 @@ describe("FocusScope", () => {
             <input data-testid="before" />
             <button data-testid="trigger" />
             <Show when={show()}>
-              <FocusScope autoFocus>
+              <FocusScope autofocus>
                 <input data-testid="input1" />
                 <input data-testid="input2" />
                 <input data-testid="input3" />
@@ -768,7 +768,7 @@ describe("FocusScope", () => {
   describe("auto focus", () => {
     it("should auto focus the first tabbable element in the scope on mount", async () => {
       render(() => (
-        <FocusScope autoFocus>
+        <FocusScope autofocus>
           <div />
           <input data-testid="input1" />
           <input data-testid="input2" />
@@ -784,7 +784,7 @@ describe("FocusScope", () => {
 
     it.skip("should do nothing if something is already focused in the scope", async () => {
       render(() => (
-        <FocusScope autoFocus>
+        <FocusScope autofocus>
           <div />
           <input data-testid="input1" />
           <input data-testid="input2" autofocus />
@@ -1214,11 +1214,11 @@ describe("FocusScope", () => {
         return (
           <div>
             <input data-testid="outside" />
-            <FocusScope autoFocus restoreFocus contain>
+            <FocusScope autofocus restoreFocus contain>
               <input data-testid="parent1" />
               <input data-testid="parent2" />
               <input data-testid="parent3" />
-              <FocusScope autoFocus restoreFocus contain>
+              <FocusScope autofocus restoreFocus contain>
                 <input data-testid="child1" />
                 <input data-testid="child2" />
                 <input data-testid="child3" />
@@ -1255,13 +1255,13 @@ describe("FocusScope", () => {
         return (
           <div>
             <input data-testid="outside" />
-            <FocusScope autoFocus restoreFocus contain>
+            <FocusScope autofocus restoreFocus contain>
               <input data-testid="parent1" />
               <input data-testid="parent2" />
               <input data-testid="parent3" />
               <div>
                 <div>
-                  <FocusScope autoFocus restoreFocus contain>
+                  <FocusScope autofocus restoreFocus contain>
                     <input data-testid="child1" />
                     <input data-testid="child2" />
                     <input data-testid="child3" />
@@ -1302,7 +1302,7 @@ describe("FocusScope", () => {
         return (
           <div>
             <input data-testid="outside" />
-            <FocusScope autoFocus restoreFocus contain>
+            <FocusScope autofocus restoreFocus contain>
               <input data-testid="parent" />
               <div>
                 <div>
@@ -1353,7 +1353,7 @@ describe("FocusScope", () => {
         return (
           <div>
             <input data-testid="outside" />
-            <FocusScope autoFocus restoreFocus contain>
+            <FocusScope autofocus restoreFocus contain>
               <input data-testid="parent" />
               <Show when={show1()}>
                 <FocusScope contain>
@@ -1459,7 +1459,7 @@ describe("FocusScope", () => {
       function Test() {
         return (
           <div>
-            <FocusScope autoFocus restoreFocus contain>
+            <FocusScope autofocus restoreFocus contain>
               <input data-testid="parent" />
               <div>
                 <Portal>
@@ -1496,7 +1496,7 @@ describe("FocusScope", () => {
       function Test() {
         return (
           <div>
-            <FocusScope autoFocus restoreFocus contain>
+            <FocusScope autofocus restoreFocus contain>
               <input data-testid="parent" />
               <div>
                 <Portal>

@@ -70,10 +70,12 @@ export interface MenuTriggerAria {
  * Provides the behavior and accessibility implementation for a menu trigger.
  * @param props - Props for the menu trigger.
  * @param ref - A ref to the menu trigger element.
+ * @param state - State for the menu trigger, as returned by `createMenuTriggerState`.
  */
 export function createMenuTrigger<T extends HTMLElement>(
   props: AriaMenuTriggerProps,
-  ref: Accessor<T | undefined>
+  ref: Accessor<T | undefined>,
+  state: MenuTriggerState = createMenuTriggerState(props)
 ): MenuTriggerAria {
   const defaultProps: Partial<AriaMenuTriggerProps> = {
     type: "menu",
@@ -85,8 +87,6 @@ export function createMenuTrigger<T extends HTMLElement>(
   props = mergeProps(defaultProps, props);
 
   const menuTriggerId = createId();
-
-  const state = createMenuTriggerState(props);
 
   const { triggerProps, overlayProps } = createOverlayTrigger(
     { type: () => props.type ?? "menu" },
@@ -119,16 +119,6 @@ export function createMenuTrigger<T extends HTMLElement>(
         break;
     }
   };
-
-  /*
-  const { hoverProps } = createHover({
-    isDisabled: () => props.isDisabled || props.trigger !== "hover",
-    onHoverStart: () => state.open("first"),
-    onHoverEnd: e => {
-      // ???
-    }
-  });
-  */
 
   const { longPressProps } = createLongPress<T>({
     isDisabled: () => props.isDisabled || props.trigger !== "longPress",

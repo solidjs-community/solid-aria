@@ -80,37 +80,30 @@ describe("createMenuTrigger", () => {
       const { menuTriggerProps, state } = renderCreateMenuTriggerPrimitive({ type: "menu" });
 
       const expectedOpenState = !state.isOpen();
-      const toggleSpy = jest.spyOn(state, "toggle");
 
       expect(typeof menuTriggerProps.onPressStart).toBe("function");
 
       menuTriggerProps.onPressStart?.({ pointerType: "mouse" } as PressEvent);
 
       expect(state.isOpen()).toBe(expectedOpenState);
-      expect(toggleSpy).toHaveBeenCalledTimes(1);
-      expect(toggleSpy).toHaveBeenCalledWith(undefined);
 
       dispose();
     }));
 
-  it("doesn't toggle the menu if isDisabled", () =>
-    createRoot(dispose => {
+  it("doesn't toggle the menu if isDisabled", async () =>
+    createRoot(async dispose => {
       const { menuTriggerProps, state } = renderCreateMenuTriggerPrimitive({ isDisabled: true });
 
-      const setOpenSpy = jest.spyOn(state, "setOpen");
-      const toggleSpy = jest.spyOn(state, "toggle");
-
       expect(typeof menuTriggerProps.onPressStart).toBe("function");
+      expect(state.isOpen()).toBeFalsy();
 
       menuTriggerProps.onPressStart?.({ pointerType: "mouse" } as PressEvent);
-
-      expect(setOpenSpy).toHaveBeenCalledTimes(0);
-      expect(toggleSpy).toHaveBeenCalledTimes(0);
+      await Promise.resolve();
 
       menuTriggerProps.onPress?.({ pointerType: "touch" } as PressEvent);
+      await Promise.resolve();
 
-      expect(setOpenSpy).toHaveBeenCalledTimes(0);
-      expect(toggleSpy).toHaveBeenCalledTimes(0);
+      expect(state.isOpen()).toBeFalsy();
 
       dispose();
     }));

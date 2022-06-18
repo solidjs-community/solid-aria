@@ -42,7 +42,7 @@ export interface AriaMenuProps extends CreateTreeStateProps, DOMProps, AriaLabel
   /**
    * Where the focus should be set.
    */
-  autoFocus?: boolean | FocusStrategy;
+  autofocus?: boolean | FocusStrategy;
 
   /**
    * Whether keyboard navigation is circular.

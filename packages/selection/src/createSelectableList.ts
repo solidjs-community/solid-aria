@@ -50,7 +50,7 @@ export interface CreateSelectableListProps {
    * Whether the collection or one of its items should be automatically focused upon render.
    * @default false
    */
-  autoFocus?: MaybeAccessor<boolean | FocusStrategy | undefined>;
+  autofocus?: MaybeAccessor<boolean | FocusStrategy | undefined>;
 
   /**
    * Whether focus should wrap around when the end/start is reached.
@@ -129,7 +129,7 @@ export function createSelectableList<T extends HTMLElement>(
     {
       keyboardDelegate: delegate,
       selectionManager: () => access(props.selectionManager),
-      autoFocus: () => access(props.autoFocus),
+      autofocus: () => access(props.autofocus),
       shouldFocusWrap: () => access(props.shouldFocusWrap),
       disallowEmptySelection: () => access(props.disallowEmptySelection),
       selectOnFocus: () => access(props.selectOnFocus),

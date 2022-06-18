@@ -15,6 +15,8 @@
  * governing permissions and limitations under the License.
  */
 
+import { JSX } from "solid-js";
+
 export type ValidationState = "valid" | "invalid";
 
 export interface Validation {
@@ -65,4 +67,23 @@ export interface ValueBase<T, C = T> {
    * Handler that is called when the value changes.
    */
   onChange?: (value: C) => void;
+}
+
+export interface TextInputBase {
+  /**
+   * Temporary text that occupies the text input when it is empty.
+   */
+  placeholder?: string;
+}
+
+export interface HelpTextProps {
+  /**
+   * A description for the field. Provides a hint such as specific requirements for what to choose.
+   */
+  description?: JSX.Element;
+
+  /**
+   * An error message for the field.
+   */
+  errorMessage?: JSX.Element;
 }

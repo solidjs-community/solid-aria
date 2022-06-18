@@ -21,7 +21,7 @@ import {
   OverlayTriggerState
 } from "@solid-aria/overlays";
 import { FocusStrategy } from "@solid-aria/types";
-import { Accessor, createSignal } from "solid-js";
+import { Accessor, createSignal, mergeProps } from "solid-js";
 
 export interface MenuTriggerState extends OverlayTriggerState {
   /**
@@ -58,11 +58,6 @@ export function createMenuTriggerState(props: CreateOverlayTriggerStateProps): M
     overlayTriggerState.toggle();
   };
 
-  return {
-    focusStrategy,
-    ...overlayTriggerState,
-    // override the ones from `overlayTriggerState`
-    open,
-    toggle
-  };
+  // eslint-disable-next-line solid/reactivity
+  return mergeProps(overlayTriggerState, { focusStrategy, open, toggle });
 }

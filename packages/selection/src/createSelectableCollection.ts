@@ -43,7 +43,7 @@ interface CreateSelectableCollectionProps {
    * Whether the collection or one of its items should be automatically focused upon render.
    * @default false
    */
-  autoFocus?: MaybeAccessor<boolean | FocusStrategy | undefined>;
+  autofocus?: MaybeAccessor<boolean | FocusStrategy | undefined>;
 
   /**
    * Whether focus should wrap around when the end/start is reached.
@@ -302,7 +302,7 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
         }
         break;
       case "Tab": {
-        if (!access(props.allowsTabNavigation) && refEl) {
+        if (!access(props.allowsTabNavigation)) {
           // There may be elements that are "tabbable" inside a collection (e.g. in a grid cell).
           // However, collections should be treated as a single tab stop, with arrow key navigation internally.
           // We don't control the rendering of these, so we can't override the tabIndex to prevent tabbing.
@@ -387,7 +387,7 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
         scrollEl.scrollLeft = scrollPos.left;
 
         // Refocus and scroll the focused item into view if it exists within the scrollable region.
-        const element = scrollEl?.querySelector(`[data-key="${manager.focusedKey()}"]`);
+        const element = scrollEl.querySelector(`[data-key="${manager.focusedKey()}"]`);
 
         if (element) {
           // This prevents a flash of focus on the first/last element in the collection
@@ -416,9 +416,9 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
   };
 
   onMount(() => {
-    const autoFocus = access(props.autoFocus);
+    const autofocus = access(props.autofocus);
 
-    if (!autoFocus) {
+    if (!autofocus) {
       return;
     }
 
@@ -428,10 +428,10 @@ export function createSelectableCollection<T extends HTMLElement, U extends HTML
     let focusedKey: ItemKey | undefined;
 
     // Check focus strategy to determine which item to focus
-    if (autoFocus === "first") {
+    if (autofocus === "first") {
       focusedKey = delegate.getFirstKey?.();
     }
-    if (autoFocus === "last") {
+    if (autofocus === "last") {
       focusedKey = delegate.getLastKey?.();
     }
 

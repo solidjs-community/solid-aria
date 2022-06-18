@@ -102,7 +102,7 @@ function ModalDialog(props: ModalDialogProps) {
       }}
       {...underlayProps}
     >
-      <FocusScope contain restoreFocus autoFocus>
+      <FocusScope contain restoreFocus autofocus>
         <div
           {...overlayProps}
           {...dialogProps}

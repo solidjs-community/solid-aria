@@ -22,7 +22,7 @@ export interface FocusableProps extends FocusEvents, KeyboardEvents {
   /**
    * Whether the element should receive focus on render.
    */
-  autoFocus?: boolean;
+  autofocus?: boolean;
 }
 
 export interface FocusableDOMProps extends DOMProps {

@@ -100,8 +100,8 @@ export function createBreadcrumbItem<T extends HTMLElement = HTMLAnchorElement>(
     get tabIndex() {
       if (local.isCurrent) {
         // isCurrent sets isDisabled === true for the current item,
-        // so we have to restore the tabIndex in order to support autoFocus.
-        return props.autoFocus ? -1 : undefined;
+        // so we have to restore the tabIndex in order to support autofocus.
+        return props.autofocus ? -1 : undefined;
       }
 
       return !isHeading() ? linkProps.tabIndex : undefined;
