@@ -1,5 +1,11 @@
 # @solid-aria/types
 
+## 0.1.3
+
+### Patch Changes
+
+- 1bf8418: Release select package
+
 ## 0.1.2
 
 ### Patch Changes

@@ -1,5 +1,14 @@
 # @solid-aria/collection
 
+## 0.1.3
+
+### Patch Changes
+
+- 1bf8418: Release select package
+- Updated dependencies [1bf8418]
+  - @solid-aria/types@0.1.3
+  - @solid-aria/utils@0.1.3
+
 ## 0.1.2
 
 ### Patch Changes

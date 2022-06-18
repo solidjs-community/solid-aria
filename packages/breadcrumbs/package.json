@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/breadcrumbs",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": false,
   "description": "Primitives for building accessible breadcrumbs component.",
   "keywords": [
@@ -40,8 +40,8 @@
   },
   "dependencies": {
     "@solid-aria/link": "^0.1.2",
-    "@solid-aria/types": "^0.1.2",
-    "@solid-aria/utils": "^0.1.2",
+    "@solid-aria/types": "^0.1.3",
+    "@solid-aria/utils": "^0.1.3",
     "@solid-primitives/utils": "^2.1.0"
   },
   "devDependencies": {
