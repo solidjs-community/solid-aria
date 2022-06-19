@@ -28,12 +28,11 @@ export type DOMElements = keyof JSX.IntrinsicElements;
 export type ElementType<Props = any> = DOMElements | Component<Props>;
 
 /**
- * Allows for extending a set of props (`SourceProps`) by an overriding set of props
- * (`OverrideProps`), ensuring that any duplicates are overridden by the overriding
- * set of props.
+ * A map of HTML element names and their interface types.
+ * For example `'a'` -> `HTMLAnchorElement`.
  */
-export type ExtendedProps<SourceProps = {}, OverrideProps = {}> = Omit<
-  SourceProps,
-  keyof OverrideProps
-> &
-  OverrideProps;
+export type IntrinsicHTMLElements = {
+  [K in keyof JSX.IntrinsicElements]: JSX.IntrinsicElements[K] extends JSX.HTMLAttributes<infer T>
+    ? T
+    : never;
+};

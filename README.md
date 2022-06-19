@@ -40,6 +40,7 @@ A library of high-quality primitives that help you build accessible user interfa
 - [radio](./packages/radio/) - Provides the behavior and accessibility implementation for radio and radio group components.
 - [select](./packages/select/) - Provides the behavior and accessibility implementation for select component.
 - [switch](./packages/switch/) - Provides the behavior and accessibility implementation for switch component.
+- [textfield](./packages/textfield/) - Provides the behavior and accessibility implementation for text field component.
 - [toggle](./packages/toggle/) - Handles interactions for toggle elements, e.g. checkboxes and switches.
 
 ### Navigation
@@ -90,12 +91,10 @@ A library of high-quality primitives that help you build accessible user interfa
 - [x] Select
 - [x] Separator
 - [ ] Slider
-- [ ] SpinButton
 - [x] Switch
 - [ ] Table
 - [ ] Tabs
-- [ ] Tag
-- [ ] TextField
+- [x] TextField
 - [ ] Toast
 - [x] Toggle
 - [ ] Tooltip
