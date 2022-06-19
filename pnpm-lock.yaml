@@ -335,6 +335,21 @@ importers:
     devDependencies:
       solid-js: 1.4.4
 
+  packages/meter:
+    specifiers:
+      '@solid-aria/progress': ^0.0.1
+      '@solid-aria/types': ^0.1.2
+      '@solid-aria/utils': ^0.1.2
+      '@solid-primitives/utils': ^2.1.0
+      solid-js: ^1.4.4
+    dependencies:
+      '@solid-aria/progress': link:../progress
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': 0.1.3_solid-js@1.4.4
+      '@solid-primitives/utils': 2.1.1_solid-js@1.4.4
+    devDependencies:
+      solid-js: 1.4.4
+
   packages/overlays:
     specifiers:
       '@solid-aria/button': ^0.1.3
@@ -375,6 +390,7 @@ importers:
       '@solid-aria/list': ^0.1.3
       '@solid-aria/listbox': ^0.1.4
       '@solid-aria/menu': ^0.1.4
+      '@solid-aria/meter': ^0.0.0
       '@solid-aria/overlays': ^0.1.3
       '@solid-aria/progress': ^0.0.1
       '@solid-aria/radio': ^0.1.3
@@ -402,6 +418,7 @@ importers:
       '@solid-aria/list': link:../list
       '@solid-aria/listbox': link:../listbox
       '@solid-aria/menu': link:../menu
+      '@solid-aria/meter': link:../meter
       '@solid-aria/overlays': link:../overlays
       '@solid-aria/progress': link:../progress
       '@solid-aria/radio': link:../radio
@@ -2620,6 +2637,25 @@ packages:
     dependencies:
       '@sinonjs/commons': 1.8.3
     dev: true
+
+  /@solid-aria/types/0.1.3_solid-js@1.4.4:
+    resolution: {integrity: sha512-pl/g1pS+wNKRePxyDJ9dx3Sj460IL8R2gcEDJWr+v749OQv3dpnHHpLktrIkVnMZ1vW7lxXIZDfoXepkVChYFA==}
+    peerDependencies:
+      solid-js: ^1.4.4
+    dependencies:
+      '@solid-primitives/utils': 2.1.1_solid-js@1.4.4
+      solid-js: 1.4.4
+    dev: false
+
+  /@solid-aria/utils/0.1.3_solid-js@1.4.4:
+    resolution: {integrity: sha512-qYjZlWZShd/OlW/AnPYIVXxD4DIMi1cfAZl411ozOBtjzAFD+bBr2POzj83fvcTJjCEVT6s0s8973tJfadmz9Q==}
+    peerDependencies:
+      solid-js: ^1.4.4
+    dependencies:
+      '@solid-aria/types': 0.1.3_solid-js@1.4.4
+      '@solid-primitives/utils': 2.1.1_solid-js@1.4.4
+      solid-js: 1.4.4
+    dev: false
 
   /@solid-primitives/event-listener/2.2.0_solid-js@1.4.4:
     resolution: {integrity: sha512-puW/GHPOHi/3z8KIdJozlDh2MwQsAVZxBSeahY29t26QBDzInRch0SZZ+6xX/Tjb7g7Q8IjZgA4QWE7Ts1EX7Q==}
