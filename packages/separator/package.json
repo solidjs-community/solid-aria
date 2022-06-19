@@ -1,8 +1,8 @@
 {
-  "name": "@solid-aria/i18n",
-  "version": "0.1.2",
+  "name": "@solid-aria/separator",
+  "version": "0.0.0",
   "private": false,
-  "description": "Primitives for dealing with locale and layout direction.",
+  "description": "Primitives for building accessible separator component.",
   "keywords": [
     "solid",
     "aria",
@@ -11,7 +11,7 @@
     "system",
     "components"
   ],
-  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/i18n#readme",
+  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/separator#readme",
   "bugs": {
     "url": "https://github.com/solidjs-community/solid-aria/issues"
   },
@@ -39,7 +39,6 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@internationalized/number": "^3.1.1",
     "@solid-aria/types": "^0.1.2",
     "@solid-aria/utils": "^0.1.2",
     "@solid-primitives/utils": "^2.1.0"
@@ -54,7 +53,7 @@
     "access": "public"
   },
   "primitive": {
-    "name": "i18n",
+    "name": "separator",
     "stage": 0,
     "list": [],
     "category": ""

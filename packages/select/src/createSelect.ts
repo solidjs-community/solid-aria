@@ -18,7 +18,7 @@
 import { AriaButtonProps } from "@solid-aria/button";
 import { createCollator } from "@solid-aria/i18n";
 import { setInteractionModality } from "@solid-aria/interactions";
-import { createField } from "@solid-aria/label";
+import { AriaFieldProps, createField } from "@solid-aria/label";
 import { AriaListBoxProps } from "@solid-aria/listbox";
 import { createMenuTrigger } from "@solid-aria/menu";
 import { createTypeSelect, ListKeyboardDelegate } from "@solid-aria/selection";
@@ -193,7 +193,7 @@ export function createSelect<T extends HTMLElement>(
     // select is not an HTML input element so it
     // shouldn't be labeled by a <label> element.
     isHTMLLabelElement: false
-  });
+  } as Partial<AriaFieldProps>);
 
   const { labelProps, fieldProps, descriptionProps, errorMessageProps } =
     createField(createFieldProps);

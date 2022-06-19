@@ -15,16 +15,22 @@
  * governing permissions and limitations under the License.
  */
 
-export * from "./createControllableSignal";
-export * from "./createDescription";
-export * from "./createGlobalListeners";
-export * from "./createId";
-export * from "./createSyncRef";
-export * from "./filterDOMProps";
-export * from "./focusWithoutScrolling";
-export * from "./getScrollParent";
-export * from "./handler";
-export * from "./mergeAriaLabels";
-export * from "./number";
-export * from "./runAfterTransition";
-export * from "./scrollIntoView";
+import { NumberFormatOptions, NumberFormatter } from "@internationalized/number";
+import { Accessor, createMemo } from "solid-js";
+
+import { useLocale } from "./context";
+
+/**
+ * Provides localized number formatting for the current locale. Automatically updates when the locale changes,
+ * and handles caching of the number formatter for performance.
+ * @param options - Formatting options.
+ */
+export function createNumberFormatter(
+  options: Accessor<NumberFormatOptions>
+): Accessor<Intl.NumberFormat> {
+  const locale = useLocale();
+
+  const formatter = createMemo(() => new NumberFormatter(locale().locale, options()));
+
+  return formatter;
+}

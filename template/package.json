@@ -2,7 +2,7 @@
   "name": "@solid-aria/template-primitive",
   "version": "0.0.0",
   "private": false,
-  "description": "A template primitive example.",
+  "description": "Primitives for building accessible template-primitive component.",
   "keywords": [
     "solid",
     "aria",
@@ -20,7 +20,7 @@
     "url": "git+https://github.com/solidjs-community/solid-aria.git"
   },
   "license": "MIT",
-  "author": "Your Name <you@youremail.com>",
+  "author": "Fabien Marie-Louise <fabienml.dev@gmail.com>",
   "contributors": [],
   "sideEffects": false,
   "type": "module",
@@ -55,9 +55,7 @@
   "primitive": {
     "name": "template-primitive",
     "stage": 0,
-    "list": [
-      "createPrimitiveTemplate"
-    ],
-    "category": "Template"
+    "list": [],
+    "category": ""
   }
 }
