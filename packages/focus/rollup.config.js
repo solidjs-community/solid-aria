@@ -1,6 +1,3 @@
-import withSolid from "rollup-preset-solid";
+import defaultConfig from "../../configs/rollup.config";
 
-export default withSolid({
-  input: "src/index.tsx",
-  targets: ["esm", "cjs"]
-});
+export default defaultConfig;
