@@ -1,0 +1,61 @@
+{
+  "name": "@solid-aria/separator",
+  "version": "0.0.0",
+  "private": false,
+  "description": "Primitives for building accessible separator component.",
+  "keywords": [
+    "solid",
+    "aria",
+    "headless",
+    "design",
+    "system",
+    "components"
+  ],
+  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/separator#readme",
+  "bugs": {
+    "url": "https://github.com/solidjs-community/solid-aria/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solidjs-community/solid-aria.git"
+  },
+  "license": "MIT",
+  "author": "Fabien Marie-Louise <fabienml.dev@gmail.com>",
+  "contributors": [],
+  "sideEffects": false,
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "dev": "vite serve dev --host",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch --passWithNoTests",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@solid-aria/types": "^0.1.2",
+    "@solid-aria/utils": "^0.1.2",
+    "@solid-primitives/utils": "^2.1.0"
+  },
+  "devDependencies": {
+    "solid-js": "^1.4.4"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.4.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "primitive": {
+    "name": "separator",
+    "stage": 0,
+    "list": [],
+    "category": ""
+  }
+}

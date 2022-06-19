@@ -24,6 +24,10 @@ A library of high-quality primitives that help you build accessible user interfa
 - [selection](./packages/selection/) - Primitives for managing selection in collections.
 - [tree](./packages/tree/) - Primitives for managing tree collections.
 
+### Content
+
+- [separator](./packages/separator/) - Provides the accessibility implementation for a separator.
+
 ### Interactions
 
 - [focus](./packages/focus/) - Primitives for dealing with focus rings and focus management.
@@ -79,7 +83,7 @@ A library of high-quality primitives that help you build accessible user interfa
 - [x] Radio
 - [ ] SearchField
 - [x] Select
-- [ ] Separator
+- [x] Separator
 - [ ] Slider
 - [ ] SpinButton
 - [x] Switch
@@ -91,6 +95,7 @@ A library of high-quality primitives that help you build accessible user interfa
 - [x] Toggle
 - [ ] Tooltip
 - [x] Visually-hidden
+- [ ] Virtualizer
 
 ## Acknowledgment
 
