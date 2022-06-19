@@ -1,5 +1,17 @@
 # @solid-aria/primitives
 
+## 0.3.0
+
+### Minor Changes
+
+- e43ef3e: - `@solid-aria/primitives`: added `meter` package.
+  - `@solid-aria/meter`: new package.
+
+### Patch Changes
+
+- Updated dependencies [e43ef3e]
+  - @solid-aria/meter@0.0.1
+
 ## 0.2.0
 
 ### Minor Changes
