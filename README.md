@@ -55,6 +55,7 @@ A library of high-quality primitives that help you build accessible user interfa
 
 ### Status
 
+- [meter](./packages/meter/) - Provides the accessibility implementation for a meter component.
 - [progress](./packages/progress/) - Provides the accessibility implementation for a progress bar component.
 
 ### Utilities
@@ -79,7 +80,7 @@ A library of high-quality primitives that help you build accessible user interfa
 - [x] Listbox
 - [ ] LiveAnnouncer
 - [x] Menu
-- [ ] Meter
+- [x] Meter
 - [ ] NumberField
 - [x] Overlays
 - [ ] Pagination
