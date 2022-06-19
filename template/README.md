@@ -12,7 +12,7 @@
 
 A sample primitive that is made up for templating with the following options:
 
-`createPrimitiveTemplate` - Provides a getter and setter for the primitive.
+- `createPrimitiveTemplate` - Provides a getter and setter for the primitive.
 
 ## Installation
 

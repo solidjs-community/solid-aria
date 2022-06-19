@@ -53,6 +53,10 @@ A library of high-quality primitives that help you build accessible user interfa
 - [menu](./packages/menu/) - Provides the behavior and accessibility implementation for a menu component.
 - [overlays](./packages/overlays/) - Provides the behavior and accessibility implementation for overlay components such as dialogs, popovers, and menus.
 
+### Status
+
+- [progress](./packages/progress/) - Provides the accessibility implementation for a progress bar component.
+
 ### Utilities
 
 - [i18n](./packages/i18n/) - Primitives for dealing with locale and layout direction.
@@ -79,7 +83,7 @@ A library of high-quality primitives that help you build accessible user interfa
 - [ ] NumberField
 - [x] Overlays
 - [ ] Pagination
-- [ ] Progress
+- [x] Progress
 - [x] Radio
 - [ ] SearchField
 - [x] Select

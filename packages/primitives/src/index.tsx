@@ -29,6 +29,7 @@ export * from "@solid-aria/list";
 export * from "@solid-aria/listbox";
 export * from "@solid-aria/menu";
 export * from "@solid-aria/overlays";
+export * from "@solid-aria/progress";
 export * from "@solid-aria/radio";
 export * from "@solid-aria/select";
 export * from "@solid-aria/selection";
