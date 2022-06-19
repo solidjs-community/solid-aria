@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/label",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "private": false,
   "description": "Primitives that provides the accessibility implementation for labels and their associated elements.",
   "keywords": [
@@ -41,7 +41,7 @@
   },
   "dependencies": {
     "@solid-aria/types": "^0.1.3",
-    "@solid-aria/utils": "^0.1.3",
+    "@solid-aria/utils": "^0.2.0",
     "@solid-primitives/props": "^2.1.7",
     "@solid-primitives/utils": "^2.1.0"
   },

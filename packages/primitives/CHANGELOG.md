@@ -1,5 +1,42 @@
 # @solid-aria/primitives
 
+## 0.2.0
+
+### Minor Changes
+
+- e6bac81: - `@solid-aria/i18n`: added `createNumberFormatter` primitive.
+  - `@solid-aria/primitives`: added `progress` and `separator` packages.
+  - `@solid-aria/utils`: added number utilities.
+  - `@solid-aria/progress`: new package.
+  - `@solid-aria/separator`: new package.
+
+### Patch Changes
+
+- Updated dependencies [e6bac81]
+  - @solid-aria/i18n@0.2.0
+  - @solid-aria/utils@0.2.0
+  - @solid-aria/progress@0.0.1
+  - @solid-aria/select@0.0.2
+  - @solid-aria/separator@0.0.1
+  - @solid-aria/overlays@0.1.3
+  - @solid-aria/radio@0.1.3
+  - @solid-aria/selection@0.1.4
+  - @solid-aria/breadcrumbs@0.1.4
+  - @solid-aria/button@0.1.3
+  - @solid-aria/checkbox@0.1.3
+  - @solid-aria/collection@0.1.4
+  - @solid-aria/dialog@0.1.4
+  - @solid-aria/focus@0.1.4
+  - @solid-aria/interactions@0.1.4
+  - @solid-aria/label@0.1.4
+  - @solid-aria/link@0.1.3
+  - @solid-aria/list@0.1.3
+  - @solid-aria/listbox@0.1.4
+  - @solid-aria/menu@0.1.4
+  - @solid-aria/toggle@0.1.3
+  - @solid-aria/tree@0.1.3
+  - @solid-aria/visually-hidden@0.1.3
+
 ## 0.1.3
 
 ### Patch Changes

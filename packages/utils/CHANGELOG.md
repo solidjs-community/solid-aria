@@ -1,5 +1,15 @@
 # @solid-aria/utils
 
+## 0.2.0
+
+### Minor Changes
+
+- e6bac81: - `@solid-aria/i18n`: added `createNumberFormatter` primitive.
+  - `@solid-aria/primitives`: added `progress` and `separator` packages.
+  - `@solid-aria/utils`: added number utilities.
+  - `@solid-aria/progress`: new package.
+  - `@solid-aria/separator`: new package.
+
 ## 0.1.3
 
 ### Patch Changes
