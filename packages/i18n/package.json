@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/i18n",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "private": false,
   "description": "Primitives for dealing with locale and layout direction.",
   "keywords": [
@@ -41,7 +41,7 @@
   "dependencies": {
     "@internationalized/number": "^3.1.1",
     "@solid-aria/types": "^0.1.2",
-    "@solid-aria/utils": "^0.1.2",
+    "@solid-aria/utils": "^0.2.0",
     "@solid-primitives/utils": "^2.1.0"
   },
   "devDependencies": {

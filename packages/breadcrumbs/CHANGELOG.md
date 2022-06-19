@@ -1,5 +1,13 @@
 # @solid-aria/breadcrumbs
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies [e6bac81]
+  - @solid-aria/utils@0.2.0
+  - @solid-aria/link@0.1.3
+
 ## 0.1.3
 
 ### Patch Changes
