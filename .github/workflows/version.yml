@@ -1,12 +1,12 @@
-name: Snapshot Release
+name: Version
 
 on: [workflow_dispatch]
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  release:
-    name: Release
+  version:
+    name: Version
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -28,14 +28,13 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Create Snapshot Release Pull Request or Publish to npm
+      - name: Create Update Version Pull Request
         id: changesets
         uses: changesets/action@v1
         with:
-          commit: "chore: update snapshot versions"
-          title: "chore: update snapshot versions"
-          version: pnpm ci:version-snapshot
-          publish: pnpm ci:release-snapshot
+          commit: "chore: update versions"
+          title: "chore: update versions"
+          version: pnpm ci:version
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
