@@ -447,7 +447,6 @@ describe("createSelect", () => {
 
       fireEvent.click(trigger);
       await Promise.resolve();
-      jest.runAllTimers();
 
       const listbox = screen.getByRole("listbox");
 
@@ -459,7 +458,6 @@ describe("createSelect", () => {
 
       fireEvent.click(document.body);
       await Promise.resolve();
-      jest.runAllTimers();
 
       expect(listbox).not.toBeInTheDocument();
       expect(trigger).toHaveAttribute("aria-expanded", "false");
@@ -1873,7 +1871,9 @@ describe("createSelect", () => {
       expect(focusSpies.onFocusChange).toHaveBeenCalledWith(true);
     });
 
-    it.skip("calls onBlur and onFocus for the closed Select", async () => {
+    it("calls onBlur and onFocus for the closed Select", async () => {
+      jest.useRealTimers();
+
       render(() => (
         <>
           <button data-testid="before" />
@@ -1891,32 +1891,32 @@ describe("createSelect", () => {
       const afterBtn = screen.getByTestId("after");
       const trigger = screen.getByTestId("trigger");
 
-      fireEvent.focus(trigger);
-      await Promise.resolve();
+      trigger.focus();
 
       expect(document.activeElement).toBe(trigger);
       expect(focusSpies.onFocus).toHaveBeenCalledTimes(1);
       expect(focusSpies.onFocusChange).toHaveBeenCalledTimes(1);
       expect(focusSpies.onFocusChange).toHaveBeenNthCalledWith(1, true);
 
-      userEvent.tab();
-
+      await userEvent.tab();
       expect(document.activeElement).toBe(afterBtn);
       expect(focusSpies.onBlur).toHaveBeenCalledTimes(1);
       expect(focusSpies.onFocusChange).toHaveBeenCalledTimes(2);
       expect(focusSpies.onFocusChange).toHaveBeenNthCalledWith(2, false);
 
-      userEvent.tab({ shift: true });
+      await userEvent.tab({ shift: true });
 
       expect(document.activeElement).toBe(trigger);
       expect(focusSpies.onFocus).toHaveBeenCalledTimes(2);
       expect(focusSpies.onFocusChange).toHaveBeenNthCalledWith(3, true);
 
-      userEvent.tab({ shift: true });
-
+      await userEvent.tab({ shift: true });
       expect(document.activeElement).toBe(beforeBtn);
       expect(focusSpies.onBlur).toHaveBeenCalledTimes(2);
       expect(focusSpies.onFocusChange).toHaveBeenNthCalledWith(4, false);
+
+      jest.clearAllTimers();
+      jest.useFakeTimers();
     });
 
     it.skip("calls onBlur and onFocus for the open Select", async () => {
@@ -1937,8 +1937,7 @@ describe("createSelect", () => {
       const afterBtn = screen.getByTestId("after");
       const trigger = screen.getByTestId("trigger");
 
-      fireEvent.focus(trigger);
-      await Promise.resolve();
+      trigger.focus();
 
       fireEvent.keyDown(trigger, { key: "ArrowDown" });
       await Promise.resolve();
@@ -1946,24 +1945,17 @@ describe("createSelect", () => {
       fireEvent.keyUp(trigger, { key: "ArrowDown" });
       await Promise.resolve();
 
-      jest.runAllTimers();
-
       let listbox = screen.getByRole("listbox");
-
       expect(listbox).toBeVisible();
 
       let items = within(listbox).getAllByRole("option");
-
       expect(document.activeElement).toBe(items[0]);
 
-      userEvent.tab();
-      jest.runAllTimers();
-
+      await userEvent.tab();
       expect(document.activeElement).toBe(afterBtn);
       expect(focusSpies.onBlur).toHaveBeenCalledTimes(1);
 
-      userEvent.tab({ shift: true });
-
+      await userEvent.tab({ shift: true });
       expect(focusSpies.onFocus).toHaveBeenCalledTimes(2);
       expect(focusSpies.onFocusChange).toHaveBeenNthCalledWith(1, true);
       expect(focusSpies.onFocusChange).toHaveBeenNthCalledWith(2, false);
@@ -1975,19 +1967,14 @@ describe("createSelect", () => {
       fireEvent.keyUp(trigger, { key: "ArrowDown" });
       await Promise.resolve();
 
-      jest.runAllTimers();
-
       listbox = screen.getByRole("listbox");
-      items = within(listbox).getAllByRole("option");
 
+      items = within(listbox).getAllByRole("option");
       expect(document.activeElement).toBe(items[0]);
 
-      userEvent.tab({ shift: true });
-      jest.runAllTimers();
-
+      await userEvent.tab({ shift: true });
       expect(focusSpies.onBlur).toHaveBeenCalledTimes(2);
       expect(focusSpies.onFocusChange).toHaveBeenNthCalledWith(4, false);
-
       expect(document.activeElement).toBe(beforeBtn);
     });
 

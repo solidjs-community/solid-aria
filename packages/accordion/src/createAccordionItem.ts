@@ -18,33 +18,49 @@
 import { AriaButtonProps, createButton } from "@solid-aria/button";
 import { Node } from "@solid-aria/collection";
 import { createSelectableItem } from "@solid-aria/selection";
-import { TreeState } from "@solid-aria/tree";
 import { createId } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
 import { Accessor, JSX, mergeProps } from "solid-js";
+
+import { useAccordionContext } from "./createAccordion";
 
 export interface AriaAccordionItemProps {
   item: Node;
 }
 
 export interface AccordionItemAria {
-  /** Props for the accordion item button. */
+  /**
+   * Props for the accordion item button.
+   */
   buttonProps: JSX.ButtonHTMLAttributes<any>;
 
-  /** Props for the accordion item content element. */
+  /**
+   * Props for the accordion item content element.
+   */
   regionProps: JSX.HTMLAttributes<any>;
+
+  /**
+   * Whether the accordion item is expanded.
+   */
+  isExpanded: Accessor<boolean>;
+
+  /**
+   * Whether the accordion item is disabled.
+   */
+  isDisabled: Accessor<boolean>;
 }
 
 export function createAccordionItem(
   props: AriaAccordionItemProps,
-  state: TreeState,
   ref: Accessor<HTMLButtonElement | undefined>
 ): AccordionItemAria {
+  const { state } = useAccordionContext();
+
   const buttonId = createId();
   const regionId = createId();
 
-  const isDisabled = () => state.disabledKeys().has(props.item.key);
   const isExpanded = () => state.expandedKeys().has(props.item.key);
+  const isDisabled = () => state.disabledKeys().has(props.item.key);
 
   const { itemProps } = createSelectableItem(
     {
@@ -82,6 +98,8 @@ export function createAccordionItem(
       id: regionId,
       role: "region",
       "aria-labelledby": buttonId
-    }
+    },
+    isExpanded,
+    isDisabled
   };
 }

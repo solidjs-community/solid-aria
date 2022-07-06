@@ -17,9 +17,17 @@
 
 import { CollectionBase } from "@solid-aria/collection";
 import { createSelectableList } from "@solid-aria/selection";
-import { createTreeState, CreateTreeStateProps } from "@solid-aria/tree";
+import { createTreeState, CreateTreeStateProps, TreeState } from "@solid-aria/tree";
 import { DOMProps, Expandable } from "@solid-aria/types";
-import { Accessor, JSX, mergeProps } from "solid-js";
+import {
+  Accessor,
+  createComponent,
+  createContext,
+  FlowComponent,
+  JSX,
+  mergeProps,
+  useContext
+} from "solid-js";
 
 export interface AriaAccordionProps
   extends CollectionBase,
@@ -28,8 +36,20 @@ export interface AriaAccordionProps
     CreateTreeStateProps {}
 
 export interface AccordionAria {
-  /** Props for the accordion container element. */
+  /**
+   * Provide the accordion state to descendant elements.
+   */
+  AccordionProvider: FlowComponent;
+
+  /**
+   * Props for the accordion container element.
+   */
   accordionProps: JSX.HTMLAttributes<HTMLElement>;
+
+  /**
+   * State for the accordion, as returned by `createTreeState`.
+   */
+  state: TreeState;
 }
 
 export function createAccordion(
@@ -47,7 +67,35 @@ export function createAccordion(
     ref
   );
 
+  const AccordionProvider: FlowComponent = props => {
+    return createComponent(AccordionContext.Provider, {
+      value: { state },
+      get children() {
+        return props.children;
+      }
+    });
+  };
+
   const accordionProps = mergeProps(listProps, { tabIndex: undefined });
 
-  return { accordionProps };
+  return { AccordionProvider, accordionProps, state };
+}
+
+interface AccordionContextValue {
+  /**
+   * State for the accordion, as returned by `createTreeState`.
+   */
+  state: TreeState;
+}
+
+const AccordionContext = createContext<AccordionContextValue>();
+
+export function useAccordionContext() {
+  const context = useContext(AccordionContext);
+
+  if (!context) {
+    throw new Error("[solid-aria]: useAccordionContext should be used in a AccordionProvider.");
+  }
+
+  return context;
 }
