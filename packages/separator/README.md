@@ -40,8 +40,6 @@ This example shows how create both a horizontal and a vertical oriented separato
 ```tsx
 import { AriaSeparatorProps, createSeparator } from "@solid-aria/separator";
 
-import { AriaSeparatorProps, createSeparator } from "../src";
-
 function Separator(props: AriaSeparatorProps) {
   const { separatorProps } = createSeparator(props);
 
