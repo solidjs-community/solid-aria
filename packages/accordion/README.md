@@ -73,7 +73,7 @@ function AccordionItem(props: AriaAccordionItemProps) {
             width: "100%"
           }}
         >
-          {props.item.rendered()}
+          {props.item.props.title}
         </button>
       </h3>
       <div
@@ -84,7 +84,7 @@ function AccordionItem(props: AriaAccordionItemProps) {
           padding: "1em 1.5em"
         }}
       >
-        {props.item.rendered()}
+        {props.item.props.children}
       </div>
     </div>
   );
@@ -121,13 +121,13 @@ function App() {
   return (
     <Accordion>
       <Item key="one" title="Section One">
-        <span>Content One</span>
+        Content One
       </Item>
       <Item key="two" title="Section Two">
-        <span>Content Two</span>
+        Content Two
       </Item>
       <Item key="three" title="Section Three">
-        <span>Content Three</span>
+        Content Three
       </Item>
     </Accordion>
   );
