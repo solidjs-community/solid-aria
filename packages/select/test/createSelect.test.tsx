@@ -356,7 +356,7 @@ describe("createSelect", () => {
       expect(items[1]).toHaveTextContent("Two");
       expect(items[2]).toHaveTextContent("Three");
 
-      expect(document.activeElement).toBe(items[0]);
+      expect(document.activeElement).toBe(listbox);
     });
 
     it("supports default open state", async () => {
@@ -387,7 +387,7 @@ describe("createSelect", () => {
       expect(items[1]).toHaveTextContent("Two");
       expect(items[2]).toHaveTextContent("Three");
 
-      expect(document.activeElement).toBe(items[0]);
+      expect(document.activeElement).toBe(listbox);
     });
   });
 
@@ -2070,6 +2070,8 @@ describe("createSelect", () => {
       const onSubmit = jest.fn(e => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
+        console.log(formData);
+
         value = Object.fromEntries(formData).select;
       });
 
@@ -2080,9 +2082,6 @@ describe("createSelect", () => {
             <Item key="two">Two</Item>
             <Item key="three">Three</Item>
           </Select>
-          <button type="submit" data-testid="submit">
-            submit
-          </button>
         </form>
       ));
 
