@@ -59,7 +59,6 @@ function Accordion(props: AriaAccordionProps) {
   return (
     <div {...rootProps} ref={ref}>
       <AccordionProvider>
-        {props.children}
         <ForItems in={state.collection()}>{item => <AccordionItem item={item()} />}</ForItems>
       </AccordionProvider>
     </div>
