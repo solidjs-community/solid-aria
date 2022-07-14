@@ -33,7 +33,12 @@ export interface AriaAccordionProps
   extends CollectionBase,
     Expandable,
     DOMProps,
-    CreateTreeStateProps {}
+    CreateTreeStateProps {
+  /**
+   * Whether focus should wrap around when the end/start is reached.
+   */
+  shouldFocusWrap?: boolean;
+}
 
 export interface AccordionAria {
   /**

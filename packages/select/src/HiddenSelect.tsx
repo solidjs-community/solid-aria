@@ -16,6 +16,7 @@
  */
 
 import { createInteractionModality } from "@solid-aria/interactions";
+import { ItemKey } from "@solid-aria/types";
 import { createVisuallyHidden } from "@solid-aria/visually-hidden";
 import { Accessor, createMemo, For, JSX, Match, mergeProps, Switch } from "solid-js";
 
@@ -149,6 +150,8 @@ export function HiddenSelect<T extends HTMLElement>(props: HiddenSelectProps<T>)
     return [...props.state.collection()].filter(item => item.type === "item");
   });
 
+  const isSelected = (key: ItemKey) => key === props.state.selectedKey();
+
   // If used in a <form>, use a hidden input so the value can be submitted to a server.
   // If the collection isn't too big, use a hidden <select> element for this so that browser
   // autofill will work. Otherwise, use an <input type="hidden">.
@@ -159,9 +162,15 @@ export function HiddenSelect<T extends HTMLElement>(props: HiddenSelectProps<T>)
           <input {...inputProps} />
           <label>
             {props.label}
-            <select {...selectProps} value={selectProps.value}>
+            <select {...selectProps}>
               <option />
-              <For each={items()}>{item => <option value={item.key}>{item.textValue}</option>}</For>
+              <For each={items()}>
+                {item => (
+                  <option value={item.key} selected={isSelected(item.key)}>
+                    {item.textValue}
+                  </option>
+                )}
+              </For>
             </select>
           </label>
         </div>

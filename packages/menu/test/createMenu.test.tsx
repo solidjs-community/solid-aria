@@ -48,7 +48,7 @@ function Menu(props: AriaMenuProps) {
               key={item().key}
               onAction={props.onAction}
             >
-              {item().rendered()}
+              {item().children}
             </MenuItem>
           )}
         </ForItems>

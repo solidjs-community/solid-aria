@@ -76,7 +76,7 @@ function Menu(props: AriaMenuProps) {
         <ForItems in={state.collection()}>
           {item => (
             <MenuItem key={item().key} onAction={props.onAction}>
-              {item().rendered()}
+              {item().children}
             </MenuItem>
           )}
         </ForItems>
@@ -155,11 +155,11 @@ function Menu(props: AriaMenuProps) {
       >
         <ForItems in={state.collection()}>
           {section => (
-            <MenuSection heading={section().rendered()}>
+            <MenuSection heading={section().title}>
               <ForItems in={section().childNodes}>
                 {item => (
                   <MenuItem key={item().key} onAction={props.onAction}>
-                    {item().rendered()}
+                    {item().children}
                   </MenuItem>
                 )}
               </ForItems>
@@ -354,7 +354,7 @@ function MenuPopup(props: AriaMenuProps & AriaOverlayProps) {
             <ForItems in={state.collection()}>
               {item => (
                 <MenuItem key={item().key} onAction={props.onAction} onClose={props.onClose}>
-                  {item().rendered()}
+                  {item().children}
                 </MenuItem>
               )}
             </ForItems>

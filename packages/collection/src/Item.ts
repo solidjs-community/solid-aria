@@ -33,8 +33,6 @@ function* getCollectionNodeForItem(props: ItemProps): Generator<PartialNode> {
 
   const resolvedChildren = children(() => props.children);
 
-  const rendered = createMemo(() => title() || resolvedChildren());
-
   const ariaLabel = () => props["aria-label"];
 
   const textValue = createMemo(() => {
@@ -42,7 +40,7 @@ function* getCollectionNodeForItem(props: ItemProps): Generator<PartialNode> {
       return props.textValue;
     }
 
-    const renderedContent = rendered();
+    const renderedContent = title() || resolvedChildren();
 
     if (typeof renderedContent === "string") {
       return renderedContent;
@@ -66,7 +64,12 @@ function* getCollectionNodeForItem(props: ItemProps): Generator<PartialNode> {
   yield {
     type: "item",
     props: props,
-    rendered,
+    get title() {
+      return title();
+    },
+    get children() {
+      return resolvedChildren();
+    },
     textValue,
     "aria-label": ariaLabel,
     hasChildNodes: hasChildItems(),

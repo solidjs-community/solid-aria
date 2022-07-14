@@ -49,7 +49,7 @@ function ListBox(props: AriaListBoxProps) {
         <ForItems in={state.collection()}>
           {item => (
             <ListBoxOption aria-label={item()["aria-label"]()} key={item().key}>
-              {item().rendered()}
+              {item().children}
             </ListBoxOption>
           )}
         </ForItems>
