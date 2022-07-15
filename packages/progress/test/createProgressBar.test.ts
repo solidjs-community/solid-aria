@@ -76,4 +76,13 @@ describe("createProgressBar", () => {
 
       dispose();
     }));
+
+  it("supports custom label", () =>
+    createRoot(dispose => {
+      const { progressBarProps, labelProps } = createProgressBar({ label: "test", value: 25 });
+
+      expect(progressBarProps["aria-labelledby"]).toBe(labelProps.id);
+
+      dispose();
+    }));
 });
