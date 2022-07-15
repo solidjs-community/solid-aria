@@ -8,32 +8,17 @@ A library of high-quality primitives that help you build accessible user interfa
 
 > ⚠️ Solid Aria is in early stage and **not ready** for production ⚠️
 
-## Primitives
+## All in one package
 
-- [@solid-aria/primitives](./packages/primitives/) - Export all Solid Aria primitives in a single convenient package.
+[@solid-aria/primitives](./packages/primitives/) - Export all Solid Aria primitives in a single convenient package.
 
-### Buttons
+## Separate packages
+
+### General
 
 - [button](./packages/button/) - Provides the behavior and accessibility implementation for button and toggle button components.
 
-### Collections
-
-- [collection](./packages/collection/) - Primitives for dealing with collection of items.
-- [list](./packages/list/) - Primitives for managing list collections.
-- [listbox](./packages/listbox/) - Provides the behavior and accessibility implementation for listbox component.
-- [selection](./packages/selection/) - Primitives for managing selection in collections.
-- [tree](./packages/tree/) - Primitives for managing tree collections.
-
-### Content
-
-- [separator](./packages/separator/) - Provides the accessibility implementation for a separator.
-
-### Interactions
-
-- [focus](./packages/focus/) - Primitives for dealing with focus rings and focus management.
-- [interactions](./packages/interactions/) - Primitives for dealing with user interactions like press, hover, etc.
-
-### Forms
+### Data entry
 
 - [checkbox](./packages/checkbox/) - Provides the behavior and accessibility implementation for checkbox and checkbox group components.
 - [label](./packages/label/) - Provides the behavior and accessibility implementation for labels and their associated elements.
@@ -43,62 +28,83 @@ A library of high-quality primitives that help you build accessible user interfa
 - [textfield](./packages/textfield/) - Provides the behavior and accessibility implementation for text field component.
 - [toggle](./packages/toggle/) - Handles interactions for toggle elements, e.g. checkboxes and switches.
 
+### Data display
+
+- [accordion](./packages/accordion/) - Provides the accessibility implementation for an accordion.
+- [listbox](./packages/listbox/) - Provides the behavior and accessibility implementation for listbox component.
+- [separator](./packages/separator/) - Provides the accessibility implementation for a separator.
+
 ### Navigation
 
 - [breadcrumbs](./packages/breadcrumbs/) - Provides the behavior and accessibility implementation for a breadcrumbs component.
 - [link](./packages/link/) - Provides the behavior and accessibility implementation for a link component.
 
-### Overlays
+### Feedback
+
+- [meter](./packages/meter/) - Provides the accessibility implementation for a meter component.
+- [progress](./packages/progress/) - Provides the accessibility implementation for a progress bar component.
+
+### Overlay
 
 - [dialog](./packages/dialog/) - Provides the behavior and accessibility implementation for a dialog component.
 - [menu](./packages/menu/) - Provides the behavior and accessibility implementation for a menu component.
 - [overlays](./packages/overlays/) - Provides the behavior and accessibility implementation for overlay components such as dialogs, popovers, and menus.
 
-### Status
+### Collection
 
-- [meter](./packages/meter/) - Provides the accessibility implementation for a meter component.
-- [progress](./packages/progress/) - Provides the accessibility implementation for a progress bar component.
+- [collection](./packages/collection/) - Primitives for dealing with collection of items.
+- [list](./packages/list/) - Primitives for managing list collections.
+- [selection](./packages/selection/) - Primitives for managing selection in collections.
+- [tree](./packages/tree/) - Primitives for managing tree collections.
 
-### Utilities
+### Interaction
+
+- [focus](./packages/focus/) - Primitives for dealing with focus rings and focus management.
+- [interactions](./packages/interactions/) - Primitives for dealing with user interactions like press, hover, etc.
+
+### Utility
 
 - [i18n](./packages/i18n/) - Primitives for dealing with locale and layout direction.
 - [visually-hidden](./packages/visually-hidden/) - Hides its children visually, while keeping content visible to screen readers.
 
+---
+
 ## Roadmap
 
-- [ ] Accordion
-- [ ] AutoComplete
+- [x] Accordion
 - [x] Breadcrumbs
 - [x] Button
-- [ ] Calendar
 - [x] Checkbox
-- [ ] Combobox
-- [ ] DatePicker
 - [x] Dialog
 - [x] Label
 - [x] Link
-- [ ] List
 - [x] Listbox
-- [ ] LiveAnnouncer
 - [x] Menu
 - [x] Meter
-- [ ] NumberField
 - [x] Overlays
-- [ ] Pagination
 - [x] Progress
 - [x] Radio
-- [ ] SearchField
 - [x] Select
 - [x] Separator
-- [ ] Slider
 - [x] Switch
+- [x] TextField
+- [x] Toggle
+- [x] Visually-hidden
+
+- [ ] AutoComplete
+- [ ] Calendar
+- [ ] Combobox
+- [ ] DatePicker
+- [ ] List
+- [ ] LiveAnnouncer
+- [ ] NumberField
+- [ ] Pagination
+- [ ] SearchField
+- [ ] Slider
 - [ ] Table
 - [ ] Tabs
-- [x] TextField
 - [ ] Toast
-- [x] Toggle
 - [ ] Tooltip
-- [x] Visually-hidden
 - [ ] Virtualizer
 
 ## Acknowledgment
