@@ -15,12 +15,13 @@
  * governing permissions and limitations under the License.
  */
 
-export * from "./createFocus";
-export * from "./createFocusVisible";
-export * from "./createFocusWithin";
-export * from "./createHover";
-export * from "./createInteractOutside";
-export * from "./createKeyboard";
-export * from "./createLongPress";
-export * from "./createPress";
-export * from "./textSelection";
+import { createContext } from "solid-js";
+
+import { CreatePressProps } from "./types";
+
+export interface PressResponderContextValue extends CreatePressProps {
+  ref: (el: any) => void;
+  register: () => void;
+}
+
+export const PressResponderContext = createContext<PressResponderContextValue>();

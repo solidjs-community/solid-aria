@@ -15,13 +15,12 @@
  * governing permissions and limitations under the License.
  */
 
-import { PointerType, PressEvents } from "@solid-aria/types";
-import { createGlobalListeners, createSyncRef, focusWithoutScrolling } from "@solid-aria/utils";
+import { PointerType } from "@solid-aria/types";
+import { createGlobalListeners, focusWithoutScrolling } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
-import { access, MaybeAccessor } from "@solid-primitives/utils";
+import { access } from "@solid-primitives/utils";
 import {
   Accessor,
-  createContext,
   createEffect,
   createSignal,
   JSX,
@@ -31,40 +30,18 @@ import {
   useContext
 } from "solid-js";
 
+import { PressResponderContext } from "./PressResponderContext";
 import { disableTextSelection, restoreTextSelection } from "./textSelection";
+import { CreatePressProps } from "./types";
 import { isVirtualClick } from "./utils";
 
-export interface CreatePressProps extends PressEvents {
-  /**
-   * Whether the target is in a controlled press state (e.g. an overlay it triggers is open).
-   */
-  isPressed?: MaybeAccessor<boolean | undefined>;
-
-  /**
-   * Whether the press events should be disabled.
-   */
-  isDisabled?: MaybeAccessor<boolean | undefined>;
-
-  /**
-   * Whether the target should not receive focus on press.
-   */
-  preventFocusOnPress?: MaybeAccessor<boolean | undefined>;
-
-  /**
-   * Whether press events should be canceled when the pointer leaves the target while pressed.
-   * By default, this is `false`, which means if the pointer returns back over the target while
-   * still pressed, onPressStart will be fired again. If set to `true`, the press is canceled
-   * when the pointer leaves the target and onPressStart will not be fired if the pointer returns.
-   */
-  shouldCancelOnPointerExit?: MaybeAccessor<boolean | undefined>;
-
-  /**
-   * Whether text selection should be enabled on the pressable element.
-   */
-  allowTextSelectionOnPress?: MaybeAccessor<boolean | undefined>;
-}
-
 export interface PressResult<T extends HTMLElement> {
+  /**
+   * A ref to apply onto the target element.
+   * Merge the given `props.ref` and all parents `PressResponder` refs.
+   */
+  ref: (el: T) => void;
+
   /**
    * Whether the target is currently pressed.
    */
@@ -84,49 +61,25 @@ interface EventBase {
   altKey: boolean;
 }
 
-interface PressResponderContextValue extends CreatePressProps {
-  register: () => void;
-  ref: Accessor<HTMLElement | undefined>;
-}
-
-export const PressResponderContext = createContext<PressResponderContextValue>();
-
-function usePressResponderContext<T extends HTMLElement>(
-  props: CreatePressProps,
-  ref?: Accessor<T | undefined>
-): CreatePressProps {
-  // Consume context from <PressResponder> and merge with props.
-  const context = useContext(PressResponderContext);
-
-  if (!context) {
-    return props;
-  }
-
-  const [, contextProps] = splitProps(context, ["register", "ref"]);
-
-  props = combineProps(contextProps, props);
-
-  context.register();
-
-  if (ref) {
-    createSyncRef(context, ref);
-  }
-
-  return props;
-}
-
 /**
  * Handles press interactions across mouse, touch, keyboard, and screen readers.
  * It normalizes behavior across browsers and platforms, and handles many nuances
  * of dealing with pointer and keyboard events.
  * @param props - Props for the press primitive.
- * @param ref - A ref for the HTML element.
  */
-export function createPress<T extends HTMLElement>(
-  props: CreatePressProps,
-  ref?: Accessor<T | undefined>
-): PressResult<T> {
-  const [local, domProps] = splitProps(usePressResponderContext(props, ref), [
+export function createPress<T extends HTMLElement>(props: CreatePressProps): PressResult<T> {
+  const context = useContext(PressResponderContext);
+
+  // Consume context from `PressResponder` and combine props.
+  if (context) {
+    context.register();
+
+    const [, contextProps] = splitProps(context, ["register", "ref"]);
+
+    props = combineProps(contextProps, props);
+  }
+
+  const [, domProps] = splitProps(props, [
     "onPress",
     "onPressChange",
     "onPressStart",
@@ -152,14 +105,14 @@ export function createPress<T extends HTMLElement>(
 
   const { addGlobalListener, removeAllGlobalListeners } = createGlobalListeners();
 
-  const isPressed = () => access(local.isPressed) ?? isTriggerPressed();
+  const isPressed = () => access(props.isPressed) ?? isTriggerPressed();
 
   const triggerPressStart = (originalEvent: EventBase, pointerType: PointerType) => {
-    if (access(local.isDisabled) || didFirePressStart()) {
+    if (access(props.isDisabled) || didFirePressStart()) {
       return;
     }
 
-    local.onPressStart?.({
+    props.onPressStart?.({
       type: "pressstart",
       pointerType,
       target: originalEvent.currentTarget as HTMLElement,
@@ -169,7 +122,7 @@ export function createPress<T extends HTMLElement>(
       altKey: originalEvent.altKey
     });
 
-    local.onPressChange?.(true);
+    props.onPressChange?.(true);
 
     setDidFirePressStart(true);
     setIsTriggerPressed(true);
@@ -187,7 +140,7 @@ export function createPress<T extends HTMLElement>(
     setIgnoreClickAfterPress(true);
     setDidFirePressStart(false);
 
-    local.onPressEnd?.({
+    props.onPressEnd?.({
       type: "pressend",
       pointerType,
       target: originalEvent.currentTarget as HTMLElement,
@@ -197,11 +150,11 @@ export function createPress<T extends HTMLElement>(
       altKey: originalEvent.altKey
     });
 
-    local.onPressChange?.(false);
+    props.onPressChange?.(false);
     setIsTriggerPressed(false);
 
-    if (wasPressed && !access(local.isDisabled)) {
-      local.onPress?.({
+    if (wasPressed && !access(props.isDisabled)) {
+      props.onPress?.({
         type: "press",
         pointerType,
         target: originalEvent.currentTarget as HTMLElement,
@@ -214,11 +167,11 @@ export function createPress<T extends HTMLElement>(
   };
 
   const triggerPressUp = (originalEvent: EventBase, pointerType: PointerType) => {
-    if (access(local.isDisabled)) {
+    if (access(props.isDisabled)) {
       return;
     }
 
-    local.onPressUp?.({
+    props.onPressUp?.({
       type: "pressup",
       pointerType,
       target: originalEvent.currentTarget as HTMLElement,
@@ -245,7 +198,7 @@ export function createPress<T extends HTMLElement>(
 
     removeAllGlobalListeners();
 
-    if (!access(local.allowTextSelectionOnPress)) {
+    if (!access(props.allowTextSelectionOnPress)) {
       restoreTextSelection(target()!);
     }
   };
@@ -298,7 +251,7 @@ export function createPress<T extends HTMLElement>(
       setIsOverTarget(false);
       triggerPressEnd(createEvent(target()!, e as EventBase), pointerType()!, false);
 
-      if (access(local.shouldCancelOnPointerExit)) {
+      if (access(props.shouldCancelOnPointerExit)) {
         cancel(e as EventBase);
       }
     }
@@ -319,7 +272,7 @@ export function createPress<T extends HTMLElement>(
 
       removeAllGlobalListeners();
 
-      if (!access(local.allowTextSelectionOnPress)) {
+      if (!access(props.allowTextSelectionOnPress)) {
         restoreTextSelection(target()!);
       }
     }
@@ -402,7 +355,7 @@ export function createPress<T extends HTMLElement>(
     if (e && e.button === 0) {
       e.stopPropagation();
 
-      if (access(local.isDisabled)) {
+      if (access(props.isDisabled)) {
         e.preventDefault();
       }
 
@@ -414,7 +367,7 @@ export function createPress<T extends HTMLElement>(
         (pointerType() === "virtual" || isVirtualClick(e))
       ) {
         // Ensure the element receives focus (VoiceOver on iOS does not do this)
-        if (!access(local.isDisabled) && !access(local.preventFocusOnPress)) {
+        if (!access(props.isDisabled) && !access(props.preventFocusOnPress)) {
           focusWithoutScrolling(e.currentTarget);
         }
 
@@ -469,11 +422,11 @@ export function createPress<T extends HTMLElement>(
       setActivePointerId(e.pointerId);
       const newTarget = setTarget(e.currentTarget as any);
 
-      if (!access(local.isDisabled) && !access(local.preventFocusOnPress)) {
+      if (!access(props.isDisabled) && !access(props.preventFocusOnPress)) {
         focusWithoutScrolling(e.currentTarget);
       }
 
-      if (!access(local.allowTextSelectionOnPress)) {
+      if (!access(props.allowTextSelectionOnPress)) {
         disableTextSelection(newTarget);
       }
 
@@ -546,7 +499,7 @@ export function createPress<T extends HTMLElement>(
       setTarget(e.currentTarget as any);
       const newPointerType = setPointerType(isVirtualClick(e) ? "virtual" : "mouse");
 
-      if (!access(local.isDisabled) && !access(local.preventFocusOnPress)) {
+      if (!access(props.isDisabled) && !access(props.preventFocusOnPress)) {
         focusWithoutScrolling(e.currentTarget);
       }
 
@@ -580,7 +533,7 @@ export function createPress<T extends HTMLElement>(
 
         triggerPressEnd(e, pointerType()!, false);
 
-        if (access(local.shouldCancelOnPointerExit)) {
+        if (access(props.shouldCancelOnPointerExit)) {
           cancel(e);
         }
       }
@@ -618,11 +571,11 @@ export function createPress<T extends HTMLElement>(
 
       // Due to browser inconsistencies, especially on mobile browsers, we prevent default
       // on the emulated mouse event and handle focusing the pressable element ourselves.
-      if (!access(local.isDisabled) && !access(local.preventFocusOnPress)) {
+      if (!access(props.isDisabled) && !access(props.preventFocusOnPress)) {
         focusWithoutScrolling(e.currentTarget);
       }
 
-      if (!access(local.allowTextSelectionOnPress)) {
+      if (!access(props.allowTextSelectionOnPress)) {
         disableTextSelection(newTarget);
       }
 
@@ -653,7 +606,7 @@ export function createPress<T extends HTMLElement>(
         setIsOverTarget(false);
         triggerPressEnd(e, pointerType()!, false);
 
-        if (access(local.shouldCancelOnPointerExit)) {
+        if (access(props.shouldCancelOnPointerExit)) {
           cancel(e);
         }
       }
@@ -684,7 +637,7 @@ export function createPress<T extends HTMLElement>(
       setIsOverTarget(false);
       setIgnoreEmulatedMouseEvents(true);
 
-      if (!access(local.allowTextSelectionOnPress)) {
+      if (!access(props.allowTextSelectionOnPress)) {
         restoreTextSelection(target()!);
       }
 
@@ -714,7 +667,7 @@ export function createPress<T extends HTMLElement>(
 
   createEffect(
     on(
-      () => access(local.allowTextSelectionOnPress),
+      () => access(props.allowTextSelectionOnPress),
       allowTextSelectionOnPress => {
         onCleanup(() => {
           if (!allowTextSelectionOnPress) {
@@ -726,6 +679,10 @@ export function createPress<T extends HTMLElement>(
   );
 
   return {
+    ref: (el: T) => {
+      props.ref?.(el);
+      context?.ref?.(el);
+    },
     isPressed,
     pressProps: combineProps(domProps, pressProps) as JSX.HTMLAttributes<T>
   };

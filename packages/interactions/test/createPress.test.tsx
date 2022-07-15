@@ -35,7 +35,7 @@ function Example(
 ) {
   let ref: any;
 
-  const { pressProps } = createPress(props, () => ref);
+  const { pressProps } = createPress(props);
 
   return (
     <Dynamic
@@ -2792,8 +2792,7 @@ describe("createPress", () => {
 
       const [show, setShow] = createSignal(false);
 
-      let ref: HTMLDivElement | undefined;
-      const { pressProps } = createPress(createPressProps, () => ref);
+      const { pressProps } = createPress<HTMLDivElement>(createPressProps);
 
       return (
         <div style={show() ? local.styleToApply : {}} {...pressProps}>
