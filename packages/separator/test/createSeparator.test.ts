@@ -20,25 +20,25 @@ import { createRoot } from "solid-js";
 import { createSeparator } from "../src";
 
 describe("createSeparator", () => {
-  it("should have 'aria-orientation' set to horizontal by default", () =>
+  it("should not have implicit 'aria-orientation' by default", () =>
     createRoot(dispose => {
       const { separatorProps } = createSeparator({ orientation: "horizontal" });
 
-      expect(separatorProps["aria-orientation"]).toBe("horizontal");
+      expect(separatorProps["aria-orientation"]).toBeUndefined();
 
       dispose();
     }));
 
-  it("should have 'aria-orientation' set to horizontal when orientation props is horizontal", () =>
+  it("should not have implicit 'aria-orientation' when 'orientation=horizontal'", () =>
     createRoot(dispose => {
       const { separatorProps } = createSeparator({ orientation: "horizontal" });
 
-      expect(separatorProps["aria-orientation"]).toBe("horizontal");
+      expect(separatorProps["aria-orientation"]).toBeUndefined();
 
       dispose();
     }));
 
-  it("should have 'aria-orientation' set to vertical when orientation props is vertical", () =>
+  it("should have 'aria-orientation' set to vertical when 'orientation=vertical'", () =>
     createRoot(dispose => {
       const { separatorProps } = createSeparator({ orientation: "vertical" });
 
@@ -47,7 +47,7 @@ describe("createSeparator", () => {
       dispose();
     }));
 
-  it("should have 'role=separator' when elementType is not <hr>", () =>
+  it("should have 'role=separator' when elementType is not '<hr>'", () =>
     createRoot(dispose => {
       const { separatorProps } = createSeparator({ elementType: "span" });
 
@@ -56,11 +56,29 @@ describe("createSeparator", () => {
       dispose();
     }));
 
-  it("should not have 'role=separator' when elementType is <hr>", () =>
+  it("should not have 'role=separator' when elementType is '<hr>'", () =>
     createRoot(dispose => {
       const { separatorProps } = createSeparator({ elementType: "hr" });
 
       expect(separatorProps.role).toBeUndefined();
+
+      dispose();
+    }));
+
+  it("supports aria-label", () =>
+    createRoot(dispose => {
+      const { separatorProps } = createSeparator({ "aria-label": "test" });
+
+      expect(separatorProps["aria-label"]).toBe("test");
+
+      dispose();
+    }));
+
+  it("supports aria-labelledby", () =>
+    createRoot(dispose => {
+      const { separatorProps } = createSeparator({ "aria-labelledby": "test" });
+
+      expect(separatorProps["aria-labelledby"]).toBe("test");
 
       dispose();
     }));

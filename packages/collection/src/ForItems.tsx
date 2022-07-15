@@ -39,7 +39,7 @@ interface ForItemsProps<T extends JSX.Element> {
 export function ForItems<T extends JSX.Element>(props: ForItemsProps<T>) {
   return (
     <Key each={[...props.in]} by="key" fallback={props.fallback}>
-      {(item, index) => props.children(item, index)}
+      {props.children}
     </Key>
   );
 }

@@ -38,7 +38,12 @@ function* getCollectionNodeForSection(props: SectionProps): Generator<PartialNod
   yield {
     type: "section",
     hasChildNodes: true,
-    rendered: title,
+    get title() {
+      return title();
+    },
+    get children() {
+      return resolvedChildren();
+    },
     "aria-label": ariaLabel,
     *childNodes() {
       let childs = resolvedChildren() ?? [];

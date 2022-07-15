@@ -50,10 +50,13 @@ export function createSeparator(props: AriaSeparatorProps = {}): SeparatorAria {
   // eslint-disable-next-line solid/reactivity
   const separatorProps = mergeProps(domProps, {
     get role() {
+      // hr elements implicitly have role = separator
       return props.elementType === "hr" ? undefined : "separator";
     },
     get "aria-orientation"() {
-      return props.orientation ?? "horizontal";
+      // if orientation is horizontal, aria-orientation default is horizontal, so we leave it undefined
+      // if it's vertical, we need to specify it
+      return props.orientation === "horizontal" ? undefined : props.orientation;
     }
   } as JSX.HTMLAttributes<any>);
 

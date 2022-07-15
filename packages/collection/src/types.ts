@@ -122,8 +122,11 @@ export interface Node {
   /** The loaded children of this node. */
   childNodes: Iterable<Node>;
 
-  /** The rendered contents of this node (e.g. JSX). */
-  rendered: Accessor<JSX.Element>;
+  /** The rendered title of this node (e.g. JSX). */
+  title: JSX.Element;
+
+  /** The rendered children of this node (e.g. JSX). */
+  children: JSX.Element;
 
   /** A string value for this node, used for features like typeahead. */
   textValue: Accessor<string>;
@@ -163,8 +166,11 @@ export interface PartialNode {
   /** A function that should be called to wrap the rendered node. */
   wrapper?: ElementWrapper;
 
-  /** The rendered contents of this node (e.g. JSX). */
-  rendered?: Accessor<JSX.Element>;
+  /** The rendered title of this node (e.g. JSX). */
+  title?: JSX.Element;
+
+  /** The rendered children of this node (e.g. JSX). */
+  children?: JSX.Element;
 
   /** A string value for this node, used for features like typeahead. */
   textValue?: Accessor<string>;

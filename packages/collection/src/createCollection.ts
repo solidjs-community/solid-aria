@@ -32,20 +32,13 @@ export function createCollection<C extends Collection<Node> = Collection<Node>>(
 
   const builder = new CollectionBuilder();
 
-  const nodes = createNodes(builder, resolvedChildren);
-  const [collection, setCollection] = createSignal<C>(factory(nodes));
+  const [collection, setCollection] = createSignal<C>(factory([]));
 
   createEffect(
-    on(
-      [resolvedChildren, ...deps],
-      () => {
-        const nodes = createNodes(builder, resolvedChildren);
-        setCollection(() => factory(nodes));
-      },
-      {
-        defer: true
-      }
-    )
+    on([resolvedChildren, ...deps], ([resolvedChildren]) => {
+      const nodes = createNodes(builder, resolvedChildren);
+      setCollection(() => factory(nodes));
+    })
   );
 
   return collection;
@@ -54,8 +47,8 @@ export function createCollection<C extends Collection<Node> = Collection<Node>>(
 /**
  * Create an Iterable of `Nodes` with the given builder and resolved children.
  */
-function createNodes(builder: CollectionBuilder, resolvedChildren: Accessor<ResolvedChildren>) {
-  let items = resolvedChildren() ?? [];
+function createNodes(builder: CollectionBuilder, resolvedChildren: ResolvedChildren) {
+  let items = resolvedChildren ?? [];
 
   if (!Array.isArray(items)) {
     items = [items];

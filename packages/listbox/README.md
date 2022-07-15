@@ -81,7 +81,7 @@ function ListBox(props: AriaListBoxProps) {
         }}
       >
         <ForItems in={state.collection()}>
-          {item => <Option key={item().key}>{item().rendered()}</Option>}
+          {item => <Option key={item().key}>{item().children}</Option>}
         </ForItems>
       </ul>
     </ListBoxProvider>
@@ -167,9 +167,9 @@ function ListBox(props: AriaListBoxProps) {
       >
         <ForItems in={state.collection()}>
           {section => (
-            <ListBoxSection heading={section().rendered()}>
+            <ListBoxSection heading={section().title}>
               <ForItems in={section().childNodes}>
-                {item => <Option key={item().key}>{item().rendered()}</Option>}
+                {item => <Option key={item().key}>{item().children}</Option>}
               </ForItems>
             </ListBoxSection>
           )}

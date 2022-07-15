@@ -127,7 +127,7 @@ function ListBox(props: AriaListBoxProps & { state: ListState }) {
         }}
       >
         <ForItems in={props.state.collection()}>
-          {item => <Option key={item().key}>{item().rendered()}</Option>}
+          {item => <Option key={item().key}>{item().children}</Option>}
         </ForItems>
       </ul>
     </ListBoxProvider>
@@ -170,7 +170,7 @@ function Select(props: AriaSelectProps) {
       <div {...labelProps}>{props.label}</div>
       <HiddenSelect state={state} triggerRef={ref} label={props.label} name={props.name} />
       <button {...buttonProps} ref={ref} style={{ height: "30px", "font-size": "14px" }}>
-        <span {...valueProps}>{state.selectedItem()?.rendered() ?? "Select an option"}</span>
+        <span {...valueProps}>{state.selectedItem()?.children ?? "Select an option"}</span>
         <span aria-hidden="true" style={{ "padding-left": "5px" }}>
           ▼
         </span>

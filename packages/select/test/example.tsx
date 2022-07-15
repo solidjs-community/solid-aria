@@ -49,7 +49,7 @@ function ListBox(props: AriaListBoxProps & { state: ListState }) {
     <ListBoxProvider>
       <ul {...listBoxProps} ref={ref} data-testid="listbox">
         <ForItems in={props.state.collection()}>
-          {item => <Option key={item().key}>{item().rendered()}</Option>}
+          {item => <Option key={item().key}>{item().children}</Option>}
         </ForItems>
       </ul>
     </ListBoxProvider>
@@ -100,7 +100,7 @@ export function Select(props: AriaSelectProps) {
       />
       <button {...buttonProps} ref={ref} autofocus={props.autofocus}>
         <span {...valueProps} data-testid="value">
-          {state.selectedItem()?.rendered() ?? "Select an option"}
+          {state.selectedItem()?.children ?? "Select an option"}
         </span>
         <span aria-hidden="true">▼</span>
       </button>

@@ -15,6 +15,7 @@
  * governing permissions and limitations under the License.
  */
 
+export * from "@solid-aria/accordion";
 export * from "@solid-aria/breadcrumbs";
 export * from "@solid-aria/button";
 export * from "@solid-aria/checkbox";
@@ -36,6 +37,7 @@ export * from "@solid-aria/select";
 export * from "@solid-aria/selection";
 export * from "@solid-aria/separator";
 export * from "@solid-aria/switch";
+export * from "@solid-aria/textfield";
 export * from "@solid-aria/toggle";
 export * from "@solid-aria/tree";
 export * from "@solid-aria/types";
