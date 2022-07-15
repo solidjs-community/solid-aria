@@ -1,5 +1,30 @@
 # @solid-aria/primitives
 
+## 0.4.0
+
+### Minor Changes
+
+- 5c594a6: - add textfield, accordion
+  - fix title and children render twice when used via `item.props` in collection item (breaking changes)
+
+### Patch Changes
+
+- Updated dependencies [5c594a6]
+  - @solid-aria/collection@0.2.0
+  - @solid-aria/listbox@0.2.0
+  - @solid-aria/menu@0.2.0
+  - @solid-aria/select@0.1.0
+  - @solid-aria/accordion@0.0.1
+  - @solid-aria/meter@0.0.2
+  - @solid-aria/progress@0.0.2
+  - @solid-aria/separator@0.0.2
+  - @solid-aria/textfield@0.0.1
+  - @solid-aria/types@0.1.4
+  - @solid-aria/utils@0.2.1
+  - @solid-aria/list@0.1.4
+  - @solid-aria/selection@0.1.5
+  - @solid-aria/tree@0.1.4
+
 ## 0.3.0
 
 ### Minor Changes

@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/progress",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "description": "Primitives for building accessible progress bar component.",
   "keywords": [
@@ -41,8 +41,8 @@
   "dependencies": {
     "@solid-aria/i18n": "^0.2.0",
     "@solid-aria/label": "^0.1.4",
-    "@solid-aria/types": "^0.1.2",
-    "@solid-aria/utils": "^0.2.0",
+    "@solid-aria/types": "^0.1.4",
+    "@solid-aria/utils": "^0.2.1",
     "@solid-primitives/props": "^2.1.7",
     "@solid-primitives/utils": "^2.1.0"
   },
