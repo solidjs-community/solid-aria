@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/selection",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "private": false,
   "description": "Primitives for managing selection in collections.",
   "keywords": [
@@ -39,12 +39,12 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/collection": "^0.1.4",
+    "@solid-aria/collection": "^0.2.0",
     "@solid-aria/focus": "^0.1.4",
     "@solid-aria/i18n": "^0.2.0",
     "@solid-aria/interactions": "^0.1.4",
-    "@solid-aria/types": "^0.1.3",
-    "@solid-aria/utils": "^0.2.0",
+    "@solid-aria/types": "^0.1.4",
+    "@solid-aria/utils": "^0.2.1",
     "@solid-primitives/event-listener": "^2.1.0",
     "@solid-primitives/platform": "^0.0.100",
     "@solid-primitives/props": "^2.1.7",

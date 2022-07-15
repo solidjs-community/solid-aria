@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/separator",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "private": false,
   "description": "Primitives for building accessible separator component.",
   "keywords": [
@@ -39,8 +39,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@solid-aria/types": "^0.1.2",
-    "@solid-aria/utils": "^0.2.0",
+    "@solid-aria/types": "^0.1.4",
+    "@solid-aria/utils": "^0.2.1",
     "@solid-primitives/utils": "^2.1.0"
   },
   "devDependencies": {

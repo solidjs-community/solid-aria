@@ -1,6 +1,6 @@
 {
   "name": "@solid-aria/accordion",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": false,
   "description": "Primitives for building accessible accordion component.",
   "keywords": [
@@ -40,12 +40,12 @@
   },
   "dependencies": {
     "@solid-aria/button": "^0.1.3",
-    "@solid-aria/collection": "^0.1.4",
+    "@solid-aria/collection": "^0.2.0",
     "@solid-aria/interactions": "^0.1.4",
-    "@solid-aria/selection": "^0.1.4",
-    "@solid-aria/tree": "^0.1.3",
-    "@solid-aria/types": "^0.1.3",
-    "@solid-aria/utils": "^0.2.0",
+    "@solid-aria/selection": "^0.1.5",
+    "@solid-aria/tree": "^0.1.4",
+    "@solid-aria/types": "^0.1.4",
+    "@solid-aria/utils": "^0.2.1",
     "@solid-primitives/props": "^2.1.8",
     "@solid-primitives/utils": "^2.1.0"
   },

@@ -99,12 +99,12 @@ importers:
   packages/accordion:
     specifiers:
       '@solid-aria/button': ^0.1.3
-      '@solid-aria/collection': ^0.1.4
+      '@solid-aria/collection': ^0.2.0
       '@solid-aria/interactions': ^0.1.4
-      '@solid-aria/selection': ^0.1.4
-      '@solid-aria/tree': ^0.1.3
-      '@solid-aria/types': ^0.1.3
-      '@solid-aria/utils': ^0.2.0
+      '@solid-aria/selection': ^0.1.5
+      '@solid-aria/tree': ^0.1.4
+      '@solid-aria/types': ^0.1.4
+      '@solid-aria/utils': ^0.2.1
       '@solid-primitives/props': ^2.1.8
       '@solid-primitives/utils': ^2.1.0
       solid-js: ^1.4.4
@@ -178,8 +178,8 @@ importers:
 
   packages/collection:
     specifiers:
-      '@solid-aria/types': ^0.1.3
-      '@solid-aria/utils': ^0.2.0
+      '@solid-aria/types': ^0.1.4
+      '@solid-aria/utils': ^0.2.1
       '@solid-primitives/keyed': ^1.0.0
       '@solid-primitives/utils': ^2.1.0
       solid-js: ^1.4.4
@@ -291,10 +291,10 @@ importers:
 
   packages/list:
     specifiers:
-      '@solid-aria/collection': ^0.1.4
-      '@solid-aria/selection': ^0.1.4
-      '@solid-aria/types': ^0.1.2
-      '@solid-aria/utils': ^0.2.0
+      '@solid-aria/collection': ^0.2.0
+      '@solid-aria/selection': ^0.1.5
+      '@solid-aria/types': ^0.1.4
+      '@solid-aria/utils': ^0.2.1
       '@solid-primitives/utils': ^2.1.0
       solid-js: ^1.4.4
     dependencies:
@@ -308,14 +308,14 @@ importers:
 
   packages/listbox:
     specifiers:
-      '@solid-aria/collection': ^0.1.4
+      '@solid-aria/collection': ^0.2.0
       '@solid-aria/focus': ^0.1.4
       '@solid-aria/interactions': ^0.1.4
       '@solid-aria/label': ^0.1.4
-      '@solid-aria/list': ^0.1.3
-      '@solid-aria/selection': ^0.1.4
-      '@solid-aria/types': ^0.1.3
-      '@solid-aria/utils': ^0.2.0
+      '@solid-aria/list': ^0.1.4
+      '@solid-aria/selection': ^0.1.5
+      '@solid-aria/types': ^0.1.4
+      '@solid-aria/utils': ^0.2.1
       '@solid-primitives/platform': ^0.0.100
       '@solid-primitives/props': ^2.1.7
       '@solid-primitives/utils': ^2.1.0
@@ -338,13 +338,13 @@ importers:
   packages/menu:
     specifiers:
       '@solid-aria/button': ^0.1.3
-      '@solid-aria/collection': ^0.1.4
+      '@solid-aria/collection': ^0.2.0
       '@solid-aria/interactions': ^0.1.4
       '@solid-aria/overlays': ^0.1.3
-      '@solid-aria/selection': ^0.1.4
-      '@solid-aria/tree': ^0.1.3
-      '@solid-aria/types': ^0.1.3
-      '@solid-aria/utils': ^0.2.0
+      '@solid-aria/selection': ^0.1.5
+      '@solid-aria/tree': ^0.1.4
+      '@solid-aria/types': ^0.1.4
+      '@solid-aria/utils': ^0.2.1
       '@solid-primitives/utils': ^2.1.0
       solid-js: ^1.4.4
     dependencies:
@@ -362,9 +362,9 @@ importers:
 
   packages/meter:
     specifiers:
-      '@solid-aria/progress': ^0.0.1
-      '@solid-aria/types': ^0.1.3
-      '@solid-aria/utils': ^0.2.0
+      '@solid-aria/progress': ^0.0.2
+      '@solid-aria/types': ^0.1.4
+      '@solid-aria/utils': ^0.2.1
       '@solid-primitives/utils': ^2.1.0
       solid-js: ^1.4.4
     dependencies:
@@ -402,33 +402,33 @@ importers:
 
   packages/primitives:
     specifiers:
-      '@solid-aria/accordion': ^0.0.0
+      '@solid-aria/accordion': ^0.0.1
       '@solid-aria/breadcrumbs': ^0.1.4
       '@solid-aria/button': ^0.1.3
       '@solid-aria/checkbox': ^0.1.3
-      '@solid-aria/collection': ^0.1.4
+      '@solid-aria/collection': ^0.2.0
       '@solid-aria/dialog': ^0.1.4
       '@solid-aria/focus': ^0.1.4
       '@solid-aria/i18n': ^0.2.0
       '@solid-aria/interactions': ^0.1.4
       '@solid-aria/label': ^0.1.4
       '@solid-aria/link': ^0.1.3
-      '@solid-aria/list': ^0.1.3
-      '@solid-aria/listbox': ^0.1.4
-      '@solid-aria/menu': ^0.1.4
-      '@solid-aria/meter': ^0.0.1
+      '@solid-aria/list': ^0.1.4
+      '@solid-aria/listbox': ^0.2.0
+      '@solid-aria/menu': ^0.2.0
+      '@solid-aria/meter': ^0.0.2
       '@solid-aria/overlays': ^0.1.3
-      '@solid-aria/progress': ^0.0.1
+      '@solid-aria/progress': ^0.0.2
       '@solid-aria/radio': ^0.1.3
-      '@solid-aria/select': ^0.0.2
-      '@solid-aria/selection': ^0.1.4
-      '@solid-aria/separator': ^0.0.1
+      '@solid-aria/select': ^0.1.0
+      '@solid-aria/selection': ^0.1.5
+      '@solid-aria/separator': ^0.0.2
       '@solid-aria/switch': ^0.1.2
-      '@solid-aria/textfield': ^0.0.0
+      '@solid-aria/textfield': ^0.0.1
       '@solid-aria/toggle': ^0.1.3
-      '@solid-aria/tree': ^0.1.3
-      '@solid-aria/types': ^0.1.3
-      '@solid-aria/utils': ^0.2.0
+      '@solid-aria/tree': ^0.1.4
+      '@solid-aria/types': ^0.1.4
+      '@solid-aria/utils': ^0.2.1
       '@solid-aria/visually-hidden': ^0.1.3
       solid-js: ^1.4.4
     dependencies:
@@ -467,8 +467,8 @@ importers:
     specifiers:
       '@solid-aria/i18n': ^0.2.0
       '@solid-aria/label': ^0.1.4
-      '@solid-aria/types': ^0.1.2
-      '@solid-aria/utils': ^0.2.0
+      '@solid-aria/types': ^0.1.4
+      '@solid-aria/utils': ^0.2.1
       '@solid-primitives/props': ^2.1.7
       '@solid-primitives/utils': ^2.1.0
       solid-js: ^1.4.4
@@ -508,18 +508,18 @@ importers:
   packages/select:
     specifiers:
       '@solid-aria/button': ^0.1.3
-      '@solid-aria/collection': ^0.1.4
+      '@solid-aria/collection': ^0.2.0
       '@solid-aria/focus': ^0.1.4
       '@solid-aria/i18n': ^0.2.0
       '@solid-aria/interactions': ^0.1.4
       '@solid-aria/label': ^0.1.4
-      '@solid-aria/list': ^0.1.3
-      '@solid-aria/listbox': ^0.1.4
-      '@solid-aria/menu': ^0.1.4
+      '@solid-aria/list': ^0.1.4
+      '@solid-aria/listbox': ^0.2.0
+      '@solid-aria/menu': ^0.2.0
       '@solid-aria/overlays': ^0.1.3
-      '@solid-aria/selection': ^0.1.4
-      '@solid-aria/types': ^0.1.3
-      '@solid-aria/utils': ^0.2.0
+      '@solid-aria/selection': ^0.1.5
+      '@solid-aria/types': ^0.1.4
+      '@solid-aria/utils': ^0.2.1
       '@solid-aria/visually-hidden': ^0.1.3
       '@solid-primitives/props': ^2.1.7
       '@solid-primitives/utils': ^2.1.0
@@ -546,12 +546,12 @@ importers:
 
   packages/selection:
     specifiers:
-      '@solid-aria/collection': ^0.1.4
+      '@solid-aria/collection': ^0.2.0
       '@solid-aria/focus': ^0.1.4
       '@solid-aria/i18n': ^0.2.0
       '@solid-aria/interactions': ^0.1.4
-      '@solid-aria/types': ^0.1.3
-      '@solid-aria/utils': ^0.2.0
+      '@solid-aria/types': ^0.1.4
+      '@solid-aria/utils': ^0.2.1
       '@solid-primitives/event-listener': ^2.1.0
       '@solid-primitives/platform': ^0.0.100
       '@solid-primitives/props': ^2.1.7
@@ -573,8 +573,8 @@ importers:
 
   packages/separator:
     specifiers:
-      '@solid-aria/types': ^0.1.2
-      '@solid-aria/utils': ^0.2.0
+      '@solid-aria/types': ^0.1.4
+      '@solid-aria/utils': ^0.2.1
       '@solid-primitives/utils': ^2.1.0
       solid-js: ^1.4.4
     dependencies:
@@ -601,8 +601,8 @@ importers:
     specifiers:
       '@solid-aria/focus': ^0.1.4
       '@solid-aria/label': ^0.1.4
-      '@solid-aria/types': ^0.1.3
-      '@solid-aria/utils': ^0.2.0
+      '@solid-aria/types': ^0.1.4
+      '@solid-aria/utils': ^0.2.1
       '@solid-primitives/props': ^2.1.7
       '@solid-primitives/utils': ^2.1.0
       solid-js: ^1.4.4
@@ -637,10 +637,10 @@ importers:
 
   packages/tree:
     specifiers:
-      '@solid-aria/collection': ^0.1.4
-      '@solid-aria/selection': ^0.1.4
-      '@solid-aria/types': ^0.1.2
-      '@solid-aria/utils': ^0.2.0
+      '@solid-aria/collection': ^0.2.0
+      '@solid-aria/selection': ^0.1.5
+      '@solid-aria/types': ^0.1.4
+      '@solid-aria/utils': ^0.2.1
       '@solid-primitives/utils': ^2.1.0
       solid-js: ^1.4.4
     dependencies:
@@ -663,7 +663,7 @@ importers:
 
   packages/utils:
     specifiers:
-      '@solid-aria/types': ^0.1.3
+      '@solid-aria/types': ^0.1.4
       '@solid-primitives/utils': ^2.1.0
       solid-js: ^1.4.4
     dependencies:

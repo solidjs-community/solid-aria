@@ -1,5 +1,12 @@
 # @solid-aria/types
 
+## 0.1.4
+
+### Patch Changes
+
+- 5c594a6: - add textfield, accordion
+  - fix title and children render twice when used via `item.props` in collection item (breaking changes)
+
 ## 0.1.3
 
 ### Patch Changes
