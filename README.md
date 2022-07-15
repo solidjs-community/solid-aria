@@ -67,8 +67,6 @@ A library of high-quality primitives that help you build accessible user interfa
 - [i18n](./packages/i18n/) - Primitives for dealing with locale and layout direction.
 - [visually-hidden](./packages/visually-hidden/) - Hides its children visually, while keeping content visible to screen readers.
 
----
-
 ## Roadmap
 
 - [x] Accordion
