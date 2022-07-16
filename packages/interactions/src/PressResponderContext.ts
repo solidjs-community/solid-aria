@@ -19,7 +19,7 @@ import { createContext } from "solid-js";
 
 import { CreatePressProps } from "./types";
 
-export interface PressResponderContextValue extends CreatePressProps {
+export interface PressResponderContextValue extends Omit<CreatePressProps<any>, "ref"> {
   ref: (el: any) => void;
   register: () => void;
 }

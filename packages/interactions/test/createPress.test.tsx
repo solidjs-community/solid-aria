@@ -30,7 +30,7 @@ jest.mock("@solid-primitives/platform", () => ({
 }));
 
 function Example(
-  props: CreatePressProps &
+  props: CreatePressProps<any> &
     JSX.HTMLAttributes<any> & { elementType?: any; style?: any; draggable?: boolean; href?: string }
 ) {
   let ref: any;
@@ -2783,7 +2783,7 @@ describe("createPress", () => {
     const mockUserSelect = "contain";
     const oldUserSelect = document.documentElement.style.webkitUserSelect;
 
-    function TestStyleChange(props: CreatePressProps & { styleToApply?: any }) {
+    function TestStyleChange(props: CreatePressProps<any> & { styleToApply?: any }) {
       const [local, others] = splitProps(props, ["styleToApply"]);
 
       const createPressProps = mergeProps(others, {

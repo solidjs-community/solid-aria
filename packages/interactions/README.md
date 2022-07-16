@@ -93,7 +93,7 @@ import { createSignal, For } from "solid-js";
 function Example() {
   const [events, setEvents] = createSignal<string[]>([]);
 
-  const { pressProps, isPressed } = createPress<HTMLDivElement>({
+  const { pressProps, isPressed, ref } = createPress<HTMLDivElement>({
     onPressStart: e => {
       setEvents(events => [...events, `press start with ${e.pointerType}`]);
     },
@@ -108,6 +108,7 @@ function Example() {
   return (
     <>
       <div
+        ref={ref} // Only if you want to merge with parent `PressResponder` refs, otherwise just use `props.ref`
         {...pressProps}
         style={{
           background: isPressed() ? "darkgreen" : "green",

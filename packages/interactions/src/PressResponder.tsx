@@ -16,20 +16,15 @@
  */
 
 import { combineProps } from "@solid-primitives/props";
-import { createSignal, JSX, mergeProps, onMount, Ref, useContext } from "solid-js";
+import { createSignal, FlowProps, mergeProps, onMount, useContext } from "solid-js";
 
 import { PressResponderContext, PressResponderContextValue } from "./PressResponderContext";
 import { CreatePressProps } from "./types";
 
-export interface PressResponderProps<T extends HTMLElement> extends CreatePressProps {
-  children: JSX.Element;
-  ref?: Ref<T | undefined>;
-}
-
 /**
- * Handle press events on child pressable element (e.g. element using the `createPress` primitive).
+ * Handle press events of descendant pressable element (e.g. element using the `createPress` primitive).
  */
-export function PressResponder<T extends HTMLElement>(props: PressResponderProps<T>) {
+export function PressResponder<T extends HTMLElement>(props: FlowProps<CreatePressProps<T>>) {
   const [isRegistered, setIsRegistered] = createSignal(false);
 
   const prevContext = useContext(PressResponderContext);
@@ -50,8 +45,7 @@ export function PressResponder<T extends HTMLElement>(props: PressResponderProps
   onMount(() => {
     if (!isRegistered()) {
       console.warn(
-        "[solid-aria]: A PressResponder was rendered without a pressable child. " +
-          "Ensure the PressResponder have a child calling the createPress primitive."
+        "[solid-aria]: A PressResponder was rendered without a pressable child. Ensure the PressResponder have a descendant calling the createPress primitive."
       );
     }
   });

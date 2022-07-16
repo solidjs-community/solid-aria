@@ -3,7 +3,7 @@ import { MaybeAccessor } from "@solid-primitives/utils";
 import { Ref } from "solid-js";
 
 // moved here to avoid circular import
-export interface CreatePressProps extends PressEvents {
+export interface CreatePressProps<T extends HTMLElement> extends PressEvents {
   /**
    * Whether the target is in a controlled press state (e.g. an overlay it triggers is open).
    */
@@ -35,5 +35,5 @@ export interface CreatePressProps extends PressEvents {
   /**
    * A ref to the target element.
    */
-  ref?: Ref<any>;
+  ref?: Ref<T>;
 }

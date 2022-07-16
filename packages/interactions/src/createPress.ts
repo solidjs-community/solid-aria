@@ -67,7 +67,7 @@ interface EventBase {
  * of dealing with pointer and keyboard events.
  * @param props - Props for the press primitive.
  */
-export function createPress<T extends HTMLElement>(props: CreatePressProps): PressResult<T> {
+export function createPress<T extends HTMLElement>(props: CreatePressProps<T>): PressResult<T> {
   const context = useContext(PressResponderContext);
 
   // Consume context from `PressResponder` and combine props.
@@ -680,7 +680,7 @@ export function createPress<T extends HTMLElement>(props: CreatePressProps): Pre
 
   return {
     ref: (el: T) => {
-      props.ref?.(el);
+      (props.ref as ((el: T) => void) | undefined)?.(el);
       context?.ref?.(el);
     },
     isPressed,
