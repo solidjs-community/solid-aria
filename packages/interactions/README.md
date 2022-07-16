@@ -54,10 +54,11 @@ Read [React Spectrum blog post](https://react-spectrum.adobe.com/blog/building-a
 
 `createPress` returns props that you should spread onto the target element, along with the current press state:
 
-| Name         | Type                      | Description                              |
-| ------------ | ------------------------- | ---------------------------------------- |
-| `isPressed`  | `Accessor<boolean>`       | Whether the target is currently pressed. |
-| `pressProps` | `JSX.HTMLAttributes<any>` | Props to spread on the target element.   |
+| Name         | Type                    | Description                                                                                                |
+| ------------ | ----------------------- | ---------------------------------------------------------------------------------------------------------- |
+| `ref`        | `(el: T) => void`       | A ref to apply onto the target element. Merge the given `props.ref` and all parents `PressResponder` refs. |
+| `isPressed`  | `Accessor<boolean>`     | Whether the target is currently pressed.                                                                   |
+| `pressProps` | `JSX.HTMLAttributes<T>` | Props to spread on the target element.                                                                     |
 
 `createPress` supports the following event handlers:
 
@@ -92,7 +93,7 @@ import { createSignal, For } from "solid-js";
 function Example() {
   const [events, setEvents] = createSignal<string[]>([]);
 
-  const { pressProps, isPressed } = createPress<HTMLDivElement>({
+  const { pressProps, isPressed, ref } = createPress<HTMLDivElement>({
     onPressStart: e => {
       setEvents(events => [...events, `press start with ${e.pointerType}`]);
     },
@@ -107,6 +108,7 @@ function Example() {
   return (
     <>
       <div
+        ref={ref} // Only if you want to merge with parent `PressResponder` refs, otherwise just use `props.ref`
         {...pressProps}
         style={{
           background: isPressed() ? "darkgreen" : "green",

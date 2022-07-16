@@ -24,6 +24,8 @@ import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
 
 import { createMenuTriggerState, MenuTriggerState } from "./createMenuTriggerState";
 import { MenuTriggerType } from "./types";
+import { intlMessages } from "./intl";
+import { createMessageFormatter } from "@solid-aria/i18n";
 
 export interface AriaMenuTriggerProps extends CreateOverlayTriggerStateProps {
   /**
@@ -41,12 +43,6 @@ export interface AriaMenuTriggerProps extends CreateOverlayTriggerStateProps {
    * @default 'press'
    */
   trigger?: MenuTriggerType;
-
-  /**
-   * A description for assistive techology users indicating that a long press
-   * action is available, e.g. "Long press to open menu".
-   */
-  accessibilityDescription?: string;
 }
 
 export interface MenuTriggerAria {
@@ -79,8 +75,7 @@ export function createMenuTrigger<T extends HTMLElement>(
 ): MenuTriggerAria {
   const defaultProps: Partial<AriaMenuTriggerProps> = {
     type: "menu",
-    trigger: "press",
-    accessibilityDescription: "Long press or press Alt + ArrowDown to open menu"
+    trigger: "press"
   };
 
   // eslint-disable-next-line solid/reactivity
@@ -120,14 +115,16 @@ export function createMenuTrigger<T extends HTMLElement>(
     }
   };
 
+  const formatMessage = createMessageFormatter(intlMessages);
+
   const { longPressProps } = createLongPress<T>({
     isDisabled: () => props.isDisabled || props.trigger !== "longPress",
-    accessibilityDescription: () => props.accessibilityDescription,
+    accessibilityDescription: () => formatMessage("longPressMessage"),
     onLongPressStart: () => state.close(),
     onLongPress: () => state.open("first")
   });
 
-  const pressProps: Pick<CreatePressProps, "onPressStart" | "onPress"> = {
+  const pressProps: Pick<CreatePressProps<T>, "onPressStart" | "onPress"> = {
     onPressStart: e => {
       // For consistency with native, open the menu on mouse/key down, but touch up.
       if (e.pointerType !== "touch" && e.pointerType !== "keyboard" && !props.isDisabled) {

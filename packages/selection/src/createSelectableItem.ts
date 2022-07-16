@@ -193,7 +193,7 @@ export function createSelectableItem<T extends HTMLElement>(
   // we want to be able to have the pointer down on the trigger that opens the menu and
   // the pointer up on the menu item rather than requiring a separate press.
   // For keyboard events, selection still occurs on key down.
-  const itemPressProps: CreatePressProps = {
+  const itemPressProps: CreatePressProps<T> = {
     onPressStart: e => {
       modality = e.pointerType;
       longPressEnabledOnPressStart = longPressEnabled();

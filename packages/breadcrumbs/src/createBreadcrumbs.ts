@@ -15,9 +15,12 @@
  * governing permissions and limitations under the License.
  */
 
+import { createMessageFormatter } from "@solid-aria/i18n";
 import { AriaLabelingProps, DOMProps } from "@solid-aria/types";
 import { filterDOMProps } from "@solid-aria/utils";
-import { createMemo, JSX, mergeProps } from "solid-js";
+import { createMemo, JSX, mergeProps, splitProps } from "solid-js";
+
+import { intlMessages } from "./intl";
 
 export interface AriaBreadcrumbsProps extends DOMProps, AriaLabelingProps {
   /**
@@ -40,13 +43,20 @@ interface BreadcrumbsAria {
 
 /**
  * Provides the behavior and accessibility implementation for a breadcrumbs component.
- * Breadcrumbs display a heirarchy of links to the current page or resource in an application.
+ * Breadcrumbs display a hierarchy of links to the current page or resource in an application.
  */
 export function createBreadcrumbs(props: AriaBreadcrumbsProps): BreadcrumbsAria {
-  // eslint-disable-next-line solid/reactivity
-  props = mergeProps({ "aria-label": "Breadcrumbs" }, props);
+  const [local, others] = splitProps(props, ["aria-label"]);
 
-  const navProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
+  const formatMessage = createMessageFormatter(intlMessages);
+
+  const domProps = createMemo(() => filterDOMProps(others, { labelable: true }));
+
+  const navProps = mergeProps(domProps, {
+    get "aria-label"() {
+      return local["aria-label"] || formatMessage("breadcrumbs");
+    }
+  } as JSX.HTMLAttributes<any>);
 
   return { navProps };
 }
