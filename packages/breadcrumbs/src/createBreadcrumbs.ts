@@ -48,13 +48,13 @@ interface BreadcrumbsAria {
 export function createBreadcrumbs(props: AriaBreadcrumbsProps): BreadcrumbsAria {
   const [local, others] = splitProps(props, ["aria-label"]);
 
-  const formatter = createMessageFormatter(intlMessages);
+  const formatMessage = createMessageFormatter(intlMessages);
 
   const domProps = createMemo(() => filterDOMProps(others, { labelable: true }));
 
   const navProps = mergeProps(domProps, {
     get "aria-label"() {
-      return local["aria-label"] || formatter().format("breadcrumbs", {});
+      return local["aria-label"] || formatMessage("breadcrumbs");
     }
   } as JSX.HTMLAttributes<any>);
 

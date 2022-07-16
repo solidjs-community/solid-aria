@@ -16,9 +16,11 @@
  */
 
 import { LocalizedStrings, MessageDictionary, MessageFormatter } from "@internationalized/message";
-import { Accessor, createMemo } from "solid-js";
+import { createMemo } from "solid-js";
 
 import { useLocale } from "./context";
+
+export type FormatMessageFn = (key: string, variables?: { [key: string]: any }) => string;
 
 const cache = new WeakMap();
 
@@ -38,12 +40,12 @@ function getCachedDictionary(strings: LocalizedStrings) {
  * Automatically updates when the locale changes, and handles caching of messages for performance.
  * @param strings - A mapping of languages to strings by key.
  */
-export function createMessageFormatter(strings: LocalizedStrings): Accessor<MessageFormatter> {
+export function createMessageFormatter(strings: LocalizedStrings): FormatMessageFn {
   const locale = useLocale();
 
   const formatter = createMemo(() => {
     return new MessageFormatter(locale().locale, getCachedDictionary(strings));
   });
 
-  return formatter;
+  return (key, variables) => formatter().format(key, variables);
 }
