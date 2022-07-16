@@ -127,7 +127,7 @@ export function createMenuTrigger<T extends HTMLElement>(
     onLongPress: () => state.open("first")
   });
 
-  const pressProps: Pick<CreatePressProps, "onPressStart" | "onPress"> = {
+  const pressProps: Pick<CreatePressProps<T>, "onPressStart" | "onPress"> = {
     onPressStart: e => {
       // For consistency with native, open the menu on mouse/key down, but touch up.
       if (e.pointerType !== "touch" && e.pointerType !== "keyboard" && !props.isDisabled) {
