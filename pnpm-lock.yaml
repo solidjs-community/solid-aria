@@ -428,6 +428,7 @@ importers:
       '@solid-aria/selection': ^0.1.5
       '@solid-aria/separator': ^0.0.2
       '@solid-aria/switch': ^0.1.2
+      '@solid-aria/tabs': ^0.0.0
       '@solid-aria/textfield': ^0.0.1
       '@solid-aria/toggle': ^0.1.3
       '@solid-aria/tree': ^0.1.4
@@ -458,6 +459,7 @@ importers:
       '@solid-aria/selection': link:../selection
       '@solid-aria/separator': link:../separator
       '@solid-aria/switch': link:../switch
+      '@solid-aria/tabs': link:../tabs
       '@solid-aria/textfield': link:../textfield
       '@solid-aria/toggle': link:../toggle
       '@solid-aria/tree': link:../tree
@@ -597,6 +599,33 @@ importers:
     dependencies:
       '@solid-aria/toggle': link:../toggle
       '@solid-aria/types': link:../types
+      '@solid-primitives/utils': 2.2.1_solid-js@1.4.7
+    devDependencies:
+      solid-js: 1.4.7
+
+  packages/tabs:
+    specifiers:
+      '@solid-aria/collection': ^0.2.0
+      '@solid-aria/focus': ^0.1.4
+      '@solid-aria/i18n': ^0.2.0
+      '@solid-aria/interactions': ^0.1.4
+      '@solid-aria/list': ^0.1.4
+      '@solid-aria/selection': ^0.1.5
+      '@solid-aria/types': ^0.1.4
+      '@solid-aria/utils': ^0.2.1
+      '@solid-primitives/props': ^2.1.8
+      '@solid-primitives/utils': ^2.2.1
+      solid-js: ^1.4.4
+    dependencies:
+      '@solid-aria/collection': link:../collection
+      '@solid-aria/focus': link:../focus
+      '@solid-aria/i18n': link:../i18n
+      '@solid-aria/interactions': link:../interactions
+      '@solid-aria/list': link:../list
+      '@solid-aria/selection': link:../selection
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
+      '@solid-primitives/props': 2.1.8_solid-js@1.4.7
       '@solid-primitives/utils': 2.2.1_solid-js@1.4.7
     devDependencies:
       solid-js: 1.4.7

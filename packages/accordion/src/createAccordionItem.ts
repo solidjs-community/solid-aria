@@ -25,6 +25,9 @@ import { Accessor, JSX, mergeProps } from "solid-js";
 import { useAccordionContext } from "./createAccordion";
 
 export interface AriaAccordionItemProps {
+  /**
+   * The item used to render the accordion item.
+   */
   item: Node;
 }
 

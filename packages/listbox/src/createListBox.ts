@@ -86,7 +86,7 @@ export interface AriaListBoxProps
   label?: JSX.Element;
 }
 
-interface ListBoxAria {
+export interface ListBoxAria {
   /**
    * Provide the listbox state to descendant elements.
    */
@@ -121,6 +121,9 @@ export function createListBox<T extends HTMLElement>(
   state: ListState = createListState(props)
 ): ListBoxAria {
   const defaultListboxId = createId();
+
+  // eslint-disable-next-line solid/reactivity
+  props = mergeProps({ id: defaultListboxId }, props);
 
   const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
 

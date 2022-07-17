@@ -20,9 +20,9 @@ import { ItemKey } from "@solid-aria/types";
 
 export class ListCollection implements Collection<Node> {
   private keyMap: Map<ItemKey, Node> = new Map();
-  private iterable: Iterable<Node>;
-  private firstKey?: ItemKey;
-  private lastKey?: ItemKey;
+  private readonly iterable: Iterable<Node>;
+  private readonly firstKey?: ItemKey;
+  private readonly lastKey?: ItemKey;
 
   constructor(nodes: Iterable<Node>) {
     this.iterable = nodes;
@@ -45,7 +45,7 @@ export class ListCollection implements Collection<Node> {
       return;
     }
 
-    let last!: Node;
+    let last: Node | undefined;
     let index = 0;
     for (const [key, node] of this.keyMap) {
       if (last) {
@@ -67,7 +67,7 @@ export class ListCollection implements Collection<Node> {
       last.nextKey = undefined;
     }
 
-    this.lastKey = last.key;
+    this.lastKey = last?.key;
   }
 
   *[Symbol.iterator]() {
