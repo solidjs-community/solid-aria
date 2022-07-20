@@ -178,6 +178,8 @@ importers:
 
   packages/collection:
     specifiers:
+      '@solid-aria/focus': ^0.1.4
+      '@solid-aria/listbox': ^0.2.0
       '@solid-aria/types': ^0.1.4
       '@solid-aria/utils': ^0.2.1
       '@solid-primitives/keyed': ^1.0.0
@@ -189,6 +191,8 @@ importers:
       '@solid-primitives/keyed': 1.0.0_solid-js@1.4.7
       '@solid-primitives/utils': 2.1.1_solid-js@1.4.7
     devDependencies:
+      '@solid-aria/focus': link:../focus
+      '@solid-aria/listbox': link:../listbox
       solid-js: 1.4.7
 
   packages/dialog:

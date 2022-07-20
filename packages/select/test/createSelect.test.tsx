@@ -122,7 +122,7 @@ describe("createSelect", () => {
       expect(items[1]).toHaveTextContent("Two");
       expect(items[2]).toHaveTextContent("Three");
 
-      expect(document.activeElement).toBe(items[0]);
+      expect(document.activeElement).toBe(listbox);
     });
 
     it("can be opened on Space key down", async () => {
@@ -355,6 +355,8 @@ describe("createSelect", () => {
       expect(items[0]).toHaveTextContent("One");
       expect(items[1]).toHaveTextContent("Two");
       expect(items[2]).toHaveTextContent("Three");
+
+      console.log(document.activeElement?.tagName, listbox.tagName);
 
       expect(document.activeElement).toBe(listbox);
     });

@@ -54,6 +54,8 @@
     "@solid-primitives/utils": "^2.1.0"
   },
   "devDependencies": {
+    "@solid-aria/focus": "^0.1.4",
+    "@solid-aria/listbox": "^0.2.0",
     "solid-js": "^1.4.7"
   },
   "peerDependencies": {

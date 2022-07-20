@@ -205,7 +205,7 @@ export function createSelect<T extends HTMLElement>(
   const valueId = createId();
 
   const _labelProps = mergeProps(labelProps, {
-    onClick: () => {
+    onClick() {
       if (!props.isDisabled) {
         ref()?.focus();
 
@@ -263,7 +263,7 @@ export function createSelect<T extends HTMLElement>(
     shouldFocusOnHover: true,
     disallowEmptySelection: true,
     get autofocus() {
-      return state.focusStrategy() || true;
+      return state.focusStrategy() ?? true;
     },
     get "aria-labelledby"() {
       return [

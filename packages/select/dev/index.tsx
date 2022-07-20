@@ -1,7 +1,6 @@
+/* @refresh reload */
 import { render } from "solid-js/web";
 
-function App() {
-  return <div>Hello Solid Aria!</div>;
-}
+import App from "./App";
 
-render(() => <App />, document.getElementById("root") as HTMLDivElement);
+render(() => <App />, document.getElementById("root")!);

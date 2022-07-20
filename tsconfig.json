@@ -17,11 +17,7 @@
     "skipLibCheck": true,
     "strict": true,
     "sourceMap": true,
-    "types": ["solid-js", "vite/client", "node", "jest", "@testing-library/jest-dom"],
-    "paths": {
-      "@solid-aria/list": ["./packages/list/src/index.ts"],
-      "@solid-aria/collection": ["./packages/collection/src/index.ts"]
-    }
+    "types": ["solid-js", "vite/client", "node", "jest", "@testing-library/jest-dom"]
   },
   "exclude": ["node_modules"]
 }
