@@ -137,7 +137,7 @@ export function createButton(
     "preventFocusOnPress"
   ]);
 
-  const { pressProps, isPressed } = createPress(createPressProps, ref);
+  const { pressProps, isPressed } = createPress(createPressProps);
 
   const { focusableProps } = createFocusable(props, ref);
 

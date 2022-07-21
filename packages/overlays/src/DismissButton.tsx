@@ -15,10 +15,13 @@
  * governing permissions and limitations under the License.
  */
 
+import { createMessageFormatter } from "@solid-aria/i18n";
 import { AriaLabelingProps, DOMProps } from "@solid-aria/types";
 import { mergeAriaLabels } from "@solid-aria/utils";
 import { createVisuallyHidden } from "@solid-aria/visually-hidden";
 import { splitProps } from "solid-js";
+
+import { intlMessages } from "./intl";
 
 interface DismissButtonProps extends AriaLabelingProps, DOMProps {
   /**
@@ -37,7 +40,9 @@ export function DismissButton(props: DismissButtonProps) {
 
   const { visuallyHiddenProps } = createVisuallyHidden();
 
-  const { ariaLabelsProps } = mergeAriaLabels(others, "Dismiss");
+  const formatMessage = createMessageFormatter(intlMessages);
+
+  const { ariaLabelsProps } = mergeAriaLabels(others, () => formatMessage("dismiss"));
 
   const onClick = () => local.onDismiss?.();
 

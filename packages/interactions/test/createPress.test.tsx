@@ -30,12 +30,12 @@ jest.mock("@solid-primitives/platform", () => ({
 }));
 
 function Example(
-  props: CreatePressProps &
+  props: CreatePressProps<any> &
     JSX.HTMLAttributes<any> & { elementType?: any; style?: any; draggable?: boolean; href?: string }
 ) {
   let ref: any;
 
-  const { pressProps } = createPress(props, () => ref);
+  const { pressProps } = createPress(props);
 
   return (
     <Dynamic
@@ -2783,7 +2783,7 @@ describe("createPress", () => {
     const mockUserSelect = "contain";
     const oldUserSelect = document.documentElement.style.webkitUserSelect;
 
-    function TestStyleChange(props: CreatePressProps & { styleToApply?: any }) {
+    function TestStyleChange(props: CreatePressProps<any> & { styleToApply?: any }) {
       const [local, others] = splitProps(props, ["styleToApply"]);
 
       const createPressProps = mergeProps(others, {
@@ -2792,8 +2792,7 @@ describe("createPress", () => {
 
       const [show, setShow] = createSignal(false);
 
-      let ref: HTMLDivElement | undefined;
-      const { pressProps } = createPress(createPressProps, () => ref);
+      const { pressProps } = createPress<HTMLDivElement>(createPressProps);
 
       return (
         <div style={show() ? local.styleToApply : {}} {...pressProps}>

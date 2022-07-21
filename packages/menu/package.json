@@ -24,14 +24,23 @@
   "contributors": [],
   "sideEffects": false,
   "type": "module",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "solid": "./dist/source/index.jsx",
+      "import": "./dist/esm/index.js",
+      "browser": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "node": "./dist/cjs/index.js"
+    }
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsup",
+    "build": "rollup -c ../../configs/rollup.config.js",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "dev": "vite serve dev --host",
     "test": "jest --passWithNoTests",
@@ -41,6 +50,7 @@
   "dependencies": {
     "@solid-aria/button": "^0.1.3",
     "@solid-aria/collection": "^0.2.0",
+    "@solid-aria/i18n": "^0.2.0",
     "@solid-aria/interactions": "^0.1.4",
     "@solid-aria/overlays": "^0.1.3",
     "@solid-aria/selection": "^0.1.5",

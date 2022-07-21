@@ -76,7 +76,7 @@ export function createLink<T extends HTMLElement = HTMLAnchorElement>(
 
   const { focusableProps } = createFocusable(props, ref);
 
-  const { pressProps, isPressed } = createPress(createPressProps, ref);
+  const { pressProps, isPressed } = createPress(createPressProps);
 
   const domProps = mergeProps(createMemo(() => filterDOMProps(others, { labelable: true })));
 
