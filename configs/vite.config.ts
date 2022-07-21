@@ -10,7 +10,8 @@ export const viteConfig = defineConfig({
   resolve: {
     alias: {
       "@solid-aria/list": resolvePackage("list"),
-      "@solid-aria/collection": resolvePackage("collection")
+      "@solid-aria/collection": resolvePackage("collection"),
+      "@solid-aria/selection": resolvePackage("selection")
     }
   },
   build: {
