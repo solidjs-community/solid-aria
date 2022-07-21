@@ -15,8 +15,8 @@
  * governing permissions and limitations under the License.
  */
 
-import { Accessor, children, createEffect, createSignal, on } from "solid-js";
-import { ResolvedChildren } from "solid-js/types/reactive/signal";
+import { Many } from "@solid-primitives/utils";
+import { Accessor, children, createMemo } from "solid-js";
 
 import { CollectionBuilder } from "./CollectionBuilder";
 import { Collection, CollectionBase, ItemMetaData, Node } from "./types";
@@ -28,18 +28,18 @@ export function createCollection<C extends Collection<Node> = Collection<Node>>(
   factory: CollectionFactory<C>,
   deps: Accessor<any>[] = []
 ): Accessor<C> {
-  const resolvedChildren = children(() => props.children);
+  const resolvedChildren = children(() => props.children) as unknown as Accessor<
+    Many<ItemMetaData>
+  >;
 
   const builder = new CollectionBuilder();
 
-  const [collection, setCollection] = createSignal<C>(factory([]));
-
-  createEffect(
-    on([resolvedChildren, ...deps], ([resolvedChildren]) => {
-      const nodes = createNodes(builder, resolvedChildren);
-      setCollection(() => factory(nodes));
-    })
-  );
+  const collection = createMemo(() => {
+    // execute deps to track them
+    deps.forEach(f => f());
+    const nodes = createNodes(builder, resolvedChildren());
+    return factory(nodes);
+  });
 
   return collection;
 }
@@ -47,12 +47,12 @@ export function createCollection<C extends Collection<Node> = Collection<Node>>(
 /**
  * Create an Iterable of `Nodes` with the given builder and resolved children.
  */
-function createNodes(builder: CollectionBuilder, resolvedChildren: ResolvedChildren) {
+function createNodes(builder: CollectionBuilder, resolvedChildren: Many<ItemMetaData>) {
   let items = resolvedChildren ?? [];
 
   if (!Array.isArray(items)) {
     items = [items];
   }
 
-  return builder.build(items as unknown as ItemMetaData[]);
+  return builder.build(items);
 }

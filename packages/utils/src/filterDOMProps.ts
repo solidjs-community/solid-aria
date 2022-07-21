@@ -22,13 +22,13 @@ import { splitProps } from "solid-js";
  * A set of common DOM props that are allowed on any component
  * Ensure this is synced with DOMProps in types/dom.
  */
-const DOMPropNames = new Set(["id"]);
+const DOMPropNames: ReadonlySet<string> = new Set(["id"]);
 
 /**
  * A set of common DOM props that are allowed on any component
  * Ensure this is synced with AriaLabelingProps in types/aria.
  */
-const labelablePropNames = new Set([
+const labelablePropNames: ReadonlySet<string> = new Set([
   "aria-label",
   "aria-labelledby",
   "aria-describedby",

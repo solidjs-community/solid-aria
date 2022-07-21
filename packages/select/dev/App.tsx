@@ -1,5 +1,5 @@
 import { createButton } from "@solid-aria/button";
-import { ForItems } from "@solid-aria/collection";
+import { ForItems, Item } from "@solid-aria/collection";
 import { FocusScope } from "@solid-aria/focus";
 import { ListState } from "@solid-aria/list";
 import {
@@ -12,6 +12,18 @@ import { AriaOverlayProps, createOverlay, DismissButton } from "@solid-aria/over
 import { ParentProps, Show } from "solid-js";
 
 import { AriaSelectProps, createSelect, HiddenSelect } from "../src";
+
+function Option(props: ParentProps<AriaListBoxOptionProps>) {
+  let ref: HTMLLIElement | undefined;
+
+  const { optionProps } = createListBoxOption(props, () => ref);
+
+  return (
+    <li {...optionProps} ref={ref}>
+      {props.children}
+    </li>
+  );
+}
 
 function Popover(props: ParentProps<AriaOverlayProps>) {
   let ref: HTMLDivElement | undefined;
@@ -53,18 +65,6 @@ function ListBox(props: AriaListBoxProps & { state: ListState }) {
         </ForItems>
       </ul>
     </ListBoxProvider>
-  );
-}
-
-function Option(props: ParentProps<AriaListBoxOptionProps>) {
-  let ref: HTMLLIElement | undefined;
-
-  const { optionProps } = createListBoxOption(props, () => ref);
-
-  return (
-    <li {...optionProps} ref={ref}>
-      {props.children}
-    </li>
   );
 }
 
@@ -118,3 +118,22 @@ export function Select(props: AriaSelectProps) {
     </div>
   );
 }
+
+function App() {
+  return (
+    <Select label="Favorite Color">
+      <Item key="Red">Red</Item>
+      <Item key="Orange">Orange</Item>
+      <Item key="Yellow">Yellow</Item>
+      <Item key="Green">Green</Item>
+      <Item key="Blue">Blue</Item>
+      <Item key="Purple">Purple</Item>
+      <Item key="Black">Black</Item>
+      <Item key="White">White</Item>
+      <Item key="Lime">Lime</Item>
+      <Item key="Fushsia">Fushsia</Item>
+    </Select>
+  );
+}
+
+export default App;
