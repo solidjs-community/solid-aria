@@ -21,7 +21,9 @@
   },
   "license": "MIT",
   "author": "Fabien Marie-Louise <fabienml.dev@gmail.com>",
-  "contributors": [],
+  "contributors": [
+    "Damian Tarnawski <gthetarnav@gmail.com>"
+  ],
   "sideEffects": false,
   "type": "module",
   "exports": {
@@ -48,6 +50,7 @@
   },
   "dependencies": {
     "@solid-aria/types": "^0.1.4",
+    "@solid-primitives/props": "^2.2.0",
     "@solid-primitives/utils": "^2.1.0"
   },
   "devDependencies": {

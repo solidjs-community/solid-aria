@@ -198,7 +198,7 @@ export function createSelect<T extends HTMLElement>(
   const { labelProps, fieldProps, descriptionProps, errorMessageProps } =
     createField(createFieldProps);
 
-  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
+  const domProps = filterDOMProps(props, { labelable: true });
 
   const triggerProps = combineProps(typeSelectProps, menuTriggerProps, fieldProps);
 

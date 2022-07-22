@@ -78,7 +78,7 @@ export function createLink<T extends HTMLElement = HTMLAnchorElement>(
 
   const { pressProps, isPressed } = createPress(createPressProps);
 
-  const domProps = mergeProps(createMemo(() => filterDOMProps(others, { labelable: true })));
+  const domProps = filterDOMProps(others, { labelable: true });
 
   const isAnchorTag = () => local.elementType === "a";
 

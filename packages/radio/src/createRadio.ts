@@ -109,7 +109,7 @@ export function createRadio(
 
   const { focusableProps } = createFocusable(createFocusableProps, inputRef);
 
-  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
+  const domProps = filterDOMProps(props, { labelable: true });
 
   const inputProps = combineProps(domProps, pressProps, focusableProps, {
     type: "radio",

@@ -104,7 +104,7 @@ export function createProgressBar(props: AriaProgressBarProps = {}): ProgressBar
   // eslint-disable-next-line solid/reactivity
   props = mergeProps(defaultProps, props);
 
-  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
+  const domProps = filterDOMProps(props, { labelable: true });
 
   const createLabelProps = mergeProps(props, {
     // select is not an HTML input element so it

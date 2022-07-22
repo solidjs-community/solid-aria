@@ -45,7 +45,7 @@ export interface SeparatorAria {
  * e.g. groups of menu items or sections of a page.
  */
 export function createSeparator(props: AriaSeparatorProps = {}): SeparatorAria {
-  const domProps = createMemo(() => filterDOMProps(props, { labelable: true }));
+  const domProps = filterDOMProps(props, { labelable: true });
 
   // eslint-disable-next-line solid/reactivity
   const separatorProps = mergeProps(domProps, {

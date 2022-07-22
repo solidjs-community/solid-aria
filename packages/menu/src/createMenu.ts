@@ -117,7 +117,7 @@ export function createMenu<T extends HTMLElement>(
 
   const state = createTreeState(props);
 
-  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
+  const domProps = filterDOMProps(props, { labelable: true });
 
   const createSelectableListProps = mergeProps(props, {
     selectionManager: state.selectionManager,

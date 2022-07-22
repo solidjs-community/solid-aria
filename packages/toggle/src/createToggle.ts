@@ -119,7 +119,7 @@ export function createToggle(
 
   const { focusableProps } = createFocusable(props, inputRef);
 
-  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
+  const domProps = filterDOMProps(props, { labelable: true });
 
   const baseToggleProps: JSX.InputHTMLAttributes<any> = {
     type: "checkbox",

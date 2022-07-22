@@ -141,7 +141,7 @@ export function createButton(
 
   const { focusableProps } = createFocusable(props, ref);
 
-  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
+  const domProps = filterDOMProps(props, { labelable: true });
 
   const baseButtonProps: JSX.HTMLAttributes<any> = {
     get "aria-haspopup"() {
