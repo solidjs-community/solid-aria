@@ -122,8 +122,7 @@ export function createListBox<T extends HTMLElement>(
 ): ListBoxAria {
   const defaultListboxId = createId();
 
-  // eslint-disable-next-line solid/reactivity
-  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
+  const domProps = filterDOMProps(props, { labelable: true });
 
   const createSelectableListProps = mergeProps(props, {
     selectionManager: state.selectionManager,

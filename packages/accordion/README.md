@@ -95,7 +95,7 @@ function Accordion(props: AriaAccordionProps) {
 
   const { AccordionProvider, accordionProps, state } = createAccordion(props, () => ref);
 
-  const domProps = createMemo(() => filterDOMProps(props));
+  const domProps = filterDOMProps(props);
 
   const rootProps = mergeProps(domProps, accordionProps);
 

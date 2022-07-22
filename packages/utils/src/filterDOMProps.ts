@@ -16,7 +16,7 @@
  */
 
 import { AriaLabelingProps, DOMProps } from "@solid-aria/types";
-import { splitProps } from "solid-js";
+import { createPropsPredicate, filterProps } from "@solid-primitives/props";
 
 /**
  * A set of common DOM props that are allowed on any component
@@ -49,32 +49,31 @@ interface Options {
 
 const dataAttrsRegex = /^(data-.*)$/;
 
+/**
+ * Function returning a boolean indicating if a prop considered a valid DOM prop.
+ * @param this - The options object.
+ * @param key - The name of the prop.
+ */
+function filterDOMPropsPredicate(this: Options, key: string): boolean {
+  return (
+    DOMPropNames.has(key) ||
+    (this.labelable && labelablePropNames.has(key)) ||
+    this.propNames?.has(key) ||
+    dataAttrsRegex.test(key)
+  );
+}
+
 // Note: "valid DOM props" refers to the `DOMPropNames` Set above, not "any valid DOM props".
 /**
  * Filters out all props that aren't valid DOM props or defined via override prop obj.
  * @param props - The component props to be filtered.
  * @param opts - Props to override.
+ * @returns A filtered props object.
  */
 export function filterDOMProps(
   props: Record<string, any> & DOMProps & AriaLabelingProps,
-  opts: Options = {}
+  options: Options = {}
 ): DOMProps & AriaLabelingProps {
-  const { labelable, propNames } = opts;
-  const filteredPropNames: Array<string> = [];
-
-  for (const prop in props) {
-    if (
-      Object.prototype.hasOwnProperty.call(props, prop) &&
-      (DOMPropNames.has(prop) ||
-        (labelable && labelablePropNames.has(prop)) ||
-        propNames?.has(prop) ||
-        dataAttrsRegex.test(prop))
-    ) {
-      filteredPropNames.push(prop);
-    }
-  }
-
-  const [filteredProps] = splitProps(props, filteredPropNames as any);
-
-  return filteredProps;
+  const predicate = createPropsPredicate(props, filterDOMPropsPredicate.bind(options));
+  return filterProps(props, predicate);
 }

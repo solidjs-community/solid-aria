@@ -51,10 +51,7 @@ function Accordion(props: AriaAccordionProps) {
 
   const { AccordionProvider, accordionProps, state } = createAccordion(props, () => ref);
 
-  const rootProps = mergeProps(
-    createMemo(() => filterDOMProps(props)),
-    accordionProps
-  );
+  const rootProps = mergeProps(filterDOMProps(props), accordionProps);
 
   return (
     <div {...rootProps} ref={ref}>

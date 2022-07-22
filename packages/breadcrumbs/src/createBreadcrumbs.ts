@@ -50,7 +50,7 @@ export function createBreadcrumbs(props: AriaBreadcrumbsProps): BreadcrumbsAria 
 
   const formatMessage = createMessageFormatter(intlMessages);
 
-  const domProps = createMemo(() => filterDOMProps(others, { labelable: true }));
+  const domProps = filterDOMProps(others, { labelable: true });
 
   const navProps = mergeProps(domProps, {
     get "aria-label"() {

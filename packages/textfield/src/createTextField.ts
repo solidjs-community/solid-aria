@@ -144,7 +144,7 @@ export function createTextField<T extends TextFieldIntrinsicElements = DefaultEl
   const { focusableProps } = createFocusable(props, ref);
   const { labelProps, fieldProps, descriptionProps, errorMessageProps } = createField(props);
 
-  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
+  const domProps = filterDOMProps(props, { labelable: true });
 
   const baseInputProps: JSX.HTMLAttributes<any> = mergeProps(
     {

@@ -54,8 +54,7 @@ export function createDialog<T extends HTMLElement>(
     return props["aria-label"] ? undefined : defaultTitleId();
   };
 
-  // eslint-disable-next-line solid/reactivity
-  const domProps = mergeProps(createMemo(() => filterDOMProps(props, { labelable: true })));
+  const domProps = filterDOMProps(props, { labelable: true });
 
   // Note: aria-modal has a bug in Safari which forces the first focusable element to be focused
   // on mount when inside an iframe, no matter which element we programmatically focus.
