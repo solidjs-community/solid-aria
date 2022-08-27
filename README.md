@@ -38,6 +38,7 @@ A library of high-quality primitives that help you build accessible user interfa
 
 - [breadcrumbs](./packages/breadcrumbs/) - Provides the behavior and accessibility implementation for a breadcrumbs component.
 - [link](./packages/link/) - Provides the behavior and accessibility implementation for a link component.
+- [pagination](./packages/pagination/) - Provides the behavior and accessibility implementation for a pagination component.
 
 ### Feedback
 
