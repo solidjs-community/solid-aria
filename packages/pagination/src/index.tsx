@@ -16,4 +16,5 @@
  */
 
 export { type PaginationState, createPaginationState } from "./createPaginationState";
+export { type PaginationAriaProps, createPagination } from "./createPagination";
 export type { PaginationBase, PaginationProps } from "./types";

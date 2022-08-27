@@ -16,8 +16,9 @@
  */
 
 import { ValueBase } from "@solid-aria/types";
+import { Accessor } from "solid-js";
 
-export type PaginationValue = "" | number;
+export type PaginationValue = "" | number | undefined;
 
 export interface PaginationBase extends ValueBase<number> {
   maxValue?: number;
@@ -26,7 +27,7 @@ export interface PaginationBase extends ValueBase<number> {
 }
 
 export interface PaginationProps {
-  value?: PaginationValue;
+  value?: Accessor<PaginationValue>;
   maxValue?: number;
   defaultValue?: number;
   onChange?: (val: PaginationValue) => void;

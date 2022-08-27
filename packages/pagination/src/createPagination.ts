@@ -30,10 +30,12 @@ export interface PaginationAriaProps {
 }
 
 interface PaginationAria {
-  prevButtonProps: JSX.ButtonHTMLAttributes<any> & {
+  prevButtonProps: {
+    "aria-label": string;
     onPress: PressEvents["onPress"];
   };
-  nextButtonProps: JSX.ButtonHTMLAttributes<any> & {
+  nextButtonProps: {
+    "aria-label": string;
     onPress: PressEvents["onPress"];
   };
   textProps: JSX.HTMLAttributes<any>;
