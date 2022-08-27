@@ -227,6 +227,8 @@ importers:
     specifiers:
       '@internationalized/message': ^3.0.8
       '@internationalized/number': ^3.1.1
+      '@internationalized/string': ^3.0.0
+      '@solid-aria/i18n': workspace:^0.2.0
       '@solid-aria/types': ^0.1.2
       '@solid-aria/utils': ^0.2.0
       '@solid-primitives/utils': ^2.1.0
@@ -234,6 +236,8 @@ importers:
     dependencies:
       '@internationalized/message': 3.0.8
       '@internationalized/number': 3.1.1
+      '@internationalized/string': 3.0.0
+      '@solid-aria/i18n': 'link:'
       '@solid-aria/types': link:../types
       '@solid-aria/utils': link:../utils
       '@solid-primitives/utils': 2.1.1_solid-js@1.4.6
@@ -400,6 +404,21 @@ importers:
       '@solid-aria/visually-hidden': link:../visually-hidden
       '@solid-primitives/platform': 0.0.100_solid-js@1.4.6
       '@solid-primitives/props': 2.1.8_solid-js@1.4.6
+      '@solid-primitives/utils': 2.1.1_solid-js@1.4.6
+    devDependencies:
+      solid-js: 1.4.6
+
+  packages/pagination:
+    specifiers:
+      '@solid-aria/i18n': workspace:^0.2.0
+      '@solid-aria/types': ^0.1.4
+      '@solid-aria/utils': ^0.2.1
+      '@solid-primitives/utils': ^2.1.0
+      solid-js: ^1.4.4
+    dependencies:
+      '@solid-aria/i18n': link:../i18n
+      '@solid-aria/types': link:../types
+      '@solid-aria/utils': link:../utils
       '@solid-primitives/utils': 2.1.1_solid-js@1.4.6
     devDependencies:
       solid-js: 1.4.6
@@ -2367,6 +2386,12 @@ packages:
 
   /@internationalized/number/3.1.1:
     resolution: {integrity: sha512-dBxCQKIxvsZvW2IBt3KsqrCfaw2nV6o6a8xsloJn/hjW0ayeyhKuiiMtTwW3/WGNPP7ZRyDbtuiUEjMwif1ENQ==}
+    dependencies:
+      '@babel/runtime': 7.18.6
+    dev: false
+
+  /@internationalized/string/3.0.0:
+    resolution: {integrity: sha512-NUSr4u+mNu5BysXFeVWZW4kvjXylPkU/YYqaWzdNuz1eABfehFiZTEYhWAAMzI3U8DTxfqF9PM3zyhk5gcfz6w==}
     dependencies:
       '@babel/runtime': 7.18.6
     dev: false
