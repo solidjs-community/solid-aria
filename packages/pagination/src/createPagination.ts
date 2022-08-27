@@ -22,6 +22,7 @@ import { JSX, mergeProps, splitProps } from "solid-js";
 import intlMessages from "../intl";
 import { PaginationState } from "./createPaginationState";
 import { PaginationValue } from "./types";
+import { parsePageSafe } from "./utils";
 
 export interface PaginationAriaProps {
   value?: PaginationValue;
@@ -52,7 +53,7 @@ export function createPagination(
     state.onDecrement();
     const value = state.value();
     if (props.onPrevious && value) {
-      props.onPrevious(value);
+      props.onPrevious(parsePageSafe(value));
     }
   };
 
@@ -60,7 +61,7 @@ export function createPagination(
     state.onIncrement();
     const value = state.value();
     if (props.onNext && value) {
-      props.onNext(value);
+      props.onNext(parsePageSafe(value));
     }
   };
 

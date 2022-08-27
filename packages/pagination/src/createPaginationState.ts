@@ -19,6 +19,7 @@ import { createControllableSignal } from "@solid-aria/utils";
 import { access } from "@solid-primitives/utils";
 import { Accessor, untrack } from "solid-js";
 import { PaginationProps, PaginationValue } from "./types";
+import { parsePageSafe } from "./utils";
 
 export interface PaginationState {
   onChange: (val: PaginationValue | undefined) => void;
@@ -66,11 +67,8 @@ export function createPaginationState(props: PaginationProps): PaginationState {
   };
 }
 
-function isValidPage(
-  totalPages: number | undefined,
-  page: number | string | undefined
-): page is number {
-  page = parseInt(`${page}`, 10);
-  totalPages = parseInt(`${totalPages}`);
+function isValidPage(totalPages: number | undefined, page: PaginationValue): page is number {
+  page = parsePageSafe(page);
+  totalPages = parsePageSafe(totalPages);
   return !isNaN(page) && page >= 1 && !!totalPages && page <= totalPages;
 }
