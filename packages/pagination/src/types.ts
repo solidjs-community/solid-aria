@@ -16,6 +16,7 @@
  */
 
 import { ValueBase } from "@solid-aria/types";
+import { MaybeAccessor } from "@solid-primitives/utils";
 
 export type PaginationValue = string | number | undefined;
 
@@ -28,7 +29,7 @@ export interface PaginationBase extends ValueBase<number> {
 
 export interface PaginationProps {
   maxValue?: number;
-  value?: PaginationValue;
+  value?: MaybeAccessor<PaginationValue>;
   defaultValue?: number;
   onChange?: (val: number) => void;
 }

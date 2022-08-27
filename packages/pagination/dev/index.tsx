@@ -21,7 +21,6 @@ function App() {
       <h1>Uncontrolled</h1>
       <PaginationInput
         maxValue={20}
-        defaultValue={1}
         onChange={value => console.log("uncontrolled -> onChange", value)}
         onNext={value => console.log("uncontrolled -> on next", value)}
         onPrevious={value => console.log("uncontrolled -> on previous", value)}

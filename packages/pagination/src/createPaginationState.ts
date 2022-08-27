@@ -28,7 +28,9 @@ export interface PaginationState {
   value: Accessor<PaginationValue | undefined>;
 }
 
-export function createPaginationState(props: PaginationProps): PaginationState {
+type PaginationStateProps = PaginationProps;
+
+export function createPaginationState(props: PaginationStateProps): PaginationState {
   const [value, setValue] = createControllableSignal({
     value: () => access(props.value),
     defaultValue: () => props.defaultValue,

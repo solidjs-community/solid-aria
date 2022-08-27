@@ -5,31 +5,51 @@ import { createButton } from "@solid-aria/button";
 
 export function PaginationInput(props: PaginationBase) {
   const propsWithDefault = mergeProps({ defaultValue: 1 }, props);
-  const state = createPaginationState(props);
+  const state = createPaginationState(propsWithDefault);
   const { prevButtonProps, nextButtonProps, textProps } = createPagination(propsWithDefault, state);
   const locale = useLocale();
   const direction = () => locale().direction;
   const maxValue = () => props.maxValue;
-  let prevButtonRef!: HTMLButtonElement;
-  const { buttonProps: pagePrevButtonProps } = createButton(prevButtonProps, () => prevButtonRef);
 
+  let prevButtonRef!: HTMLButtonElement;
   let nextButtonRef!: HTMLButtonElement;
-  const { buttonProps: pageNextButtonProps } = createButton(nextButtonProps, () => nextButtonRef);
+
+  const { buttonProps: resolvedPrevButtonProps } = createButton(
+    mergeProps(prevButtonProps, {
+      get isDisabled() {
+        return props.value === 1;
+      }
+    }),
+    () => prevButtonRef
+  );
+
+  const { buttonProps: resolvedNextButtonProps } = createButton(
+    mergeProps(nextButtonProps, {
+      get isDisabled() {
+        return props.value === props.maxValue;
+      }
+    }),
+    () => prevButtonRef
+  );
 
   return (
-    <nav>
-      <button {...pagePrevButtonProps} ref={prevButtonRef}>
-        {direction() === "rtl" ? ">" : "<"}
-      </button>
-      <input
-        {...textProps}
-        value={state.value()}
-        onChange={evt => state.onChange(evt.currentTarget?.value)}
-      />
-      <span>Max count: {maxValue()}</span>
-      <button {...pageNextButtonProps} ref={nextButtonRef}>
-        {direction() === "rtl" ? "<" : ">"}
-      </button>
-    </nav>
+    <>
+      <nav>
+        <button {...resolvedPrevButtonProps} ref={prevButtonRef}>
+          {direction() === "rtl" ? ">" : "<"}
+        </button>
+        <input
+          {...textProps}
+          value={state.value()}
+          onChange={evt => state.onChange(evt.currentTarget?.value)}
+        />
+        <button {...resolvedNextButtonProps} ref={nextButtonRef}>
+          {direction() === "rtl" ? "<" : ">"}
+        </button>
+      </nav>
+      <span>
+        Page: {state.value()} / {maxValue()}
+      </span>
+    </>
   );
 }
