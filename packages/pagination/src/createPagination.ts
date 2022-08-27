@@ -16,21 +16,25 @@
  */
 
 import { createStringFormatter } from "@solid-aria/i18n";
-import { JSX, mergeProps } from "solid-js";
+import { PressEvents } from "@solid-aria/types";
+import { JSX, mergeProps, splitProps } from "solid-js";
+
 import intlMessages from "../intl";
 import { PaginationState } from "./createPaginationState";
+import { PaginationValue } from "./types";
 
 export interface PaginationAriaProps {
+  value?: PaginationValue;
   onPrevious?: (value: number, ...args: any) => void;
   onNext?: (value: number, ...args: any) => void;
 }
 
 interface PaginationAria {
   prevButtonProps: JSX.ButtonHTMLAttributes<any> & {
-    onPress: () => void;
+    onPress: PressEvents["onPress"];
   };
   nextButtonProps: JSX.ButtonHTMLAttributes<any> & {
-    onPress: () => void;
+    onPress: PressEvents["onPress"];
   };
   textProps: JSX.HTMLAttributes<any>;
 }
@@ -40,6 +44,7 @@ export function createPagination(
   state: PaginationState
 ): PaginationAria {
   const stringFormatter = createStringFormatter(intlMessages);
+  const [localTextProps] = splitProps(props, ["value"]);
 
   const onPrevious = () => {
     state.onDecrement();
@@ -87,7 +92,7 @@ export function createPagination(
       },
       onPress: onNext
     },
-    textProps: mergeProps(props, {
+    textProps: mergeProps(localTextProps, {
       onKeyDown: onKeyDown
     })
   };
