@@ -23,12 +23,12 @@ export interface PaginationBase extends ValueBase<number> {
   maxValue?: number;
   onPrevious?: (value: number, e: Event) => void;
   onNext?: (value: number, e: Event) => void;
-  onChange?: (val: PaginationValue) => void;
+  onChange?: (val: number) => void;
 }
 
 export interface PaginationProps {
   maxValue?: number;
   value?: PaginationValue;
   defaultValue?: number;
-  onChange?: (val: PaginationValue) => void;
+  onChange?: (val: number) => void;
 }

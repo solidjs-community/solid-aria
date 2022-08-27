@@ -32,7 +32,7 @@ export function createPaginationState(props: PaginationProps): PaginationState {
   const [value, setValue] = createControllableSignal({
     value: () => access(props.value),
     defaultValue: () => props.defaultValue,
-    onChange: value => props.onChange?.(value)
+    onChange: value => props.onChange?.(parsePageSafe(value))
   });
 
   const onIncrement = () => {

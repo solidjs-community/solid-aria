@@ -65,7 +65,6 @@ describe("createPaginationState", () => {
   it("test invalid state value : character", () => {
     const props = { defaultValue: 1, maxValue: maxValue };
     const result = createPaginationState(props);
-    // @ts-expect-error should pass "" | number
     result.onChange("a");
     expect(result.value()).toEqual(props.defaultValue);
   });
