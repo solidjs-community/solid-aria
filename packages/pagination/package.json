@@ -1,0 +1,70 @@
+{
+  "name": "@solid-aria/pagination",
+  "version": "0.0.0",
+  "private": false,
+  "description": "Primitives for building accessible pagination component.",
+  "keywords": [
+    "solid",
+    "aria",
+    "headless",
+    "design",
+    "system",
+    "components"
+  ],
+  "homepage": "https://github.com/solidjs-community/solid-aria/tree/main/packages/template-primitive#readme",
+  "bugs": {
+    "url": "https://github.com/solidjs-community/solid-aria/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/solidjs-community/solid-aria.git"
+  },
+  "license": "MIT",
+  "author": "Fabien Marie-Louise <fabienml.dev@gmail.com>",
+  "contributors": [],
+  "sideEffects": false,
+  "type": "module",
+  "exports": {
+    ".": {
+      "solid": "./dist/source/index.jsx",
+      "import": "./dist/esm/index.js",
+      "browser": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "node": "./dist/cjs/index.js"
+    }
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c ../../configs/rollup.config.js",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "dev": "vite serve dev --host",
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch --passWithNoTests",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@solid-aria/types": "^0.1.4",
+    "@solid-aria/utils": "^0.2.1",
+    "@solid-primitives/utils": "^2.1.0"
+  },
+  "devDependencies": {
+    "solid-js": "^1.4.4"
+  },
+  "peerDependencies": {
+    "solid-js": "^1.4.4"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "primitive": {
+    "name": "template-primitive",
+    "stage": 0,
+    "list": [],
+    "category": ""
+  }
+}
