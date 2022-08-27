@@ -21,7 +21,11 @@ export function PaginationInput(props: PaginationBase) {
       <button {...pagePrevButtonProps} ref={prevButtonRef}>
         {direction() === "rtl" ? ">" : "<"}
       </button>
-      <input {...textProps} onChange={evt => state.onChange(evt.currentTarget?.value)} />
+      <input
+        {...textProps}
+        value={state.value()}
+        onChange={evt => state.onChange(evt.currentTarget?.value)}
+      />
       <span>Max count: {maxValue()}</span>
       <button {...pageNextButtonProps} ref={nextButtonRef}>
         {direction() === "rtl" ? "<" : ">"}
