@@ -31,11 +31,9 @@ Provides state management for a pagination component.
 
 ### How to use it
 
-```typescript jsx
-import { createPaginationState } from "./createPaginationState";
-import { createSignal } from "solid-js";
+```typescript
+import { createPaginationState } from "@solid-aria/pagination";
 
-// Uncontrolled state
 const state = createPaginationState({
   state: 1,
   onChange() {
@@ -62,28 +60,22 @@ Provides the behavior and accessibility implementation for a pagination componen
 
 ### Features
 
+- Accessibility and behavior of page navigation buttons and page text input.
+
 ### How to use it
 
-This example use native buttons for the Previous and Next behavior, and a native text input to be able to update
-the page manually.
+This example use native buttons with [@solid-aria/button](../button) to handle the behavior of the
+page navigation buttons.
+This mean that the `onPress` property will be bound automatically.
 
-Thanks to `createPagination`, the text input will react to `ArrowUp` and `ArrowDown` events in order to update the
-pagination state.
-
-Also, each button will have the `aria-label` translated located correctly and automatically.
-
-The example above will also make use of `@solid-aria/i18n` in order to handle the `direction` of the button in base of
-the current `Locale`.
-
-In order to properly handle the `Press` events of previous and next button, this example also use
-`@solid-aria/button` which provides the behavior and accessibility for a button component.
+[@solid-aria/i18n](../i18n) will be used to handle the `direction` of the buttons in base of the locale. Also,
+each button will automatically have the `aria-label` property translated by the current locale.
 
 ```typescript jsx
-import { createPagination } from "./createPagination";
-import { mergeProps } from "solid-js";
-import { createPaginationState } from "./createPaginationState";
+import { createPagination, createPaginationState } from "@solid-aria/pagination";
 import { useLocale } from "@solid-aria/i18n";
-import { createButton } from "./createButton";
+import { createButton } from "@solid-aria/button";
+import { mergeProps } from "solid-js";
 
 function Pagination(props: PaginationBase) {
   let prevButtonRef: HTMLButtonElement | undefined;
