@@ -39,15 +39,15 @@ export function createPaginationState(props: PaginationStateProps): PaginationSt
 
   const onIncrement = () => {
     const untrackedValue = untrack(value);
-    const page = untrackedValue === "" ? 1 : parseInt(`${untrackedValue}`, 10) + 1;
+    const page = parsePageSafe(untrackedValue) + 1;
     if (isValidPage(props.maxValue, page)) {
       setValue(page);
     }
   };
 
   const onDecrement = () => {
-    const untrackedValue = untrack(value) as string | number | undefined;
-    const page = untrackedValue === "" ? 1 : parseInt(`${untrackedValue}`, 10) - 1;
+    const untrackedValue = untrack(value);
+    const page = parsePageSafe(untrackedValue) - 1;
     if (isValidPage(props.maxValue, page)) {
       setValue(page);
     }

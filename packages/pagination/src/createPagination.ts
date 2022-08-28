@@ -16,7 +16,7 @@
  */
 
 import { createStringFormatter } from "@solid-aria/i18n";
-import { PressEvents } from "@solid-aria/types";
+import { PressEvent, PressEvents } from "@solid-aria/types";
 import { JSX, mergeProps, splitProps } from "solid-js";
 
 import intlMessages from "../intl";
@@ -26,8 +26,8 @@ import { parsePageSafe } from "./utils";
 
 export interface PaginationAriaProps {
   value?: PaginationValue;
-  onPrevious?: (value: number, ...args: any) => void;
-  onNext?: (value: number, ...args: any) => void;
+  onPrevious?: (value: number, e: PressEvent) => void;
+  onNext?: (value: number, e: PressEvent) => void;
 }
 
 interface PaginationAria {
@@ -49,19 +49,19 @@ export function createPagination(
   const stringFormatter = createStringFormatter(intlMessages);
   const [localTextProps] = splitProps(props, ["value"]);
 
-  const onPrevious = () => {
+  const onPrevious = (pressEvent: PressEvent) => {
     state.onDecrement();
     const value = state.value();
     if (props.onPrevious && value) {
-      props.onPrevious(parsePageSafe(value));
+      props.onPrevious(parsePageSafe(value), pressEvent);
     }
   };
 
-  const onNext = () => {
+  const onNext = (pressEvent: PressEvent) => {
     state.onIncrement();
     const value = state.value();
     if (props.onNext && value) {
-      props.onNext(parsePageSafe(value));
+      props.onNext(parsePageSafe(value), pressEvent);
     }
   };
 

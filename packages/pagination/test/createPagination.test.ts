@@ -101,10 +101,11 @@ describe("createPagination", () => {
       defaultValue: 1,
       maxValue: maxValue
     });
+    const clickEvent = makeEvent("click");
     // @ts-expect-error Broken type?
-    paginationProps.prevButtonProps.onPress(makeEvent("click"));
+    paginationProps.prevButtonProps.onPress(clickEvent);
     expect(state.onDecrement).toHaveBeenCalled();
-    expect(props.onPrevious).toHaveBeenCalledWith(state.value());
+    expect(props.onPrevious).toHaveBeenCalledWith(state.value(), clickEvent);
   });
 
   it("handles invalid previous", function () {
@@ -112,10 +113,11 @@ describe("createPagination", () => {
       defaultValue: 1,
       maxValue: maxValue
     });
+    const clickEvent = makeEvent("click");
     // @ts-expect-error Broken type?
-    paginationProps.prevButtonProps.onPress(makeEvent("click"));
+    paginationProps.prevButtonProps.onPress(clickEvent);
     expect(state.onDecrement).toHaveBeenCalled();
-    expect(props.onPrevious).toHaveBeenCalledWith(state.value());
+    expect(props.onPrevious).toHaveBeenCalledWith(state.value(), clickEvent);
   });
 
   it("handles valid next", function () {
@@ -123,10 +125,12 @@ describe("createPagination", () => {
       defaultValue: 1,
       maxValue: maxValue
     });
+
+    const clickEvent = makeEvent("click");
     // @ts-expect-error Broken type?
-    paginationProps.nextButtonProps.onPress(makeEvent("click"));
+    paginationProps.nextButtonProps.onPress(clickEvent);
     expect(state.onIncrement).toHaveBeenCalled();
-    expect(props.onNext).toHaveBeenCalledWith(state.value());
+    expect(props.onNext).toHaveBeenCalledWith(state.value(), clickEvent);
   });
 
   it("handles invalid next", function () {
@@ -135,9 +139,10 @@ describe("createPagination", () => {
       defaultValue: 1,
       maxValue: maxValue
     });
+    const clickEvent = makeEvent("click");
     // @ts-expect-error Broken type?
     paginationProps.nextButtonProps.onPress(makeEvent("click"));
     expect(state.onIncrement).toHaveBeenCalled();
-    expect(props.onNext).toHaveBeenCalledWith(state.value());
+    expect(props.onNext).toHaveBeenCalledWith(state.value(), clickEvent);
   });
 });
