@@ -141,7 +141,7 @@ function Example() {
     <Pagination
       value={page()}
       onChange={setPage}
-      maxValue={20}
+      maxValue={maxValue}
       onNext={value => console.log('Next', e)}
       onPrevious={value => console.log('Previous', e)}
     />

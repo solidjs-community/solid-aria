@@ -89,7 +89,8 @@ A library of high-quality primitives that help you build accessible user interfa
 - [x] TextField
 - [x] Toggle
 - [x] Visually-hidden
-
+- [x] Pagination
+-
 - [ ] AutoComplete
 - [ ] Calendar
 - [ ] Combobox
@@ -97,7 +98,6 @@ A library of high-quality primitives that help you build accessible user interfa
 - [ ] List
 - [ ] LiveAnnouncer
 - [ ] NumberField
-- [ ] Pagination
 - [ ] SearchField
 - [ ] Slider
 - [ ] Table
