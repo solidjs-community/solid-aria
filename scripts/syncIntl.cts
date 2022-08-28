@@ -71,9 +71,9 @@ try {
     rmSync(tmpDir, { force: true, recursive: true });
   });
 } catch (e) {
+  rmSync(tmpDir, { force: true, recursive: true });
   console.error(e);
   process.exit(0);
-  rmSync(tmpDir, { force: true, recursive: true });
 }
 
 
@@ -88,9 +88,9 @@ function createIntlExportFile(dir: string) {
   const file = ts.factory.createSourceFile(
     [
       createLicense(),
-      ...createNewLine(2),
+      createNewLine(),
       ...imports,
-      createNewLine(1),
+      createNewLine(),
       createIntlExportDefault()
     ],
     ts.factory.createToken(1),
@@ -107,12 +107,8 @@ function createIntlExportFile(dir: string) {
     return ts.factory.createIdentifier(licenseTemplate) as unknown as Statement;
   }
 
-  function createNewLine(newLine: 1): Statement;
-  function createNewLine(newLine: number): Statement[];
-  function createNewLine(newLine: 1 | number): Statement[] | Statement {
-    const newLineStatement = ts.factory.createIdentifier("\n") as unknown as Statement;
-    if (newLine === 0) return newLineStatement;
-    return new Array(newLine).fill(newLineStatement);
+  function createNewLine(): Statement {
+    return ts.factory.createIdentifier("\n") as unknown as Statement;
   }
 
   function createIntlExportDefault() {
