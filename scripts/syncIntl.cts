@@ -14,7 +14,7 @@ import ts, { ImportDeclaration, Statement } from "typescript";
 import { execSync } from "child_process";
 
 const tmpDir = join(__dirname, "tmp");
-const licensePath = join(__dirname, "LICENSE.template.md");
+const licensePath = join(__dirname, "LICENSE");
 
 rmSync(tmpDir, { force: true, recursive: true });
 
