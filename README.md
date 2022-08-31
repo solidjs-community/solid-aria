@@ -8,6 +8,13 @@ A library of high-quality primitives that help you build accessible user interfa
 
 > ⚠️ Solid Aria is in early stage and **not ready** for production ⚠️
 
+## Contribitors
+
+> **Note**
+> <b>We're looking for contributors!</b> Solid Aria has ported more than half of all features and tests to reach parity with React Aria. It has excellent foundations but could use support to push it to completion.
+
+There are opportunities for short and long-term contributors. Currently the need includes focusing on the `collection` package which supports `listbox`, `menu`, `select` etc. This package has been mostly ported but needs to be tested and validated. To get involved reach out via Github Issue or join us on [our SolidJS dedicated Discord channel](https://discord.com/channels/722131463138705510/967415193233670174).
+
 ## All in one package
 
 [@solid-aria/primitives](./packages/primitives/) - Export all Solid Aria primitives in a single convenient package.
