@@ -15,10 +15,21 @@
  * governing permissions and limitations under the License.
  */
 
-export * from "./context";
-export * from "./createCollator";
-export * from "./createDefaultLocale";
-export * from "./createMessageFormatter";
-export * from "./createNumberFormatter";
-export * from "./createStringFormatter";
-export * from "./utils";
+import { ValueBase } from "@solid-aria/types";
+import { MaybeAccessor } from "@solid-primitives/utils";
+
+export type PaginationValue = string | number | undefined;
+
+export interface PaginationBase extends ValueBase<number> {
+  maxValue?: number;
+  onPrevious?: (value: number, e: Event) => void;
+  onNext?: (value: number, e: Event) => void;
+  onChange?: (val: number) => void;
+}
+
+export interface PaginationProps {
+  maxValue?: number;
+  value?: MaybeAccessor<PaginationValue>;
+  defaultValue?: number;
+  onChange?: (val: number) => void;
+}

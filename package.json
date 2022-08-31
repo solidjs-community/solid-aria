@@ -21,6 +21,7 @@
     "format": "prettier . --write --ignore-path .gitignore && git update-index --again",
     "lint": "eslint . --ext .ts,.tsx --ignore-path .gitignore",
     "prepare": "husky install",
+    "sync:intl": "npx tsx scripts/syncIntl.cts",
     "test": "turbo run test",
     "typecheck": "turbo run typecheck"
   },
@@ -47,6 +48,7 @@
     "@commitlint/cli": "17.0.2",
     "@commitlint/config-conventional": "17.0.2",
     "@commitlint/cz-commitlint": "17.0.0",
+    "@rollup/plugin-json": "^4.1.0",
     "@solid-primitives/event-listener": "2.2.0",
     "@solid-primitives/keyed": "1.0.0",
     "@solid-primitives/props": "2.1.7",
@@ -84,5 +86,8 @@
     "typescript": "4.7.3",
     "vite": "2.9.12",
     "vite-plugin-solid": "2.2.6"
+  },
+  "syncIntl": {
+    "pagination": "pagination"
   }
 }

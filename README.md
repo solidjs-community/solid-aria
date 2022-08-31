@@ -45,6 +45,7 @@ There are opportunities for short and long-term contributors. Currently the need
 
 - [breadcrumbs](./packages/breadcrumbs/) - Provides the behavior and accessibility implementation for a breadcrumbs component.
 - [link](./packages/link/) - Provides the behavior and accessibility implementation for a link component.
+- [pagination](./packages/pagination/) - Provides the behavior and accessibility implementation for a pagination component.
 
 ### Feedback
 
@@ -95,7 +96,8 @@ There are opportunities for short and long-term contributors. Currently the need
 - [x] TextField
 - [x] Toggle
 - [x] Visually-hidden
-
+- [x] Pagination
+-
 - [ ] AutoComplete
 - [ ] Calendar
 - [ ] Combobox
@@ -103,7 +105,6 @@ There are opportunities for short and long-term contributors. Currently the need
 - [ ] List
 - [ ] LiveAnnouncer
 - [ ] NumberField
-- [ ] Pagination
 - [ ] SearchField
 - [ ] Slider
 - [ ] Table
