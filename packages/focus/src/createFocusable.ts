@@ -74,7 +74,7 @@ export function createFocusable(
   };
 
   onMount(() => {
-    autofocus() && access(ref)?.focus();
+    autofocus() && ref()?.focus();
     setAutofocus(false);
   });
 
