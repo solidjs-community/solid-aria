@@ -48,11 +48,7 @@ function Button(props: AriaButtonProps) {
 
   const { buttonProps } = createButton(props, () => ref);
 
-  return (
-    <button {...buttonProps} ref={ref}>
-      {props.children}
-    </button>
-  );
+  return <button {...buttonProps} ref={ref}/>
 }
 
 function App() {
@@ -89,9 +85,7 @@ function Button(props: AriaButtonProps<"span">) {
         "-webkit-user-select": "none"
       }}
       ref={ref}
-    >
-      {props.children}
-    </span>
+    />
   );
 }
 
@@ -147,9 +141,7 @@ function ToggleButton(props: AriaToggleButtonProps) {
         border: "none"
       }}
       ref={ref}
-    >
-      {props.children}
-    </button>
+    />
   );
 }
 
