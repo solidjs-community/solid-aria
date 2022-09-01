@@ -22,17 +22,15 @@ import { AriaButtonProps } from "../src/types";
 
 describe("createButton", () => {
   it("handles defaults", () => {
-    let ref: any;
     const props = {};
-    const { buttonProps } = createButton(props, () => ref);
+    const { buttonProps } = createButton(props);
 
     expect(typeof buttonProps.onClick).toBe("function");
   });
 
   it("handles elements other than button", () => {
-    let ref: any;
     const props: AriaButtonProps<"a"> = { elementType: "a" };
-    const { buttonProps } = createButton(props, () => ref);
+    const { buttonProps } = createButton(props);
 
     expect(buttonProps.role).toBe("button");
     expect(buttonProps.tabIndex).toBe(0);
@@ -43,9 +41,8 @@ describe("createButton", () => {
   });
 
   it("handles elements other than button disabled", () => {
-    let ref: any;
     const props: AriaButtonProps<"a"> = { elementType: "a", isDisabled: true };
-    const { buttonProps } = createButton(props, () => ref);
+    const { buttonProps } = createButton(props);
 
     expect(buttonProps.role).toBe("button");
     expect(buttonProps.tabIndex).toBeUndefined();
@@ -56,25 +53,22 @@ describe("createButton", () => {
   });
 
   it("handles the rel attribute on anchors", () => {
-    let ref: any;
     const props: AriaButtonProps<"a"> = { elementType: "a", rel: "noopener noreferrer" };
-    const { buttonProps } = createButton(props, () => ref);
+    const { buttonProps } = createButton(props);
 
     expect(buttonProps.rel).toBe("noopener noreferrer");
   });
 
   it("handles the rel attribute as a string on anchors", () => {
-    let ref: any;
     const props: AriaButtonProps<"a"> = { elementType: "a", rel: "search" };
-    const { buttonProps } = createButton(props, () => ref);
+    const { buttonProps } = createButton(props);
 
     expect(buttonProps.rel).toBe("search");
   });
 
   it("handles input elements", () => {
-    let ref: any;
     const props: AriaButtonProps<"input"> = { elementType: "input", isDisabled: true };
-    const { buttonProps } = createButton(props, () => ref);
+    const { buttonProps } = createButton(props);
 
     expect(buttonProps.role).toBe("button");
     expect(buttonProps.tabIndex).toBeUndefined();
@@ -92,7 +86,6 @@ describe("createButton", () => {
   });
 
   it("user props are passed down to the returned button props", () => {
-    const ref = document.createElement("button");
     const onMouseMove = jest.fn();
     const props: AriaButtonProps<"button"> & JSX.IntrinsicElements["button"] = {
       children: "Hello",
@@ -101,7 +94,7 @@ describe("createButton", () => {
       style: { color: "red" }
     };
 
-    const { buttonProps } = createButton(props, () => ref);
+    const { buttonProps } = createButton(props);
 
     expect(buttonProps.children).toBe("Hello");
     expect(buttonProps.class).toBe("test-class");
