@@ -23,7 +23,30 @@ import {
   FocusableProps,
   PressEvents
 } from "@solid-aria/types";
-import { JSX } from "solid-js";
+import { Component, JSX, Ref } from "solid-js";
+
+// TODO: these probably should be added to @solid-aria/types
+
+/**
+ * Infers the type of `ref` element from the `elementType` prop.
+ * @example
+ * "button" -> HTMLButtonElement
+ * "div" -> HTMLDivElement
+ * Component<{ ref: Ref<HTMLInputElement> }> -> HTMLInputElement
+ */
+export type ElementOfType<T extends ElementType> = T extends keyof JSX.IntrinsicElements
+  ? JSX.IntrinsicElements[T] extends JSX.CustomAttributes<infer U>
+    ? U
+    : never
+  : T extends Component<{ ref: Ref<infer U> }>
+  ? U
+  : never;
+
+export type PropsOfType<T extends ElementType> = T extends keyof JSX.IntrinsicElements
+  ? JSX.IntrinsicElements[T]
+  : T extends Component<any>
+  ? Parameters<T>[0]
+  : never;
 
 interface ButtonProps extends PressEvents, FocusableProps {
   /**
@@ -38,6 +61,11 @@ interface ButtonProps extends PressEvents, FocusableProps {
 }
 
 export interface AriaButtonElementTypeProps<T extends ElementType = "button"> {
+  /**
+   * A ref to the target element.
+   */
+  ref?: Ref<ElementOfType<T>>;
+
   /**
    * The HTML element or SolidJS component used to render the button, e.g. 'div', 'a', or `Link`.
    * @default 'button'

@@ -14,6 +14,7 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
+/* eslint-disable solid/reactivity */
 
 import { PointerType } from "@solid-aria/types";
 import { createGlobalListeners, focusWithoutScrolling } from "@solid-aria/utils";
@@ -74,12 +75,15 @@ export function createPress<T extends HTMLElement>(props: CreatePressProps<T>): 
   if (context) {
     context.register();
 
-    const [, contextProps] = splitProps(context, ["register", "ref"]);
+    const [, contextProps] = splitProps(context, ["register"]);
 
+    // eslint-disable-next-line solid/reactivity
     props = combineProps(contextProps, props);
   }
 
   const [, domProps] = splitProps(props, [
+    // ref is omited, because user should populate it himself
+    "ref",
     "onPress",
     "onPressChange",
     "onPressStart",
@@ -679,12 +683,9 @@ export function createPress<T extends HTMLElement>(props: CreatePressProps<T>): 
   );
 
   return {
-    ref: (el: T) => {
-      (props.ref as ((el: T) => void) | undefined)?.(el);
-      context?.ref?.(el);
-    },
+    ref: (el: T) => (props.ref as ((el: T) => void) | undefined)?.(el),
     isPressed,
-    pressProps: combineProps(domProps, pressProps) as JSX.HTMLAttributes<T>
+    pressProps: combineProps(domProps, pressProps)
   };
 }
 

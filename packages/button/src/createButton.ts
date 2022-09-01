@@ -14,21 +14,27 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
+/* eslint-disable solid/reactivity */
 
-import { createFocusable } from "@solid-aria/focus";
+import { createFocusable, CreateFocusableProps } from "@solid-aria/focus";
 import { createPress } from "@solid-aria/interactions";
 import { ElementType } from "@solid-aria/types";
-import { filterDOMProps } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
-import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
+import { Accessor, JSX, mergeProps, splitProps } from "solid-js";
 
-import { AriaButtonProps } from "./types";
+import { AriaButtonProps, ElementOfType, PropsOfType } from "./types";
 
-export interface ButtonAria<T> {
+export interface ButtonAria<T extends ElementType> {
+  /**
+   * A ref to apply onto the target element.
+   * Merge the given `props.ref` and all parents `PressResponder` refs.
+   */
+  ref: (el: ElementOfType<T>) => void;
+
   /**
    * Props for the button element.
    */
-  buttonProps: T;
+  buttonProps: Omit<PropsOfType<T>, "ref">;
 
   /**
    * Whether the button is currently pressed.
@@ -36,54 +42,13 @@ export interface ButtonAria<T> {
   isPressed: Accessor<boolean>;
 }
 
-// Order with overrides is important: 'button' should be default
-export function createButton(
-  props: AriaButtonProps<"button">,
-  ref: Accessor<HTMLButtonElement | undefined>
-): ButtonAria<JSX.ButtonHTMLAttributes<HTMLButtonElement>>;
-
-export function createButton(
-  props: AriaButtonProps<"a">,
-  ref: Accessor<HTMLAnchorElement | undefined>
-): ButtonAria<JSX.AnchorHTMLAttributes<HTMLAnchorElement>>;
-
-export function createButton(
-  props: AriaButtonProps<"div">,
-  ref: Accessor<HTMLDivElement | undefined>
-): ButtonAria<JSX.HTMLAttributes<HTMLDivElement>>;
-
-export function createButton(
-  props: AriaButtonProps<"input">,
-  ref: Accessor<HTMLInputElement | undefined>
-): ButtonAria<JSX.InputHTMLAttributes<HTMLInputElement>>;
-
-export function createButton(
-  props: AriaButtonProps<"span">,
-  ref: Accessor<HTMLSpanElement | undefined>
-): ButtonAria<JSX.HTMLAttributes<HTMLSpanElement>>;
-
-export function createButton(
-  props: AriaButtonProps<ElementType>,
-  ref: Accessor<HTMLElement | undefined>
-): ButtonAria<JSX.HTMLAttributes<HTMLElement>>;
-
 /**
  * Provides the behavior and accessibility implementation for a button component. Handles mouse, keyboard, and touch interactions,
  * focus behavior, and ARIA props for both native button elements and custom element types.
  * @param props - Props to be applied to the button.
- * @param ref - A ref to a DOM element for the button.
  */
-export function createButton(
-  props: AriaButtonProps<ElementType>,
-  ref: Accessor<any>
-): ButtonAria<JSX.HTMLAttributes<any>> {
-  const defaultProps: AriaButtonProps<"button"> = {
-    elementType: "button",
-    type: "button"
-  };
-
-  // eslint-disable-next-line solid/reactivity
-  props = mergeProps(defaultProps, props);
+export function createButton<T extends ElementType>(props: AriaButtonProps<T>): ButtonAria<T> {
+  props = mergeProps({ elementType: "button", type: "button" }, props) as typeof props;
 
   const additionalButtonElementProps: JSX.ButtonHTMLAttributes<any> = {
     get type() {
@@ -120,12 +85,8 @@ export function createButton(
       }
     };
 
-  const additionalProps = mergeProps(
-    createMemo(() => {
-      return props.elementType === "button"
-        ? additionalButtonElementProps
-        : additionalOtherElementProps;
-    })
+  const additionalProps = mergeProps(() =>
+    props.elementType === "button" ? additionalButtonElementProps : additionalOtherElementProps
   );
 
   const [createPressProps] = splitProps(props, [
@@ -137,11 +98,12 @@ export function createButton(
     "preventFocusOnPress"
   ]);
 
-  const { pressProps, isPressed } = createPress(createPressProps);
+  const { pressProps, isPressed, ref: pressRef } = createPress(createPressProps);
 
-  const { focusableProps } = createFocusable(props, ref);
-
-  const domProps = filterDOMProps(props, { labelable: true });
+  // createFocusable has problems with the `props` type because if you pass a component as the `elementType` prop, there is no telling if the `ref` will be a HTML Element.
+  const { focusableProps, ref: focusRef } = createFocusable(
+    props as CreateFocusableProps<HTMLElement>
+  );
 
   const baseButtonProps: JSX.HTMLAttributes<any> = {
     get "aria-haspopup"() {
@@ -173,9 +135,15 @@ export function createButton(
     additionalProps,
     focusableProps,
     pressProps,
-    domProps,
     baseButtonProps
-  );
+  ) as Omit<PropsOfType<T>, "ref">;
 
-  return { buttonProps, isPressed };
+  return {
+    buttonProps,
+    isPressed,
+    ref: el => {
+      focusRef(el as HTMLElement);
+      pressRef(el as HTMLElement);
+    }
+  };
 }

@@ -23,9 +23,16 @@ import {
 } from "@solid-aria/interactions";
 import { combineProps } from "@solid-primitives/props";
 import { access, MaybeAccessor } from "@solid-primitives/utils";
-import { Accessor, createSignal, JSX, onMount } from "solid-js";
+import { createSignal, JSX, onMount, Ref, splitProps } from "solid-js";
 
-export interface CreateFocusableProps extends CreateFocusProps, CreateKeyboardProps {
+export interface CreateFocusableProps<El extends HTMLElement>
+  extends CreateFocusProps,
+    CreateKeyboardProps {
+  /**
+   * A ref to the target element.
+   */
+  ref?: Ref<El>;
+
   /**
    * Whether focus should be disabled.
    */
@@ -45,7 +52,13 @@ export interface CreateFocusableProps extends CreateFocusProps, CreateKeyboardPr
   excludeFromTabOrder?: MaybeAccessor<boolean | undefined>;
 }
 
-export interface FocusableResult {
+export interface FocusableResult<El extends HTMLElement> {
+  /**
+   * A ref to apply onto the target element.
+   * Merge the given `props.ref` and all parents `PressResponder` refs.
+   */
+  ref: (el: El) => void;
+
   /**
    * Props to spread onto the target element.
    */
@@ -57,26 +70,30 @@ export interface FocusableResult {
 /**
  * Make an element focusable, capable of auto focus and excludable from tab order.
  */
-export function createFocusable(
-  props: CreateFocusableProps,
-  ref: Accessor<HTMLElement | undefined>
-): FocusableResult {
+export function createFocusable<El extends HTMLElement>(
+  props: CreateFocusableProps<El>
+): FocusableResult<El> {
+  // eslint-disable-next-line solid/reactivity
   const [autofocus, setAutofocus] = createSignal(!!access(props.autofocus));
 
-  const { focusProps } = createFocus(props);
-  const { keyboardProps } = createKeyboard(props);
+  const propsWithoutRef = splitProps(props, ["ref"])[1];
 
-  const focusableProps = {
-    ...combineProps(focusProps, keyboardProps),
+  const { focusProps } = createFocus(propsWithoutRef);
+  const { keyboardProps } = createKeyboard(propsWithoutRef);
+
+  const focusableProps = combineProps(propsWithoutRef, focusProps, keyboardProps, {
     get tabIndex() {
       return access(props.excludeFromTabOrder) && !access(props.isDisabled) ? -1 : undefined;
     }
-  };
+  });
+
+  let target: El | undefined;
+  const ref = (el: El) => (props.ref as (el: El) => void)?.((target = el));
 
   onMount(() => {
-    autofocus() && ref()?.focus();
+    autofocus() && target?.focus();
     setAutofocus(false);
   });
 
-  return { focusableProps };
+  return { focusableProps, ref };
 }
