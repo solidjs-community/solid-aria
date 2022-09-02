@@ -15,6 +15,8 @@
  * governing permissions and limitations under the License.
  */
 
+import { JSX } from "solid-js";
+
 import { createButton } from "../src";
 import { AriaButtonProps } from "../src/types";
 
@@ -87,5 +89,29 @@ describe("createButton", () => {
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     expect(buttonProps.rel).toBeUndefined();
+  });
+
+  it("user props are passed down to the returned button props", () => {
+    const ref = document.createElement("button");
+    const onMouseMove = jest.fn();
+    const props: AriaButtonProps<"button"> & JSX.IntrinsicElements["button"] = {
+      children: "Hello",
+      class: "test-class",
+      onMouseMove,
+      style: { color: "red" }
+    };
+
+    const { buttonProps } = createButton(props, () => ref);
+
+    expect(buttonProps.children).toBe("Hello");
+    expect(buttonProps.class).toBe("test-class");
+    expect(buttonProps.style).toEqual({ color: "red" });
+
+    expect(buttonProps).toHaveProperty("onMouseMove");
+    expect(typeof buttonProps.onMouseMove).toBe("function");
+
+    // @ts-expect-error
+    buttonProps.onMouseMove();
+    expect(onMouseMove).toHaveBeenCalled();
   });
 });

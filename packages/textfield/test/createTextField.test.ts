@@ -16,9 +16,9 @@
  */
 
 import { callHandler } from "@solid-aria/utils";
-import { createRoot } from "solid-js";
+import { createRoot, JSX } from "solid-js";
 
-import { createTextField } from "../src";
+import { AriaTextFieldProps, createTextField } from "../src";
 
 describe("createTextField", () => {
   it("should use default props if no props are provided", () =>
@@ -141,6 +141,33 @@ describe("createTextField", () => {
       // TS hack: cast to 'any' for checking if those props are undefined
       expect((inputProps as any).type).toBeUndefined();
       expect((inputProps as any).pattern).toBeUndefined();
+
+      dispose();
+    }));
+
+  it("user props are passed through", () =>
+    createRoot(dispose => {
+      const ref = document.createElement("input");
+      const onMouseMove = jest.fn();
+      const props: AriaTextFieldProps<"input"> & JSX.IntrinsicElements["input"] = {
+        children: "Hello",
+        class: "test-class",
+        onMouseMove,
+        style: { color: "red" }
+      };
+
+      const { inputProps } = createTextField(props, () => ref);
+
+      expect(inputProps.children).toBe("Hello");
+      expect(inputProps.class).toBe("test-class");
+      expect(inputProps.style).toEqual({ color: "red" });
+
+      expect(inputProps).toHaveProperty("onMouseMove");
+      expect(typeof inputProps.onMouseMove).toBe("function");
+
+      // @ts-expect-error
+      inputProps.onMouseMove();
+      expect(onMouseMove).toHaveBeenCalled();
 
       dispose();
     }));

@@ -14,13 +14,13 @@
  * OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
+/* eslint-disable solid/reactivity */
 
 import { createFocusable } from "@solid-aria/focus";
 import { createPress } from "@solid-aria/interactions";
 import { ElementType } from "@solid-aria/types";
-import { filterDOMProps } from "@solid-aria/utils";
 import { combineProps } from "@solid-primitives/props";
-import { Accessor, createMemo, JSX, mergeProps, splitProps } from "solid-js";
+import { Accessor, JSX, mergeProps, splitProps } from "solid-js";
 
 import { AriaButtonProps } from "./types";
 
@@ -82,7 +82,6 @@ export function createButton(
     type: "button"
   };
 
-  // eslint-disable-next-line solid/reactivity
   props = mergeProps(defaultProps, props);
 
   const additionalButtonElementProps: JSX.ButtonHTMLAttributes<any> = {
@@ -120,12 +119,8 @@ export function createButton(
       }
     };
 
-  const additionalProps = mergeProps(
-    createMemo(() => {
-      return props.elementType === "button"
-        ? additionalButtonElementProps
-        : additionalOtherElementProps;
-    })
+  const additionalProps = mergeProps(() =>
+    props.elementType === "button" ? additionalButtonElementProps : additionalOtherElementProps
   );
 
   const [createPressProps] = splitProps(props, [
@@ -140,8 +135,6 @@ export function createButton(
   const { pressProps, isPressed } = createPress(createPressProps);
 
   const { focusableProps } = createFocusable(props, ref);
-
-  const domProps = filterDOMProps(props, { labelable: true });
 
   const baseButtonProps: JSX.HTMLAttributes<any> = {
     get "aria-haspopup"() {
@@ -169,13 +162,7 @@ export function createButton(
     }
   };
 
-  const buttonProps = combineProps(
-    additionalProps,
-    focusableProps,
-    pressProps,
-    domProps,
-    baseButtonProps
-  );
+  const buttonProps = combineProps(additionalProps, focusableProps, pressProps, baseButtonProps);
 
   return { buttonProps, isPressed };
 }

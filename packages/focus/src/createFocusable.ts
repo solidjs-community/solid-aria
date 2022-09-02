@@ -66,12 +66,11 @@ export function createFocusable(
   const { focusProps } = createFocus(props);
   const { keyboardProps } = createKeyboard(props);
 
-  const focusableProps = {
-    ...combineProps(focusProps, keyboardProps),
+  const focusableProps = combineProps(props, focusProps, keyboardProps, {
     get tabIndex() {
       return access(props.excludeFromTabOrder) && !access(props.isDisabled) ? -1 : undefined;
     }
-  };
+  });
 
   onMount(() => {
     autofocus() && ref()?.focus();
