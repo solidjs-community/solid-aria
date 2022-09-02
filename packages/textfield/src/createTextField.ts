@@ -31,16 +31,15 @@ import {
   Validation,
   ValueBase
 } from "@solid-aria/types";
-import { callHandler, filterDOMProps } from "@solid-aria/utils";
-import { combineProps } from "@solid-primitives/props";
-import { Accessor, createMemo, JSX, mergeProps } from "solid-js";
+import { callHandler } from "@solid-aria/utils";
+import { Accessor, JSX, mergeProps, splitProps } from "solid-js";
 
 type DefaultElementType = "input";
 
 /**
  * The intrinsic HTML element names that `createTextField` supports; e.g. `input`, `textarea`.
  */
-type TextFieldIntrinsicElements = keyof Pick<IntrinsicHTMLElements, "input" | "textarea">;
+type TextFieldIntrinsicElements = "input" | "textarea";
 
 /**
  * The HTML element interfaces that `createTextField` supports based on what is
@@ -121,6 +120,23 @@ export interface TextFieldAria<T extends TextFieldIntrinsicElements = DefaultEle
   errorMessageProps: JSX.HTMLAttributes<any>;
 }
 
+const inputPropKeys = [
+  "type",
+  "pattern",
+  "aria-errormessage",
+  "aria-activedescendant",
+  "aria-autocomplete",
+  "aria-haspopup",
+  "value",
+  "defaultValue",
+  "autocomplete",
+  "maxLength",
+  "minLength",
+  "name",
+  "placeholder",
+  "inputMode"
+] as const;
+
 /**
  * Provides the behavior and accessibility implementation for a text field.
  * @param props - Props for the text field.
@@ -141,93 +157,96 @@ export function createTextField<T extends TextFieldIntrinsicElements = DefaultEl
   // eslint-disable-next-line solid/reactivity
   props = mergeProps(defaultProps, props) as AriaTextFieldProps<T>;
 
-  const { focusableProps } = createFocusable(props, ref);
-  const { labelProps, fieldProps, descriptionProps, errorMessageProps } = createField(props);
+  // local props are separated so that they don't mess with mergeProps
+  // e.g. the `type` prop should return `undefined` if the element is not an input
+  // but `mergeProps` will search for the first defined value (ignoring undefined)
+  const localProps = splitProps(props, inputPropKeys)[1];
 
-  const domProps = filterDOMProps(props, { labelable: true });
+  const { focusableProps } = createFocusable(localProps, ref);
+  const { labelProps, fieldProps, descriptionProps, errorMessageProps } = createField(localProps);
 
-  const baseInputProps: JSX.HTMLAttributes<any> = mergeProps(
-    {
-      get type() {
-        return props.inputElementType === "input" ? props.type : undefined;
-      },
-      get pattern() {
-        return props.inputElementType === "input" ? props.pattern : undefined;
-      },
-      get disabled() {
-        return props.isDisabled;
-      },
-      get readOnly() {
-        return props.isReadOnly;
-      },
-      get "aria-required"() {
-        return props.isRequired || undefined;
-      },
-      get "aria-invalid"() {
-        return props.validationState === "invalid" || undefined;
-      },
-      get "aria-errormessage"() {
-        return props["aria-errormessage"];
-      },
-      get "aria-activedescendant"() {
-        return props["aria-activedescendant"];
-      },
-      get "aria-autocomplete"() {
-        return props["aria-autocomplete"];
-      },
-      get "aria-haspopup"() {
-        return props["aria-haspopup"];
-      },
-      get value() {
-        return props.value;
-      },
-      get defaultValue() {
-        return props.value ? undefined : props.defaultValue;
-      },
-      get autocomplete() {
-        return props.autocomplete;
-      },
-      get maxLength() {
-        return props.maxLength;
-      },
-      get minLength() {
-        return props.minLength;
-      },
-      get name() {
-        return props.name;
-      },
-      get placeholder() {
-        return props.placeholder;
-      },
-      get inputMode() {
-        return props.inputMode;
-      },
+  const baseInputProps: JSX.IntrinsicElements["input"] & { defaultValue: string | undefined } = {
+    get type() {
+      return props.inputElementType === "input" ? props.type : undefined;
+    },
+    get pattern() {
+      return props.inputElementType === "input" ? props.pattern : undefined;
+    },
+    get disabled() {
+      return props.isDisabled;
+    },
+    get readOnly() {
+      return props.isReadOnly;
+    },
+    get "aria-required"() {
+      return props.isRequired || undefined;
+    },
+    get "aria-invalid"() {
+      return props.validationState === "invalid" || undefined;
+    },
+    get "aria-errormessage"() {
+      return props["aria-errormessage"];
+    },
+    get "aria-activedescendant"() {
+      return props["aria-activedescendant"];
+    },
+    get "aria-autocomplete"() {
+      return props["aria-autocomplete"];
+    },
+    get "aria-haspopup"() {
+      return props["aria-haspopup"];
+    },
+    get value() {
+      return props.value;
+    },
+    get defaultValue() {
+      return props.value ? undefined : props.defaultValue;
+    },
+    get autocomplete() {
+      return props.autocomplete;
+    },
+    get maxLength() {
+      return props.maxLength;
+    },
+    get minLength() {
+      return props.minLength;
+    },
+    get name() {
+      return props.name;
+    },
+    get placeholder() {
+      return props.placeholder;
+    },
+    get inputMode() {
+      return props.inputMode;
+    },
 
-      // Change events
-      onChange: e => props.onChange?.((e.target as HTMLInputElement).value),
+    // Change events
+    onChange: e => props.onChange?.((e.target as HTMLInputElement).value),
 
-      // Clipboard events
-      onCopy: e => callHandler(props.onCopy, e),
-      onCut: e => callHandler(props.onCut, e),
-      onPaste: e => callHandler(props.onPaste, e),
+    // Clipboard events
+    onCopy: e => callHandler(props.onCopy, e),
+    onCut: e => callHandler(props.onCut, e),
+    onPaste: e => callHandler(props.onPaste, e),
 
-      // Composition events
-      onCompositionEnd: e => callHandler(props.onCompositionEnd, e),
-      onCompositionStart: e => callHandler(props.onCompositionStart, e),
-      onCompositionUpdate: e => callHandler(props.onCompositionUpdate, e),
+    // Composition events
+    onCompositionEnd: e => callHandler(props.onCompositionEnd, e),
+    onCompositionStart: e => callHandler(props.onCompositionStart, e),
+    onCompositionUpdate: e => callHandler(props.onCompositionUpdate, e),
 
-      // Selection events
-      onSelect: e => callHandler(props.onSelect, e),
+    // Selection events
+    onSelect: e => callHandler(props.onSelect, e),
 
-      // Input events
-      onBeforeInput: e => callHandler(props.onBeforeInput, e),
-      onInput: e => callHandler(props.onInput, e)
-    } as JSX.HTMLAttributes<any>,
+    // Input events
+    onBeforeInput: e => callHandler(props.onBeforeInput, e),
+    onInput: e => callHandler(props.onInput, e)
+  };
+
+  const inputProps = mergeProps(
     focusableProps,
-    fieldProps
-  );
-
-  const inputProps = combineProps(domProps, baseInputProps);
+    fieldProps,
+    baseInputProps
+  ) as TextFieldInputProps<T>;
 
   return {
     labelProps,
