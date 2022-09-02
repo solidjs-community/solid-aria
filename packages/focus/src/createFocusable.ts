@@ -45,11 +45,11 @@ export interface CreateFocusableProps extends CreateFocusProps, CreateKeyboardPr
   excludeFromTabOrder?: MaybeAccessor<boolean | undefined>;
 }
 
-export interface FocusableResult<Props = {}> {
+export interface FocusableResult {
   /**
    * Props to spread onto the target element.
    */
-  focusableProps: Props & JSX.HTMLAttributes<any>;
+  focusableProps: JSX.HTMLAttributes<any>;
 }
 
 // TODO: add all the focus provider stuff when needed
@@ -57,10 +57,10 @@ export interface FocusableResult<Props = {}> {
 /**
  * Make an element focusable, capable of auto focus and excludable from tab order.
  */
-export function createFocusable<Props extends CreateFocusableProps>(
-  props: Props,
+export function createFocusable(
+  props: CreateFocusableProps,
   ref: Accessor<HTMLElement | undefined>
-): FocusableResult<Props> {
+): FocusableResult {
   const [autofocus, setAutofocus] = createSignal(!!access(props.autofocus));
 
   const { focusProps } = createFocus(props);
@@ -70,7 +70,7 @@ export function createFocusable<Props extends CreateFocusableProps>(
     get tabIndex() {
       return access(props.excludeFromTabOrder) && !access(props.isDisabled) ? -1 : undefined;
     }
-  }) as Props;
+  });
 
   onMount(() => {
     autofocus() && ref()?.focus();
