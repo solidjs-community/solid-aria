@@ -40,7 +40,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "tsup",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "dev": "vite serve dev --host",
     "test": "jest --passWithNoTests",
