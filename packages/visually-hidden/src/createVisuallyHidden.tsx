@@ -17,13 +17,22 @@
 
 import { createFocus } from "@solid-aria/interactions";
 import { access, isObject, MaybeAccessor } from "@solid-primitives/utils";
-import { createSignal, JSX, mergeProps } from "solid-js";
+import { Component, createSignal, JSX, mergeProps, splitProps } from "solid-js";
+import { Dynamic } from "solid-js/web";
 
-interface AriaVisuallyHiddenProps {
+type ElementType = keyof JSX.IntrinsicElements | Component<any>;
+
+interface AriaVisuallyHiddenProps extends JSX.DOMAttributes<any> {
   /**
    * Whether the element should become visible on focus, for example skip links.
    */
   isFocusable?: MaybeAccessor<boolean | undefined>;
+
+  /**
+   * The element type for the container.
+   * @default "div"
+   */
+  elementType?: ElementType;
 
   /**
    * Additional style to be passed to the element.
@@ -85,4 +94,16 @@ export function createVisuallyHidden(props: AriaVisuallyHiddenProps = {}): Visua
   } as JSX.HTMLAttributes<any>);
 
   return { visuallyHiddenProps };
+}
+
+export function VisuallyHidden(props: AriaVisuallyHiddenProps) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { children, elementType = "div", isFocusable, style, ...otherProps } = props;
+  const { visuallyHiddenProps } = createVisuallyHidden(props);
+
+  return (
+    <Dynamic component={elementType} {...mergeProps(otherProps, visuallyHiddenProps)}>
+      {children}
+    </Dynamic>
+  );
 }
